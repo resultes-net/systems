@@ -1,0 +1,39 @@
+import os
+import pathlib as pl
+import sys
+
+import pytrnsys.rsim.runParallelTrnsys as runTrnsys
+import pytrnsys.utils.log as log
+
+
+def _run_config_file(configFile: pl.Path, configFileNumber: int) -> None:
+    logger = log.getOrCreateCustomLogger("root", "INFO")
+
+    logger.info("Running config file %s...", configFile)
+
+    nameDeck = f"complete-{configFileNumber}"
+
+    pathBase = os.getcwd()
+
+    runTool = runTrnsys.RunParallelTrnsys(pathBase, nameDeck)
+
+    runTool.readConfig(pathBase, str(configFile))
+    runTool.getConfig()
+
+    runTool.runConfig()
+
+    runTool.runParallel()
+
+    logger.info("...DONE (%s).", configFile)
+
+
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        configFiles = [sys.argv[1]]
+    else:
+        containingDirPath = pl.Path(__file__).parent
+
+        _run_config_file(
+            pl.Path("run.config"),
+            configFileNumber=0,
+        )
