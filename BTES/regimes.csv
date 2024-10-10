@@ -1,5 +1,5 @@
-regimeName,PuColl,PuGhx,PuHp,PuHx,QSnk,ValGhxIn,ValGhxOut,ValGhxMix,ValPriMix
-to_buff_to_ghx,600,50,0,600,500,1,1,0.1,0.2
-to_buff_from_ghx,600,50,50,600,500,0,0,0,0.2
-from_buff_to_ghx,300,50,0,300,500,1,1,0.1,0.2
-from_buff_from_ghx,300,50,50,300,500,0,0,0,0.2
+regimeName,PuColl,PuGhx,PuHp,PuHx,QSnk,ValBuffToGhx,ValGhxMix,ValSupplyMix
+to_buff_to_ghx,600,50,0,600,500,1,0.1,0.2
+to_buff_from_ghx,600,50,50,600,500,0,0,0.2
+from_buff_to_ghx,300,50,0,300,500,1,0.1,0.2
+from_buff_from_ghx,300,50,50,300,500,0,0,0.2
