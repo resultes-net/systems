@@ -1,18 +1,8 @@
 *************************************
 **BEGIN hydraulic_control.ddck
 *************************************
-EQUATIONS 4
+EQUATIONS #
+*** Massflowrates
 $MfrQSnk = 500
-$MfrPuSec = 500.0
-$MfrPuPri = $CollMSet
-$xFracVal = 0
-
-
-EQUATIONS 2
-$BolrOn = 0
-$BolrTSet = 120
-
-
-*******************************
-**END hydraulic_control.ddck
-*******************************
+$MfrQAddSrc = MAX(0, $MfrQSnk - $MfrPuCollSec)
+$MfrPuAddSrcSec = $MfrQAddSrc

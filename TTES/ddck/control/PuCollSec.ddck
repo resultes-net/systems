@@ -1,0 +1,60 @@
+*************************************
+** BEGIN PuCollPri.ddck
+*************************************
+
+*************************************
+** ABOUT
+** This control controls the pump on the secondary side of the solar collector HX. The pump is run only if
+**      1. The return temperature of the network `TNetReturn` is less than the supply temperature of the solar collector
+**          (with a hysterisis) and
+**      2. There isn't any mass flow into the storage or the temperature at the top of the tank `TTesTop` is less than a
+**          given maximum `TTesTopMax`
+*************************************
+
+*************************************
+** Connection to hydraulic file
+*************************************
+EQUATIONS #
+TNetReturn = $TTee7_PuCollSec
+
+*************************************
+** Connection to other ddcks
+*************************************
+EQUATIONS #
+TTesTop = $TSenAvg5_Tes1
+! CollTOut
+
+*************************************
+** Control
+*************************************
+CONSTANTS #
+TTesTopMax = 95
+dTUpper = 10
+dTLower = 5
+
+UNIT 1 TYPE 2
+PARAMETERS #
+5                   ! 1: Number of oscilattions
+TTesTopMax          ! 2: High limit cutout
+INPUTS #
+$CollTOut           ! 1: Upper value
+TNetReturn          ! 2: Lower value
+TTesTop             ! 3: Cutout monitoring value
+on         ! 4: Input control function
+dTUpper             ! 5: Upper dead band
+dTLower             ! 6: Lower dead band
+**
+0                   ! 1: Upper value
+0                   ! 2: Lower value
+0                   ! 3: Cutout monitoring value
+0                   ! 4: Input control function
+0                   ! 5: Upper dead band
+0                   ! 6: Lower dead band
+
+EQUATIONS #
+on = [1,1]
+$MfrPuCollSec = on*$MfrPuCollPri
+
+*******************************
+** END PuCollPri.ddck
+*******************************

@@ -22,14 +22,17 @@ qSysOut_dpSoilIntTot = dpSoilIntTot
 
 
 
-EQUATIONS 6
+EQUATIONS 9
 *** Black box component temperatures
 TCollH=TColl
 TTesDpL90_10H=TTesDpL90_10
 TQSnkH=TQSnk
 TBolrH=TBolr
-THxSide1H=THxSide1
-THxSide2H=THxSide2
+THxCollSide1H=THxCollSide1
+THxCollSide2H=THxCollSide2
+TQAddSrcH=TQAddSrc
+THxAddSrcSide1H=THxAddSrcSide1
+THxAddSrcSide2H=THxAddSrcSide2
 
 *** Default global PARAMETERS for single pipes
 CONSTANTS 1
@@ -74,57 +77,81 @@ dpRadNdDist = dpSoilThickness/dpNrSlRad ! Radial distance of any node in m
 dpNrSlCirc = 4  ! Number of circumferential soil nodes
 
 UNIT 450 TYPE 9352
-PARAMETERS 140
+PARAMETERS 220
 mfrSolverAbsTol
 mfrSolverRelTol
 mfrTolSwitchThreshold
-34
-28 22 0 0      !1 : SCnrCold
-27 29 0 0      !2 : SCnrHot
-28 31 0 0      !3 : SCnr2Cold
-30 29 0 0      !4 : SCnr2Hot
-15 16 0 0      !5 : Coll
-32 33 0 0      !6 : TesDpL90_10
-30 31 0 8      !7 : QSnk
-26 27 0 0      !8 : Bolr
-16 14 0 0      !9 : HxSide1
-34 18 0 0      !10 : HxSide2
-18 25 32 2     !11 : Tee
-19 24 33 2     !12 : Tee2
-14 15 0 8      !13 : PuPri
-9 13 0 0       !14 : Hx_Pump2
-13 5 0 0       !15 : Pump2_Coll
-5 9 0 0        !16 : Coll_Hx
-19 34 0 8      !17 : PuSec
-10 11 0 0      !18 : Hx_Tee
-12 17 0 0      !19 : Tee2_PuCharge
-26 25 23 3     !20 : Val
-24 22 23 2     !21 : Tee3
-1 21 0 0       !22 : SCnr_Tee3
-21 20 0 0      !23 : Tee3_Val
-21 12 0 0      !24 : Tee3_Tee2
-11 20 0 0      !25 : Tee_Val
-20 8 0 0       !26 : Val_Bolr
-8 2 0 0        !27 : Bolr_SCnr
-3 1 0 0        !28 : SCnr_SCnr2Cold
-2 4 0 0        !29 : SCnr_SCnr2Hot
-4 7 0 0        !30 : SCnr2_QSnk
-7 3 0 0        !31 : QSnk_SCnr2
-11 6 0 0       !32 : Tee_Tes
-6 12 0 0       !33 : Tes_Tee2
-17 10 0 0      !34 : PuSec_Hx
-INPUTS 34! for Type 9351
+54
+15 40 0 0      !1 : SCnrCold
+39 16 0 0      !2 : SCnrHot
+15 18 0 0      !3 : SCnr2Cold
+17 16 0 0      !4 : SCnr2Hot
+42 31 0 0      !5 : Coll
+44 46 0 0      !6 : TesDpL90_10
+17 18 0 8      !7 : QSnk
+49 41 0 0      !8 : Bolr
+31 32 0 0      !9 : HxCollSide1
+28 53 0 0      !10 : HxCollSide2
+33 52 45 2     !11 : Tee
+34 51 46 2     !12 : Tee2
+32 42 0 8      !13 : PuCollPri
+25 26 0 8      !14 : PuAddSrcSec
+3 1 0 0        !15 : SCnr_SCnr2Cold
+2 4 0 0        !16 : SCnr_SCnr2Hot
+4 7 0 0        !17 : SCnr2_QSnk
+7 3 0 0        !18 : QSnk_SCnr2
+30 29 0 8      !19 : QAddSrc
+29 30 0 0      !20 : HxAddSrcSide1
+26 27 0 0      !21 : HxAddSrcSide2
+43 28 0 8      !22 : PuCollSec
+53 33 27 2     !23 : Tee6
+43 34 25 2     !24 : Tee7
+24 14 0 0      !25 : Tee7_PuTes
+14 21 0 0      !26 : PuTes_Hx2
+21 23 0 0      !27 : Hx2_Tee6
+22 10 0 0      !28 : Pump_Hx
+19 20 0 0      !29 : QSrc_Hx2
+20 19 0 0      !30 : Hx2_QSrc
+5 9 0 0        !31 : Coll_Hx
+9 13 0 0       !32 : Hx_PuPri
+23 11 0 0      !33 : Tee6_Tee
+24 12 0 0      !34 : Tee7_Tee2
+45 44 0 0      !35 : Conn
+54 40 38 2     !36 : TeeMix
+39 41 38 3     !37 : ValMix
+36 37 0 0      !38 : Tee3_Val
+37 2 0 0       !39 : Val_SCnr
+1 36 0 0       !40 : SCnr_Tee3
+8 37 0 0       !41 : Bolr_Val
+13 5 0 0       !42 : PuCollPri_Coll
+24 22 0 0      !43 : Tee7_PuCollSec
+35 6 0 0       !44 : Conn_Tes
+11 35 0 0      !45 : Tee_Conn
+6 12 0 0       !46 : Tes_Tee2
+54 51 50 3     !47 : ValByPass
+52 49 50 2     !48 : TeeByPass
+48 8 0 0       !49 : Tee4_Bolr
+47 48 0 0      !50 : Val_Tee4
+47 12 0 0      !51 : Val_Tee2
+11 48 0 0      !52 : Tee_TeeByPass
+10 23 0 0      !53 : HxColl_Tee6
+36 47 0 0      !54 : TeeMix_ValByPass
+INPUTS 54! for Type 9351
 0,0 0,0 0,0 0,0 0,0 0,0 MfrQSnk 0,0 0,0 0,0 
-0,0 0,0 MfrPuPri 0,0 0,0 0,0 MfrPuSec 0,0 0,0 xFracVal 
-0,0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 
-0,0 0,0 0,0 0,0 
+0,0 0,0 MfrPuCollPri MfrPuAddSrcSec 0,0 0,0 0,0 0,0 MfrQAddSrc 0,0 0,0 
+MfrPuCollSec 0,0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 
+0,0 0,0 0,0 0,0 0,0 xFracValMix 0,0 0,0 0,0 0,0 
+0,0 0,0 0,0 0,0 0,0 xFracValByPass 0,0 0,0 0,0 0,0 
+0,0 0,0 0,0 
 *** Initial Inputs
+0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 
 0 0 0 0 0 0 0 0 0 0 
 0 0 0 0 0 0 0 0 0 0 
 0 0 0 0 0 0 0 0 0 0 
 0 0 0 0 
 
-EQUATIONS 72	! Output up to three (A,B,C) mass flow rates of each component, positive = input/inlet, negative = output/outlet 
+EQUATIONS 116	! Output up to three (A,B,C) mass flow rates of each component, positive = input/inlet, negative = output/outlet 
 MSCnrCold_A=[450,1]
 MSCnrCold_B=[450,2]
 MSCnrHot_A=[450,4]
@@ -141,62 +168,106 @@ MQSnk_A=[450,19]
 MQSnk_B=[450,20]
 MBolr_A=[450,22]
 MBolr_B=[450,23]
-MHxSide1_A=[450,25]
-MHxSide1_B=[450,26]
-MHxSide2_A=[450,28]
-MHxSide2_B=[450,29]
+MHxCollSide1_A=[450,25]
+MHxCollSide1_B=[450,26]
+MHxCollSide2_A=[450,28]
+MHxCollSide2_B=[450,29]
 MTee_A=[450,31]
 MTee_B=[450,32]
 MTee_C=[450,33]
 MTee2_A=[450,34]
 MTee2_B=[450,35]
 MTee2_C=[450,36]
-MPuPri_A=[450,37]
-MPuPri_B=[450,38]
-MHx_Pump2_A=[450,40]
-MHx_Pump2_B=[450,41]
-MPump2_Coll_A=[450,43]
-MPump2_Coll_B=[450,44]
-MColl_Hx_A=[450,46]
-MColl_Hx_B=[450,47]
-MPuSec_A=[450,49]
-MPuSec_B=[450,50]
-MHx_Tee_A=[450,52]
-MHx_Tee_B=[450,53]
-MTee2_PuCharge_A=[450,55]
-MTee2_PuCharge_B=[450,56]
-MVal_A=[450,58]
-MVal_B=[450,59]
-MVal_C=[450,60]
-MTee3_A=[450,61]
-MTee3_B=[450,62]
-MTee3_C=[450,63]
-MSCnr_Tee3_A=[450,64]
-MSCnr_Tee3_B=[450,65]
-MTee3_Val_A=[450,67]
-MTee3_Val_B=[450,68]
-MTee3_Tee2_A=[450,70]
-MTee3_Tee2_B=[450,71]
-MTee_Val_A=[450,73]
-MTee_Val_B=[450,74]
-MVal_Bolr_A=[450,76]
-MVal_Bolr_B=[450,77]
-MBolr_SCnr_A=[450,79]
-MBolr_SCnr_B=[450,80]
-MSCnr_SCnr2Cold_A=[450,82]
-MSCnr_SCnr2Cold_B=[450,83]
-MSCnr_SCnr2Hot_A=[450,85]
-MSCnr_SCnr2Hot_B=[450,86]
-MSCnr2_QSnk_A=[450,88]
-MSCnr2_QSnk_B=[450,89]
-MQSnk_SCnr2_A=[450,91]
-MQSnk_SCnr2_B=[450,92]
-MTee_Tes_A=[450,94]
-MTee_Tes_B=[450,95]
-MTes_Tee2_A=[450,97]
-MTes_Tee2_B=[450,98]
-MPuSec_Hx_A=[450,100]
-MPuSec_Hx_B=[450,101]
+MPuCollPri_A=[450,37]
+MPuCollPri_B=[450,38]
+MPuAddSrcSec_A=[450,40]
+MPuAddSrcSec_B=[450,41]
+MSCnr_SCnr2Cold_A=[450,43]
+MSCnr_SCnr2Cold_B=[450,44]
+MSCnr_SCnr2Hot_A=[450,46]
+MSCnr_SCnr2Hot_B=[450,47]
+MSCnr2_QSnk_A=[450,49]
+MSCnr2_QSnk_B=[450,50]
+MQSnk_SCnr2_A=[450,52]
+MQSnk_SCnr2_B=[450,53]
+MQAddSrc_A=[450,55]
+MQAddSrc_B=[450,56]
+MHxAddSrcSide1_A=[450,58]
+MHxAddSrcSide1_B=[450,59]
+MHxAddSrcSide2_A=[450,61]
+MHxAddSrcSide2_B=[450,62]
+MPuCollSec_A=[450,64]
+MPuCollSec_B=[450,65]
+MTee6_A=[450,67]
+MTee6_B=[450,68]
+MTee6_C=[450,69]
+MTee7_A=[450,70]
+MTee7_B=[450,71]
+MTee7_C=[450,72]
+MTee7_PuTes_A=[450,73]
+MTee7_PuTes_B=[450,74]
+MPuTes_Hx2_A=[450,76]
+MPuTes_Hx2_B=[450,77]
+MHx2_Tee6_A=[450,79]
+MHx2_Tee6_B=[450,80]
+MPump_Hx_A=[450,82]
+MPump_Hx_B=[450,83]
+MQSrc_Hx2_A=[450,85]
+MQSrc_Hx2_B=[450,86]
+MHx2_QSrc_A=[450,88]
+MHx2_QSrc_B=[450,89]
+MColl_Hx_A=[450,91]
+MColl_Hx_B=[450,92]
+MHx_PuPri_A=[450,94]
+MHx_PuPri_B=[450,95]
+MTee6_Tee_A=[450,97]
+MTee6_Tee_B=[450,98]
+MTee7_Tee2_A=[450,100]
+MTee7_Tee2_B=[450,101]
+MConn_A=[450,103]
+MConn_B=[450,104]
+MTeeMix_A=[450,106]
+MTeeMix_B=[450,107]
+MTeeMix_C=[450,108]
+MValMix_A=[450,109]
+MValMix_B=[450,110]
+MValMix_C=[450,111]
+MTee3_Val_A=[450,112]
+MTee3_Val_B=[450,113]
+MVal_SCnr_A=[450,115]
+MVal_SCnr_B=[450,116]
+MSCnr_Tee3_A=[450,118]
+MSCnr_Tee3_B=[450,119]
+MBolr_Val_A=[450,121]
+MBolr_Val_B=[450,122]
+MPuCollPri_Coll_A=[450,124]
+MPuCollPri_Coll_B=[450,125]
+MTee7_PuCollSec_A=[450,127]
+MTee7_PuCollSec_B=[450,128]
+MConn_Tes_A=[450,130]
+MConn_Tes_B=[450,131]
+MTee_Conn_A=[450,133]
+MTee_Conn_B=[450,134]
+MTes_Tee2_A=[450,136]
+MTes_Tee2_B=[450,137]
+MValByPass_A=[450,139]
+MValByPass_B=[450,140]
+MValByPass_C=[450,141]
+MTeeByPass_A=[450,142]
+MTeeByPass_B=[450,143]
+MTeeByPass_C=[450,144]
+MTee4_Bolr_A=[450,145]
+MTee4_Bolr_B=[450,146]
+MVal_Tee4_A=[450,148]
+MVal_Tee4_B=[450,149]
+MVal_Tee2_A=[450,151]
+MVal_Tee2_B=[450,152]
+MTee_TeeByPass_A=[450,154]
+MTee_TeeByPass_B=[450,155]
+MHxColl_Tee6_A=[450,157]
+MHxColl_Tee6_B=[450,158]
+MTeeMix_ValByPass_A=[450,160]
+MTeeMix_ValByPass_B=[450,161]
 
 
 ** Fluids:
@@ -209,15 +280,7 @@ FwaterRho = RHOWAT ! [kg/m^3]
 FwaterCp = CPWAT_SI*0.001 ! [kJ/(kg*K)]
 
 ** Hydraulic loops
-EQUATIONS 10
-** loop1
-Lloop1Rho = FbrineRho
-Lloop1Cp = FbrineCp
-
-** loop3
-Lloop3Rho = FwaterRho
-Lloop3Cp = FwaterCp
-
+EQUATIONS 12
 ** loop2
 loop2NPipes = 2
 loop2Len = 2.0 ! [m]
@@ -225,6 +288,18 @@ loop2Dia = 0.02 ! [m]
 loop2UVal = 9.99972 ! [kJ/(h*m^2*K)] (= 2.7777 W/(m^2*K))
 Lloop2Rho = FwaterRho
 Lloop2Cp = FwaterCp
+
+** loop1
+Lloop1Rho = FwaterRho
+Lloop1Cp = FwaterCp
+
+** loop4
+Lloop4Rho = FwaterRho
+Lloop4Cp = FwaterCp
+
+** loop5
+Lloop5Rho = FwaterRho
+Lloop5Cp = FwaterCp
 
 
 ! BEGIN SCnr
@@ -246,7 +321,7 @@ PARAMETERS 2
 mfrSolverAbsTol
 spTIni
 INPUTS 3
-MSCnrHot_A TBolr_SCnr TSCnr_SCnr2Hot
+MSCnrHot_A TVal_SCnr TSCnr_SCnr2Hot
 ***
 0 spTIni spTIni
 EQUATIONS 1
@@ -287,9 +362,9 @@ INPUTS 6
 MTee_A
 MTee_B
 MTee_C
-THx_Tee
-TTee_Val
-TTee_Tes
+TTee6_Tee
+TTee_TeeByPass
+TTee_Conn
 ***
 0
 0
@@ -306,8 +381,8 @@ INPUTS 6
 MTee2_A
 MTee2_B
 MTee2_C
-TTee2_PuCharge
-TTee3_Tee2
+TTee7_Tee2
+TVal_Tee2
 TTes_Tee2
 ***
 0
@@ -324,226 +399,24 @@ PARAMETERS 2
 mfrSolverAbsTol
 spTIni
 INPUTS 3
-MPuPri_A THx_Pump2 TPump2_Coll
+MPuCollPri_A THx_PuPri TPuCollPri_Coll
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TPuPri = [457,1]
-MPuPri = MPuPri_A
+TPuCollPri = [457,1]
+MPuCollPri = MPuCollPri_A
 
-UNIT 458 TYPE 931
-! Hx_Pump2
-PARAMETERS 6
-0.02 ! diameter [m]
-33.333333333333336 ! length [m]
-9.99972 ! U-value [kJ/(h*m^2*K)]  (= 2.7777 W/(m^2*K))
-Lloop1Rho ! density [kg/m^3]
-Lloop1Cp ! specific heat [kJ/(kg*K)]
-spTIni ! Initial fluid temperature [deg C]
-INPUTS 4
-THxSide1H ! input flow temperature [deg C]
-MHx_Pump2_A ! input mass flow [kg/h]
-TRoomStore ! ambient temperature [deg C]
-TPuPri ! reverse flow input temperature [deg C]
-***Initial values
-20 0.0 20 20
-
-EQUATIONS 5
-THx_Pump2 = [458,1] ! Output flow temperature [deg C]
-PHx_Pump2_kW = [458,3]/3600 ! Dissipated heat [kW]
-PHx_Pump2Conv_kW = [458,4]/3600 ! Convected heat [kW]
-PHx_Pump2Int_kJ = [458,5] ! Accumulated internal energy since start of simulation [kJ]
-MHx_Pump2 = MHx_Pump2_A
-
-UNIT 459 TYPE 931
-! Pump2_Coll
-PARAMETERS 6
-0.02 ! diameter [m]
-33.333333333333336 ! length [m]
-9.99972 ! U-value [kJ/(h*m^2*K)]  (= 2.7777 W/(m^2*K))
-Lloop1Rho ! density [kg/m^3]
-Lloop1Cp ! specific heat [kJ/(kg*K)]
-spTIni ! Initial fluid temperature [deg C]
-INPUTS 4
-TPuPri ! input flow temperature [deg C]
-MPump2_Coll_A ! input mass flow [kg/h]
-TRoomStore ! ambient temperature [deg C]
-TCollH ! reverse flow input temperature [deg C]
-***Initial values
-20 0.0 20 20
-
-EQUATIONS 5
-TPump2_Coll = [459,1] ! Output flow temperature [deg C]
-PPump2_Coll_kW = [459,3]/3600 ! Dissipated heat [kW]
-PPump2_CollConv_kW = [459,4]/3600 ! Convected heat [kW]
-PPump2_CollInt_kJ = [459,5] ! Accumulated internal energy since start of simulation [kJ]
-MPump2_Coll = MPump2_Coll_A
-
-UNIT 460 TYPE 931
-! Coll_Hx
-PARAMETERS 6
-0.02 ! diameter [m]
-33.333333333333336 ! length [m]
-9.99972 ! U-value [kJ/(h*m^2*K)]  (= 2.7777 W/(m^2*K))
-Lloop1Rho ! density [kg/m^3]
-Lloop1Cp ! specific heat [kJ/(kg*K)]
-spTIni ! Initial fluid temperature [deg C]
-INPUTS 4
-TCollH ! input flow temperature [deg C]
-MColl_Hx_A ! input mass flow [kg/h]
-TRoomStore ! ambient temperature [deg C]
-THxSide1H ! reverse flow input temperature [deg C]
-***Initial values
-20 0.0 20 20
-
-EQUATIONS 5
-TColl_Hx = [460,1] ! Output flow temperature [deg C]
-PColl_Hx_kW = [460,3]/3600 ! Dissipated heat [kW]
-PColl_HxConv_kW = [460,4]/3600 ! Convected heat [kW]
-PColl_HxInt_kJ = [460,5] ! Accumulated internal energy since start of simulation [kJ]
-MColl_Hx = MColl_Hx_A
-
-UNIT 461 TYPE 2221
+UNIT 458 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
 INPUTS 3
-MPuSec_A TTee2_PuCharge TPuSec_Hx
+MPuAddSrcSec_A TTee7_PuTes TPuTes_Hx2
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TPuSec = [461,1]
-MPuSec = MPuSec_A
-
-UNIT 462 TYPE 2221
-PARAMETERS 2
-mfrSolverAbsTol
-spTIni
-INPUTS 3
-MHx_Tee_A THxSide2H TTee
-***
-0 spTIni spTIni
-EQUATIONS 2
-THx_Tee = [462,1]
-MHx_Tee = MHx_Tee_A
-
-UNIT 463 TYPE 2221
-PARAMETERS 2
-mfrSolverAbsTol
-spTIni
-INPUTS 3
-MTee2_PuCharge_A TTee2 TPuSec
-***
-0 spTIni spTIni
-EQUATIONS 2
-TTee2_PuCharge = [463,1]
-MTee2_PuCharge = MTee2_PuCharge_A
-
-UNIT 464 TYPE 929
-!Val
-PARAMETERS 0
-INPUTS 6
-MVal_A
-MVal_B
-MVal_C
-TVal_Bolr
-TTee_Val
-TTee3_Val
-***Initial values
-0 0 0 20 20 20 
-EQUATIONS 1
-TVal= [464,1]
-
-! Tee3
-UNIT 465 TYPE 929
-INPUTS 6
-MTee3_A
-MTee3_B
-MTee3_C
-TTee3_Tee2
-TSCnr_Tee3
-TTee3_Val
-***
-0
-0
-0
-20.0
-20.0
-20.0
-EQUATIONS 1
-TTee3 = [465,1]
-
-UNIT 466 TYPE 2221
-PARAMETERS 2
-mfrSolverAbsTol
-spTIni
-INPUTS 3
-MSCnr_Tee3_A TSCnrCold TTee3
-***
-0 spTIni spTIni
-EQUATIONS 2
-TSCnr_Tee3 = [466,1]
-MSCnr_Tee3 = MSCnr_Tee3_A
-
-UNIT 467 TYPE 2221
-PARAMETERS 2
-mfrSolverAbsTol
-spTIni
-INPUTS 3
-MTee3_Val_A TTee3 TVal
-***
-0 spTIni spTIni
-EQUATIONS 2
-TTee3_Val = [467,1]
-MTee3_Val = MTee3_Val_A
-
-UNIT 468 TYPE 2221
-PARAMETERS 2
-mfrSolverAbsTol
-spTIni
-INPUTS 3
-MTee3_Tee2_A TTee3 TTee2
-***
-0 spTIni spTIni
-EQUATIONS 2
-TTee3_Tee2 = [468,1]
-MTee3_Tee2 = MTee3_Tee2_A
-
-UNIT 469 TYPE 2221
-PARAMETERS 2
-mfrSolverAbsTol
-spTIni
-INPUTS 3
-MTee_Val_A TTee TVal
-***
-0 spTIni spTIni
-EQUATIONS 2
-TTee_Val = [469,1]
-MTee_Val = MTee_Val_A
-
-UNIT 470 TYPE 2221
-PARAMETERS 2
-mfrSolverAbsTol
-spTIni
-INPUTS 3
-MVal_Bolr_A TVal TBolrH
-***
-0 spTIni spTIni
-EQUATIONS 2
-TVal_Bolr = [470,1]
-MVal_Bolr = MVal_Bolr_A
-
-UNIT 471 TYPE 2221
-PARAMETERS 2
-mfrSolverAbsTol
-spTIni
-INPUTS 3
-MBolr_SCnr_A TBolrH TSCnrHot
-***
-0 spTIni spTIni
-EQUATIONS 2
-TBolr_SCnr = [471,1]
-MBolr_SCnr = MBolr_SCnr_A
+TPuAddSrcSec = [458,1]
+MPuAddSrcSec = MPuAddSrcSec_A
 
 CONSTANTS 4
 SCnr_SCnr2_Len = 579.404
@@ -552,7 +425,7 @@ SCnr_SCnr2_NrSlAx = INT(SCnr_SCnr2_Len*dpNrSlAxRef/dpLengthRef) + 1
 SCnr_SCnr2_NrFlNds = dpNrFlNdsToNrSlAxRatio*SCnr_SCnr2_NrSlAx
 SCnr_SCnr2_NrSlCirc = dpNrSlCirc
 
-UNIT 472 TYPE 9511
+UNIT 459 TYPE 9511
 ! SCnr_SCnr2
 PARAMETERS 36
 ****** pipe and soil properties ******
@@ -614,24 +487,24 @@ dpTIniHot
 dpTIniHot
 
 EQUATIONS 14
-TSCnr_SCnr2Cold = [472,1]  ! Outlet fluid temperature, deg C
+TSCnr_SCnr2Cold = [459,1]  ! Outlet fluid temperature, deg C
 MSCnr_SCnr2Cold = MSCnr_SCnr2Cold_A  ! Outlet mass flow rate, kg/h
 
-TSCnr_SCnr2Hot = [472,3]  ! Outlet fluid temperature, deg C
+TSCnr_SCnr2Hot = [459,3]  ! Outlet fluid temperature, deg C
 MSCnr_SCnr2Hot = MSCnr_SCnr2Hot_A  ! Outlet mass flow rate, kg/h
 
-SCnr_SCnr2ColdConv = [472,7]*-1*1/3600 ! Convected heat [kW]
-SCnr_SCnr2ColdInt = [472,9]*1/3600 ! Change in fluid's internal heat content compared to previous time step [kW]
-SCnr_SCnr2ColdDiss = [472,11]*1/3600 ! Dissipated heat to casing (aka gravel) [kW]
-SCnr_SCnr2HotConv = [472,8]*-1*1/3600 ! Convected heat [kW]
-SCnr_SCnr2HotInt = [472,10]*1/3600 ! Change in fluid's internal heat content compared to previous time step [kW]
-SCnr_SCnr2HotDiss = [472,12]*1/3600 ! Dissipated heat to casing (aka gravel) [kW]
-SCnr_SCnr2Exch = [472,13]*1/3600 ! Dissipated heat from cold pipe to hot pipe [kW]
-SCnr_SCnr2GrSl = [472,14]*1/3600 ! Dissipated heat from gravel to soil [kW]
-SCnr_SCnr2SlFf = [472,15]*1/3600 ! Dissipated heat from soil to "far field" [kW]
-SCnr_SCnr2SlInt = [472,16]*1/3600 ! Change in soil's internal heat content compared to previous time step [kW]
+SCnr_SCnr2ColdConv = [459,7]*-1*1/3600 ! Convected heat [kW]
+SCnr_SCnr2ColdInt = [459,9]*1/3600 ! Change in fluid's internal heat content compared to previous time step [kW]
+SCnr_SCnr2ColdDiss = [459,11]*1/3600 ! Dissipated heat to casing (aka gravel) [kW]
+SCnr_SCnr2HotConv = [459,8]*-1*1/3600 ! Convected heat [kW]
+SCnr_SCnr2HotInt = [459,10]*1/3600 ! Change in fluid's internal heat content compared to previous time step [kW]
+SCnr_SCnr2HotDiss = [459,12]*1/3600 ! Dissipated heat to casing (aka gravel) [kW]
+SCnr_SCnr2Exch = [459,13]*1/3600 ! Dissipated heat from cold pipe to hot pipe [kW]
+SCnr_SCnr2GrSl = [459,14]*1/3600 ! Dissipated heat from gravel to soil [kW]
+SCnr_SCnr2SlFf = [459,15]*1/3600 ! Dissipated heat from soil to "far field" [kW]
+SCnr_SCnr2SlInt = [459,16]*1/3600 ! Change in soil's internal heat content compared to previous time step [kW]
 
-UNIT 473 TYPE 931
+UNIT 460 TYPE 931
 ! SCnr2_QSnk
 PARAMETERS 6
 loop2Dia ! diameter [m]
@@ -649,13 +522,13 @@ TQSnkH ! reverse flow input temperature [deg C]
 20 0.0 20 20
 
 EQUATIONS 5
-TSCnr2_QSnk = [473,1] ! Output flow temperature [deg C]
-PSCnr2_QSnk_kW = [473,3]/3600 ! Dissipated heat [kW]
-PSCnr2_QSnkConv_kW = [473,4]/3600 ! Convected heat [kW]
-PSCnr2_QSnkInt_kJ = [473,5] ! Accumulated internal energy since start of simulation [kJ]
+TSCnr2_QSnk = [460,1] ! Output flow temperature [deg C]
+PSCnr2_QSnk_kW = [460,3]/3600 ! Dissipated heat [kW]
+PSCnr2_QSnkConv_kW = [460,4]/3600 ! Convected heat [kW]
+PSCnr2_QSnkInt_kJ = [460,5] ! Accumulated internal energy since start of simulation [kJ]
 MSCnr2_QSnk = MSCnr2_QSnk_A
 
-UNIT 474 TYPE 931
+UNIT 461 TYPE 931
 ! QSnk_SCnr2
 PARAMETERS 6
 loop2Dia ! diameter [m]
@@ -673,25 +546,325 @@ TSCnr2Cold ! reverse flow input temperature [deg C]
 20 0.0 20 20
 
 EQUATIONS 5
-TQSnk_SCnr2 = [474,1] ! Output flow temperature [deg C]
-PQSnk_SCnr2_kW = [474,3]/3600 ! Dissipated heat [kW]
-PQSnk_SCnr2Conv_kW = [474,4]/3600 ! Convected heat [kW]
-PQSnk_SCnr2Int_kJ = [474,5] ! Accumulated internal energy since start of simulation [kJ]
+TQSnk_SCnr2 = [461,1] ! Output flow temperature [deg C]
+PQSnk_SCnr2_kW = [461,3]/3600 ! Dissipated heat [kW]
+PQSnk_SCnr2Conv_kW = [461,4]/3600 ! Convected heat [kW]
+PQSnk_SCnr2Int_kJ = [461,5] ! Accumulated internal energy since start of simulation [kJ]
 MQSnk_SCnr2 = MQSnk_SCnr2_A
+
+UNIT 462 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MPuCollSec_A TTee7_PuCollSec TPump_Hx
+***
+0 spTIni spTIni
+EQUATIONS 2
+TPuCollSec = [462,1]
+MPuCollSec = MPuCollSec_A
+
+! Tee6
+UNIT 463 TYPE 929
+INPUTS 6
+MTee6_A
+MTee6_B
+MTee6_C
+THxColl_Tee6
+TTee6_Tee
+THx2_Tee6
+***
+0
+0
+0
+20.0
+20.0
+20.0
+EQUATIONS 1
+TTee6 = [463,1]
+
+! Tee7
+UNIT 464 TYPE 929
+INPUTS 6
+MTee7_A
+MTee7_B
+MTee7_C
+TTee7_PuCollSec
+TTee7_Tee2
+TTee7_PuTes
+***
+0
+0
+0
+20.0
+20.0
+20.0
+EQUATIONS 1
+TTee7 = [464,1]
+
+UNIT 465 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MTee7_PuTes_A TTee7 TPuAddSrcSec
+***
+0 spTIni spTIni
+EQUATIONS 2
+TTee7_PuTes = [465,1]
+MTee7_PuTes = MTee7_PuTes_A
+
+UNIT 466 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MPuTes_Hx2_A TPuAddSrcSec THxAddSrcSide2H
+***
+0 spTIni spTIni
+EQUATIONS 2
+TPuTes_Hx2 = [466,1]
+MPuTes_Hx2 = MPuTes_Hx2_A
+
+UNIT 467 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MHx2_Tee6_A THxAddSrcSide2H TTee6
+***
+0 spTIni spTIni
+EQUATIONS 2
+THx2_Tee6 = [467,1]
+MHx2_Tee6 = MHx2_Tee6_A
+
+UNIT 468 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MPump_Hx_A TPuCollSec THxCollSide2H
+***
+0 spTIni spTIni
+EQUATIONS 2
+TPump_Hx = [468,1]
+MPump_Hx = MPump_Hx_A
+
+UNIT 469 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MQSrc_Hx2_A TQAddSrcH THxAddSrcSide1H
+***
+0 spTIni spTIni
+EQUATIONS 2
+TQSrc_Hx2 = [469,1]
+MQSrc_Hx2 = MQSrc_Hx2_A
+
+UNIT 470 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MHx2_QSrc_A THxAddSrcSide1H TQAddSrcH
+***
+0 spTIni spTIni
+EQUATIONS 2
+THx2_QSrc = [470,1]
+MHx2_QSrc = MHx2_QSrc_A
+
+UNIT 471 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MColl_Hx_A TCollH THxCollSide1H
+***
+0 spTIni spTIni
+EQUATIONS 2
+TColl_Hx = [471,1]
+MColl_Hx = MColl_Hx_A
+
+UNIT 472 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MHx_PuPri_A THxCollSide1H TPuCollPri
+***
+0 spTIni spTIni
+EQUATIONS 2
+THx_PuPri = [472,1]
+MHx_PuPri = MHx_PuPri_A
+
+UNIT 473 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MTee6_Tee_A TTee6 TTee
+***
+0 spTIni spTIni
+EQUATIONS 2
+TTee6_Tee = [473,1]
+MTee6_Tee = MTee6_Tee_A
+
+UNIT 474 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MTee7_Tee2_A TTee7 TTee2
+***
+0 spTIni spTIni
+EQUATIONS 2
+TTee7_Tee2 = [474,1]
+MTee7_Tee2 = MTee7_Tee2_A
 
 UNIT 475 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
 INPUTS 3
-MTee_Tes_A TTee TTesDpL90_10H
+MConn_A TTee_Conn TConn_Tes
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TTee_Tes = [475,1]
-MTee_Tes = MTee_Tes_A
+TConn = [475,1]
+MConn = MConn_A
 
-UNIT 476 TYPE 2221
+! TeeMix
+UNIT 476 TYPE 929
+INPUTS 6
+MTeeMix_A
+MTeeMix_B
+MTeeMix_C
+TTeeMix_ValByPass
+TSCnr_Tee3
+TTee3_Val
+***
+0
+0
+0
+20.0
+20.0
+20.0
+EQUATIONS 1
+TTeeMix = [476,1]
+
+UNIT 477 TYPE 929
+!ValMix
+PARAMETERS 0
+INPUTS 6
+MValMix_A
+MValMix_B
+MValMix_C
+TVal_SCnr
+TBolr_Val
+TTee3_Val
+***Initial values
+0 0 0 20 20 20 
+EQUATIONS 1
+TValMix= [477,1]
+
+UNIT 478 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MTee3_Val_A TTeeMix TValMix
+***
+0 spTIni spTIni
+EQUATIONS 2
+TTee3_Val = [478,1]
+MTee3_Val = MTee3_Val_A
+
+UNIT 479 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MVal_SCnr_A TValMix TSCnrHot
+***
+0 spTIni spTIni
+EQUATIONS 2
+TVal_SCnr = [479,1]
+MVal_SCnr = MVal_SCnr_A
+
+UNIT 480 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MSCnr_Tee3_A TSCnrCold TTeeMix
+***
+0 spTIni spTIni
+EQUATIONS 2
+TSCnr_Tee3 = [480,1]
+MSCnr_Tee3 = MSCnr_Tee3_A
+
+UNIT 481 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MBolr_Val_A TBolrH TValMix
+***
+0 spTIni spTIni
+EQUATIONS 2
+TBolr_Val = [481,1]
+MBolr_Val = MBolr_Val_A
+
+UNIT 482 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MPuCollPri_Coll_A TPuCollPri TCollH
+***
+0 spTIni spTIni
+EQUATIONS 2
+TPuCollPri_Coll = [482,1]
+MPuCollPri_Coll = MPuCollPri_Coll_A
+
+UNIT 483 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MTee7_PuCollSec_A TTee7 TPuCollSec
+***
+0 spTIni spTIni
+EQUATIONS 2
+TTee7_PuCollSec = [483,1]
+MTee7_PuCollSec = MTee7_PuCollSec_A
+
+UNIT 484 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MConn_Tes_A TConn TTesDpL90_10H
+***
+0 spTIni spTIni
+EQUATIONS 2
+TConn_Tes = [484,1]
+MConn_Tes = MConn_Tes_A
+
+UNIT 485 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MTee_Conn_A TTee TConn
+***
+0 spTIni spTIni
+EQUATIONS 2
+TTee_Conn = [485,1]
+MTee_Conn = MTee_Conn_A
+
+UNIT 486 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -700,24 +873,118 @@ MTes_Tee2_A TTesDpL90_10H TTee2
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TTes_Tee2 = [476,1]
+TTes_Tee2 = [486,1]
 MTes_Tee2 = MTes_Tee2_A
 
-UNIT 477 TYPE 2221
+UNIT 487 TYPE 929
+!ValByPass
+PARAMETERS 0
+INPUTS 6
+MValByPass_A
+MValByPass_B
+MValByPass_C
+TTeeMix_ValByPass
+TVal_Tee2
+TVal_Tee4
+***Initial values
+0 0 0 20 20 20 
+EQUATIONS 1
+TValByPass= [487,1]
+
+! TeeByPass
+UNIT 488 TYPE 929
+INPUTS 6
+MTeeByPass_A
+MTeeByPass_B
+MTeeByPass_C
+TTee_TeeByPass
+TTee4_Bolr
+TVal_Tee4
+***
+0
+0
+0
+20.0
+20.0
+20.0
+EQUATIONS 1
+TTeeByPass = [488,1]
+
+UNIT 489 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
 INPUTS 3
-MPuSec_Hx_A TPuSec THxSide2H
+MTee4_Bolr_A TTeeByPass TBolrH
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TPuSec_Hx = [477,1]
-MPuSec_Hx = MPuSec_Hx_A
+TTee4_Bolr = [489,1]
+MTee4_Bolr = MTee4_Bolr_A
+
+UNIT 490 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MVal_Tee4_A TValByPass TTeeByPass
+***
+0 spTIni spTIni
+EQUATIONS 2
+TVal_Tee4 = [490,1]
+MVal_Tee4 = MVal_Tee4_A
+
+UNIT 491 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MVal_Tee2_A TValByPass TTee2
+***
+0 spTIni spTIni
+EQUATIONS 2
+TVal_Tee2 = [491,1]
+MVal_Tee2 = MVal_Tee2_A
+
+UNIT 492 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MTee_TeeByPass_A TTee TTeeByPass
+***
+0 spTIni spTIni
+EQUATIONS 2
+TTee_TeeByPass = [492,1]
+MTee_TeeByPass = MTee_TeeByPass_A
+
+UNIT 493 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MHxColl_Tee6_A THxCollSide2H TTee6
+***
+0 spTIni spTIni
+EQUATIONS 2
+THxColl_Tee6 = [493,1]
+MHxColl_Tee6 = MHxColl_Tee6_A
+
+UNIT 494 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MTeeMix_ValByPass_A TTeeMix TValByPass
+***
+0 spTIni spTIni
+EQUATIONS 2
+TTeeMix_ValByPass = [494,1]
+MTeeMix_ValByPass = MTeeMix_ValByPass_A
 
 *** Single pipe losses
 EQUATIONS 1
-spPipeEnIntTot = PHx_Pump2Int_kJ+PPump2_CollInt_kJ+PColl_HxInt_kJ+PSCnr2_QSnkInt_kJ+PQSnk_SCnr2Int_kJ
+spPipeEnIntTot = PSCnr2_QSnkInt_kJ+PQSnk_SCnr2Int_kJ
 
 UNIT 100 TYPE 993
 PARAMETERS 1
@@ -728,8 +995,8 @@ spPipeEnIntTot
 0
 
 EQUATIONS 4
-spPipeConvectedTot = PHx_Pump2Conv_kW+PPump2_CollConv_kW+PColl_HxConv_kW+PSCnr2_QSnkConv_kW+PQSnk_SCnr2Conv_kW
-PipeLossTot = PHx_Pump2_kW+PPump2_Coll_kW+PColl_Hx_kW+PSCnr2_QSnk_kW+PQSnk_SCnr2_kW
+spPipeConvectedTot = PSCnr2_QSnkConv_kW+PQSnk_SCnr2Conv_kW
+PipeLossTot = PSCnr2_QSnk_kW+PQSnk_SCnr2_kW
 spPipeIntTot = (spPipeEnIntTot - [100,1]) / dtSim / 3600 ! kW
 spImbalance = spPipeConvectedTot - PipeLossTot - spPipeIntTot
 *** Double pipe energy balance
@@ -739,14 +1006,14 @@ dpToFFieldTot = SCnr_SCnr2SlFf
 dpPipeIntTot = SCnr_SCnr2ColdInt + SCnr_SCnr2HotInt
 dpSoilIntTot = SCnr_SCnr2SlInt
 dpImbalance = dpPipeConvectedTot - dpToFFieldTot  - dpPipeIntTot - dpSoilIntTot
-ASSIGN TTES_Mfr.prt 478
+ASSIGN TTES_Mfr.prt 495
 
-UNIT 478 TYPE 25! User defined Printer
+UNIT 495 TYPE 25! User defined Printer
 PARAMETERS 10
 dtSim! 1 Printing interval
 START! 2 Start time
 STOP! 3 Stop time
-478! 4 Logical unit
+495! 4 Logical unit
 0! 5 Units printing mode
 0! 6 Relative or absolute start time
 -1! 7 Overwrite or Append
@@ -754,25 +1021,27 @@ STOP! 3 Stop time
 0! 9 Delimiter
 1! 10 Print labels
 
-INPUTS 19
-MHx_Pump2 MPump2_Coll MColl_Hx MHx_Tee MTee2_PuCharge xFracVal MSCnr_Tee3 MTee3_Val
-MTee3_Tee2 MTee_Val MVal_Bolr MBolr_SCnr MSCnr_SCnr2Cold MSCnr_SCnr2Hot MSCnr2_QSnk MQSnk_SCnr2
-MTee_Tes MTes_Tee2 MPuSec_Hx
+INPUTS 31
+MSCnr_SCnr2Cold MSCnr_SCnr2Hot MSCnr2_QSnk MQSnk_SCnr2 MTee7_PuTes MPuTes_Hx2 MHx2_Tee6 MPump_Hx
+MQSrc_Hx2 MHx2_QSrc MColl_Hx MHx_PuPri MTee6_Tee MTee7_Tee2 xFracValMix MTee3_Val
+MVal_SCnr MSCnr_Tee3 MBolr_Val MPuCollPri_Coll MTee7_PuCollSec MConn_Tes MTee_Conn MTes_Tee2
+xFracValByPass MTee4_Bolr MVal_Tee4 MVal_Tee2 MTee_TeeByPass MHxColl_Tee6 MTeeMix_ValByPass
 
 ***
-MHx_Pump2 MPump2_Coll MColl_Hx MHx_Tee MTee2_PuCharge xFracVal MSCnr_Tee3 MTee3_Val
-MTee3_Tee2 MTee_Val MVal_Bolr MBolr_SCnr MSCnr_SCnr2Cold MSCnr_SCnr2Hot MSCnr2_QSnk MQSnk_SCnr2
-MTee_Tes MTes_Tee2 MPuSec_Hx
+MSCnr_SCnr2Cold MSCnr_SCnr2Hot MSCnr2_QSnk MQSnk_SCnr2 MTee7_PuTes MPuTes_Hx2 MHx2_Tee6 MPump_Hx
+MQSrc_Hx2 MHx2_QSrc MColl_Hx MHx_PuPri MTee6_Tee MTee7_Tee2 xFracValMix MTee3_Val
+MVal_SCnr MSCnr_Tee3 MBolr_Val MPuCollPri_Coll MTee7_PuCollSec MConn_Tes MTee_Conn MTes_Tee2
+xFracValByPass MTee4_Bolr MVal_Tee4 MVal_Tee2 MTee_TeeByPass MHxColl_Tee6 MTeeMix_ValByPass
 
 
-ASSIGN TTES_T.prt 479
+ASSIGN TTES_T.prt 496
 
-UNIT 479 TYPE 25! User defined Printer
+UNIT 496 TYPE 25! User defined Printer
 PARAMETERS 10
 dtSim! 1 Printing interval
 START! 2 Start time
 STOP! 3 Stop time
-479! 4 Logical unit
+496! 4 Logical unit
 0! 5 Units printing mode
 0! 6 Relative or absolute start time
 -1! 7 Overwrite or Append
@@ -780,14 +1049,16 @@ STOP! 3 Stop time
 0! 9 Delimiter
 1! 10 Print labels
 
-INPUTS 18
-THx_Pump2 TPump2_Coll TColl_Hx THx_Tee TTee2_PuCharge TSCnr_Tee3 TTee3_Val TTee3_Tee2
-TTee_Val TVal_Bolr TBolr_SCnr TSCnr_SCnr2Cold TSCnr_SCnr2Hot TSCnr2_QSnk TQSnk_SCnr2 TTee_Tes
-TTes_Tee2 TPuSec_Hx
+INPUTS 29
+TSCnr_SCnr2Cold TSCnr_SCnr2Hot TSCnr2_QSnk TQSnk_SCnr2 TTee7_PuTes TPuTes_Hx2 THx2_Tee6 TPump_Hx
+TQSrc_Hx2 THx2_QSrc TColl_Hx THx_PuPri TTee6_Tee TTee7_Tee2 TTee3_Val TVal_SCnr
+TSCnr_Tee3 TBolr_Val TPuCollPri_Coll TTee7_PuCollSec TConn_Tes TTee_Conn TTes_Tee2 TTee4_Bolr
+TVal_Tee4 TVal_Tee2 TTee_TeeByPass THxColl_Tee6 TTeeMix_ValByPass
 
 ***
-THx_Pump2 TPump2_Coll TColl_Hx THx_Tee TTee2_PuCharge TSCnr_Tee3 TTee3_Val TTee3_Tee2
-TTee_Val TVal_Bolr TBolr_SCnr TSCnr_SCnr2Cold TSCnr_SCnr2Hot TSCnr2_QSnk TQSnk_SCnr2 TTee_Tes
-TTes_Tee2 TPuSec_Hx
+TSCnr_SCnr2Cold TSCnr_SCnr2Hot TSCnr2_QSnk TQSnk_SCnr2 TTee7_PuTes TPuTes_Hx2 THx2_Tee6 TPump_Hx
+TQSrc_Hx2 THx2_QSrc TColl_Hx THx_PuPri TTee6_Tee TTee7_Tee2 TTee3_Val TVal_SCnr
+TSCnr_Tee3 TBolr_Val TPuCollPri_Coll TTee7_PuCollSec TConn_Tes TTee_Conn TTes_Tee2 TTee4_Bolr
+TVal_Tee4 TVal_Tee2 TTee_TeeByPass THxColl_Tee6 TTeeMix_ValByPass
 
 

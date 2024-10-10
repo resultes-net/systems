@@ -25,7 +25,7 @@ elSysIn_Q_TesAux = qHeatSource_Tes1
 *** Inputs from hydraulic solver ****
 *************************************
 EQUATIONS 3
-Tdp1In_Tes1 = TTee_Tes
+Tdp1In_Tes1 = TConn_Tes
 Mfrdp1_Tes1 = MTesDpL90_10_A
 Tdp1InRev_Tes1 = TTes_Tee2
 CONSTANTS 2
@@ -206,7 +206,7 @@ zero zero zero zero zero zero zero zero zero
 *****************OUTPUTS****************
 EQUATIONS 1
 Qdp1_Tes1=[50,31] ! 
-EQUATIONS 21
+EQUATIONS #
 TAvg_Tes1 = [50,180] ! Average storage temperature 
 ***Temperatures at 10 equallay distributed height 
 T1_Tes1 =[50,21] !temperature at 0.05 
@@ -229,7 +229,9 @@ Tsen6_Tes1 =[50,76] ! temperature at user defined sensor height Tsen6_Tes1
 Tsen7_Tes1 =[50,77] ! temperature at user defined sensor height Tsen7_Tes1 
 Tsen8_Tes1 =[50,78] ! temperature at user defined sensor height Tsen8_Tes1 
 Tsen9_Tes1 =[50,79] ! temperature at user defined sensor height Tsen9_Tes1 
-Tsen10_Tes1 =[50,80] ! temperature at user defined sensor height Tsen10_Tes1 
+Tsen10_Tes1 =[50,80] ! temperature at user defined sensor height Tsen10_Tes1
+***Average temperatures at user defined height
+TsenAVG5_TES1 = [50,95]
 EQUATIONS 1
 qHeatSource_Tes1 = [50,181] ! Heat input of all auxiliary heat sources [kW]
 EQUATIONS 5

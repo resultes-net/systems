@@ -1,0 +1,55 @@
+*************************************
+** BEGIN ValByPass.ddck
+*************************************
+
+*************************************
+** ABOUT
+** This control controls by pass valve for when the storage temperature at the top is lower than the network return
+** temperature.
+*************************************
+
+*************************************
+** Connection to hydraulics file
+*************************************
+EQUATIONS #
+TNetReturn = $TTeeMix_ValByPass
+
+*************************************
+** Connection to other ddcks
+*************************************
+EQUATIONS #
+TTesTop = $TSenAvg5_Tes1
+
+*************************************
+** Control
+*************************************
+CONSTANTS #
+dTUpper = 10
+dTLower = 5
+
+UNIT 1 TYPE 2
+PARAMETERS #
+5                   ! 1: Number of oscilattions
+$ksecTTesTopMax     ! 2: High limit cutout
+INPUTS #
+TTesTop             ! 1: Upper value
+TNetReturn          ! 2: Lower value
+TNetReturn          ! 3: Cutout monitoring value
+bypassOff           ! 4: Input control function
+dTUpper             ! 5: Upper dead band
+dTLower             ! 6: Lower dead band
+**
+0                   ! 1: Upper value
+0                   ! 2: Lower value
+0                   ! 3: Cutout monitoring value
+0                   ! 4: Input control function
+0                   ! 5: Upper dead band
+0                   ! 6: Lower dead band
+
+EQUATIONS #
+bypassOff = [1,1]
+$xFracValByPass = NOT(bypassOff)
+
+*******************************
+** END ValByPass.ddck
+*******************************

@@ -1,0 +1,41 @@
+*************************************
+** BEGIN ValMix.ddck
+*************************************
+
+*************************************
+** ABOUT
+** This control controls by the mixing valve to ensure the correct set point temperature in the
+** Network supply
+*************************************
+
+*************************************
+** Connection to hydraulics ddck
+*************************************
+EQUATIONS #
+THotInput = $TBolr_Val
+TColdInput = $TTee3_Val
+MSet = $MVal_SCnr
+
+*************************************
+** Control
+*************************************
+CONSTANTS #
+TNetSupplySet = 75
+TSet = TNetSupplySet
+
+UNIT 441 TYPE 811 ! Passive Divider for heating 
+PARAMETERS #
+5 !Nb.of iterations before fixing the value 
+INPUTS #
+THotInput
+TColdInput
+MSet
+TSet
+*** INITIAL INPUT VALUES
+35.0 21.0 800.0 TSet
+EQUATIONS #
+$xFracValMix =  1.-[441,5] 
+
+*******************************
+** END ValMix.ddck
+*******************************
