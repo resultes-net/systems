@@ -1,34 +1,38 @@
 *************************************
-** BEGIN dTSourceSink.ddck
+** BEGIN constReturnSourceSink.ddck
 *************************************
 
 *************************************
 ** ABOUT
-** A const delta T source (dT > 0) or sink (dT < 0)
+** A const return temperature T source (P > 0) or sink (P < 0)
 *************************************
 
 *************************************
 ** Input from hydraulic file
 *************************************
-EQUATIONS 1
+EQUATIONS #
 TIn = @temp(In)
+cp = @cp(In)
+M = @mfr(In)
 
 *************************************
 ** Implementation
 *************************************
-CONSTANTS 1
-dT = 5
+CONSTANTS #
+TOutMin = 80
 
-EQUATIONS 1
-TOut = TIn + dT
+EQUATIONS #
+TOut = MAX(TOutMin, TIn)
+dT = TOut - TIn
+P = M*cp*dT
 
 *************************************
 ** Output to hydraulic file
 *************************************
-EQUATIONS 1
+EQUATIONS #
 @temp(Out) = TOut
 
 
 *******************************
-** END dTSourceSink.ddck
+** END constReturnSourceSink.ddck
 *******************************

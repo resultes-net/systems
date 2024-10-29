@@ -1,0 +1,13 @@
+*************************************
+** BEGIN ValStrat.ddck
+*************************************
+
+*************************************
+** ABOUT
+** This control controls by the stratifying valve so that we charge the storage at the correct height
+** given the input temperature.
+*************************************
+
+*******************************
+** END ValStrat.ddck
+*******************************

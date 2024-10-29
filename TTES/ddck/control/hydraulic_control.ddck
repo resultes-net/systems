@@ -3,6 +3,52 @@
 *************************************
 EQUATIONS #
 *** Massflowrates
-$MfrQSnk = 500
-$MfrQAddSrc = MAX(0, $MfrQSnk - $MfrPuCollSec)
+$MfrQSnk = $QSnkM
+
+CONSTANTS #
+on = 10
+
+UNIT 1 TYPE 577
+PARAMETERS #
+0           ! 1: min value
+1           ! 2: max value
+314159265   ! 3: seed value
+INPUTS #
+on         ! 1: on: >= 1 => generate new value, < 1 => keep current value
+on         ! 1: initial value
+
+EQUATIONS #
+rand = [1,1]
+additionalSourceOn = GT(rand,0.70)
+$MfrQAddSrc = $QAddSrcM
 $MfrPuAddSrcSec = $MfrQAddSrc
+$xFracValStrat = 0
+
+***********************************
+** Online Plotter
+***********************************
+UNIT 103 TYPE 65		!Changed automatically
+PARAMETERS #     
+1     				! 1: Nb. of left-axis variables
+0     				! 2: Nb. of right-axis variables
+-0.5   				! 3: Left axis minimum
+1        			! 4: Left axis maximum
+-1   				! 5: Right axis minimum
+100  				! 6: Right axis maximum
+$nPlotsPerSim		! 7: Number of plots per simulation
+12     				! 8: X-axis gridpoints
+1     				! 9: Shut off Online w/o removing
+-1     				! 10: Logical unit for output file
+0     				! 11: Output file units
+0     				! 12: Output file delimiter
+INPUTS #    
+rand
+rand
+LABELS #     
+rand
+nix
+HydraulicControl
+
+*************************************
+**BEGIN hydraulic_control.ddck
+*************************************

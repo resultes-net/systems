@@ -12,8 +12,8 @@
 ** Connection to hydraulics ddck
 *************************************
 EQUATIONS #
-THotInput = $TBolr_Val
-TColdInput = $TTee3_Val
+THotInput = $TBolr_ValMix
+TColdInput = $TTeeMix_ValMix
 MSet = $MVal_SCnr
 
 *************************************

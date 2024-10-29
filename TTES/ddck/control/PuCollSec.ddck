@@ -15,32 +15,30 @@
 ** Connection to hydraulic file
 *************************************
 EQUATIONS #
-TNetReturn = $TTee7_PuCollSec
+TPriIn = $TColl_Hx
+TSecIn = $TTee7_PuCollSec
 
 *************************************
 ** Connection to other ddcks
 *************************************
-EQUATIONS #
-TTesTop = $TSenAvg5_Tes1
-! CollTOut
 
 *************************************
 ** Control
 *************************************
 CONSTANTS #
 TTesTopMax = 95
-dTUpper = 10
+dTUpper = 7
 dTLower = 5
 
 UNIT 1 TYPE 2
 PARAMETERS #
-5                   ! 1: Number of oscilattions
+15                  ! 1: Number of oscilattions
 TTesTopMax          ! 2: High limit cutout
 INPUTS #
-$CollTOut           ! 1: Upper value
-TNetReturn          ! 2: Lower value
-TTesTop             ! 3: Cutout monitoring value
-on         ! 4: Input control function
+TPriIn              ! 1: Upper value
+TSecIn              ! 2: Lower value
+TPriIn             ! 3: Cutout monitoring value
+on                  ! 4: Input control function
 dTUpper             ! 5: Upper dead band
 dTLower             ! 6: Lower dead band
 **

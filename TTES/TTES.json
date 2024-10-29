@@ -31,51 +31,6 @@
         },
         "Block-10": {
             ".__BlockDict__": true,
-            "BlockDisplayName": "Bolr",
-            "BlockName": "Boiler",
-            "__version__": "e8cfde2f-8239-4338-a5f0-63a7abb93900",
-            "blockPosition": [
-                -980.0,
-                0.0
-            ],
-            "flippedH": true,
-            "flippedV": false,
-            "portsIdsIn": [
-                17
-            ],
-            "portsIdsOut": [
-                18
-            ],
-            "rotationN": 0,
-            "trnsysId": 14
-        },
-        "Block-11": {
-            ".__BlockDict__": true,
-            "BlockDisplayName": "HxColl",
-            "BlockName": "ExternalHx",
-            "ExternalHxPosition": [
-                -1560.0,
-                0.0
-            ],
-            "FlippedH": false,
-            "FlippedV": false,
-            "PortsIDIn": [
-                110,
-                111
-            ],
-            "PortsIDOut": [
-                112,
-                113
-            ],
-            "RotationN": 0,
-            "childIds": [
-                81,
-                82
-            ],
-            "trnsysID": 81
-        },
-        "Block-12": {
-            ".__BlockDict__": true,
             "BlockDisplayName": "PuCollPri",
             "BlockName": "Pump",
             "__version__": "3d1e7f06-c7a6-49af-98b8-f593b34c5754",
@@ -97,57 +52,7 @@
             "inputPortId": 199,
             "outputPortId": 200
         },
-        "Block-13": {
-            ".__BlockDict__": true,
-            "BlockDisplayName": "Tee",
-            "BlockName": "TeePiece",
-            "__version__": "d8a12235-c3f9-4742-bb7b-2c92a26d66c5",
-            "teePieceModel": {
-                "__version__": "260c8083-5343-4345-8cb3-0cdd374bc076",
-                "blockItemModel": {
-                    "__version__": "7b792574-5fa6-4c3e-b2e3-7e4eb71d7746",
-                    "blockPosition": [
-                        -1200.0,
-                        0.0
-                    ],
-                    "flippedH": false,
-                    "flippedV": true,
-                    "rotationN": 0,
-                    "trnsysId": 83
-                },
-                "inputPortId": 114,
-                "outputPortIds": [
-                    115,
-                    116
-                ]
-            }
-        },
-        "Block-14": {
-            ".__BlockDict__": true,
-            "BlockDisplayName": "Tee2",
-            "BlockName": "TeePiece",
-            "__version__": "d8a12235-c3f9-4742-bb7b-2c92a26d66c5",
-            "teePieceModel": {
-                "__version__": "260c8083-5343-4345-8cb3-0cdd374bc076",
-                "blockItemModel": {
-                    "__version__": "7b792574-5fa6-4c3e-b2e3-7e4eb71d7746",
-                    "blockPosition": [
-                        -1220.0,
-                        80.0
-                    ],
-                    "flippedH": false,
-                    "flippedV": true,
-                    "rotationN": 0,
-                    "trnsysId": 91
-                },
-                "inputPortId": 127,
-                "outputPortIds": [
-                    128,
-                    129
-                ]
-            }
-        },
-        "Block-15": {
+        "Block-11": {
             ".__BlockDict__": true,
             "BlockDisplayName": "PuAddSrcSec",
             "BlockName": "Pump",
@@ -165,12 +70,12 @@
                     "rotationN": 0,
                     "trnsysId": 192
                 },
-                "massFlowRateInKgPerH": 500.0
+                "massFlowRateInKgPerH": 0.0
             },
             "inputPortId": 252,
             "outputPortId": 253
         },
-        "Block-16": {
+        "Block-15": {
             ".__BlockDict__": true,
             "BlockDisplayName": "QAddSrc",
             "BlockName": "Source",
@@ -190,7 +95,7 @@
             "rotationN": 1,
             "trnsysId": 326
         },
-        "Block-17": {
+        "Block-16": {
             ".__BlockDict__": true,
             "BlockDisplayName": "HxAddSrc",
             "BlockName": "ExternalHx",
@@ -215,7 +120,7 @@
             ],
             "trnsysID": 327
         },
-        "Block-18": {
+        "Block-17": {
             ".__BlockDict__": true,
             "BlockDisplayName": "PuCollSec",
             "BlockName": "Pump",
@@ -233,14 +138,14 @@
                     "rotationN": 0,
                     "trnsysId": 337
                 },
-                "massFlowRateInKgPerH": 200.0
+                "massFlowRateInKgPerH": 0.0
             },
             "inputPortId": 421,
             "outputPortId": 422
         },
-        "Block-19": {
+        "Block-18": {
             ".__BlockDict__": true,
-            "BlockDisplayName": "Tee6",
+            "BlockDisplayName": "TeeQSrcAddSup",
             "BlockName": "TeePiece",
             "__version__": "d8a12235-c3f9-4742-bb7b-2c92a26d66c5",
             "teePieceModel": {
@@ -263,27 +168,7 @@
                 ]
             }
         },
-        "Block-2": {
-            ".__BlockDict__": true,
-            "BlockDisplayName": "Coll",
-            "BlockName": "Collector",
-            "__version__": "e8cfde2f-8239-4338-a5f0-63a7abb93900",
-            "blockPosition": [
-                -1800.0,
-                0.0
-            ],
-            "flippedH": false,
-            "flippedV": false,
-            "portsIdsIn": [
-                13
-            ],
-            "portsIdsOut": [
-                14
-            ],
-            "rotationN": 0,
-            "trnsysId": 11
-        },
-        "Block-20": {
+        "Block-19": {
             ".__BlockDict__": true,
             "BlockDisplayName": "Tee7",
             "BlockName": "TeePiece",
@@ -308,7 +193,7 @@
                 ]
             }
         },
-        "Block-21": {
+        "Block-2": {
             ".__BlockDict__": true,
             "BlockDisplayName": "SCnr2",
             "BlockName": "SPCnr",
@@ -336,27 +221,7 @@
                 8
             ]
         },
-        "Block-3": {
-            ".__BlockDict__": true,
-            "BlockDisplayName": "Conn",
-            "BlockName": "Connector",
-            "__version__": "e8cfde2f-8239-4338-a5f0-63a7abb93900",
-            "blockPosition": [
-                -1180.0,
-                220.0
-            ],
-            "flippedH": false,
-            "flippedV": false,
-            "portsIdsIn": [
-                493
-            ],
-            "portsIdsOut": [
-                494
-            ],
-            "rotationN": 0,
-            "trnsysId": 404
-        },
-        "Block-4": {
+        "Block-29": {
             ".__BlockDict__": true,
             "BlockDisplayName": "TeeMix",
             "BlockName": "TeePiece",
@@ -381,7 +246,27 @@
                 ]
             }
         },
-        "Block-5": {
+        "Block-3": {
+            ".__BlockDict__": true,
+            "BlockDisplayName": "Coll",
+            "BlockName": "Collector",
+            "__version__": "e8cfde2f-8239-4338-a5f0-63a7abb93900",
+            "blockPosition": [
+                -1800.0,
+                0.0
+            ],
+            "flippedH": false,
+            "flippedV": false,
+            "portsIdsIn": [
+                13
+            ],
+            "portsIdsOut": [
+                14
+            ],
+            "rotationN": 0,
+            "trnsysId": 11
+        },
+        "Block-30": {
             ".__BlockDict__": true,
             "BlockDisplayName": "ValMix",
             "BlockName": "TVentil",
@@ -405,40 +290,7 @@
                 503
             ]
         },
-        "Block-6": {
-            ".__BlockDict__": true,
-            "BlockDisplayName": "Tes",
-            "BlockName": "StorageTank",
-            "__version__": "35f8800b-3a22-4080-acc2-13f332a84d50",
-            "directPortPairs": [
-                {
-                    "__version__": "67aaee05-7d09-40e1-a6e2-d367c7196832",
-                    "portPair": {
-                        "__version__": "ed17e7a7-4798-4a80-beb7-81730523cf35",
-                        "inputPort": {
-                            "id": 102,
-                            "relativeHeight": 0.9
-                        },
-                        "outputPort": {
-                            "id": 103,
-                            "relativeHeight": 0.1
-                        },
-                        "side": "left",
-                        "trnsysId": 74
-                    }
-                }
-            ],
-            "heatExchangers": [],
-            "height": 320,
-            "isHorizontallyFlipped": false,
-            "isVerticallyFlipped": false,
-            "position": [
-                -1100.0,
-                200.0
-            ],
-            "trnsysId": 12
-        },
-        "Block-7": {
+        "Block-35": {
             ".__BlockDict__": true,
             "BlockDisplayName": "ValByPass",
             "BlockName": "TVentil",
@@ -449,7 +301,7 @@
                 "__version__": "7b792574-5fa6-4c3e-b2e3-7e4eb71d7746",
                 "blockPosition": [
                     -1040.0,
-                    140.0
+                    149.0
                 ],
                 "flippedH": false,
                 "flippedV": false,
@@ -462,7 +314,7 @@
                 533
             ]
         },
-        "Block-8": {
+        "Block-36": {
             ".__BlockDict__": true,
             "BlockDisplayName": "TeeByPass",
             "BlockName": "TeePiece",
@@ -487,7 +339,105 @@
                 ]
             }
         },
-        "Block-9": {
+        "Block-4": {
+            ".__BlockDict__": true,
+            "BlockDisplayName": "Tes",
+            "BlockName": "StorageTank",
+            "__version__": "35f8800b-3a22-4080-acc2-13f332a84d50",
+            "directPortPairs": [
+                {
+                    "__version__": "67aaee05-7d09-40e1-a6e2-d367c7196832",
+                    "portPair": {
+                        "__version__": "ed17e7a7-4798-4a80-beb7-81730523cf35",
+                        "inputPort": {
+                            "id": 102,
+                            "relativeHeight": 0.9
+                        },
+                        "outputPort": {
+                            "id": 103,
+                            "relativeHeight": 0.1
+                        },
+                        "side": "left",
+                        "trnsysId": 74
+                    }
+                },
+                {
+                    "__version__": "67aaee05-7d09-40e1-a6e2-d367c7196832",
+                    "portPair": {
+                        "__version__": "ed17e7a7-4798-4a80-beb7-81730523cf35",
+                        "inputPort": {
+                            "id": 571,
+                            "relativeHeight": 0.5
+                        },
+                        "outputPort": {
+                            "id": 572,
+                            "relativeHeight": 0.07
+                        },
+                        "side": "left",
+                        "trnsysId": 473
+                    }
+                }
+            ],
+            "heatExchangers": [],
+            "height": 320,
+            "isHorizontallyFlipped": false,
+            "isVerticallyFlipped": false,
+            "position": [
+                -1100.0,
+                200.0
+            ],
+            "trnsysId": 12
+        },
+        "Block-43": {
+            ".__BlockDict__": true,
+            "BlockDisplayName": "ValStrat",
+            "BlockName": "TVentil",
+            "IsTempering": false,
+            "PositionForMassFlowSolver": "0.7000000000000002",
+            "__version__": "ccf7f590-c65e-4fa1-bf7c-1850a5f8985e",
+            "blockItemModel": {
+                "__version__": "7b792574-5fa6-4c3e-b2e3-7e4eb71d7746",
+                "blockPosition": [
+                    -1160.0,
+                    40.0
+                ],
+                "flippedH": false,
+                "flippedV": false,
+                "rotationN": 2,
+                "trnsysId": 475
+            },
+            "inputPortId": 576,
+            "outputPortIds": [
+                574,
+                575
+            ]
+        },
+        "Block-45": {
+            ".__BlockDict__": true,
+            "BlockDisplayName": "Tee3",
+            "BlockName": "TeePiece",
+            "__version__": "d8a12235-c3f9-4742-bb7b-2c92a26d66c5",
+            "teePieceModel": {
+                "__version__": "260c8083-5343-4345-8cb3-0cdd374bc076",
+                "blockItemModel": {
+                    "__version__": "7b792574-5fa6-4c3e-b2e3-7e4eb71d7746",
+                    "blockPosition": [
+                        -1160.0,
+                        480.0
+                    ],
+                    "flippedH": false,
+                    "flippedV": false,
+                    "rotationN": 0,
+                    "trnsysId": 484
+                },
+                "inputPortId": 585,
+                "outputPortIds": [
+                    586,
+                    587
+                ]
+            }
+        },
+        "Block-5": {
             ".__BlockDict__": true,
             "BlockDisplayName": "QSnk",
             "BlockName": "Sink",
@@ -507,7 +457,102 @@
             "rotationN": -1,
             "trnsysId": 13
         },
-        "Connection-22": {
+        "Block-6": {
+            ".__BlockDict__": true,
+            "BlockDisplayName": "Bolr",
+            "BlockName": "Boiler",
+            "__version__": "e8cfde2f-8239-4338-a5f0-63a7abb93900",
+            "blockPosition": [
+                -980.0,
+                0.0
+            ],
+            "flippedH": true,
+            "flippedV": false,
+            "portsIdsIn": [
+                17
+            ],
+            "portsIdsOut": [
+                18
+            ],
+            "rotationN": 0,
+            "trnsysId": 14
+        },
+        "Block-7": {
+            ".__BlockDict__": true,
+            "BlockDisplayName": "HxColl",
+            "BlockName": "ExternalHx",
+            "ExternalHxPosition": [
+                -1560.0,
+                0.0
+            ],
+            "FlippedH": false,
+            "FlippedV": false,
+            "PortsIDIn": [
+                110,
+                111
+            ],
+            "PortsIDOut": [
+                112,
+                113
+            ],
+            "RotationN": 0,
+            "childIds": [
+                81,
+                82
+            ],
+            "trnsysID": 81
+        },
+        "Block-8": {
+            ".__BlockDict__": true,
+            "BlockDisplayName": "TeeStrat",
+            "BlockName": "TeePiece",
+            "__version__": "d8a12235-c3f9-4742-bb7b-2c92a26d66c5",
+            "teePieceModel": {
+                "__version__": "260c8083-5343-4345-8cb3-0cdd374bc076",
+                "blockItemModel": {
+                    "__version__": "7b792574-5fa6-4c3e-b2e3-7e4eb71d7746",
+                    "blockPosition": [
+                        -1140.0,
+                        0.0
+                    ],
+                    "flippedH": false,
+                    "flippedV": true,
+                    "rotationN": 0,
+                    "trnsysId": 83
+                },
+                "inputPortId": 114,
+                "outputPortIds": [
+                    115,
+                    116
+                ]
+            }
+        },
+        "Block-9": {
+            ".__BlockDict__": true,
+            "BlockDisplayName": "Tee2",
+            "BlockName": "TeePiece",
+            "__version__": "d8a12235-c3f9-4742-bb7b-2c92a26d66c5",
+            "teePieceModel": {
+                "__version__": "260c8083-5343-4345-8cb3-0cdd374bc076",
+                "blockItemModel": {
+                    "__version__": "7b792574-5fa6-4c3e-b2e3-7e4eb71d7746",
+                    "blockPosition": [
+                        -1220.0,
+                        80.0
+                    ],
+                    "flippedH": false,
+                    "flippedV": true,
+                    "rotationN": 0,
+                    "trnsysId": 91
+                },
+                "inputPortId": 127,
+                "outputPortIds": [
+                    128,
+                    129
+                ]
+            }
+        },
+        "Connection-12": {
             ".__ConnectionDict__": true,
             "__version__": "62a1383d-5a0b-4886-9951-31ffd732637d",
             "childIds": [
@@ -541,7 +586,7 @@
             "toPortId": 8,
             "trnsysId": 267
         },
-        "Connection-23": {
+        "Connection-13": {
             ".__ConnectionDict__": true,
             "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
             "connectionId": 215,
@@ -580,14 +625,14 @@
                     89.0
                 ]
             ],
-            "shallBeSimulated": true,
+            "shallBeSimulated": false,
             "toPortId": 15,
             "trnsysId": 269,
             "uValueInWPerM2K": {
                 "name": "loop2UVal"
             }
         },
-        "Connection-24": {
+        "Connection-14": {
             ".__ConnectionDict__": true,
             "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
             "connectionId": 216,
@@ -618,14 +663,14 @@
                     109.0
                 ]
             ],
-            "shallBeSimulated": true,
+            "shallBeSimulated": false,
             "toPortId": 7,
             "trnsysId": 270,
             "uValueInWPerM2K": {
                 "name": "loop2UVal"
             }
         },
-        "Connection-25": {
+        "Connection-20": {
             ".__ConnectionDict__": true,
             "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
             "connectionId": 292,
@@ -653,7 +698,7 @@
             "trnsysId": 359,
             "uValueInWPerM2K": 2.7777
         },
-        "Connection-26": {
+        "Connection-21": {
             ".__ConnectionDict__": true,
             "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
             "connectionId": 299,
@@ -685,7 +730,7 @@
             "trnsysId": 366,
             "uValueInWPerM2K": 2.7777
         },
-        "Connection-27": {
+        "Connection-22": {
             ".__ConnectionDict__": true,
             "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
             "connectionId": 300,
@@ -721,7 +766,7 @@
             "trnsysId": 367,
             "uValueInWPerM2K": 2.7777
         },
-        "Connection-28": {
+        "Connection-23": {
             ".__ConnectionDict__": true,
             "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
             "connectionId": 301,
@@ -753,7 +798,7 @@
             "trnsysId": 368,
             "uValueInWPerM2K": 2.7777
         },
-        "Connection-29": {
+        "Connection-24": {
             ".__ConnectionDict__": true,
             "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
             "connectionId": 303,
@@ -785,7 +830,7 @@
             "trnsysId": 370,
             "uValueInWPerM2K": 2.7777
         },
-        "Connection-30": {
+        "Connection-25": {
             ".__ConnectionDict__": true,
             "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
             "connectionId": 304,
@@ -817,7 +862,7 @@
             "trnsysId": 371,
             "uValueInWPerM2K": 2.7777
         },
-        "Connection-31": {
+        "Connection-26": {
             ".__ConnectionDict__": true,
             "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
             "connectionId": 306,
@@ -849,7 +894,7 @@
             "trnsysId": 373,
             "uValueInWPerM2K": 2.7777
         },
-        "Connection-32": {
+        "Connection-27": {
             ".__ConnectionDict__": true,
             "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
             "connectionId": 307,
@@ -881,39 +926,7 @@
             "trnsysId": 374,
             "uValueInWPerM2K": 2.7777
         },
-        "Connection-33": {
-            ".__ConnectionDict__": true,
-            "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
-            "connectionId": 318,
-            "diameterInCm": 2.0,
-            "fromPortId": 439,
-            "id": 474,
-            "labelPos": [
-                -1283.0,
-                -97.0
-            ],
-            "lengthInM": 2.0,
-            "massFlowLabelPos": [
-                -1283.0,
-                -97.0
-            ],
-            "name": "Tee6_Tee",
-            "segmentsCorners": [
-                [
-                    -1243.0,
-                    20.0
-                ],
-                [
-                    -1243.0,
-                    20.0
-                ]
-            ],
-            "shallBeSimulated": false,
-            "toPortId": 114,
-            "trnsysId": 385,
-            "uValueInWPerM2K": 2.7777
-        },
-        "Connection-34": {
+        "Connection-28": {
             ".__ConnectionDict__": true,
             "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
             "connectionId": 334,
@@ -945,39 +958,7 @@
             "trnsysId": 401,
             "uValueInWPerM2K": 2.7777
         },
-        "Connection-35": {
-            ".__ConnectionDict__": true,
-            "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
-            "connectionId": 341,
-            "diameterInCm": 2.0,
-            "fromPortId": 501,
-            "id": 505,
-            "labelPos": [
-                -803.0,
-                137.0
-            ],
-            "lengthInM": 2.0,
-            "massFlowLabelPos": [
-                -950.0,
-                119.0
-            ],
-            "name": "Tee3_Val",
-            "segmentsCorners": [
-                [
-                    -800.0,
-                    152.666
-                ],
-                [
-                    -800.0,
-                    152.666
-                ]
-            ],
-            "shallBeSimulated": false,
-            "toPortId": 503,
-            "trnsysId": 411,
-            "uValueInWPerM2K": 2.7777
-        },
-        "Connection-36": {
+        "Connection-31": {
             ".__ConnectionDict__": true,
             "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
             "connectionId": 342,
@@ -1009,7 +990,7 @@
             "trnsysId": 412,
             "uValueInWPerM2K": 2.7777
         },
-        "Connection-37": {
+        "Connection-32": {
             ".__ConnectionDict__": true,
             "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
             "connectionId": 343,
@@ -1041,47 +1022,7 @@
             "trnsysId": 413,
             "uValueInWPerM2K": 2.7777
         },
-        "Connection-38": {
-            ".__ConnectionDict__": true,
-            "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
-            "connectionId": 346,
-            "diameterInCm": 2.0,
-            "fromPortId": 18,
-            "id": 510,
-            "labelPos": [
-                -937.0,
-                17.0
-            ],
-            "lengthInM": 2.0,
-            "massFlowLabelPos": [
-                -937.0,
-                17.0
-            ],
-            "name": "Bolr_Val",
-            "segmentsCorners": [
-                [
-                    -967.0,
-                    20.0
-                ],
-                [
-                    -967.0,
-                    -12.0
-                ],
-                [
-                    -853.0,
-                    -12.0
-                ],
-                [
-                    -853.0,
-                    40.0
-                ]
-            ],
-            "shallBeSimulated": false,
-            "toPortId": 502,
-            "trnsysId": 416,
-            "uValueInWPerM2K": 2.7777
-        },
-        "Connection-39": {
+        "Connection-33": {
             ".__ConnectionDict__": true,
             "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
             "connectionId": 357,
@@ -1113,7 +1054,7 @@
             "trnsysId": 427,
             "uValueInWPerM2K": 2.7777
         },
-        "Connection-40": {
+        "Connection-34": {
             ".__ConnectionDict__": true,
             "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
             "connectionId": 360,
@@ -1132,8 +1073,16 @@
             "name": "Tee7_PuCollSec",
             "segmentsCorners": [
                 [
-                    -1340.0,
+                    -1326.0,
                     100.0
+                ],
+                [
+                    -1326.0,
+                    99.0
+                ],
+                [
+                    -1340.0,
+                    99.0
                 ],
                 [
                     -1340.0,
@@ -1145,103 +1094,7 @@
             "trnsysId": 430,
             "uValueInWPerM2K": 2.7777
         },
-        "Connection-41": {
-            ".__ConnectionDict__": true,
-            "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
-            "connectionId": 363,
-            "diameterInCm": 2.0,
-            "fromPortId": 494,
-            "id": 527,
-            "labelPos": [
-                -1143.0,
-                237.0
-            ],
-            "lengthInM": 2.0,
-            "massFlowLabelPos": [
-                -1150.0,
-                175.0
-            ],
-            "name": "Conn_Tes",
-            "segmentsCorners": [
-                [
-                    -1123.0,
-                    240.0
-                ],
-                [
-                    -1123.0,
-                    232.0
-                ]
-            ],
-            "shallBeSimulated": false,
-            "toPortId": 102,
-            "trnsysId": 433,
-            "uValueInWPerM2K": 2.7777
-        },
-        "Connection-42": {
-            ".__ConnectionDict__": true,
-            "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
-            "connectionId": 364,
-            "diameterInCm": 2.0,
-            "fromPortId": 116,
-            "id": 528,
-            "labelPos": [
-                -1183.0,
-                43.0
-            ],
-            "lengthInM": 2.0,
-            "massFlowLabelPos": [
-                -1183.0,
-                43.0
-            ],
-            "name": "Tee_Conn",
-            "segmentsCorners": [
-                [
-                    -1180.0,
-                    27.334
-                ],
-                [
-                    -1180.0,
-                    27.334
-                ]
-            ],
-            "shallBeSimulated": false,
-            "toPortId": 493,
-            "trnsysId": 434,
-            "uValueInWPerM2K": 2.7777
-        },
-        "Connection-43": {
-            ".__ConnectionDict__": true,
-            "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
-            "connectionId": 365,
-            "diameterInCm": 2.0,
-            "fromPortId": 103,
-            "id": 529,
-            "labelPos": [
-                -1103.0,
-                485.0
-            ],
-            "lengthInM": 2.0,
-            "massFlowLabelPos": [
-                -1191.0,
-                537.0
-            ],
-            "name": "Tes_Tee2",
-            "segmentsCorners": [
-                [
-                    -1200.0,
-                    488.0
-                ],
-                [
-                    -1200.0,
-                    120.0
-                ]
-            ],
-            "shallBeSimulated": false,
-            "toPortId": 129,
-            "trnsysId": 435,
-            "uValueInWPerM2K": 2.7777
-        },
-        "Connection-44": {
+        "Connection-37": {
             ".__ConnectionDict__": true,
             "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
             "connectionId": 368,
@@ -1254,8 +1107,8 @@
             ],
             "lengthInM": 2.0,
             "massFlowLabelPos": [
-                -1003.0,
-                23.0
+                -1006.0,
+                117.0
             ],
             "name": "Tee4_Bolr",
             "segmentsCorners": [
@@ -1273,7 +1126,7 @@
             "trnsysId": 440,
             "uValueInWPerM2K": 2.7777
         },
-        "Connection-45": {
+        "Connection-38": {
             ".__ConnectionDict__": true,
             "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
             "connectionId": 370,
@@ -1305,7 +1158,7 @@
             "trnsysId": 442,
             "uValueInWPerM2K": 2.7777
         },
-        "Connection-46": {
+        "Connection-39": {
             ".__ConnectionDict__": true,
             "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
             "connectionId": 371,
@@ -1324,11 +1177,11 @@
             "name": "Val_Tee2",
             "segmentsCorners": [
                 [
-                    -1113.0,
-                    160.0
+                    -1058.0,
+                    169.0
                 ],
                 [
-                    -1113.0,
+                    -1058.0,
                     100.0
                 ]
             ],
@@ -1337,39 +1190,7 @@
             "trnsysId": 443,
             "uValueInWPerM2K": 2.7777
         },
-        "Connection-47": {
-            ".__ConnectionDict__": true,
-            "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
-            "connectionId": 379,
-            "diameterInCm": 2.0,
-            "fromPortId": 115,
-            "id": 549,
-            "labelPos": [
-                -1163.0,
-                23.0
-            ],
-            "lengthInM": 2.0,
-            "massFlowLabelPos": [
-                -1163.0,
-                23.0
-            ],
-            "name": "Tee_TeeByPass",
-            "segmentsCorners": [
-                [
-                    -1101.5,
-                    20.0
-                ],
-                [
-                    -1101.5,
-                    20.0
-                ]
-            ],
-            "shallBeSimulated": false,
-            "toPortId": 535,
-            "trnsysId": 451,
-            "uValueInWPerM2K": 2.7777
-        },
-        "Connection-48": {
+        "Connection-40": {
             ".__ConnectionDict__": true,
             "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
             "connectionId": 382,
@@ -1401,7 +1222,7 @@
             "trnsysId": 454,
             "uValueInWPerM2K": 2.7777
         },
-        "Connection-49": {
+        "Connection-41": {
             ".__ConnectionDict__": true,
             "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
             "connectionId": 389,
@@ -1414,8 +1235,8 @@
             ],
             "lengthInM": 2.0,
             "massFlowLabelPos": [
-                -823.0,
-                157.0
+                -939.0,
+                172.0
             ],
             "name": "TeeMix_ValByPass",
             "segmentsCorners": [
@@ -1425,7 +1246,7 @@
                 ],
                 [
                     -913.0,
-                    160.0
+                    169.0
                 ]
             ],
             "shallBeSimulated": false,
@@ -1433,11 +1254,335 @@
             "trnsysId": 461,
             "uValueInWPerM2K": 2.7777
         },
+        "Connection-42": {
+            ".__ConnectionDict__": true,
+            "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
+            "connectionId": 401,
+            "diameterInCm": 2.0,
+            "fromPortId": 116,
+            "id": 573,
+            "labelPos": [
+                -1143.0,
+                43.0
+            ],
+            "lengthInM": 2.0,
+            "massFlowLabelPos": [
+                -1260.0,
+                240.0
+            ],
+            "name": "Tee_Tes",
+            "segmentsCorners": [
+                [
+                    -1120.0,
+                    232.0
+                ]
+            ],
+            "shallBeSimulated": false,
+            "toPortId": 102,
+            "trnsysId": 474,
+            "uValueInWPerM2K": 2.7777
+        },
+        "Connection-44": {
+            ".__ConnectionDict__": true,
+            "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
+            "connectionId": 404,
+            "diameterInCm": 2.0,
+            "fromPortId": 575,
+            "id": 579,
+            "labelPos": [
+                -1217.0,
+                43.0
+            ],
+            "lengthInM": 2.0,
+            "massFlowLabelPos": [
+                -1261.0,
+                371.0
+            ],
+            "name": "Val_Tes",
+            "segmentsCorners": [
+                [
+                    -1180.0,
+                    361.0
+                ],
+                [
+                    -1100.0,
+                    361.0
+                ]
+            ],
+            "shallBeSimulated": false,
+            "toPortId": 571,
+            "trnsysId": 478,
+            "uValueInWPerM2K": 2.7777
+        },
+        "Connection-46": {
+            ".__ConnectionDict__": true,
+            "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
+            "connectionId": 410,
+            "diameterInCm": 2.0,
+            "fromPortId": 572,
+            "id": 588,
+            "labelPos": [
+                -1103.0,
+                494.6
+            ],
+            "lengthInM": 2.0,
+            "massFlowLabelPos": [
+                -1103.0,
+                494.6
+            ],
+            "name": "Tes_Tee3",
+            "segmentsCorners": [
+                [
+                    -1111.5,
+                    497.6
+                ],
+                [
+                    -1111.5,
+                    500.0
+                ]
+            ],
+            "shallBeSimulated": false,
+            "toPortId": 586,
+            "trnsysId": 485,
+            "uValueInWPerM2K": 2.7777
+        },
+        "Connection-47": {
+            ".__ConnectionDict__": true,
+            "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
+            "connectionId": 411,
+            "diameterInCm": 2.0,
+            "fromPortId": 103,
+            "id": 589,
+            "labelPos": [
+                -1103.0,
+                485.0
+            ],
+            "lengthInM": 2.0,
+            "massFlowLabelPos": [
+                -1103.0,
+                485.0
+            ],
+            "name": "Tes_Tee32",
+            "segmentsCorners": [
+                [
+                    -1123.0,
+                    488.0
+                ],
+                [
+                    -1123.0,
+                    480.0
+                ]
+            ],
+            "shallBeSimulated": false,
+            "toPortId": 587,
+            "trnsysId": 486,
+            "uValueInWPerM2K": 2.7777
+        },
+        "Connection-48": {
+            ".__ConnectionDict__": true,
+            "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
+            "connectionId": 412,
+            "diameterInCm": 2.0,
+            "fromPortId": 585,
+            "id": 590,
+            "labelPos": [
+                -1163.0,
+                497.0
+            ],
+            "lengthInM": 2.0,
+            "massFlowLabelPos": [
+                -1413.0,
+                446.0
+            ],
+            "name": "Tee3_Tee2",
+            "segmentsCorners": [
+                [
+                    -1200.0,
+                    500.0
+                ],
+                [
+                    -1200.0,
+                    120.0
+                ]
+            ],
+            "shallBeSimulated": false,
+            "toPortId": 129,
+            "trnsysId": 487,
+            "uValueInWPerM2K": 2.7777
+        },
+        "Connection-49": {
+            ".__ConnectionDict__": true,
+            "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
+            "connectionId": 417,
+            "diameterInCm": 2.0,
+            "fromPortId": 115,
+            "id": 595,
+            "labelPos": [
+                -1103.0,
+                23.0
+            ],
+            "lengthInM": 2.0,
+            "massFlowLabelPos": [
+                -1103.0,
+                23.0
+            ],
+            "name": "TeeStart_TeeByPass",
+            "segmentsCorners": [
+                [
+                    -1073.0,
+                    20.0
+                ],
+                [
+                    -1073.0,
+                    20.0
+                ]
+            ],
+            "shallBeSimulated": false,
+            "toPortId": 535,
+            "trnsysId": 492,
+            "uValueInWPerM2K": 2.7777
+        },
+        "Connection-50": {
+            ".__ConnectionDict__": true,
+            "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
+            "connectionId": 422,
+            "diameterInCm": 2.0,
+            "fromPortId": 439,
+            "id": 600,
+            "labelPos": [
+                -1270.0,
+                23.0
+            ],
+            "lengthInM": 2.0,
+            "massFlowLabelPos": [
+                -1270.0,
+                23.0
+            ],
+            "name": "TeeQSrcAddSup_ValStrat",
+            "segmentsCorners": [
+                [
+                    -1233.5,
+                    20.0
+                ],
+                [
+                    -1233.5,
+                    20.0
+                ]
+            ],
+            "shallBeSimulated": false,
+            "toPortId": 576,
+            "trnsysId": 497,
+            "uValueInWPerM2K": 2.7777
+        },
+        "Connection-51": {
+            ".__ConnectionDict__": true,
+            "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
+            "connectionId": 427,
+            "diameterInCm": 2.0,
+            "fromPortId": 574,
+            "id": 605,
+            "labelPos": [
+                -1157.0,
+                23.0
+            ],
+            "lengthInM": 2.0,
+            "massFlowLabelPos": [
+                -1157.0,
+                23.0
+            ],
+            "name": "ValStrat_TeeStrat",
+            "segmentsCorners": [
+                [
+                    -1148.5,
+                    20.0
+                ],
+                [
+                    -1148.5,
+                    20.0
+                ]
+            ],
+            "shallBeSimulated": false,
+            "toPortId": 114,
+            "trnsysId": 502,
+            "uValueInWPerM2K": 2.7777
+        },
+        "Connection-52": {
+            ".__ConnectionDict__": true,
+            "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
+            "connectionId": 428,
+            "diameterInCm": 2.0,
+            "fromPortId": 18,
+            "id": 606,
+            "labelPos": [
+                -937.0,
+                17.0
+            ],
+            "lengthInM": 2.0,
+            "massFlowLabelPos": [
+                -937.0,
+                17.0
+            ],
+            "name": "Bolr_ValMix",
+            "segmentsCorners": [
+                [
+                    -967.0,
+                    20.0
+                ],
+                [
+                    -967.0,
+                    -6.0
+                ],
+                [
+                    -850.0,
+                    -6.0
+                ],
+                [
+                    -850.0,
+                    40.0
+                ]
+            ],
+            "shallBeSimulated": false,
+            "toPortId": 502,
+            "trnsysId": 503,
+            "uValueInWPerM2K": 2.7777
+        },
+        "Connection-53": {
+            ".__ConnectionDict__": true,
+            "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
+            "connectionId": 431,
+            "diameterInCm": 2.0,
+            "fromPortId": 501,
+            "id": 609,
+            "labelPos": [
+                -803.0,
+                137.0
+            ],
+            "lengthInM": 2.0,
+            "massFlowLabelPos": [
+                -803.0,
+                137.0
+            ],
+            "name": "TeeMix_ValMix",
+            "segmentsCorners": [
+                [
+                    -800.0,
+                    152.666
+                ],
+                [
+                    -800.0,
+                    152.666
+                ]
+            ],
+            "shallBeSimulated": false,
+            "toPortId": 503,
+            "trnsysId": 506,
+            "uValueInWPerM2K": 2.7777
+        },
         "IDs": {
-            "GlobalId": 570,
+            "GlobalId": 615,
             "__idDct__": true,
-            "globalConnID": 400,
-            "trnsysID": 472
+            "globalConnID": 437,
+            "trnsysID": 512
         },
         "Strings": {
             "DiagramName": "TTES.json",
@@ -1448,7 +1593,7 @@
     "hydraulicLoops": [
         {
             "__version__": "1e16cd15-83b9-46fa-ac63-11b2b2209af1",
-            "connectionsDefinitionMode": "loop-wide-defaults",
+            "connectionsDefinitionMode": "dummy-pipes",
             "connectionsTrnsysId": [
                 269,
                 270
@@ -1484,26 +1629,29 @@
             "__version__": "1e16cd15-83b9-46fa-ac63-11b2b2209af1",
             "connectionsDefinitionMode": "dummy-pipes",
             "connectionsTrnsysId": [
-                416,
-                433,
                 367,
                 366,
                 368,
                 413,
-                411,
                 440,
-                385,
                 430,
                 359,
                 401,
-                434,
-                435,
                 412,
                 443,
                 442,
-                451,
                 454,
-                461
+                461,
+                474,
+                478,
+                485,
+                486,
+                487,
+                492,
+                497,
+                502,
+                503,
+                506
             ],
             "fluidName": "water",
             "hasUserDefinedName": false,

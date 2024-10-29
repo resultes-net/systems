@@ -15,17 +15,25 @@
 ** Control
 *************************************
 CONSTANTS #
-MOff = 0.5
 MMax = 2*$CollMNom
-TOutSet = 80
-TOutMax = 95
+TOutSet = 110
 ITMin_Wm2 = 200
 
-CONSTANTS #
-maxIte = $nIteTrnsys - 5
+
+***********************************
+** Radiation control
+***********************************
 
 EQUATIONS #
 radiationOn = GT($CollIT_Wm2, ITMin_Wm2)
+
+
+***********************************
+** Temperature control
+***********************************
+EQUATIONS #
+on = radiationOn*temperatureOn*NOT(coolDown)
+
 
 UNIT 110 TYPE 22
 PARAMETERS #
@@ -34,7 +42,7 @@ PARAMETERS #
 INPUTS #
 0,0             ! 1: Set point
 $CollTOut       ! 2: Controlled variable
-radiationOn     ! 3: On/off signal
+on              ! 3: On/off signal
 0,0             ! 4: Minumum control signal
 0,0             ! 5: Maximum control signal
 0,0             ! 6: Non-zero output threshold
@@ -43,7 +51,7 @@ radiationOn     ! 3: On/off signal
 TOutSet         ! 1: Set point
 TOutSet         ! 2: Controlled variable
 1               ! 3: On/off signal
-MOff            ! 4: Minumum control signal
+0               ! 4: Minumum control signal
 MMax            ! 5: Maximum control signal
 0               ! 6: Non-zero output threshold
 -0.5            ! 7: Tracking error tolerance, > 0 => relative, < 0 => absolute
@@ -55,8 +63,44 @@ constrMin = MOD(INT(stat/4),2)
 constrMax = MOD(INT(stat/8),2)
 tooSteep = MOD(INT(stat/64),2)
 withinTol = MOD(INT(stat/32),2)
-on = radiationOn*NOT(constrMax)
-$MfrPuCollPri = on*[110,1] + NOT(on)*MOff
+temperatureOn = NOT(constrMax)
+
+
+***********************************
+** cool down period
+***********************************
+
+UNIT 111 TYPE 21 ! Time values
+PARAMETERS #
+1       ! 1: Mode: 1 (ignored)
+0       ! 2: Relative or absolute time: 0 => absolute, 1 => relative
+
+EQUATIONS #
+hourOfDay = [111,11]
+
+UNIT 112 TYPE 150 ! Recall
+PARAMETERS #
+1
+1 0
+INPUTS #
+coolDown
+0
+
+EQUATIONS #
+coolDownRec = [112,1]
+
+EQUATIONS #
+isMidnight = EQL(hourOfDay,1)
+coolDown = NOT(temperatureOn) + temperatureOn*(coolDownRec*NOT(isMidnight))
+
+
+***********************************
+** Combined control & output
+***********************************
+
+EQUATIONS #
+$MfrPuCollPri = [110,1]
+
 
 ***********************************
 ** Online Plotter
@@ -64,7 +108,7 @@ $MfrPuCollPri = on*[110,1] + NOT(on)*MOff
 UNIT 103 TYPE 65		!Changed automatically
 PARAMETERS #     
 3     				! 1: Nb. of left-axis variables
-8     				! 2: Nb. of right-axis variables
+7    				! 2: Nb. of right-axis variables
 0     				! 3: Left axis minimum
 500     			! 4: Left axis maximum
 -1   				! 5: Right axis minimum
@@ -76,12 +120,12 @@ $nPlotsPerSim		! 7: Number of plots per simulation
 0     				! 11: Output file units
 0     				! 12: Output file delimiter
 INPUTS #    
-$MfrPuCollPri $CollIT_Wm2 ITMin_Wm2 $CollTIn $CollTOut on stuck constrMin constrMax tooSteep withinTol
-$MfrPuCollPri $CollIT_Wm2 ITMin_Wm2 $CollTIn $CollTOut on stuck constrMin constrMax tooSteep withinTol
+$MfrPuCollPri $CollIT_Wm2 ITMin_Wm2 $CollTIn $CollTOut on coolDown coolDownRec isMidnight temperatureOn
+$MfrPuCollPri $CollIT_Wm2 ITMin_Wm2 $CollTIn $CollTOut on coolDown coolDownRec isMidnight temperatureOn
 LABELS #     
-Mfr
-TempsAndStat
-PuCollPri
+"mass flows [kg/h] and insolation [W/m2]"
+"temperatures [deg C] and statuses [1]"
+"primary collector loop control"
 
 *******************************
 ** END PuCollPri.ddck
