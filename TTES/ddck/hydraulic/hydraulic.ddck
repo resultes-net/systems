@@ -643,7 +643,7 @@ MHx2_QSrc = MHx2_QSrc_A
 UNIT 469 TYPE 931
 ! Coll_Hx
 PARAMETERS 6
-0.3 ! diameter [m]
+0.42 ! diameter [m]
 2000.0 ! length [m]
 2.8800000000000003 ! U-value [kJ/(h*m^2*K)]  (= 0.8 W/(m^2*K))
 Lloop4Rho ! density [kg/m^3]

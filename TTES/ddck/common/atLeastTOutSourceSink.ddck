@@ -22,7 +22,8 @@ CONSTANTS #
 TOutMin = 80
 
 EQUATIONS #
-TOut = MAX(TOutMin, TIn)
+on = 1
+TOut = on*MAX(TOutMin, TIn) + NOT(on)*TIn
 dT = TOut - TIn
 P = M/3600*cp*dT
 @energy(in, heat, :) = P
@@ -32,6 +33,27 @@ P = M/3600*cp*dT
 *************************************
 EQUATIONS #
 @temp(Out) = TOut
+
+***********************************
+** Monthly printer
+***********************************
+CONSTANTS #
+unitMonthly = 31
+
+ASSIGN invalid\change_in_run.config unitMonthly 
+
+UNIT 32 TYPE 46      
+PARAMETERS #   
+unitMonthly 		! 1: Logical unit number, -
+-1           		! 2: Logical unit for monthly summaries, -
+1            		! 3: Relative or absolute start time. 0: print at time intervals relative to the simulation start time. 1: print at absolute time intervals. No effect for monthly integrations
+-1           		! 4: Printing & integrating interval, h. -1 for monthly integration
+1            		! 5: Number of inputs to avoid integration, -
+1            		! 6: Output number to avoid integration
+INPUTS #
+$TIME  P
+**
+$TIME  P
 
 
 *******************************
