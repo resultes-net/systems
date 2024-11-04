@@ -24,7 +24,8 @@ TOutMin = 80
 EQUATIONS #
 TOut = MAX(TOutMin, TIn)
 dT = TOut - TIn
-P = M*cp*dT
+P = M/3600*cp*dT
+@energy(in, heat, :) = P
 
 *************************************
 ** Output to hydraulic file

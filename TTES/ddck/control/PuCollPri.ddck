@@ -4,7 +4,7 @@
 
 *************************************
 ** ABOUT
-** This control controls the pump on the primary side of the solar collector HX. It tries to keep the collector outlet temperature
+** This control controls the pump on the primary side of the solar collector HX. IT_Wm2 tries to keep the collector outlet temperature
 ** `CollTOut` at the set point temperature `TOutSet` by numerical optimization utilizing TRNSYS iterations (Type 22).
 ** 
 ** In addition, the pump is only run if incident total radiation `IT_kW` is above a certain threshold `ITMin_Wm2` and if the
@@ -14,56 +14,71 @@
 *************************************
 ** Control
 *************************************
+EQUATIONS #
+TIn = $CollTIn
+TOut = $CollTout
+IT_Wm2 = $CollIT_Wm2
+A = $CollAcollAp
+cp = $Collcp
+
 CONSTANTS #
+MStart = 0.25*$CollMNom
 MMax = 2*$CollMNom
-TOutSet = 110
+TOutSet = 95
+TOutMax = 110
 ITMin_Wm2 = 200
 
+***********************************
+** Recall values
+***********************************
+UNIT 112 TYPE 150 ! Recall
+PARAMETERS #
+5
+1 0
+1 0
+1 0
+1 0
+1 0
+INPUTS #
+TIn
+TOut
+IT_Wm2
+$MfrPuCollPri
+coolDown
+0
+0
+0
+0
+0
+
+EQUATIONS #
+TInRec = [112,1]
+TOutRec = [112,2]
+ITRec = [112,3]
+MRec = [112,4]
+coolDownREc = [112,5]
 
 ***********************************
 ** Radiation control
 ***********************************
 
 EQUATIONS #
-radiationOn = GT($CollIT_Wm2, ITMin_Wm2)
+radiationOn = GT(IT_Wm2, ITMin_Wm2)
 
 
 ***********************************
 ** Temperature control
 ***********************************
-EQUATIONS #
-on = radiationOn*temperatureOn*NOT(coolDown)
-
-
-UNIT 110 TYPE 22
-PARAMETERS #
-0               ! 1: Ignored
-15               ! 2: Permitted number of iterations: 0: use global TRNSYS constants
-INPUTS #
-0,0             ! 1: Set point
-$CollTOut       ! 2: Controlled variable
-on              ! 3: On/off signal
-0,0             ! 4: Minumum control signal
-0,0             ! 5: Maximum control signal
-0,0             ! 6: Non-zero output threshold
-0,0             ! 7: Tracking error tolerance, < 0 => relative, >= 0 => absolute
-**
-TOutSet         ! 1: Set point
-TOutSet         ! 2: Controlled variable
-1               ! 3: On/off signal
-0               ! 4: Minumum control signal
-MMax            ! 5: Maximum control signal
-0               ! 6: Non-zero output threshold
--0.5            ! 7: Tracking error tolerance, > 0 => relative, < 0 => absolute
+temperatureOn = LT(TOutRec, TOutMax)
 
 EQUATIONS #
-stat  = [110,3]
-stuck = MOD(INT(stat/16),2)
-constrMin = MOD(INT(stat/4),2)
-constrMax = MOD(INT(stat/8),2)
-tooSteep = MOD(INT(stat/64),2)
-withinTol = MOD(INT(stat/32),2)
-temperatureOn = NOT(constrMax)
+PIT_kW = IT_Wm2/1000*A
+eta = 0.75
+dTSet = TOutSet - TInRec
+dTSetDenom = GT(dTSet,0)*dTSet + LE(dTSet,0)*1
+M = GT(dTSet,0)*eta*PIT_kW/(cp*dTSetDenom)*3600
+MCapped = MAX(0, MIN(M, MMax))
+MOn = GT(MCapped,0)*MCapped + EQL(MCapped,0)*MStart
 
 
 ***********************************
@@ -78,17 +93,6 @@ PARAMETERS #
 EQUATIONS #
 hourOfDay = [111,11]
 
-UNIT 112 TYPE 150 ! Recall
-PARAMETERS #
-1
-1 0
-INPUTS #
-coolDown
-0
-
-EQUATIONS #
-coolDownRec = [112,1]
-
 EQUATIONS #
 isMidnight = EQL(hourOfDay,1)
 coolDown = NOT(temperatureOn) + temperatureOn*(coolDownRec*NOT(isMidnight))
@@ -99,7 +103,7 @@ coolDown = NOT(temperatureOn) + temperatureOn*(coolDownRec*NOT(isMidnight))
 ***********************************
 
 EQUATIONS #
-$MfrPuCollPri = [110,1]
+$MfrPuCollPri = radiationOn*temperatureOn*NOT(coolDown)*MOn
 
 
 ***********************************
@@ -107,12 +111,12 @@ $MfrPuCollPri = [110,1]
 ***********************************
 UNIT 103 TYPE 65		!Changed automatically
 PARAMETERS #     
-3     				! 1: Nb. of left-axis variables
-7    				! 2: Nb. of right-axis variables
-0     				! 3: Left axis minimum
-500     			! 4: Left axis maximum
+6    				! 1: Nb. of left-axis variables
+6   				! 2: Nb. of right-axis variables
+-1     				! 3: Left axis minimum
+MMax     			! 4: Left axis maximum
 -1   				! 5: Right axis minimum
-100  				! 6: Right axis maximum
+200 				! 6: Right axis maximum
 $nPlotsPerSim		! 7: Number of plots per simulation
 12     				! 8: X-axis gridpoints
 1     				! 9: Shut off Online w/o removing
@@ -120,8 +124,8 @@ $nPlotsPerSim		! 7: Number of plots per simulation
 0     				! 11: Output file units
 0     				! 12: Output file delimiter
 INPUTS #    
-$MfrPuCollPri $CollIT_Wm2 ITMin_Wm2 $CollTIn $CollTOut on coolDown coolDownRec isMidnight temperatureOn
-$MfrPuCollPri $CollIT_Wm2 ITMin_Wm2 $CollTIn $CollTOut on coolDown coolDownRec isMidnight temperatureOn
+$MfrPuCollPri $CollIT_Wm2 $CollPColl_kW M MMax ITMin_Wm2 TIn TOut radiationOn temperatureOn coolDown isMidnight
+$MfrPuCollPri $CollIT_Wm2 $CollPColl_kW M MMax ITMin_Wm2 TIn TOut radiationOn temperatureOn coolDown isMidnight
 LABELS #     
 "mass flows [kg/h] and insolation [W/m2]"
 "temperatures [deg C] and statuses [1]"

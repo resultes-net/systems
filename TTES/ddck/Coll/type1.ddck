@@ -104,6 +104,7 @@ Pcoll = [28,3]		!kJ/h
 PColl_kW = Pcoll/3600
 PColl_kWm2 = PColl_kW/(AcollAp+1e-30)   
 PColl_Wm2 = PColl_kWm2*1000   
+@energy(in, heat, :) = PColl_kW
 
 ***********************************
 ** Monthly printer

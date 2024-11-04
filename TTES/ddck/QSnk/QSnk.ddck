@@ -30,6 +30,7 @@ profileUnit     ! 9 Logical unit for input file
 
 EQUATIONS #
 P = scaling*[33,2] !Power of sink read from profile
+@energy(out, heat, :) = P
 
 
 
@@ -54,9 +55,8 @@ TOut = Tin - dT
 ***********************************
 ** outputs to hydraulic control
 ***********************************
-EQUATIONS 1
-M = P / ((cp/3600)*dT)	!kg/h
-
+EQUATIONS #
+M = P / (cp*dT) * 3600	!kg/h
 
 ***********************************
 ** Online Plotter

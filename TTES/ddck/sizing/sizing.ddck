@@ -3,8 +3,8 @@
 *******************************
 
 CONSTANTS #
-AperDemand_m2_per_MWh = 5
-VperA_m3_per_m2 = 0.125
+AperDemand_m2_per_MWh = 3
+VperA_m3_per_m2 = 2
 QSnkETot = 90000070/1000
 CollA = AperDemand_m2_per_MWh*QSnkETot
 TesV = VperA_m3_per_m2*CollA

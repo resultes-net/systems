@@ -16,11 +16,25 @@
 *************************************
 EQUATIONS #
 TPriIn = $TColl_Hx
-TSecIn = $TTee7_PuCollSec
+TSecIn = $TTeeQSrcSuppRet_PuAddSrcSec
 
-*************************************
-** Connection to other ddcks
-*************************************
+***********************************
+** Recall values
+***********************************
+UNIT 112 TYPE 150 ! Recall
+PARAMETERS #
+2
+1 0
+1 0
+INPUTS #
+TPriIn
+TSecIn
+0
+0
+
+EQUATIONS #
+TPriInRec = [112,1]
+TSecInRec = [112,2]
 
 *************************************
 ** Control
