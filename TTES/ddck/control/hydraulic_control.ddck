@@ -21,7 +21,7 @@ EQUATIONS #
 rand = [1,1]
 additionalSourceOn = GT(rand,0.70)
 $MfrQAddSrc = $QAddSrcM
-$MfrPuAddSrcSec = $MfrQAddSrc
+$MfrPuQSrcAddSec = $MfrQAddSrc
 $xFracValStrat = 0
 
 ***********************************

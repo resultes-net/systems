@@ -13,38 +13,36 @@
 *************************************
 EQUATIONS #
 TNetReturn = $TTeeMix_ValByPass
+TSources = $TValStrat_TeeStrat
+MSources = $MValStrat_TeeStrat
+TStore = $TSenAvg5_Tes1
 
 *************************************
 ** Connection to other ddcks
 *************************************
 EQUATIONS #
-TSources = $TValStrat_TeeStrat
-MSources = $MValStrat_TeeStrat
-TStore = $TSenAvg5_Tes1
-MQSnkBeforeMix = $TBolr_ValMix
-MFromStore = MAX(0, MQSnkBeforeMix-MSources)
-
-MMixed = MSources + MFromStore
-MMixedDenom = GT(MMixed,0)*MMixed + EQL(MMixed,0)*1
-TOn = GT(MMixed,0)*(MSources*TSources + TStore*MFromStore)/MMixedDenom + EQL(MMixed,0)*(TNetReturn + dTUpper)
-
+MSink = $MfrQSnk
 
 *************************************
 ** Control
 *************************************
+EQUATIONS #
+MFromStore = MAX(0, MSink-MSources)
+
 CONSTANTS #
-dTUpper = 7
-dTLower = 5
+dTUpper = 2
+dTLower = 0
+TInfinity = 1e6
 
 UNIT 1 TYPE 2
 PARAMETERS #
 15                  ! 1: Number of oscilattions
-$ksecTTesTopMax     ! 2: High limit cutout
+TInfinity           ! 2: High limit cutout
 INPUTS #
-TOn                 ! 1: Upper value
+TStore              ! 1: Upper value
 TNetReturn          ! 2: Lower value
-TNetReturn          ! 3: Cutout monitoring value
-bypassOff           ! 4: Input control function
+0,0                 ! 3: Cutout monitoring value
+storeOn             ! 4: Input control function
 dTUpper             ! 5: Upper dead band
 dTLower             ! 6: Lower dead band
 **
@@ -56,9 +54,39 @@ dTLower             ! 6: Lower dead band
 0                   ! 6: Lower dead band
 
 EQUATIONS #
-bypassOff = [1,1]
-bypassOn = NOT(bypassOff)
-$xFracValByPass = bypassOn
+storeOn = [1,1]
+
+EQUATIONS #
+MMixed = MSources + MFromStore
+MMixedDenom = GT(MMixed,0)*MMixed + EQL(MMixed,0)*1
+TMixed = GT(MMixed,0)*(MSources*TSources + TStore*MFromStore)/MMixedDenom + EQL(MMixed,0)*(TNetReturn + dTUpper)
+
+UNIT 1 TYPE 2
+PARAMETERS #
+15                  ! 1: Number of oscilattions
+TInfinity           ! 2: High limit cutout
+INPUTS #
+TMixed              ! 1: Upper value
+TNetReturn          ! 2: Lower value
+0,0                 ! 3: Cutout monitoring value
+mixOn               ! 4: Input control function
+dTUpper             ! 5: Upper dead band
+dTLower             ! 6: Lower dead band
+**
+0                   ! 1: Upper value
+0                   ! 2: Lower value
+0                   ! 3: Cutout monitoring value
+0                   ! 4: Input control function
+0                   ! 5: Upper dead band
+0                   ! 6: Lower dead band
+
+EQUATIONS #
+mixOn = [1,1]
+
+EQUATIONS #
+needStoreButTempTooLow = GT(MFromStore,0)*NOT(storeOn)
+bypassOff = mixOn*NOT(needStoreButTempTooLow)
+$xFracValByPass = NOT(bypassOff)
 
 ***********************************
 ** Hourly printer
@@ -78,17 +106,17 @@ unitPrinter		! 1: Logical unit number, -
 1 2 3
 
 INPUTS #
-TSources TStore TOn TNetReturn bypassOn MSources MFromStore $MfrPuCollSec $MfrPuAddSrcSec $MfrQSnk
+TSources TStore TNetReturn TMixed mixOn storeOn needStoreButTempTooLow bypassOff MSources MFromStore MMixed
 **  
-TSources TStore TOn TNetReturn bypassOn MSources MFromStore $MfrPuCollSec $MfrPuAddSrcSec $MfrQSnk
+TSources TStore TNetReturn TMixed mixOn storeOn needStoreButTempTooLow bypassOff MSources MFromStore MMixed
 
 ***********************************
 ** Online Plotter
 ***********************************
 UNIT 103 TYPE 65		!Changed automatically
 PARAMETERS #     
-5     				! 1: Nb. of left-axis variables
-5     				! 2: Nb. of right-axis variables
+8     				! 1: Nb. of left-axis variables
+3     				! 2: Nb. of right-axis variables
 -0.5   				! 3: Left axis minimum
 100        			! 4: Left axis maximum
 -1   				! 5: Right axis minimum
@@ -100,8 +128,8 @@ $nPlotsPerSim		! 7: Number of plots per simulation
 0     				! 11: Output file units
 0     				! 12: Output file delimiter
 INPUTS #    
-TSources TStore TOn TNetReturn bypassOn MSources MFromStore $MfrPuCollSec $MfrPuAddSrcSec $MfrQSnk
-TSources TStore TOn TNetReturn bypassOn MSources MFromStore $MfrPuCollSec $MfrPuAddSrcSec $MfrQSnk
+TSources TStore TNetReturn TMixed mixOn storeOn needStoreButTempTooLow bypassOff MSources MFromStore MMixed
+TSources TStore TNetReturn TMixed mixOn storeOn needStoreButTempTooLow bypassOff MSources MFromStore MMixed
 LABELS #     
 "Tempertures [degC] and statuses [1]"
 "Mass flow rates [kg/h]"

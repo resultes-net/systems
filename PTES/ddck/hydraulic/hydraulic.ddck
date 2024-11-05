@@ -47,8 +47,8 @@ dpDepth = 1.8 ! Buried pipe depth in m
 dpDiamCase = 2 ! Diameter of casing material in m
 dpLambdaFill = 7  ! Thermal conductivity of fill insulation in kJ/hr.m.K
 dpDistPtoP = 0.55  ! Center-to-center pipe spacing in m
-dpLambdaGap = 1.44  ! Thermal conductivity of gap material in kJ/hr.m.K (gravel)
-dpGapThick = 0  ! Gap thickness in m
+dpLambdaGap = 0.08  ! Thermal conductivity of gap material in kJ/hr.m.K (gravel)
+dpGapThick = 10  ! Gap thickness in m
 
 ****** Fluid properties ******
 dpRhoFlu = 1000.0 ! Density of fluid, kg/m^3

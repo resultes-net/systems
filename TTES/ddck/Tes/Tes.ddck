@@ -26,7 +26,7 @@ elSysIn_Q_TesAux = qHeatSource_Tes1
 *************************************
 EQUATIONS 3
 Tdp1In_Tes1 = TTee_Tes
-Mfrdp1_Tes1 = MTesDpL90_10_A
+Mfrdp1_Tes1 = MTesDpL99_10_A
 Tdp1InRev_Tes1 = TTes_Tee32
 EQUATIONS 3
 Tdp2In_Tes1 = TVal_Tes
@@ -41,7 +41,7 @@ qAux1_Tes1=0.00
 *************************************
 EQUATIONS 2
 *** direct port outputs
-TTesDpL90_10=[50,1]
+TTesDpL99_10=[50,1]
 TTesDpL50_7=[50,3]
 
 *************************************
@@ -53,7 +53,7 @@ VStoreRef = 0.763
 ratioTes1 = Vol_Tes1 / VStoreRef
 *********Connecting values of DIRECT PORT=1***********
 CONSTANTS 2
-zInDp1_Tes1=0.90
+zInDp1_Tes1=0.99
 zOutDp1_Tes1=0.10
 *********Connecting values of DIRECT PORT=2***********
 CONSTANTS 2
