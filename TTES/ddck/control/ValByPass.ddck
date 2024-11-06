@@ -15,7 +15,7 @@ EQUATIONS #
 TNetReturn = $TTeeMix_ValByPass
 TSources = $TValStrat_TeeStrat
 MSources = $MValStrat_TeeStrat
-TStore = $TSenAvg5_Tes1
+TStore = $Tsen10_Tes1
 
 *************************************
 ** Connection to other ddcks
@@ -61,7 +61,7 @@ MMixed = MSources + MFromStore
 MMixedDenom = GT(MMixed,0)*MMixed + EQL(MMixed,0)*1
 TMixed = GT(MMixed,0)*(MSources*TSources + TStore*MFromStore)/MMixedDenom + EQL(MMixed,0)*(TNetReturn + dTUpper)
 
-UNIT 1 TYPE 2
+UNIT 2 TYPE 2
 PARAMETERS #
 15                  ! 1: Number of oscilattions
 TInfinity           ! 2: High limit cutout
@@ -81,7 +81,7 @@ dTLower             ! 6: Lower dead band
 0                   ! 6: Lower dead band
 
 EQUATIONS #
-mixOn = [1,1]
+mixOn = [2,1]
 
 EQUATIONS #
 needStoreButTempTooLow = GT(MFromStore,0)*NOT(storeOn)

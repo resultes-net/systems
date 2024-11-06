@@ -3,11 +3,8 @@
 *******************************
 
 CONSTANTS #
-AperDemand_m2_per_MWh = 3 ! rather 1.5
-VperA_m3_per_m2 = 2 ! rather 1
-QSnkETot = 90000070/1000
-CollA = AperDemand_m2_per_MWh*QSnkETot
-TesV = VperA_m3_per_m2*CollA
+AperDemand_m2_per_MWh = 1.5
+VperDemand_m3_per_MWh = 4
 
 *******************************
 **END sizing.ddck

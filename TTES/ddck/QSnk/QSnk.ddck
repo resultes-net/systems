@@ -7,7 +7,9 @@
 ***********************************
 CONSTANTS #
 dT = 20    ! [K]
-scaling = 1
+unscaledDemand_MWh = 90000070/1000
+demand_MWh = unscaledDemand_MWh
+scaling = demand_MWh/unscaledDemand_MWh
 
 ******************************************************************************************
 ** READER

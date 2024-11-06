@@ -25,8 +25,8 @@ qSysOut_dpSoilIntTot = dpSoilIntTot
 EQUATIONS 10
 *** Black box component temperatures
 TCollH=TColl
-TTesDpL99_10H=TTesDpL99_10
-TTesDpL50_7H=TTesDpL50_7
+TTesDpL99_4H=TTesDpL99_4
+TTesDpL50_1H=TTesDpL50_1
 TQSnkH=TQSnk
 TBolrH=TBolr
 THxCollSide1H=THxCollSide1
@@ -88,67 +88,67 @@ mfrTolSwitchThreshold
 16 19 0 0      !3 : SCnr2Cold
 18 17 0 0      !4 : SCnr2Hot
 35 29 0 0      !5 : Coll
-39 44 0 0      !6 : TesDpL99_10
-41 43 0 0      !7 : TesDpL50_7
+39 58 0 0      !6 : TesDpL99_4
+41 57 0 0      !7 : TesDpL50_1
 18 19 0 8      !8 : QSnk
-37 49 0 0      !9 : Bolr
+37 45 0 0      !9 : Bolr
 29 30 0 0      !10 : HxCollSide1
-53 38 0 0      !11 : HxCollSide2
-48 46 39 2     !12 : TeeStrat
-59 57 45 2     !13 : Tee2
+49 38 0 0      !11 : HxCollSide2
+44 42 39 2     !12 : TeeStrat
+55 53 59 2     !13 : TeeTesCol
 30 35 0 8      !14 : PuCollPri
-52 26 0 8      !15 : PuQSrcAddSec
+48 26 0 8      !15 : PuQSrcAddSec
 3 1 0 0        !16 : SCnr_SCnr2Cold
 2 4 0 0        !17 : SCnr_SCnr2Hot
 4 8 0 0        !18 : SCnr2_QSnk
 8 3 0 0        !19 : QSnk_SCnr2
 28 27 0 8      !20 : QAddSrc
 27 28 0 0      !21 : HxAddSrcSide1
-26 51 0 0      !22 : HxAddSrcSide2
-58 53 0 8      !23 : PuCollSec
-38 47 51 2     !24 : TeeQSrcAddSup
-58 59 52 2     !25 : TeeQSrcAddRet
+26 47 0 0      !22 : HxAddSrcSide2
+54 49 0 8      !23 : PuCollSec
+38 43 47 2     !24 : TeeQSrcAddSup
+54 55 48 2     !25 : TeeQSrcAddRet
 15 22 0 0      !26 : PuTes_Hx2
 20 21 0 0      !27 : QSrc_Hx2
 21 20 0 0      !28 : Hx2_QSrc
 5 10 0 0       !29 : Coll_Hx
 10 14 0 0      !30 : Hx_PuPri
-55 34 50 2     !31 : TeeMix
-33 49 50 3     !32 : ValMix
+51 34 46 2     !31 : TeeMix
+33 45 46 3     !32 : ValMix
 32 2 0 0       !33 : Val_SCnr
 1 31 0 0       !34 : SCnr_Tee3
 14 5 0 0       !35 : PuCollPri_Coll
-46 37 56 2     !36 : TeeByPassSup
+42 37 52 2     !36 : TeeByPassSup
 36 9 0 0       !37 : Tee4_Bolr
 11 24 0 0      !38 : HxColl_Tee6
 12 6 0 0       !39 : Tee_Tes
-47 48 41 3     !40 : ValStrat
+43 44 41 3     !40 : ValStrat
 40 7 0 0       !41 : Val_Tes
-45 43 44 2     !42 : Tee3
-7 42 0 0       !43 : Tes_Tee3
-6 42 0 0       !44 : Tes_Tee32
-42 13 0 0      !45 : Tee3_Tee2
-12 36 0 0      !46 : TeeStart_TeeByPass
-24 40 0 0      !47 : TeeQSrcAddSup_ValStrat
-40 12 0 0      !48 : ValStrat_TeeStrat
-9 32 0 0       !49 : Bolr_ValMix
-31 32 0 0      !50 : TeeMix_ValMix
-22 24 0 0      !51 : HxAddSrc_TeeQSrcAddSup
-25 15 0 0      !52 : TeeQSrcSuppRet_PuAddSrcSec
-23 11 0 0      !53 : PuCollSec_HxColl
-55 57 56 3     !54 : ValByPass
-31 54 0 0      !55 : TeeMix_ValByPass
-54 36 0 0      !56 : ValByPass_TeeByPassSup
-54 13 0 0      !57 : ValByPass_Tee2
-25 23 0 0      !58 : TeeQSrcAddRet_PuCollSec
-13 25 0 0      !59 : Tee2_TeeQSrcAddRet
+12 36 0 0      !42 : TeeStart_TeeByPass
+24 40 0 0      !43 : TeeQSrcAddSup_ValStrat
+40 12 0 0      !44 : ValStrat_TeeStrat
+9 32 0 0       !45 : Bolr_ValMix
+31 32 0 0      !46 : TeeMix_ValMix
+22 24 0 0      !47 : HxAddSrc_TeeQSrcAddSup
+25 15 0 0      !48 : TeeQSrcSuppRet_PuAddSrcSec
+23 11 0 0      !49 : PuCollSec_HxColl
+51 53 52 3     !50 : ValByPass
+31 50 0 0      !51 : TeeMix_ValByPass
+50 36 0 0      !52 : ValByPass_TeeByPassSup
+50 13 0 0      !53 : ValByPass_Tee2
+25 23 0 0      !54 : TeeQSrcAddRet_PuCollSec
+13 25 0 0      !55 : TeeTesCol_TeeQSrcAddRet
+59 57 58 2     !56 : Tee
+7 56 0 0       !57 : Tes_Tee
+6 56 0 0       !58 : Tes_Tee2
+56 13 0 0      !59 : Tee_TeeTesCol
 INPUTS 59! for Type 9351
 0,0 0,0 0,0 0,0 0,0 0,0 0,0 MfrQSnk 0,0 0,0 0,0 
 0,0 0,0 MfrPuCollPri MfrPuQSrcAddSec 0,0 0,0 0,0 0,0 MfrQAddSrc 0,0 0,0 
 MfrPuCollSec 0,0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 xFracValMix 
 0,0 0,0 0,0 0,0 0,0 0,0 0,0 xFracValStrat 0,0 0,0 
-0,0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 
-0,0 xFracValByPass 0,0 0,0 0,0 0,0 0,0 
+0,0 0,0 0,0 0,0 0,0 0,0 0,0 xFracValByPass 0,0 0,0 
+0,0 0,0 0,0 0,0 0,0 0,0 0,0 
 *** Initial Inputs
 0 0 0 0 0 0 0 0 0 0 
 0 0 0 0 0 0 0 0 0 0 
@@ -168,10 +168,10 @@ MSCnr2Hot_A=[450,10]
 MSCnr2Hot_B=[450,11]
 MColl_A=[450,13]
 MColl_B=[450,14]
-MTesDpL99_10_A=[450,16]
-MTesDpL99_10_B=[450,17]
-MTesDpL50_7_A=[450,19]
-MTesDpL50_7_B=[450,20]
+MTesDpL99_4_A=[450,16]
+MTesDpL99_4_B=[450,17]
+MTesDpL50_1_A=[450,19]
+MTesDpL50_1_B=[450,20]
 MQSnk_A=[450,22]
 MQSnk_B=[450,23]
 MBolr_A=[450,25]
@@ -183,9 +183,9 @@ MHxCollSide2_B=[450,32]
 MTeeStrat_A=[450,34]
 MTeeStrat_B=[450,35]
 MTeeStrat_C=[450,36]
-MTee2_A=[450,37]
-MTee2_B=[450,38]
-MTee2_C=[450,39]
+MTeeTesCol_A=[450,37]
+MTeeTesCol_B=[450,38]
+MTeeTesCol_C=[450,39]
 MPuCollPri_A=[450,40]
 MPuCollPri_B=[450,41]
 MPuQSrcAddSec_A=[450,43]
@@ -248,44 +248,44 @@ MValStrat_B=[450,119]
 MValStrat_C=[450,120]
 MVal_Tes_A=[450,121]
 MVal_Tes_B=[450,122]
-MTee3_A=[450,124]
-MTee3_B=[450,125]
-MTee3_C=[450,126]
-MTes_Tee3_A=[450,127]
-MTes_Tee3_B=[450,128]
-MTes_Tee32_A=[450,130]
-MTes_Tee32_B=[450,131]
-MTee3_Tee2_A=[450,133]
-MTee3_Tee2_B=[450,134]
-MTeeStart_TeeByPass_A=[450,136]
-MTeeStart_TeeByPass_B=[450,137]
-MTeeQSrcAddSup_ValStrat_A=[450,139]
-MTeeQSrcAddSup_ValStrat_B=[450,140]
-MValStrat_TeeStrat_A=[450,142]
-MValStrat_TeeStrat_B=[450,143]
-MBolr_ValMix_A=[450,145]
-MBolr_ValMix_B=[450,146]
-MTeeMix_ValMix_A=[450,148]
-MTeeMix_ValMix_B=[450,149]
-MHxAddSrc_TeeQSrcAddSup_A=[450,151]
-MHxAddSrc_TeeQSrcAddSup_B=[450,152]
-MTeeQSrcSuppRet_PuAddSrcSec_A=[450,154]
-MTeeQSrcSuppRet_PuAddSrcSec_B=[450,155]
-MPuCollSec_HxColl_A=[450,157]
-MPuCollSec_HxColl_B=[450,158]
-MValByPass_A=[450,160]
-MValByPass_B=[450,161]
-MValByPass_C=[450,162]
-MTeeMix_ValByPass_A=[450,163]
-MTeeMix_ValByPass_B=[450,164]
-MValByPass_TeeByPassSup_A=[450,166]
-MValByPass_TeeByPassSup_B=[450,167]
-MValByPass_Tee2_A=[450,169]
-MValByPass_Tee2_B=[450,170]
-MTeeQSrcAddRet_PuCollSec_A=[450,172]
-MTeeQSrcAddRet_PuCollSec_B=[450,173]
-MTee2_TeeQSrcAddRet_A=[450,175]
-MTee2_TeeQSrcAddRet_B=[450,176]
+MTeeStart_TeeByPass_A=[450,124]
+MTeeStart_TeeByPass_B=[450,125]
+MTeeQSrcAddSup_ValStrat_A=[450,127]
+MTeeQSrcAddSup_ValStrat_B=[450,128]
+MValStrat_TeeStrat_A=[450,130]
+MValStrat_TeeStrat_B=[450,131]
+MBolr_ValMix_A=[450,133]
+MBolr_ValMix_B=[450,134]
+MTeeMix_ValMix_A=[450,136]
+MTeeMix_ValMix_B=[450,137]
+MHxAddSrc_TeeQSrcAddSup_A=[450,139]
+MHxAddSrc_TeeQSrcAddSup_B=[450,140]
+MTeeQSrcSuppRet_PuAddSrcSec_A=[450,142]
+MTeeQSrcSuppRet_PuAddSrcSec_B=[450,143]
+MPuCollSec_HxColl_A=[450,145]
+MPuCollSec_HxColl_B=[450,146]
+MValByPass_A=[450,148]
+MValByPass_B=[450,149]
+MValByPass_C=[450,150]
+MTeeMix_ValByPass_A=[450,151]
+MTeeMix_ValByPass_B=[450,152]
+MValByPass_TeeByPassSup_A=[450,154]
+MValByPass_TeeByPassSup_B=[450,155]
+MValByPass_Tee2_A=[450,157]
+MValByPass_Tee2_B=[450,158]
+MTeeQSrcAddRet_PuCollSec_A=[450,160]
+MTeeQSrcAddRet_PuCollSec_B=[450,161]
+MTeeTesCol_TeeQSrcAddRet_A=[450,163]
+MTeeTesCol_TeeQSrcAddRet_B=[450,164]
+MTee_A=[450,166]
+MTee_B=[450,167]
+MTee_C=[450,168]
+MTes_Tee_A=[450,169]
+MTes_Tee_B=[450,170]
+MTes_Tee2_A=[450,172]
+MTes_Tee2_B=[450,173]
+MTee_TeeTesCol_A=[450,175]
+MTee_TeeTesCol_B=[450,176]
 
 
 ** Fluids:
@@ -389,15 +389,15 @@ TTee_Tes
 EQUATIONS 1
 TTeeStrat = [455,1]
 
-! Tee2
+! TeeTesCol
 UNIT 456 TYPE 929
 INPUTS 6
-MTee2_A
-MTee2_B
-MTee2_C
-TTee2_TeeQSrcAddRet
+MTeeTesCol_A
+MTeeTesCol_B
+MTeeTesCol_C
+TTeeTesCol_TeeQSrcAddRet
 TValByPass_Tee2
-TTee3_Tee2
+TTee_TeeTesCol
 ***
 0
 0
@@ -406,7 +406,7 @@ TTee3_Tee2
 20.0
 20.0
 EQUATIONS 1
-TTee2 = [456,1]
+TTeeTesCol = [456,1]
 
 UNIT 457 TYPE 2221
 PARAMETERS 2
@@ -580,7 +580,7 @@ MTeeQSrcAddRet_A
 MTeeQSrcAddRet_B
 MTeeQSrcAddRet_C
 TTeeQSrcAddRet_PuCollSec
-TTee2_TeeQSrcAddRet
+TTeeTesCol_TeeQSrcAddRet
 TTeeQSrcSuppRet_PuAddSrcSec
 ***
 0
@@ -782,7 +782,7 @@ PARAMETERS 2
 mfrSolverAbsTol
 spTIni
 INPUTS 3
-MTee_Tes_A TTeeStrat TTesDpL99_10H
+MTee_Tes_A TTeeStrat TTesDpL99_4H
 ***
 0 spTIni spTIni
 EQUATIONS 2
@@ -809,69 +809,14 @@ PARAMETERS 2
 mfrSolverAbsTol
 spTIni
 INPUTS 3
-MVal_Tes_A TValStrat TTesDpL50_7H
+MVal_Tes_A TValStrat TTesDpL50_1H
 ***
 0 spTIni spTIni
 EQUATIONS 2
 TVal_Tes = [480,1]
 MVal_Tes = MVal_Tes_A
 
-! Tee3
-UNIT 481 TYPE 929
-INPUTS 6
-MTee3_A
-MTee3_B
-MTee3_C
-TTee3_Tee2
-TTes_Tee3
-TTes_Tee32
-***
-0
-0
-0
-20.0
-20.0
-20.0
-EQUATIONS 1
-TTee3 = [481,1]
-
-UNIT 482 TYPE 2221
-PARAMETERS 2
-mfrSolverAbsTol
-spTIni
-INPUTS 3
-MTes_Tee3_A TTesDpL50_7H TTee3
-***
-0 spTIni spTIni
-EQUATIONS 2
-TTes_Tee3 = [482,1]
-MTes_Tee3 = MTes_Tee3_A
-
-UNIT 483 TYPE 2221
-PARAMETERS 2
-mfrSolverAbsTol
-spTIni
-INPUTS 3
-MTes_Tee32_A TTesDpL99_10H TTee3
-***
-0 spTIni spTIni
-EQUATIONS 2
-TTes_Tee32 = [483,1]
-MTes_Tee32 = MTes_Tee32_A
-
-UNIT 484 TYPE 2221
-PARAMETERS 2
-mfrSolverAbsTol
-spTIni
-INPUTS 3
-MTee3_Tee2_A TTee3 TTee2
-***
-0 spTIni spTIni
-EQUATIONS 2
-TTee3_Tee2 = [484,1]
-MTee3_Tee2 = MTee3_Tee2_A
-
-UNIT 485 TYPE 2221
+UNIT 481 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -880,10 +825,10 @@ MTeeStart_TeeByPass_A TTeeStrat TTeeByPassSup
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TTeeStart_TeeByPass = [485,1]
+TTeeStart_TeeByPass = [481,1]
 MTeeStart_TeeByPass = MTeeStart_TeeByPass_A
 
-UNIT 486 TYPE 2221
+UNIT 482 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -892,10 +837,10 @@ MTeeQSrcAddSup_ValStrat_A TTeeQSrcAddSup TValStrat
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TTeeQSrcAddSup_ValStrat = [486,1]
+TTeeQSrcAddSup_ValStrat = [482,1]
 MTeeQSrcAddSup_ValStrat = MTeeQSrcAddSup_ValStrat_A
 
-UNIT 487 TYPE 2221
+UNIT 483 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -904,10 +849,10 @@ MValStrat_TeeStrat_A TValStrat TTeeStrat
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TValStrat_TeeStrat = [487,1]
+TValStrat_TeeStrat = [483,1]
 MValStrat_TeeStrat = MValStrat_TeeStrat_A
 
-UNIT 488 TYPE 2221
+UNIT 484 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -916,10 +861,10 @@ MBolr_ValMix_A TBolrH TValMix
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TBolr_ValMix = [488,1]
+TBolr_ValMix = [484,1]
 MBolr_ValMix = MBolr_ValMix_A
 
-UNIT 489 TYPE 2221
+UNIT 485 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -928,10 +873,10 @@ MTeeMix_ValMix_A TTeeMix TValMix
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TTeeMix_ValMix = [489,1]
+TTeeMix_ValMix = [485,1]
 MTeeMix_ValMix = MTeeMix_ValMix_A
 
-UNIT 490 TYPE 2221
+UNIT 486 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -940,10 +885,10 @@ MHxAddSrc_TeeQSrcAddSup_A THxAddSrcSide2H TTeeQSrcAddSup
 ***
 0 spTIni spTIni
 EQUATIONS 2
-THxAddSrc_TeeQSrcAddSup = [490,1]
+THxAddSrc_TeeQSrcAddSup = [486,1]
 MHxAddSrc_TeeQSrcAddSup = MHxAddSrc_TeeQSrcAddSup_A
 
-UNIT 491 TYPE 2221
+UNIT 487 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -952,10 +897,10 @@ MTeeQSrcSuppRet_PuAddSrcSec_A TTeeQSrcAddRet TPuQSrcAddSec
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TTeeQSrcSuppRet_PuAddSrcSec = [491,1]
+TTeeQSrcSuppRet_PuAddSrcSec = [487,1]
 MTeeQSrcSuppRet_PuAddSrcSec = MTeeQSrcSuppRet_PuAddSrcSec_A
 
-UNIT 492 TYPE 2221
+UNIT 488 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -964,10 +909,10 @@ MPuCollSec_HxColl_A TPuCollSec THxCollSide2H
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TPuCollSec_HxColl = [492,1]
+TPuCollSec_HxColl = [488,1]
 MPuCollSec_HxColl = MPuCollSec_HxColl_A
 
-UNIT 493 TYPE 929
+UNIT 489 TYPE 929
 !ValByPass
 PARAMETERS 0
 INPUTS 6
@@ -980,9 +925,9 @@ TValByPass_TeeByPassSup
 ***Initial values
 0 0 0 20 20 20 
 EQUATIONS 1
-TValByPass= [493,1]
+TValByPass= [489,1]
 
-UNIT 494 TYPE 2221
+UNIT 490 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -991,10 +936,10 @@ MTeeMix_ValByPass_A TTeeMix TValByPass
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TTeeMix_ValByPass = [494,1]
+TTeeMix_ValByPass = [490,1]
 MTeeMix_ValByPass = MTeeMix_ValByPass_A
 
-UNIT 495 TYPE 2221
+UNIT 491 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -1003,22 +948,22 @@ MValByPass_TeeByPassSup_A TValByPass TTeeByPassSup
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TValByPass_TeeByPassSup = [495,1]
+TValByPass_TeeByPassSup = [491,1]
 MValByPass_TeeByPassSup = MValByPass_TeeByPassSup_A
 
-UNIT 496 TYPE 2221
+UNIT 492 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
 INPUTS 3
-MValByPass_Tee2_A TValByPass TTee2
+MValByPass_Tee2_A TValByPass TTeeTesCol
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TValByPass_Tee2 = [496,1]
+TValByPass_Tee2 = [492,1]
 MValByPass_Tee2 = MValByPass_Tee2_A
 
-UNIT 497 TYPE 2221
+UNIT 493 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -1027,20 +972,75 @@ MTeeQSrcAddRet_PuCollSec_A TTeeQSrcAddRet TPuCollSec
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TTeeQSrcAddRet_PuCollSec = [497,1]
+TTeeQSrcAddRet_PuCollSec = [493,1]
 MTeeQSrcAddRet_PuCollSec = MTeeQSrcAddRet_PuCollSec_A
+
+UNIT 494 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MTeeTesCol_TeeQSrcAddRet_A TTeeTesCol TTeeQSrcAddRet
+***
+0 spTIni spTIni
+EQUATIONS 2
+TTeeTesCol_TeeQSrcAddRet = [494,1]
+MTeeTesCol_TeeQSrcAddRet = MTeeTesCol_TeeQSrcAddRet_A
+
+! Tee
+UNIT 495 TYPE 929
+INPUTS 6
+MTee_A
+MTee_B
+MTee_C
+TTee_TeeTesCol
+TTes_Tee
+TTes_Tee2
+***
+0
+0
+0
+20.0
+20.0
+20.0
+EQUATIONS 1
+TTee = [495,1]
+
+UNIT 496 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MTes_Tee_A TTesDpL50_1H TTee
+***
+0 spTIni spTIni
+EQUATIONS 2
+TTes_Tee = [496,1]
+MTes_Tee = MTes_Tee_A
+
+UNIT 497 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MTes_Tee2_A TTesDpL99_4H TTee
+***
+0 spTIni spTIni
+EQUATIONS 2
+TTes_Tee2 = [497,1]
+MTes_Tee2 = MTes_Tee2_A
 
 UNIT 498 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
 INPUTS 3
-MTee2_TeeQSrcAddRet_A TTee2 TTeeQSrcAddRet
+MTee_TeeTesCol_A TTee TTeeTesCol
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TTee2_TeeQSrcAddRet = [498,1]
-MTee2_TeeQSrcAddRet = MTee2_TeeQSrcAddRet_A
+TTee_TeeTesCol = [498,1]
+MTee_TeeTesCol = MTee_TeeTesCol_A
 
 *** Single pipe losses
 EQUATIONS 1
@@ -1084,16 +1084,16 @@ STOP! 3 Stop time
 INPUTS 35
 MSCnr_SCnr2Cold MSCnr_SCnr2Hot MSCnr2_QSnk MQSnk_SCnr2 MPuTes_Hx2 MQSrc_Hx2 MHx2_QSrc MColl_Hx
 MHx_PuPri xFracValMix MVal_SCnr MSCnr_Tee3 MPuCollPri_Coll MTee4_Bolr MHxColl_Tee6 MTee_Tes
-xFracValStrat MVal_Tes MTes_Tee3 MTes_Tee32 MTee3_Tee2 MTeeStart_TeeByPass MTeeQSrcAddSup_ValStrat MValStrat_TeeStrat
-MBolr_ValMix MTeeMix_ValMix MHxAddSrc_TeeQSrcAddSup MTeeQSrcSuppRet_PuAddSrcSec MPuCollSec_HxColl xFracValByPass MTeeMix_ValByPass MValByPass_TeeByPassSup
-MValByPass_Tee2 MTeeQSrcAddRet_PuCollSec MTee2_TeeQSrcAddRet
+xFracValStrat MVal_Tes MTeeStart_TeeByPass MTeeQSrcAddSup_ValStrat MValStrat_TeeStrat MBolr_ValMix MTeeMix_ValMix MHxAddSrc_TeeQSrcAddSup
+MTeeQSrcSuppRet_PuAddSrcSec MPuCollSec_HxColl xFracValByPass MTeeMix_ValByPass MValByPass_TeeByPassSup MValByPass_Tee2 MTeeQSrcAddRet_PuCollSec MTeeTesCol_TeeQSrcAddRet
+MTes_Tee MTes_Tee2 MTee_TeeTesCol
 
 ***
 MSCnr_SCnr2Cold MSCnr_SCnr2Hot MSCnr2_QSnk MQSnk_SCnr2 MPuTes_Hx2 MQSrc_Hx2 MHx2_QSrc MColl_Hx
 MHx_PuPri xFracValMix MVal_SCnr MSCnr_Tee3 MPuCollPri_Coll MTee4_Bolr MHxColl_Tee6 MTee_Tes
-xFracValStrat MVal_Tes MTes_Tee3 MTes_Tee32 MTee3_Tee2 MTeeStart_TeeByPass MTeeQSrcAddSup_ValStrat MValStrat_TeeStrat
-MBolr_ValMix MTeeMix_ValMix MHxAddSrc_TeeQSrcAddSup MTeeQSrcSuppRet_PuAddSrcSec MPuCollSec_HxColl xFracValByPass MTeeMix_ValByPass MValByPass_TeeByPassSup
-MValByPass_Tee2 MTeeQSrcAddRet_PuCollSec MTee2_TeeQSrcAddRet
+xFracValStrat MVal_Tes MTeeStart_TeeByPass MTeeQSrcAddSup_ValStrat MValStrat_TeeStrat MBolr_ValMix MTeeMix_ValMix MHxAddSrc_TeeQSrcAddSup
+MTeeQSrcSuppRet_PuAddSrcSec MPuCollSec_HxColl xFracValByPass MTeeMix_ValByPass MValByPass_TeeByPassSup MValByPass_Tee2 MTeeQSrcAddRet_PuCollSec MTeeTesCol_TeeQSrcAddRet
+MTes_Tee MTes_Tee2 MTee_TeeTesCol
 
 
 ASSIGN TTES_T.prt 500
@@ -1114,13 +1114,13 @@ STOP! 3 Stop time
 INPUTS 32
 TSCnr_SCnr2Cold TSCnr_SCnr2Hot TSCnr2_QSnk TQSnk_SCnr2 TPuTes_Hx2 TQSrc_Hx2 THx2_QSrc TColl_Hx
 THx_PuPri TVal_SCnr TSCnr_Tee3 TPuCollPri_Coll TTee4_Bolr THxColl_Tee6 TTee_Tes TVal_Tes
-TTes_Tee3 TTes_Tee32 TTee3_Tee2 TTeeStart_TeeByPass TTeeQSrcAddSup_ValStrat TValStrat_TeeStrat TBolr_ValMix TTeeMix_ValMix
-THxAddSrc_TeeQSrcAddSup TTeeQSrcSuppRet_PuAddSrcSec TPuCollSec_HxColl TTeeMix_ValByPass TValByPass_TeeByPassSup TValByPass_Tee2 TTeeQSrcAddRet_PuCollSec TTee2_TeeQSrcAddRet
+TTeeStart_TeeByPass TTeeQSrcAddSup_ValStrat TValStrat_TeeStrat TBolr_ValMix TTeeMix_ValMix THxAddSrc_TeeQSrcAddSup TTeeQSrcSuppRet_PuAddSrcSec TPuCollSec_HxColl
+TTeeMix_ValByPass TValByPass_TeeByPassSup TValByPass_Tee2 TTeeQSrcAddRet_PuCollSec TTeeTesCol_TeeQSrcAddRet TTes_Tee TTes_Tee2 TTee_TeeTesCol
 
 ***
 TSCnr_SCnr2Cold TSCnr_SCnr2Hot TSCnr2_QSnk TQSnk_SCnr2 TPuTes_Hx2 TQSrc_Hx2 THx2_QSrc TColl_Hx
 THx_PuPri TVal_SCnr TSCnr_Tee3 TPuCollPri_Coll TTee4_Bolr THxColl_Tee6 TTee_Tes TVal_Tes
-TTes_Tee3 TTes_Tee32 TTee3_Tee2 TTeeStart_TeeByPass TTeeQSrcAddSup_ValStrat TValStrat_TeeStrat TBolr_ValMix TTeeMix_ValMix
-THxAddSrc_TeeQSrcAddSup TTeeQSrcSuppRet_PuAddSrcSec TPuCollSec_HxColl TTeeMix_ValByPass TValByPass_TeeByPassSup TValByPass_Tee2 TTeeQSrcAddRet_PuCollSec TTee2_TeeQSrcAddRet
+TTeeStart_TeeByPass TTeeQSrcAddSup_ValStrat TValStrat_TeeStrat TBolr_ValMix TTeeMix_ValMix THxAddSrc_TeeQSrcAddSup TTeeQSrcSuppRet_PuAddSrcSec TPuCollSec_HxColl
+TTeeMix_ValByPass TValByPass_TeeByPassSup TValByPass_Tee2 TTeeQSrcAddRet_PuCollSec TTeeTesCol_TeeQSrcAddRet TTes_Tee TTes_Tee2 TTee_TeeTesCol
 
 

@@ -26,12 +26,12 @@ elSysIn_Q_TesAux = qHeatSource_Tes1
 *************************************
 EQUATIONS 3
 Tdp1In_Tes1 = TTee_Tes
-Mfrdp1_Tes1 = MTesDpL99_10_A
-Tdp1InRev_Tes1 = TTes_Tee32
+Mfrdp1_Tes1 = MTesDpL99_4_A
+Tdp1InRev_Tes1 = TTes_Tee2
 EQUATIONS 3
 Tdp2In_Tes1 = TVal_Tes
-Mfrdp2_Tes1 = MTesDpL50_7_A
-Tdp2InRev_Tes1 = TTes_Tee3
+Mfrdp2_Tes1 = MTesDpL50_1_A
+Tdp2InRev_Tes1 = TTes_Tee
 CONSTANTS 2
 zAux1_Tes1=0.00
 qAux1_Tes1=0.00
@@ -41,8 +41,8 @@ qAux1_Tes1=0.00
 *************************************
 EQUATIONS 2
 *** direct port outputs
-TTesDpL99_10=[50,1]
-TTesDpL50_7=[50,3]
+TTesDpL99_4=[50,1]
+TTesDpL50_1=[50,3]
 
 *************************************
 ****** Parameters of Type1924 *******
@@ -54,11 +54,11 @@ ratioTes1 = Vol_Tes1 / VStoreRef
 *********Connecting values of DIRECT PORT=1***********
 CONSTANTS 2
 zInDp1_Tes1=0.99
-zOutDp1_Tes1=0.10
+zOutDp1_Tes1=0.04
 *********Connecting values of DIRECT PORT=2***********
 CONSTANTS 2
 zInDp2_Tes1=0.50
-zOutDp2_Tes1=0.07
+zOutDp2_Tes1=0.01
 *********Constant of DIRECT PORT=1***********
 CONSTANTS 1
 Dp1Strat_Tes1=0 ! 0: no forced stratification ; 1: force to stratify
@@ -148,7 +148,7 @@ Uaz2_Tes1  ! W/k
 Uaz3_Tes1  ! W/k
 UaTop_Tes1 ! W/k
 tMax_Tes1
-0	0	0 ! 17-20 unsused parameters
+0	0	0 ! 18-20 unsused parameters
 zInDp1_Tes1 zOutDp1_Tes1 zero Dp1Strat_Tes1 ! 21 - 25: zIn, zOut, cp, strat
 zInDp2_Tes1 zOutDp2_Tes1 zero Dp2Strat_Tes1 ! 26 - 30: zIn, zOut, cp, strat
 -1 -1 zero zero ! 31 - 35: zIn, zOut, cp, strat
