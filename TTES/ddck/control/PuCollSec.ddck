@@ -28,7 +28,7 @@ dTLower = 5
 UNIT 1 TYPE 2
 PARAMETERS #
 15                  ! 1: Number of oscilattions
-$constTTesMax       ! 2: High limit cutout
+$konstTTesMax       ! 2: High limit cutout
 INPUTS #
 TPriIn              ! 1: Upper value
 TSecIn              ! 2: Lower value

@@ -244,6 +244,7 @@ Tsen8_Tes1 =[50,78] ! temperature at user defined sensor height Tsen8_Tes1
 Tsen9_Tes1 =[50,79] ! temperature at user defined sensor height Tsen9_Tes1 
 Tsen10_Tes1 =[50,80] ! temperature at user defined sensor height Tsen10_Tes1 
 ***Average temperatures at user defined height
+TsenAVG3_TES1 = [50,91]
 TsenAVG5_TES1 = [50,95]
 EQUATIONS 1
 qHeatSource_Tes1 = [50,181] ! Heat input of all auxiliary heat sources [kW]
