@@ -128,7 +128,7 @@ $nPlotsPerSim		! 7: Number of plots per simulation
 0     				! 11: Output file units
 0     				! 12: Output file delimiter
 INPUTS #    
-TSources TStore TNetReturn TMixed mixOn storeOn needStoreButTempTooLow bypassOff MSources MFromStore MMixed
+TSources TStore TNetReturn TMixed mixOn storeOn needStoreButTempTooLow bypassOff MSources MFromStore ! MMixed
 TSources TStore TNetReturn TMixed mixOn storeOn needStoreButTempTooLow bypassOff MSources MFromStore MMixed
 LABELS #     
 "Tempertures [degC] and statuses [1]"
