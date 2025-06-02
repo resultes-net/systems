@@ -24,7 +24,7 @@ cp = $Collcp
 CONSTANTS #
 MStart = 0.25*$CollMNom
 MMax = 2*$CollMNom
-TOutSet = $konstTTesMax + 5
+TOutSet = $TTesMax + 5
 TOutMax = 120
 ITMin_Wm2 = 200
 

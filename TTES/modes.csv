@@ -1,0 +1,4 @@
+regimeName,PuCollPri,PuCollSec,PuQSrcAddSec,QAddSrc,QSnk,ValByPass,ValMix,ValStrat
+warm_charge_discharge,200.0,200,150,150,500.0,0,0.2,1.0
+hot_supply_and_discharge,200.0,200,150,150,500.0,0,0.2,0.0
+hot_supply_and_charge,200.0,200,150,150,300,0,0.2,0.0

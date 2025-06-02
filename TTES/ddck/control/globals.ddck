@@ -5,6 +5,10 @@
 CONSTANTS #
 TTesMax = 90
 
+EQUATIONS #
+TTesBottom = Tsen1_Tes1
+TNetReturn = TSCnr_TeeMix
+
 *************************************
 ** END constants.ddck
 *************************************

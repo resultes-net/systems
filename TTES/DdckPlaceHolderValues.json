@@ -1,0 +1,94 @@
+{
+    "Bolr": {
+        "In": {
+            "@cp": "Lloop5Cp",
+            "@mfr": "MBolr_A",
+            "@rho": "Lloop5Rho",
+            "@temp": "TTee4_Bolr"
+        },
+        "Out": {
+            "@revtemp": "TBolr_ValMix",
+            "@temp": "TBolr"
+        }
+    },
+    "Coll": {
+        "In": {
+            "@cp": "Lloop4Cp",
+            "@mfr": "MColl_A",
+            "@rho": "Lloop4Rho",
+            "@temp": "TPuCollPri_Coll"
+        },
+        "Out": {
+            "@revtemp": "TColl_Hx",
+            "@temp": "TColl"
+        }
+    },
+    "HxAddSrc": {
+        "Side1In": {
+            "@cp": "Lloop1Cp",
+            "@mfr": "MHxAddSrcSide1_A",
+            "@rho": "Lloop1Rho",
+            "@temp": "TQSrc_Hx2"
+        },
+        "Side1Out": {
+            "@revtemp": "THx2_QSrc",
+            "@temp": "THxAddSrcSide1"
+        },
+        "Side2In": {
+            "@cp": "Lloop5Cp",
+            "@mfr": "MHxAddSrcSide2_A",
+            "@rho": "Lloop5Rho",
+            "@temp": "TPuTes_Hx2"
+        },
+        "Side2Out": {
+            "@revtemp": "THxAddSrc_TeeQSrcAddSup",
+            "@temp": "THxAddSrcSide2"
+        }
+    },
+    "HxColl": {
+        "Side1In": {
+            "@cp": "Lloop4Cp",
+            "@mfr": "MHxCollSide1_A",
+            "@rho": "Lloop4Rho",
+            "@temp": "TColl_Hx"
+        },
+        "Side1Out": {
+            "@revtemp": "THx_PuPri",
+            "@temp": "THxCollSide1"
+        },
+        "Side2In": {
+            "@cp": "Lloop5Cp",
+            "@mfr": "MHxCollSide2_A",
+            "@rho": "Lloop5Rho",
+            "@temp": "TPuCollSec_HxColl"
+        },
+        "Side2Out": {
+            "@revtemp": "THxColl_Tee6",
+            "@temp": "THxCollSide2"
+        }
+    },
+    "QAddSrc": {
+        "In": {
+            "@cp": "Lloop1Cp",
+            "@mfr": "MQAddSrc_A",
+            "@rho": "Lloop1Rho",
+            "@temp": "THx2_QSrc"
+        },
+        "Out": {
+            "@revtemp": "TQSrc_Hx2",
+            "@temp": "TQAddSrc"
+        }
+    },
+    "QSnk": {
+        "In": {
+            "@cp": "Lloop2Cp",
+            "@mfr": "MQSnk_A",
+            "@rho": "Lloop2Rho",
+            "@temp": "TSCnr2_QSnk"
+        },
+        "Out": {
+            "@revtemp": "TQSnk_SCnr2",
+            "@temp": "TQSnk"
+        }
+    }
+}

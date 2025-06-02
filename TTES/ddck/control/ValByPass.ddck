@@ -115,8 +115,8 @@ TSources TStore TNetReturn TMixed mixOn storeOn needStoreButTempTooLow bypassOff
 ***********************************
 UNIT 103 TYPE 65		!Changed automatically
 PARAMETERS #     
-8     				! 1: Nb. of left-axis variables
-3     				! 2: Nb. of right-axis variables
+#     				! 1: Nb. of left-axis variables
+#     				! 2: Nb. of right-axis variables
 -0.5   				! 3: Left axis minimum
 100        			! 4: Left axis maximum
 -1   				! 5: Right axis minimum
@@ -128,8 +128,8 @@ $nPlotsPerSim		! 7: Number of plots per simulation
 0     				! 11: Output file units
 0     				! 12: Output file delimiter
 INPUTS #    
-TSources TStore TNetReturn TMixed mixOn storeOn needStoreButTempTooLow bypassOff MSources MFromStore ! MMixed
-TSources TStore TNetReturn TMixed mixOn storeOn needStoreButTempTooLow bypassOff MSources MFromStore MMixed
+TSources TStore TNetReturn TMixed mixOn storeOn needStoreButTempTooLow bypassOff | MSources MFromStore MMixed
+TSources TStore TNetReturn TMixed mixOn storeOn needStoreButTempTooLow bypassOff | MSources MFromStore MMixed
 LABELS #     
 "Tempertures [degC] and statuses [1]"
 "Mass flow rates [kg/h]"
