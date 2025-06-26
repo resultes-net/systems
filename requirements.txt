@@ -1,0 +1,4 @@
+pytrnsys_process == 0.0.24
+scikit-learn == 1.6.1
+scipy == 1.15.2
+

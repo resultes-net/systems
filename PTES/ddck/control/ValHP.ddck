@@ -1,0 +1,37 @@
+***************************************************
+**Heat pump valve control
+**************************************************
+
+
+***************************************************************************
+** The valve of the heat pump considering the outlet of the HX
+** and the demand setpoint temeperature. When T_HX < T_setpoint, the HP is used.
+** A deadband controller is implemented to make the performance smoother.
+***************************************************************************
+
+EQUATIONS #
+myTHigh = $T_set
+myTLow = $TTee7_Val3
+
+dtOn = 5    ! Upper dead band coll. pump ON, JS: was 10 before, yield is higher with 7, to be improved
+dtOff = -10   ! Lower dead band coll. pump OFF
+
+maxMyTMon = 1e6
+myTMon = myTHigh
+
+
+UNIT 56 TYPE 2
+PARAMETERS 2
+5                   ! 1 No. of oscillations
+maxMyTMon           ! 2 High limit cut-out
+INPUTS 6
+myTHigh             ! 1 Upper input temperature Th
+myTLow              ! 2 Lower input temperature Tl
+myTMon              ! 3 Monitoring temperature Tin
+out                 ! 4 70,1 Input control function
+dtOn                ! 5 Upper dead band dT
+dtOff               ! 6 Lower dead band dT
+0.0 20.0 0.0 0 dtOn dtOff
+
+EQUATIONS #
+out = [56,1] ! Temperature control

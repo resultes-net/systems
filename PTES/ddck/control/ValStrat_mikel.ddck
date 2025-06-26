@@ -1,0 +1,113 @@
+*************************************
+** BEGIN ValStrat.ddck
+*************************************
+
+*************************************
+** ABOUT
+** This control controls by the stratifying valve so that we charge the storage at the correct height
+** given the input temperature.
+*************************************
+
+*************************************
+** Connection to hydraulics file
+*************************************
+EQUATIONS #
+TIn = $TTee9_ValStrat
+MIn = $MTee9_ValStrat
+
+
+*************************************
+** Connection to other ddcks
+*************************************
+!EQUATIONS #
+!TWarmPos = $TsenAVG3_TES1
+!THotPos = $TsenAVG5_TES1
+
+***********************************
+** Recall values
+***********************************
+UNIT 1 TYPE 150 ! Recall
+PARAMETERS #
+1
+1 50
+INPUTS #
+TIn
+50
+
+EQUATIONS #
+TInRec = [1,1]
+
+*************************************
+** Controll 1
+*************************************
+!EQUATIONS #
+!TWarmPos = $pitStoreTTankN25
+!THotPos = $pitStoreTTankN50
+!
+!DistToHot = ABS(TInRec - THotPos)
+!DistToWarm = ABS(TInRec - TWarmPos)
+!
+!strat = GT(DistToWarm, DistToHot)
+!!$xValStrat = NOT(useHot)
+
+********************
+** Control 2 **
+********************
+EQUATIONS #
+myTHighStrat = TInRec
+myTLowStrat = $pitStoreTTankN1
+myTMonStrat = $pitStoreTTankN1
+maxMyTMonStrat = 1e6
+
+CONSTANTS 2
+dtOnStrat = 5    ! Upper dead band coll. pump ON, JS: was 10 before, yield is higher with 7, to be improved
+dtOffStrat = -15   ! Lower dead band coll. pump OFF
+
+
+UNIT 55 TYPE 2
+PARAMETERS 2
+20           ! 1 No. of oscillations
+maxMyTMonStrat   ! 2 High limit cut-out
+INPUTS 6
+myTHighStrat             ! Upper input temperature Th
+myTLowStrat              ! Lower input temperature Tl
+myTMonStrat             ! Monitoring temperature Tin
+strat         ! 70,1 Input control function
+!puColOnPri        ! 70,1 Input control function
+dtOnStrat             ! Upper dead band dT
+dtOffStrat            ! Lower dead band dT
+0.0 20.0 0.0 0 dtOnStrat dtOffStrat
+EQUATIONS #
+
+strat = [55,1] ! Temperature control
+
+
+***********************************
+** Online Plotter
+***********************************
+UNIT 103 TYPE 65		!Changed automatically
+PARAMETERS #
+#    				! 1: Nb. of left-axis variables
+#   				! 2: Nb. of right-axis variables
+0     				! 3: Left axis minimum
+200     			! 4: Left axis maximum
+-1   				! 5: Right axis minimum
+2 		            ! 6: Right axis maximum
+$nPlotsPerSim		! 7: Number of plots per simulation
+12     				! 8: X-axis gridpoints
+1     				! 9: Shut off Online w/o removing
+-1     				! 10: Logical unit for output file
+0     				! 11: Output file units
+0     				! 12: Output file delimiter
+INPUTS #
+TIn $pitStoreTTankN1 $pitStoreTTankN25 $pitStoreTTankN50 | strat
+TIn $pitStoreTTankN1 $pitStoreTTankN1  $pitStoreTTankN50 | strat
+LABELS #
+"temperatures [deg C] "
+"mass flows [kg/h]"
+"stratifying valve"
+
+
+*******************************
+** END ValStrat.ddck
+*******************************

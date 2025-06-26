@@ -1,18 +1,33 @@
 *************************************
 **BEGIN hydraulic_control.ddck
 *************************************
-EQUATIONS 4
-$MfrQSnk = 500
-$MfrPuSec = 500.0
-$MfrPuPri = $CollMSet
-$xFracVal = 0
+EQUATIONS 11
+*** Massflowrates
+MfrQSnk = 500
+MfrPuCollPri = 3000.0
+MfrPuCollSec = 3000.0
+MfrQSrc = 500
+xFracValHPSec = 0.0
+xFracValHXSec = 1.0
+xFracValHXPri = 0.5
+xFracValHPPri = 0.0
+MfrPuSrcSec = 1000.0
+MfrPump = 1000.0
+xFracValStrat = 1.0
 
+CONSTANTS 1
+T_set_ValMix=50
 
-EQUATIONS 2
-$BolrOn = 0
-$BolrTSet = 120
+UNIT 441 TYPE 811 ! Passive Divider for heating 
+PARAMETERS 1
+5 !Nb.of iterations before fixing the value 
+INPUTS 4 
+TBolr_ValMix
+TTee_ValMix
+MValMix_SCnr
+T_set_ValMix
+*** INITIAL INPUT VALUES
+35.0 21.0 800.0 T_set_ValMix
+EQUATIONS 1
+xFracValMix =  1.-[441,5] 
 
-
-*******************************
-**END hydraulic_control.ddck
-*******************************

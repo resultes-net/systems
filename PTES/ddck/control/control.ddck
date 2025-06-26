@@ -1,0 +1,82 @@
+*************************************
+**BEGIN control.ddck
+*************************************
+EQUATIONS #
+
+*************
+*** Pumps ***
+*************
+
+MfrPuCollPri = controlpuPriOn * CollMfrCPriNom
+MfrPuCollSec = MfrPuCollPri !1000.0
+
+
+MfrPuSrcSec = MfrQSrc !1000.0
+MfrQSrc = QSrcM
+
+MfrSources = MfrPuCollSec + MfrPuSrcSec
+
+MfrPump = MTee_ValHXSec*HPMfrEvapCondRatio   !HPMfrHpEvapNom !1000.0
+MfrDemand = MfrPump
+
+MfrQSnk = QSnkM ! 500
+
+**************
+*** Valves ***
+**************
+
+xFracValHXPri = NOT(ValHXOut)
+xFracValHXSec = xFracValHXPri
+
+xFracValHPPri = NOT(ValHPOut)
+xFracValHPSec = xFracValHPPri
+
+xFracValStrat = NOT(controlstrat)
+!xFracVal3 = 0 !GT(ModePP23, 0)
+
+**********
+*** HP ***
+**********
+
+EQUATIONS #
+HPhpIsOn = ValHPOut
+
+**************
+*** DEMAND ***
+**************
+CONSTANTS #
+T_set = 50
+
+
+***********************
+** Pit storage modes **
+***********************
+EQUATIONS #
+
+
+ModePP13 = GT(MfrSources, MfrDemand)*controlstrat ! charging through upper port
+ModePP31 = LE(MfrSources, MfrDemand) + GE(MfrSources, MfrDemand)*ModePP23 ! discharging
+ModePP23 = GT(MfrSources, MfrDemand)*NOT(controlstrat) ! charging through middle port
+
+
+
+
+******************
+** Mixing valve **
+******************
+EQUATIONS #
+T_set_ValMix = T_set
+
+UNIT 441 TYPE 811 ! Passive Divider for heating 
+PARAMETERS 1
+5 !Nb.of iterations before fixing the value 
+INPUTS 4 
+TBolr_ValMix
+TTee_ValMix
+MValMix_SCnr
+T_set_ValMix
+*** INITIAL INPUT VALUES
+35.0 21.0 800.0 T_set_ValMix
+EQUATIONS 1
+xFracValMix =  1.-[441,5]
+

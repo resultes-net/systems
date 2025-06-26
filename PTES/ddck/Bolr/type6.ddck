@@ -36,12 +36,16 @@ EQUATIONS 1
 ***********************************
 ** Dependencies with other ddck
 ***********************************
+EQUATIONS #
+on = 1
+Tset = $T_set
+tRoomStore = $tamb
 
 ***********************************
 ** Beginning TYPE
 ***********************************
 CONSTANTS 2
-PBoilerNom = 3600*10
+PBoilerNom = 360000*10
 MflowBoilerNom = 3000
 
 UNIT 219 TYPE 6
@@ -55,7 +59,7 @@ TIn  		! 1: Inlet Fluid Temperature   C
 MIn		! 2: Inlet Fluid Flow Rate   kg/h
 on		! 3: Input Control Signal   (between 0 and 1)
 Tset		! 4: Setpoint Temperature   C
-$tRoomStore	! 5: Boiler Efficiency   Fraction
+tRoomStore	! 5: Boiler Efficiency   Fraction
 **** INITIAL INPUT VALUES
 50 0.0 0.0 95 0.78
 

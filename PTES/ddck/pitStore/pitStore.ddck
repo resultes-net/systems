@@ -1,0 +1,1121 @@
+**************************************
+**BEGIN type1535.dck
+**************************************
+
+*****************************************
+** Contact person : Mikel Arenas
+** Creation date  : 20.06.2025
+** Last changes   :
+*****************************************
+
+***********************************
+** Pit storage for resultes. Based on swisstes
+***********************************
+
+******************************************************************************************
+** outputs to energy balance in kWh
+** Following this naming standard : qSysIn_name, qSysOut_name, elSysIn_name, elSysOut_name
+******************************************************************************************
+
+!EQUATIONS 2
+!@energy(out, heat, :, loss, total) = :PLoss    ! (kW)
+!@energy(out, heat, :, IntTot) = :PStorRate     ! (kW)
+
+
+***********************************
+** inputs from hydraulic solver
+***********************************
+
+!EQUATIONS 4
+!T12 = TPS_VPSDiv1a
+!M12 = ModePP12*ABS(MPSDpR99_69_A)
+!M21 = ModePP21*ABS(MPSDpR99_69_A)
+!T21 = TPS_VPSDiv2a
+!EQUATIONS 4
+!T13 = TPS_VPSDiv1b
+!M13 = ModePP13*ABS(MPSDpR95_35_A)
+!M31 = ModePP31*ABS(MPSDpR95_35_A)
+!T31 = TPS_VPSDiv3b
+!EQUATIONS 4
+!T14 = TPS_VPSDiv1b2
+!M14 = ModePP14*ABS(MPSDpR91_1_A)
+!M41 = ModePP41*ABS(MPSDpR91_1_A)
+!T41 = TPS_VPSDiv4b2
+!EQUATIONS 4
+!T23 = TPS_VPSDiv2b
+!M23 = ModePP23*ABS(MPSDpR65_5_A)
+!M32 = ModePP32*ABS(MPSDpR65_5_A)
+!T32 = TPS_VPSDiv4b
+!EQUATIONS 4
+!T24 = TPS_VPSDiv2b2
+!M24 = ModePP24*ABS(MPSDpR61_31_A)
+!M42 = ModePP42*ABS(MPSDpR61_31_A)
+!T42 = TPS_VPSDiv3b2
+!EQUATIONS 4
+!T34 = TPS_VPSDiv3a
+!M34 = ModePP34*ABS(MPSDpR39_9_A)
+!M43 = ModePP43*ABS(MPSDpR39_9_A)
+!T43 = TPS_VPSDiv4a
+
+EQUATIONS #
+T13     = $TTeeStrat_pitStoreTes! Hardcoded from hydraulic
+M13     = $ModePP13 * ABS($MpitStoreTesDpL99_5_A)! Hardcoded from hydraulic
+
+T31     = $TpitStoreTes_Tee3! Hardcoded from hydraulic
+M31     = $ModePP31 * ABS($MpitStoreTesDpL99_5_A)! Hardcoded from hydraulic
+
+T23     = $TValStrat_pitStore! Hardcoded from hydraulic
+M23     = $ModePP23 * ABS($MpitStoreTesDpL50_1_A) ! Hardcoded from hydraulic
+
+
+
+
+
+
+***********************************
+** outputs to hydraulic solver
+***********************************
+
+
+!EQUATIONS 6
+!*** direct port outputs
+!TPSDpR99_69 = ModePP12*TOutPP12 + ModePP21*TOutPP21
+!TPSDpR95_35 = ModePP13*TOutPP13 + ModePP31*TOutPP31
+!TPSDpR91_1 = ModePP14*TOutPP14 + ModePP41*TOutPP41
+!TPSDpR65_5 = ModePP32*TOutPP32
+!TPSDpR61_31 = ModePP42*TOutPP42
+!TPSDpR39_9 = ModePP34*TOutPP34 + ModePP43*TOutPP43
+
+! Don't understand this
+EQUATIONS #
+$TpitStoreTesDpL99_5 = $ModePP13*TOutPP13 + $ModePP31*TOutPP31
+$TpitStoreTesDpL50_1 = TOutPP23
+
+
+
+**********************
+** port definitions **
+**********************
+
+!EQUATIONS 20
+!TInPP12        = T12       ! 1  (C) Inlet Temperature  for Port-12
+!MfrInPP12      = M12       ! 2  (kg/hr) Inlet Flowrate for Port-12
+!TInPP13        = T13       ! 3  (C) Inlet Temperature  for Port-13
+!MfrInPP13      = M13       ! 4  (kg/hr) Inlet Flowrate for Port-13
+!TInPP14        = T14       ! 3  (C) Inlet Temperature  for Port-14
+!MfrInPP14      = M14       ! 4  (kg/hr) Inlet Flowrate for Port-14
+!TInPP34        = T34       ! 3  (C) Inlet Temperature  for Port-34
+!MfrInPP34      = M34       ! 4  (kg/hr) Inlet Flowrate for Port-34
+!TInPP21        = T21       ! 3  (C) Inlet Temperature  for Port-21
+!MfrInPP21      = M21       ! 4  (kg/hr) Inlet Flowrate for Port-21
+!TInPP31        = T31       ! 3  (C) Inlet Temperature  for Port-31
+!MfrInPP31      = M31       ! 4  (kg/hr) Inlet Flowrate for Port-31
+!TInPP41        = T41       ! 3  (C) Inlet Temperature  for Port-41
+!MfrInPP41      = M41       ! 4  (kg/hr) Inlet Flowrate for Port-41
+!TInPP32        = T32       ! 3  (C) Inlet Temperature  for Port-32
+!MfrInPP32      = M32       ! 4  (kg/hr) Inlet Flowrate for Port-32
+!TInPP42        = T42       ! 3  (C) Inlet Temperature  for Port-42
+!MfrInPP42      = M42       ! 4  (kg/hr) Inlet Flowrate for Port-42
+!TInPP43        = T43       ! 3  (C) Inlet Temperature  for Port-43
+!MfrInPP43      = M43       ! 4  (kg/hr) Inlet Flowrate for Port-43
+
+EQUATIONS #
+TInPP13        = T13        ! 1  (C) Inlet Temperature  for Port-13
+MfrInPP13      = M13        ! 2  (kg/hr) Inlet Flowrate for Port-13
+TInPP23        = T23        ! 3  (C) Inlet Temperature  for Port-23
+MfrInPP23      = M23        ! 4  (kg/hr) Inlet Flowrate for Port-23
+TInPP31        = T31        ! 5  (C) Inlet Temperature  for Port-31
+MfrInPP31      = M31        ! 6  (kg/hr) Inlet Flowrate for Port-31
+
+
+
+
+! connection 1: node 1,
+! connection 2: node 25,
+! connection 3: node 50,
+! port pair: PP12 is a massflow from con1 to con3, PP13 is a massflow from con1 to con3
+! here a sketch of the PTES with its real connections
+!   _________________________________________________________
+!   \                                                       /
+!    \                                     connection 1  ----- temperature of TherStat1 (TTherStat1)
+!     \                                                   /
+!      \                                                 /
+!       \                                               /
+!        \                                             /
+!         \                           connection 2  ----- temperature of TherStat2 (TTherStat2)
+!          \                                         /
+!           \                                       /
+!            \                                     /
+!             \                                   /
+!              \                 connection 3  ----- temperature of TherStat3 (TTherStat3)
+!               \                               /
+!                -------------------------------
+
+
+** storage definition (for type 1301 and 1535)
+CONSTANTS 4
+StVolume = 30000            !(m3) volume of storage
+StHeight = 30               !(m) height of storage
+SlAng = 60                  !(�) angle between the top surface and the side wall
+StNodes = 50
+
+** calculating the radius ratio needed by this type through the slope angle
+CONSTANTS 7
+h = StHeight                ! calculation variable
+V = StVolume                ! calculation variable
+alpha = SlAng               ! calculation variable
+dR = StHeight / tan(SlAng)  !(m) Difference between upper radius and lower radius
+LoRad = -(h^2*$PI^(1/2) - (-(h*($PI*h^3 - 12*V*tan(alpha)^2))/3)^(1/2))/(2*h*$PI^(1/2)*tan(alpha))     !equation solved with matlab to find the lower/bottom radius of the pit storage
+UpRad = LoRad + dR
+Ratio = UpRad/LoRad
+
+** standardization of parameters for every node / layer
+CONSTANTS 3
+IniT        = 90       ! (C) initial temperature of all the nodes
+LoCoe       = 3        ! (kJ/hr.m^2.K) loss coefficient for all the nodes + top and bottom
+FlueOLCoe   = 0        ! (kJ/hr.m^2.K) flue overall loss coefficient for all the nodes
+
+******************************************************************************************
+**predefinition of parameters and inputs for type 1535
+CONSTANTS #
+LUfile       = -1           ! 1  (-) LU for Data File, if -1 then you have to define the parameters after parameter 6, if >0, then you need a DataFile to define the mentioned parameters - for more information see the example project in trnsys studio
+NTankN       = StNodes      ! 2  (-) Number of Tank Nodes
+!NPorts       = 10           ! 3  (-) Number of Ports
+NPorts       = 3           ! 3  (-) Number of Port Pairs
+NImmHX       = 0            ! 4  (-) Number of Immersed Heat Exchangers
+NMiscHF      = 0            ! 5  (-) Number of Miscellaneous Heat Flows
+NTherSt      = 3            ! 6  (-) Number of Thermostats
+TankV        = StVolume     ! 7  (m3) Tank Volume
+TankH        = StHeight     ! 8  (m) Tank Height
+RatRad       = Ratio        ! 9  (-) Ratio of Tank Radii
+FlSpeHeat    = $CPWAT       ! 10 (kJ/kg.K) Specific Heat
+FlDen        = $RHOWAT      ! 11 (kg/m3) Fluid Density
+FlThCond     = 2.14         ! 12 (kJ/hr.m.K) Fluid Thermal Conductivity
+FlVisc       = 3.21         ! 13 (kg/m.hr) Fluid Viscosity
+FlThExpCoe   = 0.00026      ! 14 (1/K) Fluid Thermal Expansion Coefficient
+IniTN1       = IniT         ! 15 (C) Initial temperature of node-1
+IniTN2       = IniT         ! 16 (C) Initial temperature of node-2
+IniTN3       = IniT         ! 17 (C) Initial temperature of node-3
+IniTN4       = IniT         ! 18 (C) Initial temperature of node-4
+IniTN5       = IniT         ! 19 (C) Initial temperature of node-5
+IniTN6       = IniT         ! 19 (C) Initial temperature of node-6
+IniTN7       = IniT         ! 19 (C) Initial temperature of node-7
+IniTN8       = IniT         ! 19 (C) Initial temperature of node-8
+IniTN9       = IniT         ! 19 (C) Initial temperature of node-9
+IniTN10      = IniT         ! 19 (C) Initial temperature of node-10
+IniTN11      = IniT         ! 19 (C) Initial temperature of node-11
+IniTN12      = IniT         ! 19 (C) Initial temperature of node-12
+IniTN13      = IniT         ! 19 (C) Initial temperature of node-13
+IniTN14      = IniT         ! 19 (C) Initial temperature of node-14
+IniTN15      = IniT         ! 19 (C) Initial temperature of node-15
+IniTN16      = IniT         ! 19 (C) Initial temperature of node-16
+IniTN17      = IniT         ! 19 (C) Initial temperature of node-17
+IniTN18      = IniT         ! 19 (C) Initial temperature of node-18
+IniTN19      = IniT         ! 19 (C) Initial temperature of node-19
+IniTN20      = IniT         ! 19 (C) Initial temperature of node-20
+IniTN21      = IniT         ! 15 (C) Initial temperature of node-21
+IniTN22      = IniT         ! 16 (C) Initial temperature of node-22
+IniTN23      = IniT         ! 17 (C) Initial temperature of node-23
+IniTN24      = IniT         ! 18 (C) Initial temperature of node-24
+IniTN25      = IniT         ! 19 (C) Initial temperature of node-25
+IniTN26      = IniT         ! 19 (C) Initial temperature of node-26
+IniTN27      = IniT         ! 19 (C) Initial temperature of node-27
+IniTN28      = IniT         ! 19 (C) Initial temperature of node-28
+IniTN29      = IniT         ! 19 (C) Initial temperature of node-29
+IniTN30      = IniT         ! 19 (C) Initial temperature of node-30
+IniTN31      = IniT         ! 19 (C) Initial temperature of node-31
+IniTN32      = IniT         ! 19 (C) Initial temperature of node-32
+IniTN33      = IniT         ! 19 (C) Initial temperature of node-33
+IniTN34      = IniT         ! 19 (C) Initial temperature of node-34
+IniTN35      = IniT         ! 19 (C) Initial temperature of node-35
+IniTN36      = IniT         ! 19 (C) Initial temperature of node-36
+IniTN37      = IniT         ! 19 (C) Initial temperature of node-37
+IniTN38      = IniT         ! 19 (C) Initial temperature of node-38
+IniTN39      = IniT         ! 19 (C) Initial temperature of node-39
+IniTN40      = IniT         ! 19 (C) Initial temperature of node-40
+IniTN41      = IniT         ! 15 (C) Initial temperature of node-41
+IniTN42      = IniT         ! 16 (C) Initial temperature of node-42
+IniTN43      = IniT         ! 17 (C) Initial temperature of node-43
+IniTN44      = IniT         ! 18 (C) Initial temperature of node-44
+IniTN45      = IniT         ! 19 (C) Initial temperature of node-45
+IniTN46      = IniT         ! 19 (C) Initial temperature of node-46
+IniTN47      = IniT         ! 19 (C) Initial temperature of node-47
+IniTN48      = IniT         ! 19 (C) Initial temperature of node-48
+IniTN49      = IniT         ! 19 (C) Initial temperature of node-49
+IniTN50      = IniT         ! 19 (C) Initial temperature of node-50
+ToLoCoe      = 1            ! 20 (kJ/hr.m^2.K) Top Loss Coefficient
+EdLoCoeN1    = LoCoe        ! 21 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-1
+EdLoCoeN2    = LoCoe        ! 22 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-2
+EdLoCoeN3    = LoCoe        ! 23 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-3
+EdLoCoeN4    = LoCoe        ! 24 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-4
+EdLoCoeN5    = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-5
+EdLoCoeN6    = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-6
+EdLoCoeN7    = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-7
+EdLoCoeN8    = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-8
+EdLoCoeN9    = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-9
+EdLoCoeN10   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-10
+EdLoCoeN11   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-11
+EdLoCoeN12   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-12
+EdLoCoeN13   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-13
+EdLoCoeN14   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-14
+EdLoCoeN15   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-15
+EdLoCoeN16   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-16
+EdLoCoeN17   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-17
+EdLoCoeN18   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-18
+EdLoCoeN19   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-19
+EdLoCoeN20   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-20
+EdLoCoeN21   = LoCoe        ! 21 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-21
+EdLoCoeN22   = LoCoe        ! 22 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-22
+EdLoCoeN23   = LoCoe        ! 23 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-23
+EdLoCoeN24   = LoCoe        ! 24 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-24
+EdLoCoeN25   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-25
+EdLoCoeN26   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-26
+EdLoCoeN27   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-27
+EdLoCoeN28   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-28
+EdLoCoeN29   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-29
+EdLoCoeN30   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-30
+EdLoCoeN31   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-31
+EdLoCoeN32   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-32
+EdLoCoeN33   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-33
+EdLoCoeN34   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-34
+EdLoCoeN35   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-35
+EdLoCoeN36   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-36
+EdLoCoeN37   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-37
+EdLoCoeN38   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-38
+EdLoCoeN39   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-39
+EdLoCoeN40   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-40
+EdLoCoeN41   = LoCoe        ! 21 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-41
+EdLoCoeN42   = LoCoe        ! 22 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-42
+EdLoCoeN43   = LoCoe        ! 23 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-43
+EdLoCoeN44   = LoCoe        ! 24 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-44
+EdLoCoeN45   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-45
+EdLoCoeN46   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-46
+EdLoCoeN47   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-47
+EdLoCoeN48   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-48
+EdLoCoeN49   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-49
+EdLoCoeN50   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-50
+BoLoCoe      = LoCoe        ! 26 (kJ/hr.m^2.K) Bottom Loss Coefficient
+AdTherCond   = 0            ! 27 (kJ/hr.m.K) Additional Thermal Conductivity
+! connection 1: node 1, connection 2: node 17, connection 3: node 33, connection 4: node 50
+! port pair: PP43 is a massflow from con4 to con3, PP34 is a massflow from con3 to con4
+!PP12InM        = 1            ! 28 (-) Port Pair 12 Inlet Mode
+!PP12EnN        = 1            ! 29 (-) Port Pair 12 Entry Node
+!PP12ExN        = 17            ! 30 (-) Port Pair 12 Exit Node
+!PP13InM        = 1            ! 31 (-) Port Pair 13 Inlet Mode
+!PP13EnN        = 1            ! 32 (-) Port Pair 13 Entry Node
+!PP13ExN        = 33           ! 33 (-) Port Pair 13 Exit Node
+!PP14InM        = 1            ! 31 (-) Port Pair 14 Inlet Mode
+!PP14EnN        = 1            ! 32 (-) Port Pair 14 Entry Node
+!PP14ExN        = 50           ! 33 (-) Port Pair 14 Exit Node
+!PP34InM        = 1            ! 31 (-) Port Pair 34 Inlet Mode
+!PP34EnN        = 33           ! 32 (-) Port Pair 34 Entry Node
+!PP34ExN        = 50           ! 33 (-) Port Pair 34 Exit Node
+!PP21InM        = 1            ! 31 (-) Port Pair 21 Inlet Mode
+!PP21EnN        = 17            ! 32 (-) Port Pair 21 Entry Node
+!PP21ExN        = 1            ! 33 (-) Port Pair 21 Exit Node
+!PP31InM        = 1            ! 31 (-) Port Pair 31 Inlet Mode
+!PP31EnN        = 33           ! 32 (-) Port Pair 31 Entry Node
+!PP31ExN        = 1            ! 33 (-) Port Pair 31 Exit Node
+!PP41InM        = 1            ! 31 (-) Port Pair 41 Inlet Mode
+!PP41EnN        = 50           ! 32 (-) Port Pair 41 Entry Node
+!PP41ExN        = 1            ! 33 (-) Port Pair 41 Exit Node
+!PP32InM        = 1            ! 31 (-) Port Pair 32 Inlet Mode
+!PP32EnN        = 33           ! 32 (-) Port Pair 32 Entry Node
+!PP32ExN        = 17            ! 33 (-) Port Pair 32 Exit Node
+!PP42InM        = 1            ! 31 (-) Port Pair 42 Inlet Mode
+!PP42EnN        = 50           ! 32 (-) Port Pair 42 Entry Node
+!PP42ExN        = 17            ! 33 (-) Port Pair 42 Exit Node
+!PP43InM        = 1            ! 31 (-) Port Pair 43 Inlet Mode
+!PP43EnN        = 50           ! 32 (-) Port Pair 43 Entry Node
+!PP43ExN        = 33           ! 33 (-) Port Pair 43 Exit Node
+
+PP13InM        = 1            ! 28 (-) Port Pair 12 Inlet Mode
+PP13EnN        = 1            ! 29 (-) Port Pair 12 Entry Node
+PP13ExN        = 50           ! 30 (-) Port Pair 12 Exit Node
+
+PP23InM        = 1            ! 31 (-) Port Pair 13 Inlet Mode
+PP23EnN        = 25           ! 32 (-) Port Pair 13 Entry Node
+PP23ExN        = 50           ! 33 (-) Port Pair 13 Exit Node
+
+PP31InM        = 1            ! 31 (-) Port Pair 14 Inlet Mode
+PP31EnN        = 50           ! 32 (-) Port Pair 14 Entry Node
+PP31ExN        = 1            ! 33 (-) Port Pair 14 Exit Node
+
+
+FlueOLCoeN1   = FlueOLCoe    ! 34 (kJ/hr.K) Flue Overall Loss Coefficient for Node-1
+FlueOLCoeN2   = FlueOLCoe    ! 35 (kJ/hr.K) Flue Overall Loss Coefficient for Node-2
+FlueOLCoeN3   = FlueOLCoe    ! 36 (kJ/hr.K) Flue Overall Loss Coefficient for Node-3
+FlueOLCoeN4   = FlueOLCoe    ! 37 (kJ/hr.K) Flue Overall Loss Coefficient for Node-4
+FlueOLCoeN5   = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-5
+FlueOLCoeN6   = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-6
+FlueOLCoeN7   = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-7
+FlueOLCoeN8   = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-8
+FlueOLCoeN9   = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-9
+FlueOLCoeN10  = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-10
+FlueOLCoeN11  = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-11
+FlueOLCoeN12  = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-12
+FlueOLCoeN13  = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-13
+FlueOLCoeN14  = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-14
+FlueOLCoeN15  = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-15
+FlueOLCoeN16  = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-16
+FlueOLCoeN17  = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-17
+FlueOLCoeN18  = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-18
+FlueOLCoeN19  = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-19
+FlueOLCoeN20  = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-20
+FlueOLCoeN21  = FlueOLCoe    ! 34 (kJ/hr.K) Flue Overall Loss Coefficient for Node-21
+FlueOLCoeN22  = FlueOLCoe    ! 35 (kJ/hr.K) Flue Overall Loss Coefficient for Node-22
+FlueOLCoeN23  = FlueOLCoe    ! 36 (kJ/hr.K) Flue Overall Loss Coefficient for Node-23
+FlueOLCoeN24  = FlueOLCoe    ! 37 (kJ/hr.K) Flue Overall Loss Coefficient for Node-24
+FlueOLCoeN25  = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-25
+FlueOLCoeN26  = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-26
+FlueOLCoeN27  = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-27
+FlueOLCoeN28  = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-28
+FlueOLCoeN29  = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-29
+FlueOLCoeN30  = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-30
+FlueOLCoeN31  = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-31
+FlueOLCoeN32  = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-32
+FlueOLCoeN33  = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-33
+FlueOLCoeN34  = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-34
+FlueOLCoeN35  = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-35
+FlueOLCoeN36  = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-36
+FlueOLCoeN37  = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-37
+FlueOLCoeN38  = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-38
+FlueOLCoeN39  = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-39
+FlueOLCoeN40  = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-40
+FlueOLCoeN41  = FlueOLCoe    ! 34 (kJ/hr.K) Flue Overall Loss Coefficient for Node-41
+FlueOLCoeN42  = FlueOLCoe    ! 35 (kJ/hr.K) Flue Overall Loss Coefficient for Node-42
+FlueOLCoeN43  = FlueOLCoe    ! 36 (kJ/hr.K) Flue Overall Loss Coefficient for Node-43
+FlueOLCoeN44  = FlueOLCoe    ! 37 (kJ/hr.K) Flue Overall Loss Coefficient for Node-44
+FlueOLCoeN45  = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-45
+FlueOLCoeN46  = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-46
+FlueOLCoeN47  = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-47
+FlueOLCoeN48  = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-48
+FlueOLCoeN49  = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-49
+FlueOLCoeN50  = FlueOLCoe    ! 38 (kJ/hr.K) Flue Overall Loss Coefficient for Node-50
+NTherStat1 = 1              ! (-) Node position of thermostat-1
+NTherStat2 = 25             ! (-) Node position of thermostat-2
+NTherStat3 = 50             ! (-) Node position of thermostat-3
+
+
+EQUATIONS 104
+TToLo        = EffLoTTop    ! 5  (C) Top Loss Temperature
+TEdLo1       = EffLoTEdN1   ! 6  (C) Edge Loss Temperature for Node-1
+TEdLo2       = EffLoTEdN2   ! 7  (C) Edge Loss Temperature for Node-2
+TEdLo3       = EffLoTEdN3   ! 8  (C) Edge Loss Temperature for Node-3
+TEdLo4       = EffLoTEdN4   ! 9  (C) Edge Loss Temperature for Node-4
+TEdLo5       = EffLoTEdN5   ! 10 (C) Edge Loss Temperature for Node-5
+TEdLo6       = EffLoTEdN6   ! 10 (C) Edge Loss Temperature for Node-6
+TEdLo7       = EffLoTEdN7   ! 10 (C) Edge Loss Temperature for Node-7
+TEdLo8       = EffLoTEdN8   ! 10 (C) Edge Loss Temperature for Node-8
+TEdLo9       = EffLoTEdN9   ! 10 (C) Edge Loss Temperature for Node-9
+TEdLo10      = EffLoTEdN10  ! 10 (C) Edge Loss Temperature for Node-10
+TEdLo11      = EffLoTEdN11  ! 10 (C) Edge Loss Temperature for Node-11
+TEdLo12      = EffLoTEdN12  ! 10 (C) Edge Loss Temperature for Node-12
+TEdLo13      = EffLoTEdN13  ! 10 (C) Edge Loss Temperature for Node-13
+TEdLo14      = EffLoTEdN14  ! 10 (C) Edge Loss Temperature for Node-14
+TEdLo15      = EffLoTEdN15  ! 10 (C) Edge Loss Temperature for Node-15
+TEdLo16      = EffLoTEdN16  ! 10 (C) Edge Loss Temperature for Node-16
+TEdLo17      = EffLoTEdN17  ! 10 (C) Edge Loss Temperature for Node-17
+TEdLo18      = EffLoTEdN18  ! 10 (C) Edge Loss Temperature for Node-18
+TEdLo19      = EffLoTEdN19  ! 10 (C) Edge Loss Temperature for Node-19
+TEdLo20      = EffLoTEdN20  ! 10 (C) Edge Loss Temperature for Node-20
+TEdLo21      = EffLoTEdN21  ! 6  (C) Edge Loss Temperature for Node-21
+TEdLo22      = EffLoTEdN22  ! 7  (C) Edge Loss Temperature for Node-22
+TEdLo23      = EffLoTEdN23  ! 8  (C) Edge Loss Temperature for Node-23
+TEdLo24      = EffLoTEdN24  ! 9  (C) Edge Loss Temperature for Node-24
+TEdLo25      = EffLoTEdN25  ! 10 (C) Edge Loss Temperature for Node-25
+TEdLo26      = EffLoTEdN26  ! 10 (C) Edge Loss Temperature for Node-26
+TEdLo27      = EffLoTEdN27  ! 10 (C) Edge Loss Temperature for Node-27
+TEdLo28      = EffLoTEdN28  ! 10 (C) Edge Loss Temperature for Node-28
+TEdLo29      = EffLoTEdN29  ! 10 (C) Edge Loss Temperature for Node-29
+TEdLo30      = EffLoTEdN30  ! 10 (C) Edge Loss Temperature for Node-30
+TEdLo31      = EffLoTEdN31  ! 10 (C) Edge Loss Temperature for Node-31
+TEdLo32      = EffLoTEdN32  ! 10 (C) Edge Loss Temperature for Node-32
+TEdLo33      = EffLoTEdN33  ! 10 (C) Edge Loss Temperature for Node-33
+TEdLo34      = EffLoTEdN34  ! 10 (C) Edge Loss Temperature for Node-34
+TEdLo35      = EffLoTEdN35  ! 10 (C) Edge Loss Temperature for Node-35
+TEdLo36      = EffLoTEdN36  ! 10 (C) Edge Loss Temperature for Node-36
+TEdLo37      = EffLoTEdN37  ! 10 (C) Edge Loss Temperature for Node-37
+TEdLo38      = EffLoTEdN38  ! 10 (C) Edge Loss Temperature for Node-38
+TEdLo39      = EffLoTEdN39  ! 10 (C) Edge Loss Temperature for Node-39
+TEdLo40      = EffLoTEdN40  ! 10 (C) Edge Loss Temperature for Node-40
+TEdLo41      = EffLoTEdN41  ! 6  (C) Edge Loss Temperature for Node-41
+TEdLo42      = EffLoTEdN42  ! 7  (C) Edge Loss Temperature for Node-42
+TEdLo43      = EffLoTEdN43  ! 8  (C) Edge Loss Temperature for Node-43
+TEdLo44      = EffLoTEdN44  ! 9  (C) Edge Loss Temperature for Node-44
+TEdLo45      = EffLoTEdN45  ! 10 (C) Edge Loss Temperature for Node-45
+TEdLo46      = EffLoTEdN46  ! 10 (C) Edge Loss Temperature for Node-46
+TEdLo47      = EffLoTEdN47  ! 10 (C) Edge Loss Temperature for Node-47
+TEdLo48      = EffLoTEdN48  ! 10 (C) Edge Loss Temperature for Node-48
+TEdLo49      = EffLoTEdN49  ! 10 (C) Edge Loss Temperature for Node-49
+TEdLo50      = EffLoTEdN50  ! 10 (C) Edge Loss Temperature for Node-50
+TBoLo        = EffLoTBot    ! 11 (C) Bottom Loss Temperature
+TGasFlue     = 20           ! 12 (C) Gas Flue Temperature
+MfrInvMix    = -100         ! 13 (kg/hr) Inversion Mixing Flowrate
+AuxHeInpN1   = 0!HeTrN1       ! 14 (kJ/hr) Auxiliary Heat Input for Node-1
+AuxHeInpN2   = 0!HeTrN2       ! 15 (kJ/hr) Auxiliary Heat Input for Node-2
+AuxHeInpN3   = 0!HeTrN3       ! 16 (kJ/hr) Auxiliary Heat Input for Node-3
+AuxHeInpN4   = 0!HeTrN4       ! 17 (kJ/hr) Auxiliary Heat Input for Node-4
+AuxHeInpN5   = 0!HeTrN5       ! 18 (kJ/hr) Auxiliary Heat Input for Node-5
+AuxHeInpN6   = 0!HeTrN6       ! 18 (kJ/hr) Auxiliary Heat Input for Node-6
+AuxHeInpN7   = 0!HeTrN7       ! 18 (kJ/hr) Auxiliary Heat Input for Node-7
+AuxHeInpN8   = 0!HeTrN8       ! 18 (kJ/hr) Auxiliary Heat Input for Node-8
+AuxHeInpN9   = 0!HeTrN9       ! 18 (kJ/hr) Auxiliary Heat Input for Node-9
+AuxHeInpN10  = 0!HeTrN10      ! 18 (kJ/hr) Auxiliary Heat Input for Node-10
+AuxHeInpN11  = 0!HeTrN11      ! 18 (kJ/hr) Auxiliary Heat Input for Node-11
+AuxHeInpN12  = 0!HeTrN12      ! 18 (kJ/hr) Auxiliary Heat Input for Node-12
+AuxHeInpN13  = 0!HeTrN13      ! 18 (kJ/hr) Auxiliary Heat Input for Node-13
+AuxHeInpN14  = 0!HeTrN14      ! 18 (kJ/hr) Auxiliary Heat Input for Node-14
+AuxHeInpN15  = 0!HeTrN15      ! 18 (kJ/hr) Auxiliary Heat Input for Node-15
+AuxHeInpN16  = 0!HeTrN16      ! 18 (kJ/hr) Auxiliary Heat Input for Node-16
+AuxHeInpN17  = 0!HeTrN17      ! 18 (kJ/hr) Auxiliary Heat Input for Node-17
+AuxHeInpN18  = 0!HeTrN18      ! 18 (kJ/hr) Auxiliary Heat Input for Node-18
+AuxHeInpN19  = 0!HeTrN19      ! 18 (kJ/hr) Auxiliary Heat Input for Node-19
+AuxHeInpN20  = 0!HeTrN20      ! 18 (kJ/hr) Auxiliary Heat Input for Node-20
+AuxHeInpN21  = 0!HeTrN21      ! 14 (kJ/hr) Auxiliary Heat Input for Node-21
+AuxHeInpN22  = 0!HeTrN22      ! 15 (kJ/hr) Auxiliary Heat Input for Node-22
+AuxHeInpN23  = 0!HeTrN23      ! 16 (kJ/hr) Auxiliary Heat Input for Node-23
+AuxHeInpN24  = 0!HeTrN24      ! 17 (kJ/hr) Auxiliary Heat Input for Node-24
+AuxHeInpN25  = 0!HeTrN25      ! 18 (kJ/hr) Auxiliary Heat Input for Node-25
+AuxHeInpN26  = 0!HeTrN26      ! 18 (kJ/hr) Auxiliary Heat Input for Node-26
+AuxHeInpN27  = 0!HeTrN27      ! 18 (kJ/hr) Auxiliary Heat Input for Node-27
+AuxHeInpN28  = 0!HeTrN28      ! 18 (kJ/hr) Auxiliary Heat Input for Node-28
+AuxHeInpN29  = 0!HeTrN29      ! 18 (kJ/hr) Auxiliary Heat Input for Node-29
+AuxHeInpN30  = 0!HeTrN30      ! 18 (kJ/hr) Auxiliary Heat Input for Node-30
+AuxHeInpN31  = 0!HeTrN31      ! 18 (kJ/hr) Auxiliary Heat Input for Node-31
+AuxHeInpN32  = 0!HeTrN32      ! 18 (kJ/hr) Auxiliary Heat Input for Node-32
+AuxHeInpN33  = 0!HeTrN33      ! 18 (kJ/hr) Auxiliary Heat Input for Node-33
+AuxHeInpN34  = 0!HeTrN34      ! 18 (kJ/hr) Auxiliary Heat Input for Node-34
+AuxHeInpN35  = 0!HeTrN35      ! 18 (kJ/hr) Auxiliary Heat Input for Node-35
+AuxHeInpN36  = 0!HeTrN36      ! 18 (kJ/hr) Auxiliary Heat Input for Node-36
+AuxHeInpN37  = 0!HeTrN37      ! 18 (kJ/hr) Auxiliary Heat Input for Node-37
+AuxHeInpN38  = 0!HeTrN38      ! 18 (kJ/hr) Auxiliary Heat Input for Node-38
+AuxHeInpN39  = 0!HeTrN39      ! 18 (kJ/hr) Auxiliary Heat Input for Node-39
+AuxHeInpN40  = 0!HeTrN40      ! 18 (kJ/hr) Auxiliary Heat Input for Node-40
+AuxHeInpN41  = 0!HeTrN41      ! 14 (kJ/hr) Auxiliary Heat Input for Node-41
+AuxHeInpN42  = 0!HeTrN42      ! 15 (kJ/hr) Auxiliary Heat Input for Node-42
+AuxHeInpN43  = 0!HeTrN43      ! 16 (kJ/hr) Auxiliary Heat Input for Node-43
+AuxHeInpN44  = 0!HeTrN44      ! 17 (kJ/hr) Auxiliary Heat Input for Node-44
+AuxHeInpN45  = 0!HeTrN45      ! 18 (kJ/hr) Auxiliary Heat Input for Node-45
+AuxHeInpN46  = 0!HeTrN46      ! 18 (kJ/hr) Auxiliary Heat Input for Node-46
+AuxHeInpN47  = 0!HeTrN47      ! 18 (kJ/hr) Auxiliary Heat Input for Node-47
+AuxHeInpN48  = 0!HeTrN48      ! 18 (kJ/hr) Auxiliary Heat Input for Node-48
+AuxHeInpN49  = 0!HeTrN49      ! 18 (kJ/hr) Auxiliary Heat Input for Node-49
+AuxHeInpN50  = 0!HeTrN50      ! 18 (kJ/hr) Auxiliary Heat Input for Node-50
+
+
+UNIT 319 TYPE 1535   ! truncated cone tank model
+PARAMETERS #
+LUfile
+NTankN
+NPorts
+NImmHX
+NMiscHF
+NTherSt
+TankV
+TankH
+RatRad
+FlSpeHeat
+FlDen
+FlThCond
+FlVisc
+FlThExpCoe
+IniTN1
+IniTN2
+IniTN3
+IniTN4
+IniTN5
+IniTN6
+IniTN7
+IniTN8
+IniTN9
+IniTN10
+IniTN11
+IniTN12
+IniTN13
+IniTN14
+IniTN15
+IniTN16
+IniTN17
+IniTN18
+IniTN19
+IniTN20
+IniTN21
+IniTN22
+IniTN23
+IniTN24
+IniTN25
+IniTN26
+IniTN27
+IniTN28
+IniTN29
+IniTN30
+IniTN31
+IniTN32
+IniTN33
+IniTN34
+IniTN35
+IniTN36
+IniTN37
+IniTN38
+IniTN39
+IniTN40
+IniTN41
+IniTN42
+IniTN43
+IniTN44
+IniTN45
+IniTN46
+IniTN47
+IniTN48
+IniTN49
+IniTN50
+ToLoCoe
+EdLoCoeN1
+EdLoCoeN2
+EdLoCoeN3
+EdLoCoeN4
+EdLoCoeN5
+EdLoCoeN6
+EdLoCoeN7
+EdLoCoeN8
+EdLoCoeN9
+EdLoCoeN10
+EdLoCoeN11
+EdLoCoeN12
+EdLoCoeN13
+EdLoCoeN14
+EdLoCoeN15
+EdLoCoeN16
+EdLoCoeN17
+EdLoCoeN18
+EdLoCoeN19
+EdLoCoeN20
+EdLoCoeN21
+EdLoCoeN22
+EdLoCoeN23
+EdLoCoeN24
+EdLoCoeN25
+EdLoCoeN26
+EdLoCoeN27
+EdLoCoeN28
+EdLoCoeN29
+EdLoCoeN30
+EdLoCoeN31
+EdLoCoeN32
+EdLoCoeN33
+EdLoCoeN34
+EdLoCoeN35
+EdLoCoeN36
+EdLoCoeN37
+EdLoCoeN38
+EdLoCoeN39
+EdLoCoeN40
+EdLoCoeN41
+EdLoCoeN42
+EdLoCoeN43
+EdLoCoeN44
+EdLoCoeN45
+EdLoCoeN46
+EdLoCoeN47
+EdLoCoeN48
+EdLoCoeN49
+EdLoCoeN50
+BoLoCoe
+AdTherCond
+!PP12InM
+!PP12EnN
+!PP12ExN
+!PP13InM
+!PP13EnN
+!PP13ExN
+!PP14InM
+!PP14EnN
+!PP14ExN
+!PP34InM
+!PP34EnN
+!PP34ExN
+!PP21InM
+!PP21EnN
+!PP21ExN
+!PP31InM
+!PP31EnN
+!PP31ExN
+!PP41InM
+!PP41EnN
+!PP41ExN
+!PP32InM
+!PP32EnN
+!PP32ExN
+!PP42InM
+!PP42EnN
+!PP42ExN
+!PP43InM
+!PP43EnN
+!PP43ExN
+PP13InM
+PP13EnN
+PP13ExN
+PP23InM
+PP23EnN
+PP23ExN
+PP31InM
+PP31EnN
+PP31ExN
+FlueOLCoeN1
+FlueOLCoeN2
+FlueOLCoeN3
+FlueOLCoeN4
+FlueOLCoeN5
+FlueOLCoeN6
+FlueOLCoeN7
+FlueOLCoeN8
+FlueOLCoeN9
+FlueOLCoeN10
+FlueOLCoeN11
+FlueOLCoeN12
+FlueOLCoeN13
+FlueOLCoeN14
+FlueOLCoeN15
+FlueOLCoeN16
+FlueOLCoeN17
+FlueOLCoeN18
+FlueOLCoeN19
+FlueOLCoeN20
+FlueOLCoeN21
+FlueOLCoeN22
+FlueOLCoeN23
+FlueOLCoeN24
+FlueOLCoeN25
+FlueOLCoeN26
+FlueOLCoeN27
+FlueOLCoeN28
+FlueOLCoeN29
+FlueOLCoeN30
+FlueOLCoeN31
+FlueOLCoeN32
+FlueOLCoeN33
+FlueOLCoeN34
+FlueOLCoeN35
+FlueOLCoeN36
+FlueOLCoeN37
+FlueOLCoeN38
+FlueOLCoeN39
+FlueOLCoeN40
+FlueOLCoeN41
+FlueOLCoeN42
+FlueOLCoeN43
+FlueOLCoeN44
+FlueOLCoeN45
+FlueOLCoeN46
+FlueOLCoeN47
+FlueOLCoeN48
+FlueOLCoeN49
+FlueOLCoeN50
+NTherStat1
+NTherStat2
+NTherStat3
+
+INPUTS #
+!TInPP12
+!MfrInPP12
+!TInPP13
+!MfrInPP13
+!TInPP14
+!MfrInPP14
+!TInPP34
+!MfrInPP34
+!TInPP21
+!MfrInPP21
+!TInPP31
+!MfrInPP31
+!TInPP41
+!MfrInPP41
+!TInPP32
+!MfrInPP32
+!TInPP42
+!MfrInPP42
+!TInPP43
+!MfrInPP43
+TInPP13
+MfrInPP13
+TInPP23
+MfrInPP23
+TInPP31
+MfrInPP31
+
+TToLo
+
+TEdLo1
+TEdLo2
+TEdLo3
+TEdLo4
+TEdLo5
+TEdLo6
+TEdLo7
+TEdLo8
+TEdLo9
+TEdLo10
+TEdLo11
+TEdLo12
+TEdLo13
+TEdLo14
+TEdLo15
+TEdLo16
+TEdLo17
+TEdLo18
+TEdLo19
+TEdLo20
+TEdLo21
+TEdLo22
+TEdLo23
+TEdLo24
+TEdLo25
+TEdLo26
+TEdLo27
+TEdLo28
+TEdLo29
+TEdLo30
+TEdLo31
+TEdLo32
+TEdLo33
+TEdLo34
+TEdLo35
+TEdLo36
+TEdLo37
+TEdLo38
+TEdLo39
+TEdLo40
+TEdLo41
+TEdLo42
+TEdLo43
+TEdLo44
+TEdLo45
+TEdLo46
+TEdLo47
+TEdLo48
+TEdLo49
+TEdLo50
+
+TBoLo
+TGasFlue
+MfrInvMix
+
+AuxHeInpN1
+AuxHeInpN2
+AuxHeInpN3
+AuxHeInpN4
+AuxHeInpN5
+AuxHeInpN6
+AuxHeInpN7
+AuxHeInpN8
+AuxHeInpN9
+AuxHeInpN10
+AuxHeInpN11
+AuxHeInpN12
+AuxHeInpN13
+AuxHeInpN14
+AuxHeInpN15
+AuxHeInpN16
+AuxHeInpN17
+AuxHeInpN18
+AuxHeInpN19
+AuxHeInpN20
+AuxHeInpN21
+AuxHeInpN22
+AuxHeInpN23
+AuxHeInpN24
+AuxHeInpN25
+AuxHeInpN26
+AuxHeInpN27
+AuxHeInpN28
+AuxHeInpN29
+AuxHeInpN30
+AuxHeInpN31
+AuxHeInpN32
+AuxHeInpN33
+AuxHeInpN34
+AuxHeInpN35
+AuxHeInpN36
+AuxHeInpN37
+AuxHeInpN38
+AuxHeInpN39
+AuxHeInpN40
+AuxHeInpN41
+AuxHeInpN42
+AuxHeInpN43
+AuxHeInpN44
+AuxHeInpN45
+AuxHeInpN46
+AuxHeInpN47
+AuxHeInpN48
+AuxHeInpN49
+AuxHeInpN50
+*** INITIAL INPUT Values
+!20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 !Port inputs
+20 0 20 0 20 0  !Port inputs
+20   20 20 20 20 20 20 20 20 20 20   20 20 20 20 20 20 20 20 20 20   20 20 20 20 20 20 20 20 20 20   20 20 20 20 20 20 20 20 20 20   20 20 20 20 20 20 20 20 20 20   !temp values (losses and gas flue temp)
+0 0 0   0 0 0 0 0 0 0 0 0 0   0 0 0 0 0 0 0 0 0 0   0 0 0 0 0 0 0 0 0 0   0 0 0 0 0 0 0 0 0 0   0 0 0 0 0 0 0 0 0 0  ! inversion mixing flowrate and aux values
+
+
+** OUTPUTS
+EQUATIONS #
+!TOutPP12   =    [319,1 ]    ! 1  (C) Temperature  at Outlet-12
+!MfrOutPP12 =    [319,2 ]    ! 2  (kg/hr) Flowrate at Outlet-12
+!TOutPP13   =    [319,3 ]    ! 3  (C) Temperature  at Outlet-13
+!MfrOutPP13 =    [319,4 ]    ! 4  (kg/hr) Flowrate at Outlet-13
+!TOutPP14   =    [319,5 ]    ! 5  (C) Temperature  at Outlet-14
+!MfrOutPP14 =    [319,6 ]    ! 6  (kg/hr) Flowrate at Outlet-14
+!TOutPP34   =    [319,7 ]    ! 7  (C) Temperature  at Outlet-34
+!MfrOutPP34 =    [319,8 ]    ! 8  (kg/hr) Flowrate at Outlet-34
+!TOutPP21   =    [319,9 ]    ! 9  (C) Temperature  at Outlet-21
+!MfrOutPP21 =    [319,10]    ! 10 (kg/hr) Flowrate at Outlet-21
+!TOutPP31   =    [319,11]    ! 11 (C) Temperature  at Outlet-31
+!MfrOutPP31 =    [319,12]    ! 12 (kg/hr) Flowrate at Outlet-31
+!TOutPP41   =    [319,13]    ! 13 (C) Temperature  at Outlet-41
+!MfrOutPP41 =    [319,14]    ! 14 (kg/hr) Flowrate at Outlet-41
+!TOutPP32   =    [319,15]    ! 15 (C) Temperature  at Outlet-32
+!MfrOutPP32 =    [319,16]    ! 16 (kg/hr) Flowrate at Outlet-32
+!TOutPP42   =    [319,17]    ! 17 (C) Temperature  at Outlet-42
+!MfrOutPP42 =    [319,18]    ! 18 (kg/hr) Flowrate at Outlet-42
+!TOutPP43   =    [319,19]    ! 19 (C) Temperature  at Outlet-43
+!MfrOutPP43 =    [319,20]    ! 20 (kg/hr) Flowrate at Outlet-43
+
+
+TOutPP13   =    [319,1]    ! 1  (C) Temperature  at Outlet-13
+MfrOutPP13 =    [319,2]    ! 2  (kg/hr) Flowrate at Outlet-13
+TOutPP23   =    [319,3]    ! 3  (C) Temperature  at Outlet-23
+MfrOutPP23 =    [319,4]    ! 4  (kg/hr) Flowrate at Outlet-23
+TOutPP31   =    [319,5]    ! 5  (C) Temperature  at Outlet-31
+MfrOutPP31 =    [319,6]    ! 6  (kg/hr) Flowrate at Outlet-31
+
+
+TAvgTank =    [319,	7]      ! 7 (C) Average Tank Temperature
+DelEnR   =    [319,	8]      ! 8 (kJ/hr) Energy Delivery Rate
+
+!DelEnP12 =    [319,	9]      ! 9 (kJ/hr) Energy Delivered to Port12
+!DelEnP13 =    [319,	10]     ! 10 (kJ/hr) Energy Delivered to Port13
+!DelEnP14 =    [319,	11]     ! 11 (kJ/hr) Energy Delivered to Port14
+!DelEnP34 =    [319,	12]     ! 12 (kJ/hr) Energy Delivered to Port34
+!DelEnP21 =    [319,	13]     ! 13 (kJ/hr) Energy Delivered to Port21
+!DelEnP31 =    [319,	14]     ! 14 (kJ/hr) Energy Delivered to Port31
+!DelEnP41 =    [319,	15]     ! 15 (kJ/hr) Energy Delivered to Port41
+!DelEnP32 =    [319,	16]     ! 16 (kJ/hr) Energy Delivered to Port32
+!DelEnP42 =    [319,	17]     ! 17 (kJ/hr) Energy Delivered to Port42
+!DelEnP43 =    [319,	18]     ! 18 (kJ/hr) Energy Delivered to Port43
+
+DelEnP13 =    [319,	9]     ! 9 (kJ/hr) Energy Delivered to Port13
+DelEnP23 =    [319,	10]     ! 10 (kJ/hr) Energy Delivered to Port23
+DelEnP31 =    [319,	11]     ! 11 (kJ/hr) Energy Delivered to Port31
+
+
+ToLo =        [319,	12]     ! 19 (kJ/hr) Top Losses
+EdLo =        [319,	13]     ! 20 (kJ/hr) Edge Losses
+BoLo =        [319,	14]     ! 21 (kJ/hr) Bottom Losses
+TotLoss =     [319,	15]     ! 22 (kJ/hr) Total Tank Losses
+GasFlueLo =   [319,	16]     ! 23 (kJ/hr) Gas Flue Losses
+AuxHeR =      [319,	17]     ! 24 (kJ/hr) Auxiliary Heating Rate
+MiscEn =      [319,	18]     ! 25 (kJ/hr) Miscellaneous Energy
+TankEnStR =   [319,	19]     ! 26 (kJ/hr) Tank Energy Storage Rate
+HXTrR =       [319,	20]     ! 27 (kJ/hr) HX Heat Transfer Rate
+TankEnBalErr =[319,	21]     ! 28 (%) Tank Energy Balance Error (base 100)
+
+TTherStat1 =  [319,	22]     ! 29 (C) Thermostat1 Temperature
+TTherStat2 =  [319,	23]     ! 30 (C) Thermostat2 Temperature
+TTherStat3 =  [319,	24]     ! 31 (C) Thermostat3 Temperature
+
+TTankN1  =    [319, 25]     ! 32 (C) Tank Nodal Temperature-1
+TTankN2  =    [319, 26]     ! 33 (C) Tank Nodal Temperature-2
+TTankN3  =    [319, 27]     ! 34 (C) Tank Nodal Temperature-3
+TTankN4  =    [319, 28]     ! 35 (C) Tank Nodal Temperature-4
+TTankN5  =    [319, 29]     ! 36 (C) Tank Nodal Temperature-5
+TTankN6  =    [319, 30]     ! 37 (C) Tank Nodal Temperature-6
+TTankN7  =    [319, 31]     ! 38 (C) Tank Nodal Temperature-7
+TTankN8  =    [319, 32]     ! 39 (C) Tank Nodal Temperature-8
+TTankN9  =    [319, 33]     ! 40 (C) Tank Nodal Temperature-9
+TTankN10 =    [319, 34]     ! 41 (C) Tank Nodal Temperature-10
+TTankN11 =    [319, 35]     ! 42 (C) Tank Nodal Temperature-11
+TTankN12 =    [319, 36]     ! 43 (C) Tank Nodal Temperature-12
+TTankN13 =    [319, 37]     ! 44 (C) Tank Nodal Temperature-13
+TTankN14 =    [319, 38]     ! 45 (C) Tank Nodal Temperature-14
+TTankN15 =    [319, 39]     ! 46 (C) Tank Nodal Temperature-15
+TTankN16 =    [319, 40]     ! 47 (C) Tank Nodal Temperature-16
+TTankN17 =    [319, 41]     ! 48 (C) Tank Nodal Temperature-17
+TTankN18 =    [319, 42]     ! 49 (C) Tank Nodal Temperature-18
+TTankN19 =    [319, 43]     ! 50 (C) Tank Nodal Temperature-19
+TTankN20 =    [319, 44]     ! 51 (C) Tank Nodal Temperature-20
+TTankN21 =    [319, 45]     ! 52 (C) Tank Nodal Temperature-21
+TTankN22 =    [319, 46]     ! 53 (C) Tank Nodal Temperature-22
+TTankN23 =    [319, 47]     ! 54 (C) Tank Nodal Temperature-23
+TTankN24 =    [319, 48]     ! 55 (C) Tank Nodal Temperature-24
+TTankN25 =    [319, 49]     ! 56 (C) Tank Nodal Temperature-25
+TTankN26 =    [319, 50]     ! 57 (C) Tank Nodal Temperature-26
+TTankN27 =    [319, 51]     ! 58 (C) Tank Nodal Temperature-27
+TTankN28 =    [319, 52]     ! 59 (C) Tank Nodal Temperature-28
+TTankN29 =    [319, 53]     ! 60 (C) Tank Nodal Temperature-29
+TTankN30 =    [319, 54]     ! 61 (C) Tank Nodal Temperature-30
+TTankN31 =    [319, 55]     ! 62 (C) Tank Nodal Temperature-31
+TTankN32 =    [319, 56]     ! 63 (C) Tank Nodal Temperature-32
+TTankN33 =    [319, 57]     ! 64 (C) Tank Nodal Temperature-33
+TTankN34 =    [319, 58]     ! 65 (C) Tank Nodal Temperature-34
+TTankN35 =    [319, 59]     ! 66 (C) Tank Nodal Temperature-35
+TTankN36 =    [319, 60]     ! 67 (C) Tank Nodal Temperature-36
+TTankN37 =    [319, 61]     ! 68 (C) Tank Nodal Temperature-37
+TTankN38 =    [319, 62]     ! 69 (C) Tank Nodal Temperature-38
+TTankN39 =    [319, 63]     ! 70 (C) Tank Nodal Temperature-39
+TTankN40 =    [319, 64]     ! 71 (C) Tank Nodal Temperature-40
+TTankN41 =    [319, 65]     ! 72 (C) Tank Nodal Temperature-41
+TTankN42 =    [319, 66]     ! 73 (C) Tank Nodal Temperature-42
+TTankN43 =    [319, 67]     ! 74 (C) Tank Nodal Temperature-43
+TTankN44 =    [319, 68]     ! 75 (C) Tank Nodal Temperature-44
+TTankN45 =    [319, 69]     ! 76 (C) Tank Nodal Temperature-45
+TTankN46 =    [319, 70]     ! 77 (C) Tank Nodal Temperature-46
+TTankN47 =    [319, 71]     ! 78 (C) Tank Nodal Temperature-47
+TTankN48 =    [319, 72]     ! 79 (C) Tank Nodal Temperature-48
+TTankN49 =    [319, 73]     ! 80 (C) Tank Nodal Temperature-49
+TTankN50 =    [319, 74]     ! 81 (C) Tank Nodal Temperature-50
+
+! this part of the code calculates the percentage of the storage, which still has the temperature to feed in directly into the district heating
+EQUATIONS 55
+TDef = 85                   ! (�C) defined temperature for feeding the district heating directly
+HLay = StHeight / StNodes   ! (m) height per layer
+RadL1 = UpRad - HLay/(2*tan(SlAng)) ! (m) average radius of layer 1
+dRadL = dR / StNodes                ! (m) difference of of the radius of layer N and layer N-1
+! first part of following equations is to look, if the layer has a temperature below or above the defined temp for DH
+! second part of the equation is to calculate the volumetric percentage of the layer to the whole storage - it is assumed that one layer is cylindrical
+PerN1  = GE(TTankN1 ,TDef) * (HLay*(RadL1-0 *dRadL)^2*$PI/StVolume)
+PerN2  = GE(TTankN2 ,TDef) * (HLay*(RadL1-1 *dRadL)^2*$PI/StVolume)
+PerN3  = GE(TTankN3 ,TDef) * (HLay*(RadL1-2 *dRadL)^2*$PI/StVolume)
+PerN4  = GE(TTankN4 ,TDef) * (HLay*(RadL1-3 *dRadL)^2*$PI/StVolume)
+PerN5  = GE(TTankN5 ,TDef) * (HLay*(RadL1-4 *dRadL)^2*$PI/StVolume)
+PerN6  = GE(TTankN6 ,TDef) * (HLay*(RadL1-5 *dRadL)^2*$PI/StVolume)
+PerN7  = GE(TTankN7 ,TDef) * (HLay*(RadL1-6 *dRadL)^2*$PI/StVolume)
+PerN8  = GE(TTankN8 ,TDef) * (HLay*(RadL1-7 *dRadL)^2*$PI/StVolume)
+PerN9  = GE(TTankN9 ,TDef) * (HLay*(RadL1-8 *dRadL)^2*$PI/StVolume)
+PerN10 = GE(TTankN10,TDef) * (HLay*(RadL1-9 *dRadL)^2*$PI/StVolume)
+PerN11 = GE(TTankN11,TDef) * (HLay*(RadL1-10*dRadL)^2*$PI/StVolume)
+PerN12 = GE(TTankN12,TDef) * (HLay*(RadL1-11*dRadL)^2*$PI/StVolume)
+PerN13 = GE(TTankN13,TDef) * (HLay*(RadL1-12*dRadL)^2*$PI/StVolume)
+PerN14 = GE(TTankN14,TDef) * (HLay*(RadL1-13*dRadL)^2*$PI/StVolume)
+PerN15 = GE(TTankN15,TDef) * (HLay*(RadL1-14*dRadL)^2*$PI/StVolume)
+PerN16 = GE(TTankN16,TDef) * (HLay*(RadL1-15*dRadL)^2*$PI/StVolume)
+PerN17 = GE(TTankN17,TDef) * (HLay*(RadL1-16*dRadL)^2*$PI/StVolume)
+PerN18 = GE(TTankN18,TDef) * (HLay*(RadL1-17*dRadL)^2*$PI/StVolume)
+PerN19 = GE(TTankN19,TDef) * (HLay*(RadL1-18*dRadL)^2*$PI/StVolume)
+PerN20 = GE(TTankN20,TDef) * (HLay*(RadL1-19*dRadL)^2*$PI/StVolume)
+PerN21 = GE(TTankN21,TDef) * (HLay*(RadL1-20*dRadL)^2*$PI/StVolume)
+PerN22 = GE(TTankN22,TDef) * (HLay*(RadL1-21*dRadL)^2*$PI/StVolume)
+PerN23 = GE(TTankN23,TDef) * (HLay*(RadL1-22*dRadL)^2*$PI/StVolume)
+PerN24 = GE(TTankN24,TDef) * (HLay*(RadL1-23*dRadL)^2*$PI/StVolume)
+PerN25 = GE(TTankN25,TDef) * (HLay*(RadL1-24*dRadL)^2*$PI/StVolume)
+PerN26 = GE(TTankN26,TDef) * (HLay*(RadL1-25*dRadL)^2*$PI/StVolume)
+PerN27 = GE(TTankN27,TDef) * (HLay*(RadL1-26*dRadL)^2*$PI/StVolume)
+PerN28 = GE(TTankN28,TDef) * (HLay*(RadL1-27*dRadL)^2*$PI/StVolume)
+PerN29 = GE(TTankN29,TDef) * (HLay*(RadL1-28*dRadL)^2*$PI/StVolume)
+PerN30 = GE(TTankN30,TDef) * (HLay*(RadL1-29*dRadL)^2*$PI/StVolume)
+PerN31 = GE(TTankN31,TDef) * (HLay*(RadL1-30*dRadL)^2*$PI/StVolume)
+PerN32 = GE(TTankN32,TDef) * (HLay*(RadL1-31*dRadL)^2*$PI/StVolume)
+PerN33 = GE(TTankN33,TDef) * (HLay*(RadL1-32*dRadL)^2*$PI/StVolume)
+PerN34 = GE(TTankN34,TDef) * (HLay*(RadL1-33*dRadL)^2*$PI/StVolume)
+PerN35 = GE(TTankN35,TDef) * (HLay*(RadL1-34*dRadL)^2*$PI/StVolume)
+PerN36 = GE(TTankN36,TDef) * (HLay*(RadL1-35*dRadL)^2*$PI/StVolume)
+PerN37 = GE(TTankN37,TDef) * (HLay*(RadL1-36*dRadL)^2*$PI/StVolume)
+PerN38 = GE(TTankN38,TDef) * (HLay*(RadL1-37*dRadL)^2*$PI/StVolume)
+PerN39 = GE(TTankN39,TDef) * (HLay*(RadL1-38*dRadL)^2*$PI/StVolume)
+PerN40 = GE(TTankN40,TDef) * (HLay*(RadL1-39*dRadL)^2*$PI/StVolume)
+PerN41 = GE(TTankN41,TDef) * (HLay*(RadL1-40*dRadL)^2*$PI/StVolume)
+PerN42 = GE(TTankN42,TDef) * (HLay*(RadL1-41*dRadL)^2*$PI/StVolume)
+PerN43 = GE(TTankN43,TDef) * (HLay*(RadL1-42*dRadL)^2*$PI/StVolume)
+PerN44 = GE(TTankN44,TDef) * (HLay*(RadL1-43*dRadL)^2*$PI/StVolume)
+PerN45 = GE(TTankN45,TDef) * (HLay*(RadL1-44*dRadL)^2*$PI/StVolume)
+PerN46 = GE(TTankN46,TDef) * (HLay*(RadL1-45*dRadL)^2*$PI/StVolume)
+PerN47 = GE(TTankN47,TDef) * (HLay*(RadL1-46*dRadL)^2*$PI/StVolume)
+PerN48 = GE(TTankN48,TDef) * (HLay*(RadL1-47*dRadL)^2*$PI/StVolume)
+PerN49 = GE(TTankN49,TDef) * (HLay*(RadL1-48*dRadL)^2*$PI/StVolume)
+PerN50 = GE(TTankN50,TDef) * (HLay*(RadL1-49*dRadL)^2*$PI/StVolume)
+
+HotWatProportion = PerN1+PerN2+PerN3+PerN4+PerN5+PerN6+PerN7+PerN8+PerN9+PerN10+PerN11+PerN12+PerN13+PerN14+PerN15+PerN16+PerN17+PerN18+PerN19+PerN20+PerN21+PerN22+PerN23+PerN24+PerN25+PerN26+PerN27+PerN28+PerN29+PerN30+PerN31+PerN32+PerN33+PerN34+PerN35+PerN36+PerN37+PerN38+PerN39+PerN40+PerN41+PerN42+PerN43+PerN44+PerN45+PerN46+PerN47+PerN48+PerN49+PerN50
+
+
+
+
+
+***********************************
+** Hourly printer
+***********************************
+CONSTANTS 1
+unitHourlyPit = 33
+
+ASSIGN    temp\PTES_HR.Prt    unitHourlyPit
+
+UNIT 34 TYPE 46		! Printegrator Monthly Values for System
+PARAMETERS #
+unitHourlyPit		! 1: Logical unit number, -
+-1            		! 2: Logical unit for monthly summaries, -
+1             		! 3: Relative or absolute start time. 0: print at time intervals relative to the simulation start time. 1: print at absolute time intervals. No effect for monthly integrations
+1             		! 4: Printing & integrating interval, h. -1 for monthly integration
+3             		! 5: Number of inputs to avoid integration, -
+1             		! 6: Output number to avoid integration
+2             		! 7: Output number to avoid integration
+3             		! 8: Output number to avoid integration
+INPUTS 6
+T13 T31 T23 M13 M31 M23
+**
+T13 T31 T23 M13 M31 M23
+
+*************************************
+** Online Plotter
+*************************************
+UNIT 501 TYPE 65     ! Online Plotter HX
+PARAMETERS 12
+10     ! 1 Nb. of left-axis variables
+5     ! 2 Nb. of right-axis variables
+0     ! 3 Left axis minimum
+100     ! 4 Left axis maximum -
+-10000     ! 5 Right axis minimum
+10000     ! 6 Right axis maximum
+$nPlotsPerSim     ! 7 Number of plots per simulation
+12     ! 8 X-axis gridpoints
+1     ! 9 Shut off Online w/o removing
+-1     ! 10 Logical unit for output file
+0     ! 11 Output file units
+0     ! 12 Output file delimiter
+INPUTS 15
+TTankN1 TTankN5 TTankN10 TTankN15 TTankN20 TTankN30 TTankN35 TTankN40 TTankN45 TTankN50 PStorRate PDisChar PLoss QStore HotWatProportion
+TTankN1 TTankN5 TTankN10 TTankN15 TTankN20 TTankN30 TTankN35 TTankN40 TTankN45 TTankN50 PStorRate PDisChar PLoss QStore HotWatProportion
+LABELS  3
+Temperatures
+EnergyFlows
+PTES
+
+***************************************************************
+**BEGIN PTES energy balance printer
+***************************************************************
+EQUATIONS 4
+PDisChar = DelEnR / 3600   ! (kW)
+PStorRate = TankEnStR / 3600    ! (kW)
+PLoss = TotLoss / 3600     ! (kW)
+QStore = (TAvgTank - 10) * $CPWAT * StVolume * $RHOWAT / 3600000   ! (MWh)
+
+
+EQUATIONS 1
+qImb = PStorRate + PDisChar + PLoss
+CONSTANTS 1
+unitPrint_EBal=223
+ASSIGN temp\EBal_PTES.prt unitPrint_EBal
+UNIT 223 Type 46
+PARAMETERS 5
+unitPrint_EBal !1: Logical unit number
+-1 !2: for monthly summaries
+1  !3: 1:print at absolute times
+-1 !4 -1: monthly integration
+0  !5 number of outputs to avoid integration
+!1  !6 output number to avoid integration
+INPUTS 5
+$TIME PStorRate PDisChar PLoss qImb
+**
+$TIME PStorRate PDisChar PLoss qImb
+
+**************************************
+**END type1535.dck
+**************************************

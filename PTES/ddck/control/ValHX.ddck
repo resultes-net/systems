@@ -1,0 +1,41 @@
+***************************************************
+**Heat exchanger valve control
+**************************************************
+
+
+***************************************************************************
+** The valve of the heat exchanger considering the inlet source temperature
+** and the inlet demand temeperature. When T_source > T_demand, the HX is used.
+** A deadband controller is implemented to make the performance smoother.
+***************************************************************************
+
+EQUATIONS #
+myTHigh = $TTeeStrat_ValHXPri
+myTLow = $TTee_ValHXSec
+
+dtOn = 15    ! Upper dead band coll. pump ON, JS: was 10 before, yield is higher with 7, to be improved
+dtOff = -10   ! Lower dead band coll. pump OFF
+
+maxMyTMon = 1e6
+myTMon = myTHigh
+
+
+UNIT 56 TYPE 2
+PARAMETERS 2
+5           ! 1 No. of oscillations
+maxMyTMon   ! 2 High limit cut-out
+INPUTS 6
+myTHigh             ! Upper input temperature Th
+myTLow              ! Lower input temperature Tl
+myTMon             ! Monitoring temperature Tin
+out        ! 70,1 Input control function
+!puColOnPri         ! 70,1 Input control function
+dtOn             ! Upper dead band dT
+dtOff            ! Lower dead band dT
+0.0 20.0 0.0 0 dtOn dtOff
+
+EQUATIONS #
+out = [56,1] ! Temperature control
+
+
+
