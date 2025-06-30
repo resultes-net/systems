@@ -16,7 +16,7 @@ MfrQSrc = QSrcM
 
 MfrSources = MfrPuCollSec + MfrPuSrcSec
 
-MfrPump = MTee_ValHXSec*HPMfrEvapCondRatio   !HPMfrHpEvapNom !1000.0
+MfrPump = ValHPOut*MTee_ValHXSec*HPMfrEvapCondRatio + NOT(ValHPOut)*MTee_ValHXSec  !HPMfrHpEvapNom !1000.0
 MfrDemand = MfrPump
 
 MfrQSnk = QSnkM ! 500
@@ -28,7 +28,8 @@ MfrQSnk = QSnkM ! 500
 xFracValHXPri = NOT(ValHXOut)
 xFracValHXSec = xFracValHXPri
 
-xFracValHPPri = NOT(ValHPOut)
+ValHPPri = ValHPOut*GT(MTee7_Val3, HPMfrHpCondMin)
+xFracValHPPri = NOT(ValHPPri)
 xFracValHPSec = xFracValHPPri
 
 xFracValStrat = NOT(controlstrat)
@@ -39,7 +40,7 @@ xFracValStrat = NOT(controlstrat)
 **********
 
 EQUATIONS #
-HPhpIsOn = ValHPOut
+HPhpIsOn = ValHPPri
 
 **************
 *** DEMAND ***

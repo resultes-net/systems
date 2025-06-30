@@ -13,8 +13,8 @@ EQUATIONS #
 myTHigh = $TTeeStrat_ValHXPri
 myTLow = $TTee_ValHXSec
 
-dtOn = 15    ! Upper dead band coll. pump ON, JS: was 10 before, yield is higher with 7, to be improved
-dtOff = -10   ! Lower dead band coll. pump OFF
+dtOn = 5    ! Upper dead band coll. pump ON, JS: was 10 before, yield is higher with 7, to be improved
+dtOff = 0   ! Lower dead band coll. pump OFF
 
 maxMyTMon = 1e6
 myTMon = myTHigh

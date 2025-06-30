@@ -14,7 +14,7 @@ myTHigh = $T_set
 myTLow = $TTee7_Val3
 
 dtOn = 5    ! Upper dead band coll. pump ON, JS: was 10 before, yield is higher with 7, to be improved
-dtOff = -10   ! Lower dead band coll. pump OFF
+dtOff = -3   ! Lower dead band coll. pump OFF
 
 maxMyTMon = 1e6
 myTMon = myTHigh
@@ -35,3 +35,31 @@ dtOff               ! 6 Lower dead band dT
 
 EQUATIONS #
 out = [56,1] ! Temperature control
+
+***********************************
+** Time step printer
+***********************************
+CONSTANTS 1
+unitStepValHp = 33
+
+ASSIGN    temp\VAL_HP_DT.Prt    unitStepValHp
+
+UNIT 34 TYPE 46		! Printegrator Monthly Values for System
+PARAMETERS #
+unitStepValHp		! 1: Logical unit number, -
+-1            		! 2: Logical unit for monthly summaries, -
+1             		! 3: Relative or absolute start time. 0: print at time intervals relative to the simulation start time. 1: print at absolute time intervals. No effect for monthly integrations
+$dtSim             	! 4: Printing & integrating interval, h. -1 for monthly integration
+8             		! 5: Number of inputs to avoid integration, -
+2             		! 6: Output number to avoid integration
+3             		! 7: Output number to avoid integration
+4             		! 8: Output number to avoid integration
+5             		! 9: Output number to avoid integration
+6             		! 10: Output number to avoid integration
+7             		! 11: Output number to avoid integration
+8             		! 12: Output number to avoid integration
+9             		! 13: Output number to avoid integration
+INPUTS #
+$Time  $T_set  $TTee7_Val3 out $MTee7_Val3 $HPMfrHpCondMin $ValHPPri $HPTHpCondOut $HPcontrolfrCond_new
+**
+$Time  $T_set  $TTee7_Val3 out $MTee7_Val3 $HPMfrHpCondMin $ValHPPri $HPTHpCondOut $HPcontrolfrCond_new

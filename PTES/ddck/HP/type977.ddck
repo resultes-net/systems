@@ -89,7 +89,7 @@ frCond = $HPcontrolfrCond_new !1
 ** Begin PD CONTROLLER (currently not active)
 ***********************************************
 CONSTANTS 5
-MfrHpCondMin = MfrHpCondNom*0.4		! chosen without any knowledge of actual system
+MfrHpCondMin = MfrHpCondNom*0.2		! chosen without any knowledge of actual system
 MfrHpCondMax = MfrHpCondNom			! chosen without any knowledge of actual system
 dMfrHpCondInc = 4*MfrHpCondNom
 dMfrHpCondDec = -dMfrHpCondInc
