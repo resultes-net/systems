@@ -2,16 +2,13 @@
 **Solar controller
 **************************************************
 
-*****************************************
-** Contact person : Mikel Arenas
-** Creation date  : 19.06.2025
-** Last changes   : 19.06.2025
-*****************************************
-
 ***************************************************************************
-** Description:
-** custom controlls for the solar dhw example system
-** TODO:
+** This controller rules the activation of the pump of the solar collectors.
+** Two criteria must be matched at the same time:
+**      1. Radiation must be higher than 50 W/m2
+**      2. Outlet temperature of the collectors must be higher than
+**      MAX(Return temperature from the grid, bottom temperature of the storage).
+**      A deadband controller is introduced to make it smoother.
 ***************************************************************************
 
 
@@ -21,7 +18,7 @@
 
 EQUATIONS #
 myTHigh = $CollTOut
-myTLow = $pitStoreTTherStat3
+myTLow = MAX($TNetReturn, $TTesBottom)
 
 myTCollOut = $CollTOut
 myTCollIn = $CollTIn
@@ -52,58 +49,15 @@ puColOnTemp         ! 70,1 Input control function
 dtColOn             ! Upper dead band dT
 dtColOff            ! Lower dead band dT
 0.0 20.0 0.0 0 dtColOn dtColOff
+
 EQUATIONS 3
 puColOnRad = GT($IT_H,50*3.6) ! Radiation control
 puColOnTemp = [55,1] ! Temperature control
 puPriOn = puColOnRad * puColOnTemp ! Radiation + temperature control
 
-***********************************
-** Secondary HP pump
-***********************************
 
-!CONSTANTS #
-!dtSecHpOn = 15 !25
-!dtSecHpOff = -5 ! -25
-!
-!UNIT 29 TYPE 2
-!PARAMETERS 2
-!10           ! 1 No. of oscillations
-!999   ! 2 High limit cut-out
-!INPUTS 6
-!$TesCollT4_Tes1                 ! Upper input temperature Th
-!$TPumpHot_HxColl                ! Lower input temperature Tl
-!$TesCollT4_Tes1                 ! Monitoring temperature Tin
-!puSecHpOn                       ! 70,1 Input control function
-!dtSecHpOn                       ! Upper dead band dT
-!dtSecHpOff                      ! Lower dead band dT
-!0.0 20.0 0.0 0 dtSecHpOn dtSecHpOff
-!
-!EQUATIONS #
-!puSecHpOn = [29,1] !GT($TesCollT1_Tes1,$TPumpHot_HxColl)
 
-***********************************
-** Secondary demand pump
-***********************************
 
-!CONSTANTS #
-!dtSecDemandOn = 15 !25
-!dtSecDemandOff = -5 ! -25
-!
-!UNIT 39 TYPE 2
-!PARAMETERS 2
-!50          ! 1 No. of oscillations
-!999   ! 2 High limit cut-out
-!INPUTS 6
-!$TesCollT4_Tes1             ! Upper input temperature Th
-!$TTee2_HxCollDemand                     ! Lower input temperature Tl
-!$TesCollT4_Tes1               ! Monitoring temperature Tin
-!puSecDemandOn                           ! 70,1 Input control function
-!dtSecDemandOn                           ! Upper dead band dT
-!dtSecDemandOff                          ! Lower dead band dT
-!0.0 0.0 0.0 0.0 dtSecDemandOn dtSecDemandOff
-!
-!EQUATIONS #
-!puSecDemandOn = [39,1] !GT($TesCollT1_Tes1,$TPumpHot_HxColl)
 
 *************************************
 ********** Online Plotter ***********

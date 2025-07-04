@@ -7,9 +7,9 @@
 ***********************************
 CONSTANTS #
 dT = 20    ! [K]
-unscaledSource_MWh = 1 !90000070/1000
-source_MWh = unscaledSource_MWh
-scaling = source_MWh/unscaledSource_MWh
+QUnscaled_MWh = 1 !90000070/1000
+Q_MWh = QUnscaled_MWh
+Scaling = Q_MWh/QUnscaled_MWh
 !P = 160
 
 ***********************************
@@ -31,7 +31,7 @@ TOut = Tin + dT
 ** outputs to hydraulic control
 ***********************************
 EQUATIONS 1
-M = P / ((cp/3600)*dT)	!kg/h
+M = P_kW / ((cp/3600)*dT)	!kg/h
 
 ******************************************************************************************
 ** READER
@@ -52,7 +52,32 @@ profileSrcUnit     ! 9 Logical unit for input file (used to be 18)
 -1     ! 10 Free format mode
 
 EQUATIONS 1
-P = scaling*[41,2]   !Power of sink read from profile
+P_kW = Scaling*[41,2]   !Power of sink read from profile
+
+
+***********************************
+** Hourly printer
+***********************************
+CONSTANTS 1
+unitPrintSource = 33
+
+ASSIGN    temp\SOURCE_HR.Prt    unitPrintSource
+
+UNIT 34 TYPE 46		! Printegrator Monthly Values for System
+PARAMETERS 8
+unitPrintSource		! 1: Logical unit number, -
+-1						! 2: Logical unit for monthly summaries, -
+1						! 3: Relative or absolute start time. 0: print at time intervals relative to the simulation start time. 1: print at absolute time intervals. No effect for monthly integrations
+1						! 4: Printing & integrating interval, h. -1 for monthly integration
+3						! 5: Number of inputs to avoid integration, -
+1						! 6: Output number to avoid integration
+4						! 7: Output number to avoid integration
+5						! 8: Output number to avoid integration
+INPUTS #
+$Time P_kW M TIn TOut
+**
+$Time P_kW M TIn TOut
+
 
 
 ***********************************

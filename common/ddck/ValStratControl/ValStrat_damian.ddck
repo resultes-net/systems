@@ -1,29 +1,24 @@
 *************************************
-** BEGIN ValStrat.ddck
+** BEGIN ValStrat_damian.ddck
 *************************************
 
 *************************************
-** ABOUT
-** This control controls by the stratifying valve so that we charge the storage at the correct height
-** given the input temperature.
+** This control controls the stratifying valve.
+** Hot water is introduced in the port with
+** closest temperature.
 *************************************
 
 *************************************
 ** Connection to hydraulics file
 *************************************
-EQUATIONS #
-TIn = $TTeeQSrcAddSup_ValStrat
-MIn = $MTeeQSrcAddSup_ValStrat
 
+** Connections available in variables.ddck **
 
 *************************************
 ** Connection to other ddcks
 *************************************
-EQUATIONS #
-! THotPos = $TSen10_Tes1
-! TWarmPos = $Tsen6_Tes1
-TWarmPos = $TsenAVG3_TES1
-THotPos = $TsenAVG5_TES1
+
+** Connections available in variables.ddck **
 
 ***********************************
 ** Recall values
@@ -40,14 +35,14 @@ EQUATIONS #
 TInRec = [1,1]
 
 *************************************
-** Controll
+** Control
 *************************************
 EQUATIONS #
 DistToHot = ABS(TInRec - THotPos)
 DistToWarm = ABS(TInRec - TWarmPos)
 
-useHot = GT(DistToWarm, DistToHot)
-$xValStrat = NOT(useHot)
+Hot = GT(DistToWarm, DistToHot)
+!$xValStrat = NOT(useHot)
 
 ***********************************
 ** Online Plotter
@@ -67,8 +62,8 @@ $nPlotsPerSim		! 7: Number of plots per simulation
 0     				! 11: Output file units
 0     				! 12: Output file delimiter
 INPUTS #    
-TInRec THotPos TWarmPos DistToHot DistToWarm useHot $xValStrat | MIn
-TInRec THotPos TWarmPos DistToHot DistToWarm useHot $xValStrat | MIn
+TInRec THotPos TWarmPos DistToHot DistToWarm Hot $xValStrat | MIn
+TInRec THotPos TWarmPos DistToHot DistToWarm Hot $xValStrat | MIn
 LABELS #     
 "temperatures [deg C] and status [1]"
 "mass flows [kg/h]"

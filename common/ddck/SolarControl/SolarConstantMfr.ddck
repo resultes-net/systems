@@ -1,0 +1,15 @@
+***************************************************
+**Solar constant mfr
+**************************************************
+
+***************************************************************************
+** This controller defines a constant mfr for the collector loop based on
+** the specific nominal mass flow rate
+***************************************************************************
+
+*************************************
+** Outputs to control
+*************************************
+
+EQUATIONS #
+$MfrPuCollPriSet = $CollMfrCPriNom

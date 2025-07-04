@@ -1,0 +1,134 @@
+***************************************************
+**Solar variable mfr
+**************************************************
+
+***************************************************************************
+** This controller defines a variable mfr for the collector loop based on
+** a set-point for the outlet temperature.
+***************************************************************************
+
+
+*************************************
+** Inputs from collector
+*************************************
+EQUATIONS #
+TIn = $CollTIn
+TOut = $CollTout
+IT_Wm2 = $CollIT_Wm2
+A = $CollAcollAp
+cp = $Collcp
+
+CONSTANTS #
+MStart = 0.25*$CollMfrCPriNom
+MMax = 2*$CollMfrCPriNom
+TOutSet = 70
+TOutMax = 120
+ITMin_Wm2 = 200
+
+*************************************
+** Outputs to control
+*************************************
+
+EQUATIONS #
+$MfrPuCollPriSet = MOn
+
+***********************************
+** Recall values
+***********************************
+UNIT 112 TYPE 150 ! Recall
+PARAMETERS #
+4
+1 0
+1 0
+1 0
+1 0
+INPUTS #
+TIn
+TOut
+IT_Wm2
+$MfrPuCollPri
+0
+0
+0
+0
+
+EQUATIONS #
+TInRec = [112,1]
+TOutRec = [112,2]
+ITRec = [112,3]
+MRec = [112,4]
+
+***********************************
+** Radiation control
+***********************************
+
+!EQUATIONS #
+!radiationOn = GT(IT_Wm2, ITMin_Wm2)
+
+
+***********************************
+** Temperature control
+***********************************
+belowMaxTempOn = LT(TOutRec, TOutMax)
+
+EQUATIONS #
+PIT_kW = IT_Wm2/1000*A
+Tm = (TOutSet + TInRec)/2
+IT_kJhm2 = MAX($CollIT_kJhm2,1e-3)
+eta = MAX($CollEta0-$Colla1*(Tm-$Tamb)/IT_kJhm2-$Colla2*(Tm-$Tamb)^2/IT_kJhm2, 0)
+! etaCheck = GTWarn(0,eta,0)*GTWarn(eta,1,0)
+dTSet = TOutSet - TInRec
+dTSetDenom = GT(dTSet,0)*dTSet + LE(dTSet,0)*1
+M = GT(dTSet,0)*eta*PIT_kW/(cp*dTSetDenom)*3600
+MCapped = MAX(MStart, MIN(M, MMax))
+! MCappedCheck = EQWarn(M,0,0)*EQWarn(M,MMax,0)
+MOn = GT(MCapped,0)*MCapped + EQL(MCapped,0)*MStart
+
+
+***********************************
+** cool down period
+***********************************
+
+!UNIT 111 TYPE 21 ! Time values
+!PARAMETERS #
+!1       ! 1: Mode: 1 (ignored)
+!0       ! 2: Relative or absolute time: 0 => absolute, 1 => relative
+!
+!EQUATIONS #
+!hourOfDay = [111,11]
+!
+!EQUATIONS #
+!isMidnight = EQL(hourOfDay,1)
+!coolDown = NOT(belowMaxTempOn) + belowMaxTempOn*(coolDownRec*NOT(isMidnight))
+
+
+
+
+***********************************
+** Online Plotter
+***********************************
+UNIT 103 TYPE 65		!Changed automatically
+PARAMETERS #
+#    				! 1: Nb. of left-axis variables
+#   				! 2: Nb. of right-axis variables
+-1     				! 3: Left axis minimum
+MMax     			! 4: Left axis maximum
+-1   				! 5: Right axis minimum
+200 				! 6: Right axis maximum
+$nPlotsPerSim		! 7: Number of plots per simulation
+12     				! 8: X-axis gridpoints
+1     				! 9: Shut off Online w/o removing
+-1     				! 10: Logical unit for output file
+0     				! 11: Output file units
+0     				! 12: Output file delimiter
+INPUTS #
+$MfrPuCollPri $CollIT_Wm2 $CollPColl_kW M MMax ITMin_Wm2 | TIn TOut Tm $Tamb belowMaxTempOn eta
+$MfrPuCollPri $CollIT_Wm2 $CollPColl_kW M MMax ITMin_Wm2 | TIn TOut Tm $Tamb belowMaxTempOn eta
+LABELS #
+"mass flows [kg/h] and insolation [W/m2]"
+"temperatures [deg C] and statuses [1]"
+"primary collector loop control"
+
+*******************************
+** END PuCollPri.ddck
+*******************************

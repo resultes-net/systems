@@ -6,19 +6,18 @@
 ** Author : Dani Carbonell
 *********************************************
 CONSTANTS #
-TEvapMaxHp = 55 !40
-sizeHpNom = 12.5
-MfrHpCondRef = 3000
-MfrHpEvapRef = 2800
+sizeNom = 12.5
+MfrCondRef = 3000
+MfrEvapRef = 2800
 COPNom = 4.68 ! at B0W35
 TEvapMax = 55
-tCondMaxHp = 70
-CHPM_c1 = sizeHpRatio*14.867741
-CHPM_c2 = sizeHpRatio*127.470232
-CHPM_c3 = sizeHpRatio*-13.745162
-CHPM_c4 = sizeHpRatio*-216.501237
-CHPM_c5 = sizeHpRatio*392.541582
-CHPM_c6 = sizeHpRatio*-7.987489
+tCondMax = 70
+CM_c1 = sizeRatio*14.867741
+CM_c2 = sizeRatio*127.470232
+CM_c3 = sizeRatio*-13.745162
+CM_c4 = sizeRatio*-216.501237
+CM_c5 = sizeRatio*392.541582
+CM_c6 = sizeRatio*-7.987489
 COP_c1 = 12.410844
 COP_c2 = 61.890885
 COP_c3 = -83.489595

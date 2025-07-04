@@ -7,6 +7,11 @@
 ** The valve of the heat pump considering the outlet of the HX
 ** and the demand setpoint temeperature. When T_HX < T_setpoint, the HP is used.
 ** A deadband controller is implemented to make the performance smoother.
+
+** Input variables,
+** Output varaiables,
+** Setpoint,
+** Control logic
 ***************************************************************************
 
 EQUATIONS #
@@ -14,7 +19,7 @@ myTHigh = $T_set
 myTLow = $TTee7_Val3
 
 dtOn = 5    ! Upper dead band coll. pump ON, JS: was 10 before, yield is higher with 7, to be improved
-dtOff = -3   ! Lower dead band coll. pump OFF
+dtOff = -10   ! Lower dead band coll. pump OFF
 
 maxMyTMon = 1e6
 myTMon = myTHigh
@@ -42,7 +47,7 @@ out = [56,1] ! Temperature control
 CONSTANTS 1
 unitStepValHp = 33
 
-ASSIGN    temp\VAL_HP_DT.Prt    unitStepValHp
+ASSIGN    temp\VAL_HP_STEP.Prt    unitStepValHp
 
 UNIT 34 TYPE 46		! Printegrator Monthly Values for System
 PARAMETERS #
@@ -60,6 +65,6 @@ $dtSim             	! 4: Printing & integrating interval, h. -1 for monthly inte
 8             		! 12: Output number to avoid integration
 9             		! 13: Output number to avoid integration
 INPUTS #
-$Time  $T_set  $TTee7_Val3 out $MTee7_Val3 $HPMfrHpCondMin $ValHPPri $HPTHpCondOut $HPcontrolfrCond_new
+$TIME  $T_set  $TTee7_Val3 out $MTee7_Val3 $HPMfrCondMin $ValHPPri $HPTCondOut $HPcontrolfrCond_new
 **
-$Time  $T_set  $TTee7_Val3 out $MTee7_Val3 $HPMfrHpCondMin $ValHPPri $HPTHpCondOut $HPcontrolfrCond_new
+$TIME  $T_set  $TTee7_Val3 out $MTee7_Val3 $HPMfrCondMin $ValHPPri $HPTCondOut $HPcontrolfrCond_new

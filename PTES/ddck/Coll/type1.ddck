@@ -38,7 +38,7 @@ TOut = [28,1]
 ** qSysIn_name, qSysOut_name, elSysIn_name, elSysOut_name
 ******************************************************************************************
 EQUATIONS 1
-qSysIn_Collector = PColl_kW  
+qSysIn_Collector = P_kW
 
 ***********************************
 ** Dependencies with other ddck
@@ -101,10 +101,10 @@ C_tilt 		!Flo check		! JS: This should be correct
 
 EQUATIONS 4
 **MfrCout = [700,2]
-Pcoll = [28,3]		!kJ/h
-PColl_kW = Pcoll/3600
-PColl_kWm2 = PColl_kW/(AcollAp+1e-30)   
-PColl_Wm2 = PColl_kWm2*1000   
+P = [28,3]		!kJ/h
+P_kW = P/3600
+P_kWm2 = P_kW/(AcollAp+1e-30)
+P_Wm2 = P_kWm2*1000
 
 ***********************************
 ** Monthly printer
@@ -123,9 +123,9 @@ unitPrintSol		! 1: Logical unit number, -
 1            		! 5: Number of inputs to avoid integration, -
 1            		! 6: Output number to avoid integration
 INPUTS 4
-$Time  Pcoll_kW  PColl_kWm2  IT_kWm2
+$Time  P_kW  P_kWm2  IT_kWm2
 **
-$Time  Pcoll_kW  PColl_kWm2  IT_kWm2
+$Time  P_kW_MO  P_kWm2_MO  IT_kWm2_MO
 
 ***********************************
 ** Hourly printer
@@ -145,9 +145,9 @@ unitHourlyCol		! 1: Logical unit number, -
 4             		! 6: Output number to avoid integration
 5             		! 7: Output number to avoid integration
 INPUTS 6
-Pcoll_kW  PColl_kWm2  IT_kWm2 TOut TIn M
+P_kW  P_kWm2  IT_kWm2 TOut TIn M
 **  
-Pcoll_kW  PColl_kWm2  IT_kWm2 TOut TIn M
+P_kW_HO  P_kWm2_HO  IT_kWm2_HO TOut TIn M
 
 ***********************************
 ** Online Plotter

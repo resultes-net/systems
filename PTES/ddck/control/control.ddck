@@ -7,8 +7,8 @@ EQUATIONS #
 *** Pumps ***
 *************
 
-MfrPuCollPri = controlpuPriOn * CollMfrCPriNom
-MfrPuCollSec = MfrPuCollPri !1000.0
+MfrPuCollPri = SolarControlpuPriOn * MfrPuCollPriSet
+MfrPuCollSec = MfrPuCollPri * Lloop2Cp/Lloop5Cp !1000.0
 
 
 MfrPuSrcSec = MfrQSrc !1000.0
@@ -28,11 +28,11 @@ MfrQSnk = QSnkM ! 500
 xFracValHXPri = NOT(ValHXOut)
 xFracValHXSec = xFracValHXPri
 
-ValHPPri = ValHPOut*GT(MTee7_Val3, HPMfrHpCondMin)
+ValHPPri = ValHPOut*GT(MTee7_Val3, HPMfrCondMin)
 xFracValHPPri = NOT(ValHPPri)
 xFracValHPSec = xFracValHPPri
 
-xFracValStrat = NOT(controlstrat)
+xFracValStrat = NOT(ValStratControlHot)
 !xFracVal3 = 0 !GT(ModePP23, 0)
 
 **********
@@ -40,7 +40,7 @@ xFracValStrat = NOT(controlstrat)
 **********
 
 EQUATIONS #
-HPhpIsOn = ValHPPri
+HPIsOn = ValHPPri
 
 **************
 *** DEMAND ***
@@ -53,14 +53,9 @@ T_set = 50
 ** Pit storage modes **
 ***********************
 EQUATIONS #
-
-
-ModePP13 = GT(MfrSources, MfrDemand)*controlstrat ! charging through upper port
+ModePP13 = GT(MfrSources, MfrDemand)*ValStratControlHot ! charging through upper port
 ModePP31 = LE(MfrSources, MfrDemand) + GE(MfrSources, MfrDemand)*ModePP23 ! discharging
-ModePP23 = GT(MfrSources, MfrDemand)*NOT(controlstrat) ! charging through middle port
-
-
-
+ModePP23 = NOT(ValStratControlHot) ! charging through middle port GT(MfrSources, MfrDemand)*
 
 ******************
 ** Mixing valve **

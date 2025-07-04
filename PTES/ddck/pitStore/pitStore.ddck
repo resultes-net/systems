@@ -891,33 +891,49 @@ MfrOutPP31 =    [319,6]    ! 6  (kg/hr) Flowrate at Outlet-31
 
 
 TAvgTank =    [319,	7]      ! 7 (C) Average Tank Temperature
-DelEnR   =    [319,	8]      ! 8 (kJ/hr) Energy Delivery Rate
+QDis   =    [319,	8]      ! 8 (kJ/hr) Energy Delivery Rate
+QDis_kW = QDis/3600
 
 !DelEnP12 =    [319,	9]      ! 9 (kJ/hr) Energy Delivered to Port12
-!DelEnP13 =    [319,	10]     ! 10 (kJ/hr) Energy Delivered to Port13
+!Q13 =    [319,	10]     ! 10 (kJ/hr) Energy Delivered to Port13
 !DelEnP14 =    [319,	11]     ! 11 (kJ/hr) Energy Delivered to Port14
 !DelEnP34 =    [319,	12]     ! 12 (kJ/hr) Energy Delivered to Port34
 !DelEnP21 =    [319,	13]     ! 13 (kJ/hr) Energy Delivered to Port21
-!DelEnP31 =    [319,	14]     ! 14 (kJ/hr) Energy Delivered to Port31
+!Q31 =    [319,	14]     ! 14 (kJ/hr) Energy Delivered to Port31
 !DelEnP41 =    [319,	15]     ! 15 (kJ/hr) Energy Delivered to Port41
 !DelEnP32 =    [319,	16]     ! 16 (kJ/hr) Energy Delivered to Port32
 !DelEnP42 =    [319,	17]     ! 17 (kJ/hr) Energy Delivered to Port42
 !DelEnP43 =    [319,	18]     ! 18 (kJ/hr) Energy Delivered to Port43
 
-DelEnP13 =    [319,	9]     ! 9 (kJ/hr) Energy Delivered to Port13
-DelEnP23 =    [319,	10]     ! 10 (kJ/hr) Energy Delivered to Port23
-DelEnP31 =    [319,	11]     ! 11 (kJ/hr) Energy Delivered to Port31
+Q13 =    [319,	9]     ! 9 (kJ/hr) Energy Delivered to Port13
+Q23 =    [319,	10]     ! 10 (kJ/hr) Energy Delivered to Port23
+Q31 =    [319,	11]     ! 11 (kJ/hr) Energy Delivered to Port31
+
+Q13_kW = Q13/3600
+Q23_kW = Q23/3600
+Q31_kW = Q31/3600
 
 
-ToLo =        [319,	12]     ! 19 (kJ/hr) Top Losses
-EdLo =        [319,	13]     ! 20 (kJ/hr) Edge Losses
-BoLo =        [319,	14]     ! 21 (kJ/hr) Bottom Losses
-TotLoss =     [319,	15]     ! 22 (kJ/hr) Total Tank Losses
-GasFlueLo =   [319,	16]     ! 23 (kJ/hr) Gas Flue Losses
-AuxHeR =      [319,	17]     ! 24 (kJ/hr) Auxiliary Heating Rate
-MiscEn =      [319,	18]     ! 25 (kJ/hr) Miscellaneous Energy
-TankEnStR =   [319,	19]     ! 26 (kJ/hr) Tank Energy Storage Rate
-HXTrR =       [319,	20]     ! 27 (kJ/hr) HX Heat Transfer Rate
+QLossesTo =        [319,	12]     ! 19 (kJ/hr) Top Losses
+QLossesEd =        [319,	13]     ! 20 (kJ/hr) Edge Losses
+QLossesBo =        [319,	14]     ! 21 (kJ/hr) Bottom Losses
+QLosses =     [319,	15]     ! 22 (kJ/hr) Total Tank Losses
+QLosses_kW = QLosses/3600
+
+QLossesGas =   [319,	16]     ! 23 (kJ/hr) Gas Flue Losses
+
+QAux =      [319,	17]     ! 24 (kJ/hr) Auxiliary Heating Rate
+QMis =      [319,	18]     ! 25 (kJ/hr) Miscellaneous Energy
+QAccum =   [319,	19]     ! 26 (kJ/hr) Tank Energy Storage Rate
+QHx =       [319,	20]     ! 27 (kJ/hr) HX Heat Transfer Rate
+
+QAux_kW = QAux/3600
+QMis_kW = QMis/3600
+QAccum_kW = QAccum/3600
+QHx_kW = QHx/3600
+
+
+
 TankEnBalErr =[319,	21]     ! 28 (%) Tank Energy Balance Error (base 100)
 
 TTherStat1 =  [319,	22]     ! 29 (C) Thermostat1 Temperature
@@ -1054,14 +1070,20 @@ unitHourlyPit		! 1: Logical unit number, -
 -1            		! 2: Logical unit for monthly summaries, -
 1             		! 3: Relative or absolute start time. 0: print at time intervals relative to the simulation start time. 1: print at absolute time intervals. No effect for monthly integrations
 1             		! 4: Printing & integrating interval, h. -1 for monthly integration
-3             		! 5: Number of inputs to avoid integration, -
+6             		! 5: Number of inputs to avoid integration, -
 1             		! 6: Output number to avoid integration
 2             		! 7: Output number to avoid integration
 3             		! 8: Output number to avoid integration
-INPUTS 6
-T13 T31 T23 M13 M31 M23
+7             		! 9: Output number to avoid integration
+8             		! 10: Output number to avoid integration
+9             		! 11: Output number to avoid integration
+INPUTS #
+T13 T31 T23 M13 M31 M23 TTherStat1 TTherStat2 TTherStat3 QLosses_kW
+Q13_kW Q23_kW Q31_kW QDis_kW QAccum_kW
 **
-T13 T31 T23 M13 M31 M23
+T13 T31 T23 M13 M31 M23 TTherStat1 TTherStat2 TTherStat3 QLosses_kW
+Q13_kW Q23_kW Q31_kW QDis_kW QAccum_kW
+
 
 *************************************
 ** Online Plotter
@@ -1081,8 +1103,8 @@ $nPlotsPerSim     ! 7 Number of plots per simulation
 0     ! 11 Output file units
 0     ! 12 Output file delimiter
 INPUTS 15
-TTankN1 TTankN5 TTankN10 TTankN15 TTankN20 TTankN30 TTankN35 TTankN40 TTankN45 TTankN50 PStorRate PDisChar PLoss QStore HotWatProportion
-TTankN1 TTankN5 TTankN10 TTankN15 TTankN20 TTankN30 TTankN35 TTankN40 TTankN45 TTankN50 PStorRate PDisChar PLoss QStore HotWatProportion
+TTankN1 TTankN5 TTankN10 TTankN15 TTankN20 TTankN30 TTankN35 TTankN40 TTankN45 TTankN50 QAccum_kW QDis_kW QLosses_kW QStore HotWatProportion
+TTankN1 TTankN5 TTankN10 TTankN15 TTankN20 TTankN30 TTankN35 TTankN40 TTankN45 TTankN50 QAccum_kW QDis_kW QLosses_kW QStore HotWatProportion
 LABELS  3
 Temperatures
 EnergyFlows
@@ -1091,30 +1113,33 @@ PTES
 ***************************************************************
 **BEGIN PTES energy balance printer
 ***************************************************************
-EQUATIONS 4
-PDisChar = DelEnR / 3600   ! (kW)
-PStorRate = TankEnStR / 3600    ! (kW)
-PLoss = TotLoss / 3600     ! (kW)
-QStore = (TAvgTank - 10) * $CPWAT * StVolume * $RHOWAT / 3600000   ! (MWh)
-
-
-EQUATIONS 1
-qImb = PStorRate + PDisChar + PLoss
-CONSTANTS 1
-unitPrint_EBal=223
-ASSIGN temp\EBal_PTES.prt unitPrint_EBal
-UNIT 223 Type 46
-PARAMETERS 5
-unitPrint_EBal !1: Logical unit number
--1 !2: for monthly summaries
-1  !3: 1:print at absolute times
--1 !4 -1: monthly integration
-0  !5 number of outputs to avoid integration
-!1  !6 output number to avoid integration
-INPUTS 5
-$TIME PStorRate PDisChar PLoss qImb
-**
-$TIME PStorRate PDisChar PLoss qImb
+!EQUATIONS #
+!!QDis_kW = QDis / 3600   ! (kW)
+!!QAccum_kW = QAccum / 3600    ! (kW)
+!!QLosses_kW = QLosses / 3600     ! (kW)
+!QStore = (TAvgTank - 10) * $CPWAT * StVolume * $RHOWAT / 3600000   ! (MWh)
+!
+!
+!EQUATIONS 1
+!qImb = QAccum_kW + QDis_kW + QLosses_kW
+!
+!CONSTANTS 1
+!unitPrint_EBal=223
+!
+!ASSIGN temp\PTES_BAL.prt unitPrint_EBal
+!
+!UNIT 223 Type 46
+!PARAMETERS 5
+!unitPrint_EBal !1: Logical unit number
+!-1 !2: for monthly summaries
+!1  !3: 1:print at absolute times
+!-1 !4 -1: monthly integration
+!0  !5 number of outputs to avoid integration
+!!1  !6 output number to avoid integration
+!INPUTS 5
+!$TIME QAccum_kW QDis_kW QLosses_kW qImb
+!**
+!$TIME QAccum_kW QDis_kW QLosses_kW qImb
 
 **************************************
 **END type1535.dck

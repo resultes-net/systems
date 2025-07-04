@@ -20,10 +20,10 @@
 ** inputs from hydraulic solver
 ***********************************
 EQUATIONS #
-ThpEvapIn = @temp(EvapIn, TPiHpEvapIn)   
-MfrEvapIn = ABS(@mfr(EvapIn, MfrPuHpEvap))     
-THpCondIn = @temp(CondIn, TPiHpCondIn)      
-MfrCondIn = ABS(@mfr(CondIn, MfrPiHpCondIn))
+TEvapIn = @temp(EvapIn, TPiEvapIn)
+MfrEvapIn = ABS(@mfr(EvapIn, MfrPuEvap))
+TCondIn = @temp(CondIn, TPiCondIn)
+MfrCondIn = ABS(@mfr(CondIn, MfrPiCondIn))
 
 CpEvap = @cp(EvapIn,bar)
 CpCond = @cp(CondIn,bar)
@@ -33,8 +33,8 @@ CpCond = @cp(CondIn,bar)
 ** outputs to hydraulic solver
 ***********************************
 EQUATIONS #
-@temp(EvapOut, THpEvapOut) = THpEvapOut
-@temp(CondOut, THpCondOut) = THpCondOut		! Temperature of the condenser (heat sink) outlet
+@temp(EvapOut, TEvapOut) = TEvapOut
+@temp(CondOut, TCondOut) = TCondOut		! Temperature of the condenser (heat sink) outlet
 
 
 
@@ -43,7 +43,7 @@ EQUATIONS #
 ** Following this naming standard : qSysIn_name, qSysOut_name, elSysIn_name, elSysOut_name
 ******************************************************************************************
 EQUATIONS 1
-elSysIn_Q_HpComp = PelHpComp_kW
+elSysIn_Q_HpComp = PelComp_kW
 
 *************************************************************************************************
 ** Dependencies with other types
@@ -51,13 +51,13 @@ elSysIn_Q_HpComp = PelHpComp_kW
 ** If a variable is used more than once, redefine it here, e.g. varUsedInside=varFromAnotherDeck
 *************************************************************************************************
 EQUATIONS 1
-myHpIsOn = hpIsOn		! control signal for the heat pump
+myIsOn = IsOn		! control signal for the heat pump
 
 ***********************************
 ** outputs to other ddck
 ***********************************
 EQUATIONS 1
-MfrHpPD = MfrHpPDNew*relaxMfrHpPD + (1-relaxMfrHpPD)*MfrHpPDRc
+MfrPD = MfrPDNew*relaxMfrPD + (1-relaxMfrPD)*MfrPDRc
 
 **********************************************
 ** Dependencies with overall variables 
@@ -65,53 +65,53 @@ MfrHpPD = MfrHpPDNew*relaxMfrHpPD + (1-relaxMfrHpPD)*MfrHpPDRc
 **check
 **********************************************
 EQUATIONS 1
-tAmbHp = $Tamb		! 15
+tAmb = $Tamb		! 15
 
 ***********************************
 ** Type
 ***********************************
 CONSTANTS #		! Heat Pump: Size
-sizeHpUsed = sizeHpNom						! change this to scale the heat pump   
-SizeHpRatio = sizeHpUsed/sizeHpNom               
-MfrHpEvapNom = SizeHpRatio*MfrHpEvapRef
-MfrHpCondNom = SizeHpRatio*MfrHpCondRef		! adapt cond to corrected evap MfrHpEvapNom*ratioCondEvap                                     !
-MfrEvapCondRatio = MfrHpEvapNom/MfrHpCondNom
-timeHpBlock = 5
+sizeUsed = sizeNom						! change this to scale the heat pump
+SizeRatio = sizeUsed/sizeNom
+MfrEvapNom = SizeRatio*MfrEvapRef
+MfrCondNom = SizeRatio*MfrCondRef		! adapt cond to corrected evap MfrEvapNom*ratioCondEvap                                     !
+MfrEvapCondRatio = MfrEvapNom/MfrCondNom
+timeBlock = 5
 
 CONSTANTS 5
 Moloss = 0     
 Ctherm = 4		!1     
 Ualoss = 0     
 frCOP = 1     
-frCond = $HPcontrolfrCond_new !1
+frCond = $HpControlfrCond_new !1
 
 ***********************************************
 ** Begin PD CONTROLLER (currently not active)
 ***********************************************
 CONSTANTS 5
-MfrHpCondMin = MfrHpCondNom*0.2		! chosen without any knowledge of actual system
-MfrHpCondMax = MfrHpCondNom			! chosen without any knowledge of actual system
-dMfrHpCondInc = 4*MfrHpCondNom
-dMfrHpCondDec = -dMfrHpCondInc
-dtSetHp = 5
+MfrCondMin = MfrCondNom*0.2		! chosen without any knowledge of actual system
+MfrCondMax = MfrCondNom			! chosen without any knowledge of actual system
+dMfrCondInc = 4*MfrCondNom
+dMfrCondDec = -dMfrCondInc
+dtSet = 5
 
 EQUATIONS 1
-dTProHpPID = HpIsOn*(THpCondOut-THpCondIn)+NOT(HpIsOn)*5
+dTProPID = IsOn*(TCondOut-TCondIn)+NOT(IsOn)*5
 
 UNIT 157 TYPE 889		! Adapted PD-controller
 PARAMETERS 9     
 1     			! 1: mode of timesteps: 1= use previous value, 0 = use current value
-MfrHpCondMin    ! 2: lowest possible output value
-MfrHpCondMax    ! 3: highest possible output value
+MfrCondMin    ! 2: lowest possible output value
+MfrCondMax    ! 3: highest possible output value
 -1     			! 4: mode of action: 1 = positive, (increase in manipulated value causes increase in process variable), -1 = negative
-MfrHpCondNom    ! 5: By how much shall the manipulated variable be changed per hour if the process variable is 1 unit off?
+MfrCondNom    ! 5: By how much shall the manipulated variable be changed per hour if the process variable is 1 unit off?
 4     			! 6: A high value for D counteracts overshoot / counteracts high rates of increase or decrease in the process variable.
 120     		! 7: maximum rate of setpoint change per hour
-dMfrHpCondInc   ! 8: maximum rate of increase of the manipulated variable (positive value)
-dMfrHpCondDec   ! 9: maximum rate of decrease of the manipulated variable (negative value)
+dMfrCondInc   ! 8: maximum rate of increase of the manipulated variable (positive value)
+dMfrCondDec   ! 9: maximum rate of decrease of the manipulated variable (negative value)
 INPUTS 5     
-dTProHpPID     	! 1: process variable
-dtSetHp    		! 2: setpoint
+dTProPID     	! 1: process variable
+dtSet    		! 2: setpoint
 $Nix     		! 3: freeze manipulated variable (1) or let act (0)
 $Nix     		! 4: Manual (1) or automatic (0) manipulated variable
 $Nix     		! 5: manual manipulated variable
@@ -122,11 +122,11 @@ $Nix     		! 5: manual manipulated variable
       
 EQUATIONS 5		! ASHP ON-Signal and mass flow
      
-MfrHpPDNew = [157,1]     
-SETPHPPD = [157,2]     
-DevHPPD = [157,3]    
-MfrPuHpPD = HpIsOn*MfrHpPD   
-relaxMfrHpPD = 1     
+MfrPDNew = [157,1]
+SETPPD = [157,2]
+DevPD = [157,3]
+MfrPuPD = IsOn*MfrPD
+relaxMfrPD = 1
         
 CONSTANTS 6
 tauWPstart = 10
@@ -134,16 +134,16 @@ tauWPstop = 20
 TWPEvapIce = -100
 EtaDefrost = 0.4
 PelWPVen = 0
-PelHpCtr_kW = 0
+PelCtr_kW = 0
 
 UNIT 162 TYPE 977		! Compression Heat Pump Model v401
 PARAMETERS 28     
-CHPM_c1     	! 1: c1
-CHPM_c2     	! 2: c2
-CHPM_c3     	! 3: c3
-CHPM_c4     	! 4: c4
-CHPM_c5     	! 5: c5
-CHPM_c6     	! 6: c6
+CM_c1     	! 1: c1
+CM_c2     	! 2: c2
+CM_c3     	! 3: c3
+CM_c4     	! 4: c4
+CM_c5     	! 5: c5
+CM_c6     	! 6: c6
 COP_c1     		! 7: cop1
 COP_c2     		! 8: cop2
 COP_c3     		! 9: cop3
@@ -155,46 +155,46 @@ tauWPstop     	! 14: tau_stop, s
 TWPEvapIce     	! 15: tevapIce, deg C
 EtaDefrost     	! 16: eta_defrost, -
 PelWPVen     	! 17: ventilator electricity consumption, kW
-PelHpCtr_kW     ! 18: controller electricity consumption, kW
+PelCtr_kW     ! 18: controller electricity consumption, kW
 TminEvapTout   	! 19: tevap,min, deg C
-TEvapMaxHp     	! 20: tevap,max, deg C
+TEvapMax     	! 20: tevap,max, deg C
 0     			! 21: tcond,min, deg C
-tCondMaxHp     	! 22: tcond,max, deg C
+tCondMax     	! 22: tcond,max, deg C
 CpEvap     		! 23: cp,evap, kJ/kgK
 CpCond   		! 24: cp,cond, kJ/kgK
-timeHpBlock     ! 25: tau_error, hr
+timeBlock     ! 25: tau_error, hr
 Moloss     		! 26: loss type, 0-3
 Ctherm     		! 27: heat capacity, kJ/K
 Ualoss     		! 28: losses, W/k
 INPUTS 9     
-ThpEvapIn     	! 1: tevap,in, deg C
+TEvapIn     	! 1: tevap,in, deg C
 MfrEvapIn     	! 2: Mfr,evap,in, kg/h
-THpCondIn     	! 3: tcond,in, deg C
+TCondIn     	! 3: tcond,in, deg C
 MfrCondIn 		! 4: Mfr,cond,in, kg/h
-myHpIsOn     	! 5: gamma_ON, -
+myIsOn     	! 5: gamma_ON, -
 $RHamb_1     	! 6: RH_air_in
-tAmbHp     		! 7
+tAmb     		! 7
 frCond     		! 8
 frCOP     		! 9
 0  0  0  0  0  0.5 21 1 1     
     
 EQUATIONS #		! Heat Pump: Outputs
-THpEvapOut = [162,1]
-THpCondOut = [162,3]
+TEvapOut = [162,1]
+TCondOut = [162,3]
 **MfrAuxEvapOut = [162,2]					! mass flow rate of evaporator outlet
-**MfrAuxOut = [162,4]*NOT(HpIsBlock)		! Mass flow rate of the condenser (heat sink) outlet
-PelHpComp_kW = [162,5]     					!  electricity consumption of compressor, kW
-PelHpTot_kW = [162,6]     					!  electricity consumption total, kW
-QHpEvap_kW = [162,7]
-QHpCond_kW = [162,8]     					!  Heat output condenser, kW
-COPHp = [162,9]
-PHpLossStart_kW = [162,10]     				! Start losses, kW
+**MfrAuxOut = [162,4]*NOT(IsBlock)		! Mass flow rate of the condenser (heat sink) outlet
+PelComp_kW = [162,5]     					!  electricity consumption of compressor, kW
+PelTot_kW = [162,6]     					!  electricity consumption total, kW
+QEvap_kW = [162,7]
+QCond_kW = [162,8]     					!  Heat output condenser, kW
+COP = [162,9]
+PLossStart_kW = [162,10]     				! Start losses, kW
 PAuxDefrost_kW = [162,11]     				! Defrosting losses, kW   
 
 UNIT 163 TYPE 817		! Timer or time delay FIXED TO 5 VARIABLES. WE CAN'T CHANGE IT !!
 PARAMETERS 10    
 1      			! 1: mode of timer 1: 1= from first trigger on; 2 = from last trigger on
-timeHpBlock		! 2: lenght of time for timer 1 [h]
+timeBlock		! 2: lenght of time for timer 1 [h]
 0      			! 3: mode of timer 2: 1= from first trigger on; 2 = from last trigger on
 0    			! 4: lenght of time for timer 2 [h]
 0      			! 5: mode of timer 3: 1= from first trigger on; 2 = from last trigger on
@@ -211,22 +211,22 @@ EQUATIONS 1
 BrineTooColdTimer = [163,1]
 
 EQUATIONS 2
-HpIsBlock = BrineTooColdTimer		! OR([162,18],BrineTooColdTimer)   
-BrineTooCold = OR(LT(THpEvapIn,TMinEvapTin),(LT(THpEvapOut,TMinEvapTout)))
+IsBlock = BrineTooColdTimer		! OR([162,18],BrineTooColdTimer)
+BrineTooCold = OR(LT(TEvapIn,TMinEvapTin),(LT(TEvapOut,TMinEvapTout)))
       
 UNIT 82 TYPE 993		! Input value recall (element RcA) DC CHANGED
 PARAMETERS 1     
 3		! 1: number of variables to be remembered
 INPUTS 3    
-HpIsBlock  myHpIsOn MfrHpPDRc   
+IsBlock  myIsOn MfrPDRc
 0   0  0		!0 0 0  
      
 EQUATIONS 5   
-HpIsBlockRc = [82,1]     
-myHpIsOnRc = [82,2]
-MfrHpPDRc = [82,3]  
-BoHpStart = myHpIsOn*NOT(myHpIsOnRc)     
-HpStartPerH = BoHpStart/$dtsim
+IsBlockRc = [82,1]
+myIsOnRc = [82,2]
+MfrPDRc = [82,3]
+BoStart = myIsOn*NOT(myIsOnRc)
+StartPerH = BoStart/$dtsim
  
 ** TO BE DELETED. Pump consumption should come from GUI export 
 **EQUATIONS 9		! 16     
@@ -241,8 +241,8 @@ HpStartPerH = BoHpStart/$dtsim
 **PelPuAuxBri_kW = GT(MfrEvapIn,0.1)*PelPuAuxBrine_kW						! GT(MfrcondIn,0.1)*PelPuAuxBrine_kW		! naming could be betterdeg 
 	 
 EQUATIONS 2
-dtEvap = ThpEvapIn-THpEvapOut
-dtCond = THpCondOut-THpCondIn
+dtEvap = TEvapIn-TEvapOut
+dtCond = TCondOut-TCondIn
 
 ***********************************
 ** Monthly printer
@@ -261,9 +261,9 @@ unitPrintHp		! 1: Logical unit number, -
 1            	! 5: Number of inputs to avoid integration, -
 1            	! 6: Output number to avoid integration
 INPUTS 5
-$Time  QHpEvap_kW  QHpCond_kW  PelHpComp_kW PelHpTot_kW
+$Time  QEvap_kW  QCond_kW PelComp_kW PelTot_kW
 **
-$Time  QHpEvap_kW  QHpCond_kW PelHpComp_kW PelHpTot_kW
+$Time  QEvap_kW  QCond_kW PelComp_kW PelTot_kW
 
 ***********************************
 ** Hourly printer
@@ -285,9 +285,9 @@ unitHourlyHp		! 1: Logical unit number, -
 8             		! 8: Output number to avoid integration
 9             		! 9: Output number to avoid integration
 INPUTS 9
-$Time  QHpEvap_kW  QHpCond_kW  PelHpComp_kW PelHpTot_kW ThpEvapIn THpEvapOut THpCondIn THpCondOut
+$Time  QEvap_kW  QCond_kW  PelComp_kW PelTot_kW TEvapIn TEvapOut TCondIn TCondOut
 **
-$Time  QHpEvap_kW  QHpCond_kW  PelHpComp_kW PelHpTot_kW ThpEvapIn THpEvapOut THpCondIn THpCondOut
+$Time  QEvap_kW  QCond_kW  PelComp_kW PelTot_kW TEvapIn TEvapOut TCondIn TCondOut
 
 *************************************
 ** Online Plotter
@@ -307,11 +307,11 @@ $nPlotsPerSim		! 7 Number of plots per simulation
 0					! 11 Output file units
 0					! 12 Output file delimiter
 INPUTS 20     
-ThpEvapIn THpEvapOut THpCondIn THpCondOut myHpIsOn HpIsBlock $Nix $Nix  $Nix $Nix
-MfrEvapIn MfrCondIn QHpEvap_kW QHpCond_kW   frCond dtEvap dtCond $Nix $Nix $Nix
+TEvapIn TEvapOut TCondIn TCondOut myIsOnIsOn IsBlock $Nix $Nix  $Nix $Nix
+MfrEvapIn MfrCondIn QEvap_kW QCond_kW   frCond dtEvap dtCond $Nix $Nix $Nix
 **
-ThpEvapIn THpEvapOut THpCondIn THpCondOut myHpIsOn HpIsBlock $Nix $Nix  $Nix $Nix
-MfrEvapIn MfrCondIn QHpEvap_kW QHpCond_kW   frCond dtEvap dtCond $Nix $Nix $Nix
+TEvapIn TEvapOut TCondIn TCondOut myIsOnIsOn IsBlock $Nix $Nix  $Nix $Nix
+MfrEvapIn MfrCondIn QEvap_kW QCond_kW   frCond dtEvap dtCond $Nix $Nix $Nix
 LABELS  3     
 Temperatures     
 massFlow_and_Heat_transf     

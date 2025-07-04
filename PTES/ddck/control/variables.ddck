@@ -1,0 +1,27 @@
+***************************
+** Here we define the necessary connections with the common control files
+***************************
+
+** Solar control
+EQUATIONS #
+TNetReturn = TTee6_Pump
+TTesBottom = pitStoreTTherStat3
+
+** Stratification valve control.
+EQUATIONS #
+ValStratControlTHigh = TTee9_ValStrat
+ValStratControlTLow = pitStoreTTankN1
+ValStratControlTMon = pitStoreTTankN1
+
+ValStratControlTWarmPos = pitStoreTTankN2
+ValStratControlTHotPos = pitStoreTTankN1
+ValStratControlTIn = TTee9_ValStrat
+
+** Capacity control for HP
+EQUATIONS #
+HpControlTControlled = HPTCondOut
+HpControlTSet = T_set
+HpControlOn = HPIsOn
+
+
+

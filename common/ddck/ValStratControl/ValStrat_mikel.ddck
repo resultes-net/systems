@@ -1,27 +1,25 @@
 *************************************
-** BEGIN ValStrat.ddck
+** BEGIN ValStrat_mikel.ddck
 *************************************
 
 *************************************
-** ABOUT
-** This control controls by the stratifying valve so that we charge the storage at the correct height
-** given the input temperature.
+** This control controls the stratifying valve.
+** Hot coming coming from the sources is conducted to the top layers,
+** only when its temperature is higher. Otherwise, it is conducted to
+** the intermediate layers.
 *************************************
 
 *************************************
 ** Connection to hydraulics file
 *************************************
-EQUATIONS #
-TIn = $TTee9_ValStrat
-MIn = $MTee9_ValStrat
 
+** Connections available in variables.ddck **
 
 *************************************
 ** Connection to other ddcks
 *************************************
-!EQUATIONS #
-!TWarmPos = $TsenAVG3_TES1
-!THotPos = $TsenAVG5_TES1
+
+** Connections available in variables.ddck **
 
 ***********************************
 ** Recall values
@@ -31,55 +29,42 @@ PARAMETERS #
 1
 1 50
 INPUTS #
-TIn
+THigh
 50
 
 EQUATIONS #
-TInRec = [1,1]
+myTHighRec = [1,1]
 
-*************************************
-** Controll 1
-*************************************
-!EQUATIONS #
-!TWarmPos = $pitStoreTTankN25
-!THotPos = $pitStoreTTankN50
-!
-!DistToHot = ABS(TInRec - THotPos)
-!DistToWarm = ABS(TInRec - TWarmPos)
-!
-!strat = GT(DistToWarm, DistToHot)
-!!$xValStrat = NOT(useHot)
-
-********************
-** Control 2 **
-********************
+**********************
+** Deadband control **
+**********************
 EQUATIONS #
-myTHighStrat = TInRec
-myTLowStrat = $pitStoreTTankN1
-myTMonStrat = $pitStoreTTankN1
-maxMyTMonStrat = 1e6
+!THigh = TIn ! From variables.ddck
+!TLow = myTLow   ! From variables.ddck
+!TMon = myTMon   ! From variables.ddck
+maxMyTMon = 1e6
 
 CONSTANTS 2
-dtOnStrat = 5    ! Upper dead band coll. pump ON, JS: was 10 before, yield is higher with 7, to be improved
-dtOffStrat = -15   ! Lower dead band coll. pump OFF
+dtOn = 5    ! Upper dead band coll. pump ON, JS: was 10 before, yield is higher with 7, to be improved
+dtOff = -15   ! Lower dead band coll. pump OFF
 
 
 UNIT 55 TYPE 2
 PARAMETERS 2
 20           ! 1 No. of oscillations
-maxMyTMonStrat   ! 2 High limit cut-out
+maxMyTMon   ! 2 High limit cut-out
 INPUTS 6
-myTHighStrat             ! Upper input temperature Th
-myTLowStrat              ! Lower input temperature Tl
-myTMonStrat             ! Monitoring temperature Tin
-strat         ! 70,1 Input control function
+THigh             ! Upper input temperature Th
+TLow              ! Lower input temperature Tl
+TMon             ! Monitoring temperature Tin
+Hot         ! 70,1 Input control function
 !puColOnPri        ! 70,1 Input control function
-dtOnStrat             ! Upper dead band dT
-dtOffStrat            ! Lower dead band dT
-0.0 20.0 0.0 0 dtOnStrat dtOffStrat
+dtOn             ! Upper dead band dT
+dtOff            ! Lower dead band dT
+0.0 20.0 0.0 0 dtOn dtOff
 EQUATIONS #
 
-strat = [55,1] ! Temperature control
+Hot = [55,1] ! Temperature control
 
 
 ***********************************
@@ -100,8 +85,8 @@ $nPlotsPerSim		! 7: Number of plots per simulation
 0     				! 11: Output file units
 0     				! 12: Output file delimiter
 INPUTS #
-TIn $pitStoreTTankN1 $pitStoreTTankN25 $pitStoreTTankN50 | strat
-TIn $pitStoreTTankN1 $pitStoreTTankN1  $pitStoreTTankN50 | strat
+THigh TLow $pitStoreTTankN25 $pitStoreTTankN50 | Hot
+THigh TLow $pitStoreTTankN25 $pitStoreTTankN50 | Hot
 LABELS #
 "temperatures [deg C] "
 "mass flows [kg/h]"

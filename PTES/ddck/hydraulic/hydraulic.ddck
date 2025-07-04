@@ -402,8 +402,8 @@ Lloop5Rho = FwaterRho
 Lloop5Cp = FwaterCp
 
 ** loop2
-Lloop2Rho = FwaterRho
-Lloop2Cp = FwaterCp
+Lloop2Rho = FbrineRho
+Lloop2Cp = FbrineCp
 
 
 ! BEGIN SCnr

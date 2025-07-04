@@ -1,0 +1,138 @@
+{
+    "Bolr": {
+        "In": {
+            "@cp": "Lloop7Cp",
+            "@mfr": "MBolr_A",
+            "@rho": "Lloop7Rho",
+            "@temp": "TTee5_Bolr"
+        },
+        "Out": {
+            "@revtemp": "TBolr_ValMix",
+            "@temp": "TBolr"
+        }
+    },
+    "Coll": {
+        "In": {
+            "@cp": "Lloop2Cp",
+            "@mfr": "MColl_A",
+            "@rho": "Lloop2Rho",
+            "@temp": "TPuCollPri_Coll"
+        },
+        "Out": {
+            "@revtemp": "TColl_HxColl",
+            "@temp": "TColl"
+        }
+    },
+    "HP": {
+        "CondIn": {
+            "@cp": "Lloop7Cp",
+            "@mfr": "MHPCond_A",
+            "@rho": "Lloop7Rho",
+            "@temp": "TValHPSec_HP"
+        },
+        "CondOut": {
+            "@revtemp": "THP_Tee5",
+            "@temp": "THPCond"
+        },
+        "EvapIn": {
+            "@cp": "Lloop5Cp",
+            "@mfr": "MHPEvap_A",
+            "@rho": "Lloop5Rho",
+            "@temp": "TValHPPri_HP"
+        },
+        "EvapOut": {
+            "@revtemp": "THP_Tee6",
+            "@temp": "THPEvap"
+        }
+    },
+    "Hx": {
+        "Side1In": {
+            "@cp": "Lloop5Cp",
+            "@mfr": "MHxSide1_A",
+            "@rho": "Lloop5Rho",
+            "@temp": "TValHXPri_Hx"
+        },
+        "Side1Out": {
+            "@revtemp": "THx_Tee4",
+            "@temp": "THxSide1"
+        },
+        "Side2In": {
+            "@cp": "Lloop7Cp",
+            "@mfr": "MHxSide2_A",
+            "@rho": "Lloop7Rho",
+            "@temp": "TValHXSec_Hx"
+        },
+        "Side2Out": {
+            "@revtemp": "THx_Tee7",
+            "@temp": "THxSide2"
+        }
+    },
+    "HxColl": {
+        "Side1In": {
+            "@cp": "Lloop2Cp",
+            "@mfr": "MHxCollSide1_A",
+            "@rho": "Lloop2Rho",
+            "@temp": "TColl_HxColl"
+        },
+        "Side1Out": {
+            "@revtemp": "THxColl_PuCollPri",
+            "@temp": "THxCollSide1"
+        },
+        "Side2In": {
+            "@cp": "Lloop5Cp",
+            "@mfr": "MHxCollSide2_A",
+            "@rho": "Lloop5Rho",
+            "@temp": "TPuCollSec_HxColl"
+        },
+        "Side2Out": {
+            "@revtemp": "THxColl_Tee9",
+            "@temp": "THxCollSide2"
+        }
+    },
+    "HxQSrc": {
+        "Side1In": {
+            "@cp": "Lloop4Cp",
+            "@mfr": "MHxQSrcSide1_A",
+            "@rho": "Lloop4Rho",
+            "@temp": "TQSrc_HxQSrc"
+        },
+        "Side1Out": {
+            "@revtemp": "THxQSrc_QSrc",
+            "@temp": "THxQSrcSide1"
+        },
+        "Side2In": {
+            "@cp": "Lloop5Cp",
+            "@mfr": "MHxQSrcSide2_A",
+            "@rho": "Lloop5Rho",
+            "@temp": "TPuSrcSec_HxQSrc"
+        },
+        "Side2Out": {
+            "@revtemp": "THxQSrc_Tee9",
+            "@temp": "THxQSrcSide2"
+        }
+    },
+    "QSnk": {
+        "In": {
+            "@cp": "Lloop1Cp",
+            "@mfr": "MQSnk_A",
+            "@rho": "Lloop1Rho",
+            "@temp": "TSCnr2_QSnk"
+        },
+        "Out": {
+            "@revtemp": "TQSnk_SCnr2",
+            "@temp": "TQSnk"
+        }
+    },
+    "QSrc": {
+        "In": {
+            "@cp": "Lloop4Cp",
+            "@mfr": "MQSrc_A",
+            "@rho": "Lloop4Rho",
+            "@temp": "THxQSrc_QSrc"
+        },
+        "Out": {
+            "@revtemp": "TQSrc_HxQSrc",
+            "@temp": "TQSrc"
+        }
+    }
+}
