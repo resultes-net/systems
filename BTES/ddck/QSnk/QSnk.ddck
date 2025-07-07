@@ -1,0 +1,138 @@
+*******************************
+**BEGIN sink.ddck
+*******************************
+
+***********************************
+** Parameters
+***********************************
+CONSTANTS #
+dT = 20    ! [K]
+QUnscaled_MWh = 1 !90000070/1000
+Q_MWh = QUnscaled_MWh
+scaling = Q_MWh/QUnscaled_MWh
+
+******************************************************************************************
+** READER
+** Reading data from input profile
+******************************************************************************************
+EQUATIONS #
+profileSnkUnit = 50
+
+ASSIGN  "C:\Daten\GIT\systems\PTES\ddck\QSnk\profile_norm.csv" profileSnkUnit
+UNIT 33 TYPE 9      !Changed automatically
+Parameters #
+5               ! 1 Mode
+1               ! 2 Header Lines to Skip
+2               ! 3 No. of values to read
+1               ! 4 Time interval of data
+-1 1 0 1        ! 5 1st Data to read: 1: Interpolate (+) or not? (-); 2: Multiplication factor; 3: Addition factor; 4: average (0) or instantaneous (1)
+1 1 0 0         ! 6 1st Data to read: 1: Interpolate (+) or not? (-); 2: Multiplication factor; 3: Addition factor; 4: average (0) or instantaneous (1)
+profileSnkUnit  ! 7 Logical unit for input file
+-1              ! 8 Free format mode
+
+EQUATIONS #
+P_kW = scaling*MAX([33,2],0) !Power of sink read from profile
+@energy(out, heat, :) = P_kW
+
+
+
+***********************************
+** inputs from hydraulic solver
+***********************************
+** Temperature warm pipe to sink: 	 TIn
+EQUATIONS #
+TIn = @temp(In)
+cp = @cp(In)
+
+
+
+***********************************
+** outputs to hydraulic solver
+***********************************
+EQUATIONS #
+TOut = Tin - dT
+@temp(Out) = TOut
+
+
+***********************************
+** outputs to hydraulic control
+***********************************
+EQUATIONS #
+M =  P_kW / (cp*dT) * 3600	!kg/h
+
+***********************************
+** Monthly printer
+***********************************
+!CONSTANTS #
+!unitMonthly = 32
+!
+!ASSIGN invalid\change_in_run.config unitMonthly
+!
+!UNIT 32 TYPE 46
+!PARAMETERS #
+!unitMonthly 		! 1: Logical unit number, -
+!-1           		! 2: Logical unit for monthly summaries, -
+!1            		! 3: Relative or absolute start time. 0: print at time intervals relative to the simulation start time. 1: print at absolute time intervals. No effect for monthly integrations
+!-1           		! 4: Printing & integrating interval, h. -1 for monthly integration
+!1            		! 5: Number of inputs to avoid integration, -
+!1            		! 6: Output number to avoid integration
+!INPUTS #
+!$TIME  P
+!**
+!$TIME  P
+
+
+***********************************
+** Hourly printer
+***********************************
+CONSTANTS 1
+unitPrintSink = 33
+
+ASSIGN    temp\SINK_HR.Prt    unitPrintSink
+
+UNIT 34 TYPE 46		! Printegrator Monthly Values for System
+PARAMETERS 8
+unitPrintSink		! 1: Logical unit number, -
+-1						! 2: Logical unit for monthly summaries, -
+1						! 3: Relative or absolute start time. 0: print at time intervals relative to the simulation start time. 1: print at absolute time intervals. No effect for monthly integrations
+1						! 4: Printing & integrating interval, h. -1 for monthly integration
+3						! 5: Number of inputs to avoid integration, -
+1						! 6: Output number to avoid integration
+4						! 7: Output number to avoid integration
+5						! 8: Output number to avoid integration
+INPUTS #
+$Time P_kW M TIn TOut
+**
+$Time P_kW M TIn TOut
+
+
+
+***********************************
+** Online Plotter
+***********************************
+UNIT 103 TYPE 65		!Changed automatically
+PARAMETERS #     
+2     				! 1: Nb. of left-axis variables
+2     				! 2: Nb. of right-axis variables
+-1   				! 3: Left axis minimum
+100       			! 4: Left axis maximum
+0   				! 5: Right axis minimum
+5000  				! 6: Right axis maximum
+$nPlotsPerSim		! 7: Number of plots per simulation
+12     				! 8: X-axis gridpoints
+1     				! 9: Shut off Online w/o removing
+-1     				! 10: Logical unit for output file
+0     				! 11: Output file units
+0     				! 12: Output file delimiter
+INPUTS #    
+TIn TOut P M
+TIn TOut P M
+LABELS #     
+Temps
+PowersAndMassFlows
+Sink
+
+******************************************************************************************
+** outputs to energy balance in kWh
+** Following this naming standard : qSysIn_name, qSysOut_name, elSysIn_name, elSysOut_name
+******************************************************************************************

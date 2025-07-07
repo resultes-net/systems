@@ -1,0 +1,322 @@
+*******************************
+**BEGIN BW-HeatPump.dck
+*******************************
+    
+*****************************************
+** Contact person : D. Carbonell   
+** Creation date  : 26.02.2021 
+** Last changes   : 20.05.2022
+*****************************************
+
+***************************************************************************
+** Description: 
+** heat pump base ddck for model 977
+** clean copy of 977 with changes:
+**	-removing pump consumption and improving names
+**  -tAmbHp linked with global variable tAmb 
+***************************************************************************
+
+***********************************
+** inputs from hydraulic solver
+***********************************
+EQUATIONS #
+TEvapIn = @temp(EvapIn, TPiEvapIn)
+MfrEvapIn = ABS(@mfr(EvapIn, MfrPuEvap))
+TCondIn = @temp(CondIn, TPiCondIn)
+MfrCondIn = ABS(@mfr(CondIn, MfrPiCondIn))
+
+CpEvap = @cp(EvapIn,bar)
+CpCond = @cp(CondIn,bar)
+
+
+***********************************
+** outputs to hydraulic solver
+***********************************
+EQUATIONS #
+@temp(EvapOut, TEvapOut) = TEvapOut
+@temp(CondOut, TCondOut) = TCondOut		! Temperature of the condenser (heat sink) outlet
+
+
+
+******************************************************************************************
+** outputs to energy balance in kWh
+** Following this naming standard : qSysIn_name, qSysOut_name, elSysIn_name, elSysOut_name
+******************************************************************************************
+EQUATIONS 1
+elSysIn_Q_HpComp = PelComp_kW
+
+*************************************************************************************************
+** Dependencies with other types
+** If only one dependency defined here. 
+** If a variable is used more than once, redefine it here, e.g. varUsedInside=varFromAnotherDeck
+*************************************************************************************************
+EQUATIONS 1
+myIsOn = IsOn		! control signal for the heat pump
+
+***********************************
+** outputs to other ddck
+***********************************
+EQUATIONS 1
+MfrPD = MfrPDNew*relaxMfrPD + (1-relaxMfrPD)*MfrPDRc
+
+**********************************************
+** Dependencies with overall variables 
+**
+**check
+**********************************************
+EQUATIONS 1
+tAmb = $Tamb		! 15
+
+***********************************
+** Type
+***********************************
+CONSTANTS #		! Heat Pump: Size
+sizeUsed = sizeNom						! change this to scale the heat pump
+SizeRatio = sizeUsed/sizeNom
+MfrEvapNom = SizeRatio*MfrEvapRef
+MfrCondNom = SizeRatio*MfrCondRef		! adapt cond to corrected evap MfrEvapNom*ratioCondEvap                                     !
+MfrEvapCondRatio = MfrEvapNom/MfrCondNom
+timeBlock = 5
+
+CONSTANTS 5
+Moloss = 0     
+Ctherm = 4		!1     
+Ualoss = 0     
+frCOP = 1     
+frCond = $HpControlfrCond_new !1
+
+***********************************************
+** Begin PD CONTROLLER (currently not active)
+***********************************************
+CONSTANTS 5
+MfrCondMin = MfrCondNom*0.2		! chosen without any knowledge of actual system
+MfrCondMax = MfrCondNom			! chosen without any knowledge of actual system
+dMfrCondInc = 4*MfrCondNom
+dMfrCondDec = -dMfrCondInc
+dtSet = 5
+
+EQUATIONS 1
+dTProPID = IsOn*(TCondOut-TCondIn)+NOT(IsOn)*5
+
+UNIT 157 TYPE 889		! Adapted PD-controller
+PARAMETERS 9     
+1     			! 1: mode of timesteps: 1= use previous value, 0 = use current value
+MfrCondMin    ! 2: lowest possible output value
+MfrCondMax    ! 3: highest possible output value
+-1     			! 4: mode of action: 1 = positive, (increase in manipulated value causes increase in process variable), -1 = negative
+MfrCondNom    ! 5: By how much shall the manipulated variable be changed per hour if the process variable is 1 unit off?
+4     			! 6: A high value for D counteracts overshoot / counteracts high rates of increase or decrease in the process variable.
+120     		! 7: maximum rate of setpoint change per hour
+dMfrCondInc   ! 8: maximum rate of increase of the manipulated variable (positive value)
+dMfrCondDec   ! 9: maximum rate of decrease of the manipulated variable (negative value)
+INPUTS 5     
+dTProPID     	! 1: process variable
+dtSet    		! 2: setpoint
+$Nix     		! 3: freeze manipulated variable (1) or let act (0)
+$Nix     		! 4: Manual (1) or automatic (0) manipulated variable
+$Nix     		! 5: manual manipulated variable
+*** INITIAL INPUT VALUES     
+0.0   0.0   0.0   0.0    0.0     
+*** OUTUPUTS     
+** 1: manipulated variable, 2: current setpoint, 3: current deviation      
+      
+EQUATIONS 5		! ASHP ON-Signal and mass flow
+     
+MfrPDNew = [157,1]
+SETPPD = [157,2]
+DevPD = [157,3]
+MfrPuPD = IsOn*MfrPD
+relaxMfrPD = 1
+        
+CONSTANTS 6
+tauWPstart = 10
+tauWPstop = 20
+TWPEvapIce = -100
+EtaDefrost = 0.4
+PelWPVen = 0
+PelCtr_kW = 0
+
+UNIT 162 TYPE 977		! Compression Heat Pump Model v401
+PARAMETERS 28     
+CM_c1     	! 1: c1
+CM_c2     	! 2: c2
+CM_c3     	! 3: c3
+CM_c4     	! 4: c4
+CM_c5     	! 5: c5
+CM_c6     	! 6: c6
+COP_c1     		! 7: cop1
+COP_c2     		! 8: cop2
+COP_c3     		! 9: cop3
+COP_c4     		! 10: cop4
+COP_c5     		! 11: cop5
+COP_c6     		! 12: cop6
+tauWPstart		! 13: tau_start, s
+tauWPstop     	! 14: tau_stop, s
+TWPEvapIce     	! 15: tevapIce, deg C
+EtaDefrost     	! 16: eta_defrost, -
+PelWPVen     	! 17: ventilator electricity consumption, kW
+PelCtr_kW     ! 18: controller electricity consumption, kW
+TminEvapTout   	! 19: tevap,min, deg C
+TEvapMax     	! 20: tevap,max, deg C
+0     			! 21: tcond,min, deg C
+tCondMax     	! 22: tcond,max, deg C
+CpEvap     		! 23: cp,evap, kJ/kgK
+CpCond   		! 24: cp,cond, kJ/kgK
+timeBlock     ! 25: tau_error, hr
+Moloss     		! 26: loss type, 0-3
+Ctherm     		! 27: heat capacity, kJ/K
+Ualoss     		! 28: losses, W/k
+INPUTS 9     
+TEvapIn     	! 1: tevap,in, deg C
+MfrEvapIn     	! 2: Mfr,evap,in, kg/h
+TCondIn     	! 3: tcond,in, deg C
+MfrCondIn 		! 4: Mfr,cond,in, kg/h
+myIsOn     	! 5: gamma_ON, -
+$RHamb_1     	! 6: RH_air_in
+tAmb     		! 7
+frCond     		! 8
+frCOP     		! 9
+0  0  0  0  0  0.5 21 1 1     
+    
+EQUATIONS #		! Heat Pump: Outputs
+TEvapOut = [162,1]
+TCondOut = [162,3]
+**MfrAuxEvapOut = [162,2]					! mass flow rate of evaporator outlet
+**MfrAuxOut = [162,4]*NOT(IsBlock)		! Mass flow rate of the condenser (heat sink) outlet
+PelComp_kW = [162,5]     					!  electricity consumption of compressor, kW
+PelTot_kW = [162,6]     					!  electricity consumption total, kW
+QEvap_kW = [162,7]
+QCond_kW = [162,8]     					!  Heat output condenser, kW
+COP = [162,9]
+PLossStart_kW = [162,10]     				! Start losses, kW
+PAuxDefrost_kW = [162,11]     				! Defrosting losses, kW   
+
+UNIT 163 TYPE 817		! Timer or time delay FIXED TO 5 VARIABLES. WE CAN'T CHANGE IT !!
+PARAMETERS 10    
+1      			! 1: mode of timer 1: 1= from first trigger on; 2 = from last trigger on
+timeBlock		! 2: lenght of time for timer 1 [h]
+0      			! 3: mode of timer 2: 1= from first trigger on; 2 = from last trigger on
+0    			! 4: lenght of time for timer 2 [h]
+0      			! 5: mode of timer 3: 1= from first trigger on; 2 = from last trigger on
+0      			! 6: lenght of time for timer 3 [h]
+0      			! 7: mode of timer 4: 1= from first trigger on; 2 = from last trigger on
+0     			! 8: lenght of time for timer 4 [h]
+0
+0
+INPUTS 5    
+BrineTooCold $Nix  $Nix  $Nix $Nix
+0.0 0.0 0.0 0.0 0.0
+
+EQUATIONS 1
+BrineTooColdTimer = [163,1]
+
+EQUATIONS 2
+IsBlock = BrineTooColdTimer		! OR([162,18],BrineTooColdTimer)
+BrineTooCold = OR(LT(TEvapIn,TMinEvapTin),(LT(TEvapOut,TMinEvapTout)))
+      
+UNIT 82 TYPE 993		! Input value recall (element RcA) DC CHANGED
+PARAMETERS 1     
+3		! 1: number of variables to be remembered
+INPUTS 3    
+IsBlock  myIsOn MfrPDRc
+0   0  0		!0 0 0  
+     
+EQUATIONS 5   
+IsBlockRc = [82,1]
+myIsOnRc = [82,2]
+MfrPDRc = [82,3]
+BoStart = myIsOn*NOT(myIsOnRc)
+StartPerH = BoStart/$dtsim
+ 
+** TO BE DELETED. Pump consumption should come from GUI export 
+**EQUATIONS 9		! 16     
+**dpAuxSH_bar = 0.2															! according to MacSheep report 7.2 
+**PflowAuxSH_W = ((MfrAuxOut/3600)/RhoWat)*dpAuxSH_bar*100000				! required power to drive the flow, W
+**etaPuAuxSh = 0.35     													! Assumption
+**PelPuAuxSH_kW = (PflowAuxSH_W/1000)/etaPuAuxSH							! required pump electric power, kW
+**dpAuxBrine_bar = 0.3														! assumption (pressure drop is a mix between SH- and Borehole-Loop according to MacSheep report 7.2)
+**PflowAuxBrine_W = ((MfrAuxEvapOut/3600)/RhoBri)*dpAuxBrine_bar*100000		! required power to drive the flow, W
+**etaPuAuxBrine = 0.35														! Assumption
+**PelPuAuxBrine_kW = (PflowAuxBrine_W/1000)/etaPuAuxBrine					! required pump electric power, kW
+**PelPuAuxBri_kW = GT(MfrEvapIn,0.1)*PelPuAuxBrine_kW						! GT(MfrcondIn,0.1)*PelPuAuxBrine_kW		! naming could be betterdeg 
+	 
+EQUATIONS 2
+dtEvap = TEvapIn-TEvapOut
+dtCond = TCondOut-TCondIn
+
+***********************************
+** Monthly printer
+***********************************
+CONSTANTS 1
+unitPrintHp = 31
+
+ASSIGN temp\HEAT_PUMP_MO.Prt unitPrintHp 
+
+UNIT 32 TYPE 46      
+PARAMETERS 6   
+unitPrintHp		! 1: Logical unit number, -
+-1           	! 2: Logical unit for monthly summaries, -
+1            	! 3: Relative or absolute start time. 0: print at time intervals relative to the simulation start time. 1: print at absolute time intervals. No effect for monthly integrations
+-1           	! 4: Printing & integrating interval, h. -1 for monthly integration
+1            	! 5: Number of inputs to avoid integration, -
+1            	! 6: Output number to avoid integration
+INPUTS 5
+$Time  QEvap_kW  QCond_kW PelComp_kW PelTot_kW
+**
+$Time  QEvap_kW  QCond_kW PelComp_kW PelTot_kW
+
+***********************************
+** Hourly printer
+***********************************
+CONSTANTS 1
+unitHourlyHp = 33
+
+ASSIGN    temp\HEAT_PUMP_HR.Prt    unitHourlyHp     
+
+UNIT 34 TYPE 46		! Printegrator Monthly Values for System
+PARAMETERS 9   
+unitHourlyHp		! 1: Logical unit number, -
+-1            		! 2: Logical unit for monthly summaries, -
+1             		! 3: Relative or absolute start time. 0: print at time intervals relative to the simulation start time. 1: print at absolute time intervals. No effect for monthly integrations
+1             		! 4: Printing & integrating interval, h. -1 for monthly integration
+4             		! 5: Number of inputs to avoid integration, -
+6             		! 6: Output number to avoid integration
+7             		! 7: Output number to avoid integration
+8             		! 8: Output number to avoid integration
+9             		! 9: Output number to avoid integration
+INPUTS 9
+$Time  QEvap_kW  QCond_kW  PelComp_kW PelTot_kW TEvapIn TEvapOut TCondIn TCondOut
+**
+$Time  QEvap_kW  QCond_kW  PelComp_kW PelTot_kW TEvapIn TEvapOut TCondIn TCondOut
+
+*************************************
+** Online Plotter
+*************************************
+UNIT 89 TYPE 65		! Online Plotter Auxiliary (Element Hp)
+PARAMETERS 12     
+10					! 1: Nb. of left-axis variables
+10					! 2: Nb. of right-axis variables
+-10					! 3: Left axis minimum
+70					! 4: Left axis maximum
+0					! 5: Right axis minimum
+100					! 6: Right axis maximum
+$nPlotsPerSim		! 7 Number of plots per simulation
+12					! 8 X-axis gridpoints
+1					! 9 Shut off Online w/o removing
+-1					! 10 Logical unit for output file
+0					! 11 Output file units
+0					! 12 Output file delimiter
+INPUTS 20     
+TEvapIn TEvapOut TCondIn TCondOut myIsOnIsOn IsBlock $Nix $Nix  $Nix $Nix
+MfrEvapIn MfrCondIn QEvap_kW QCond_kW   frCond dtEvap dtCond $Nix $Nix $Nix
+**
+TEvapIn TEvapOut TCondIn TCondOut myIsOnIsOn IsBlock $Nix $Nix  $Nix $Nix
+MfrEvapIn MfrCondIn QEvap_kW QCond_kW   frCond dtEvap dtCond $Nix $Nix $Nix
+LABELS  3     
+Temperatures     
+massFlow_and_Heat_transf     
+HP    
+
+*******************************
+**END BW-HeatPump.dck
+*******************************

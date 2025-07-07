@@ -1,0 +1,17 @@
+***************************
+** Here we define the necessary connections with the common control files
+***************************
+
+** Solar control
+EQUATIONS #
+TNetReturn = -999
+TTesBottom = TesT1_Tes1
+
+** Capacity control for HP
+EQUATIONS #
+HpControlTControlled = HPTCondOut
+HpControlTSet = TSetDem
+HpControlOn = HPIsOn
+
+
+
