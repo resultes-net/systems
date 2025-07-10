@@ -5,7 +5,7 @@
 ** Solar control
 EQUATIONS #
 TNetReturn = -999
-TTesBottom = TesT1_Tes1
+TTesBottom = TesT2_Tes1
 
 ** Capacity control for HP
 EQUATIONS #

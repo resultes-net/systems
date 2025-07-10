@@ -1,0 +1,57 @@
+***************************************************
+**Borehole controller
+**************************************************
+
+***************************************************************************
+** This controller rules the charging/discharging processes of the boreholes.
+** These conditions must be met at the same time:
+**      1. If the temperature in the buffer tank is higher than the average temperature of the
+**      soil, the charging mode is enabled (with a deadband). Otherwise, the discharging
+**      mode is enabled, alongside the respective cheat pump.
+**      2. The outlet temperature from the boreholes must be lower than the inlet.
+***************************************************************************
+
+***********************************
+** Control Temperatures
+***********************************
+
+EQUATIONS #
+THigh = $TesTsen7_Tes1
+!TLow = $BoHxTGroundAve
+TLow = $TSetTes
+TMon = THigh
+TMonMax = 150
+
+
+***********************************
+** Borehole mode activation
+***********************************
+
+OnChar = GT($TesT5_Tes1, $TSetTes) !+10)
+OnDischar = LT($TesT10_Tes1, $TSetTes-10)
+
+
+***********************************
+** Deadband control for charging
+***********************************
+
+!CONSTANTS 2
+!dtOn  = 5    ! When THigh > TLow + dtOn -> On = 1
+!dtOff = -5   ! When THigh < TLow - dtOff -> On = 0
+!
+!
+!UNIT 55 TYPE 2
+!PARAMETERS 2
+!5           ! 1 No. of oscillations
+!TMonMax   ! 2 High limit cut-out
+!INPUTS 6
+!THigh             ! Upper input temperature Th
+!TLow              ! Lower input temperature Tl
+!TMon             ! Monitoring temperature Tin
+!OnChar         ! 70,1 Input control function
+!dtOn             ! Upper dead band dT
+!dtOff            ! Lower dead band dT
+!0.0 20.0 0.0 0 dtOn dtOff
+!
+!EQUATIONS #
+!OnChar = [55,1] ! Temperature control

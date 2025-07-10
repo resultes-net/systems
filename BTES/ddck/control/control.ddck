@@ -14,29 +14,26 @@ MfrPuCollSec = MfrPuCollPri * Lloop4Cp/Lloop3Cp !1000.0
 
 MfrQSnk = QSnkM
 
-MfrPuGhx = 0 !MfrEvapNom
-MfrPuHp = 0 !HpMfrCondNom
-HpIsOn = 0 ! Heat pump activation signal
+MfrPuGhx = HpMfrEvapNom*(ControlBorOnChar+ControlBorOnDischar)
+MfrPuHp = HpMfrCondNom*ControlBorOnDischar
+HpIsOn = ControlBorOnDischar  !NOT(ControlBorOnChar) ! Heat pump activation signal
 
 **************
 *** Valves ***
 **************
 
-
-
-xFracValBuffToGhx = 1.0
+xFracValBuffToGhx = ControlBorOnChar
 
 **************
-*** DEMAND ***
+*** Set points ***
 **************
 CONSTANTS #
 TSetDem = 50
+TSetBor = 10
+TSetTes = TSetDem + 10
+TSetColl = TSetDem + 10
 
-*****************
-*** BOREHOLES ***
-*****************
-CONSTANTS #
-TSetBor = 50
+
 
 
 ** Mixing valve for demand
@@ -54,7 +51,7 @@ T_set_ValDemMix
 *** INITIAL INPUT VALUES
 35.0 21.0 800.0 T_set_ValDemMix
 EQUATIONS 1
-xFracValDemMix = 0.5!  1.-[441,5]
+xFracValDemMix = 1.-[441,5]
 
 
 ** Mixing valve for boreholes
@@ -63,7 +60,7 @@ T_set_ValGhxMix = TSetBor
 
 UNIT 441 TYPE 811 ! Passive Divider for heating
 PARAMETERS 1
-5 !Nb.of iterations before fixing the value
+50 !Nb.of iterations before fixing the value
 INPUTS 4
 TBolr_Val
 TTee2_Val
@@ -72,4 +69,4 @@ T_set_ValGhxMix
 *** INITIAL INPUT VALUES
 35.0 21.0 800.0 T_set_ValGhxMix
 EQUATIONS 1
-xFracValGhxMix = 0.5 ! 1.-[441,5]
+xFracValGhxMix = 1.-[441,5]

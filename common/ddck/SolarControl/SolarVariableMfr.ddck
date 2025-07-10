@@ -6,7 +6,8 @@
 ** This controller defines a variable mfr for the collector loop based on
 ** a set-point for the outlet temperature.
 ***************************************************************************
-
+EQUATIONS #
+TOutSet = $TSetColl
 
 *************************************
 ** Inputs from collector
@@ -21,7 +22,7 @@ cp = $Collcp
 CONSTANTS #
 MStart = 0.25*$CollMfrCPriNom
 MMax = 2*$CollMfrCPriNom
-TOutSet = 70
+!TOutSet = 70
 TOutMax = 120
 ITMin_Wm2 = 200
 

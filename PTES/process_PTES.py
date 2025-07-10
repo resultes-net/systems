@@ -166,10 +166,8 @@ def balance(sim: api.Simulation):
 
 def kpi(sim: api.Simulation):
 
-
     #### Calculations ####
     sim.scalar["FactorRenewable"] = (sim.scalar["QSnkP_kW_Tot"] - sim.scalar["BolrPOut_kW_Tot"]) / sim.scalar["QSnkP_kW_Tot"]
-    5
 
 def to_json(sim: api.Simulation):
     sim.scalar.to_json(sim.path + "\output.json", orient="records", indent=4)
@@ -177,7 +175,7 @@ def to_json(sim: api.Simulation):
 if __name__ == "__main__":
     path_to_sim = _pl.Path(r"C:\Daten\GIT\systems\PTES\results")
     api.global_settings.reader.force_reread_prt = True
-    api.global_settings.reader.read_step_files = False
+    api.global_settings.reader.read_step_files = True
 
     processing_steps = [
                         solar,

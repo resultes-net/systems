@@ -44,27 +44,50 @@ out = [56,1] ! Temperature control
 ***********************************
 ** Time step printer
 ***********************************
+
 CONSTANTS 1
 unitStepValHp = 33
 
-ASSIGN    temp\VAL_HP_STEP.Prt    unitStepValHp
+ASSIGN    temp\VAL_HP.Prt    unitStepValHp
 
-UNIT 34 TYPE 46		! Printegrator Monthly Values for System
-PARAMETERS #
-unitStepValHp		! 1: Logical unit number, -
--1            		! 2: Logical unit for monthly summaries, -
-1             		! 3: Relative or absolute start time. 0: print at time intervals relative to the simulation start time. 1: print at absolute time intervals. No effect for monthly integrations
-$dtSim             	! 4: Printing & integrating interval, h. -1 for monthly integration
-8             		! 5: Number of inputs to avoid integration, -
-2             		! 6: Output number to avoid integration
-3             		! 7: Output number to avoid integration
-4             		! 8: Output number to avoid integration
-5             		! 9: Output number to avoid integration
-6             		! 10: Output number to avoid integration
-7             		! 11: Output number to avoid integration
-8             		! 12: Output number to avoid integration
-9             		! 13: Output number to avoid integration
+UNIT 520 TYPE 25! User defined Printer
+PARAMETERS 10
+$dtSim! 1 Printing interval
+$START! 2 Start time
+$STOP! 3 Stop time
+unitStepValHp! 4 Logical unit
+0! 5 Units printing mode
+0! 6 Relative or absolute start time
+-1! 7 Overwrite or Append
+-1! 8 Print header
+0! 9 Delimiter
+1! 10 Print labels
 INPUTS #
-$TIME  $T_set  $TTee7_Val3 out $MTee7_Val3 $HPMfrCondMin $ValHPPri $HPTCondOut $HPcontrolfrCond_new
+$T_set  $TTee7_Val3 out $MTee7_Val3 $HPMfrCondMin $ValHPPri $HPTCondOut $HPcontrolfrCond_new
 **
-$TIME  $T_set  $TTee7_Val3 out $MTee7_Val3 $HPMfrCondMin $ValHPPri $HPTCondOut $HPcontrolfrCond_new
+$T_set  $TTee7_Val3 out $MTee7_Val3 $HPMfrCondMin $ValHPPri $HPTCondOut $HPcontrolfrCond_new
+
+!CONSTANTS 1
+!unitStepValHp = 33
+!
+!ASSIGN    temp\VAL_HP_STEP.Prt    unitStepValHp
+!
+!UNIT 34 TYPE 46		! Printegrator Monthly Values for System
+!PARAMETERS #
+!unitStepValHp		! 1: Logical unit number, -
+!-1            		! 2: Logical unit for monthly summaries, -
+!1             		! 3: Relative or absolute start time. 0: print at time intervals relative to the simulation start time. 1: print at absolute time intervals. No effect for monthly integrations
+!$dtSim             	! 4: Printing & integrating interval, h. -1 for monthly integration
+!8             		! 5: Number of inputs to avoid integration, -
+!2             		! 6: Output number to avoid integration
+!3             		! 7: Output number to avoid integration
+!4             		! 8: Output number to avoid integration
+!5             		! 9: Output number to avoid integration
+!6             		! 10: Output number to avoid integration
+!7             		! 11: Output number to avoid integration
+!8             		! 12: Output number to avoid integration
+!9             		! 13: Output number to avoid integration
+!INPUTS #
+!$TIME  $T_set  $TTee7_Val3 out $MTee7_Val3 $HPMfrCondMin $ValHPPri $HPTCondOut $HPcontrolfrCond_new
+!**
+!$TIME  $T_set  $TTee7_Val3 out $MTee7_Val3 $HPMfrCondMin $ValHPPri $HPTCondOut $HPcontrolfrCond_new

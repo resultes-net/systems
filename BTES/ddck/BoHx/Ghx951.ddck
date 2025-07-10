@@ -11,7 +11,7 @@
 
 CONSTANTS 3
 dProbes = 0.032  ! 10: inner diameter of the pipes, m
-nProbes = 551
+nProbes = 61
 calcRand = 2 ! 1: old Randaussen approach of EWS. If nBorehole>1 the MfrGHX/Nbore, 2: Lamarche-g-Functions, 3: read-in g-function
 
 
@@ -49,11 +49,13 @@ ASSIGN "C:\Daten\GIT\systems\BTES\ddck\BoHx\R40_N61_8m.txt" unitGfunc
 ***********************************
 ** inputs from hydraulic solver
 ***********************************
-EQUATIONS 3
+EQUATIONS #
 TIn = GT(MfrIn,0)*@temp(In) + LT(MfrIn,0)*@revtemp(Out) ! (C)
 MfrIn = @mfr(In)  ! (kg/h) not possible to revert the flow
 ** 
 Mfr = EQL(calcRand,1)*ABS(MfrIn) / nProbes+NOT(EQL(calcRand,1))*ABS(MfrIn)
+Cp = @cp(In)
+Rho = @rho(In)
 
 
 ***********************************
@@ -76,7 +78,7 @@ EQUATIONS 1
 ** Dependencies with other ddck
 ***********************************
 CONSTANTS #
-!MfrNom = 10000!MfrHpEvapNom  -> is being defined in the control
+MfrNom = 10000!MfrHpEvapNom  -> is being defined in the control
 
 ! not used
 !ExtrationPower = 40						! W/m
@@ -173,8 +175,8 @@ dTsoilAir     				! 14: average yearly temperature difference between soil surfa
 cpFill            			! 15
 rhoFill      				! 16
 lambdaFill   				! 17
-CpBRI     					! 18: specific heat of the brine, kJ/kgK
-RhoBRI     					! 19: density of the brine, kg/m3
+Cp     		    			! 18: specific heat of the brine, kJ/kgK
+Rho     					! 19: density of the brine, kg/m3
 lambdaBrine     			! 20: lambda of the brine, W/mK (?)
 muBrine       				! 21
 Wprecond     				! 22: Number of weeks of ground preconditionning
@@ -204,16 +206,16 @@ TIn		! Temperature of GHX inlet, �C
 Mfr		! Mass flow rate for all borehole heat exchanger, kg/h
 0.0    0.0 
     
-EQUATIONS 6
-TOut = [85,1]
-MfrOut = [85,2]
-Q_kW = [85,3]		  				! Power extracted [kW]
+EQUATIONS #
+TOut    = [85,1]
+MfrOut  = [85,2]
+Q_kW    = [85,3]		  				! Power extracted [kW]
 Q_kWExt = GT(Q_kW,0)* Q_kW		! Changed automatically
 Q_kWReg = LT(Q_kW,0)* Q_kW     ! Changed automatically
-RT = [85,6]							! K temp. drop at RANDAUSSEN
+TRT     = [85,6]							! K temp. drop at RANDAUSSEN
 
 !the whole radial profile (6 values + boundary) at the center of the borehole lenght (axial 6 values, so at 3) (T(3,1)-T(3,2)...T(3,boundary condition)
-EQUATIONS 8
+EQUATIONS #
 TGroundBoco   = [85,49]		! T(3,boco)
 TGroundFiller = [85,19]      ! filler temperatura material half of the borehole lenght T(3,filler)
 TGroundLay1 = [85,24]      ! ground temperature 1st layer half of the borehole lenght T(3,1st layer)
@@ -222,6 +224,7 @@ TGroundLay3 = [85,34]
 TGroundLay4 = [85,39]
 TGroundLay5 = [85,44]
 TGroundLay6 = [85,49]
+TGroundAve = (TGroundLay1 + TGroundLay2 + TGroundLay3 + TGroundLay4 + TGroundLay5 + TGroundLay6) / 6
 
 ***********************************
 ** Monthly printer
@@ -240,9 +243,9 @@ unitPrinterMo		! 1: Logical unit number, -
 1     				! 6: Output number to avoid integration
 2     				! 7: Output number to avoid integration
 INPUTS 5
-Time  TRT Q_kW   Q_kWExt	Q_kWReg
+$Time  TRT Q_kW   Q_kWExt	Q_kWReg
 **
-Time  TRT Q_kW   Q_kWExt	Q_kWReg
+$Time  TRT Q_kW   Q_kWExt	Q_kWReg
 
 ***********************************
 ** hourly printer
@@ -253,12 +256,12 @@ unitPrintHo = 33
 ASSIGN    temp\BOHX_HO.Prt    unitPrintHo
 
 UNIT 34 TYPE 46     ! Printegrator Monthly Values for System
-PARAMETERS 13    
+PARAMETERS #
 unitPrintHo		! 1: Logical unit number, -
 -1						! 2: Logical unit for monthly summaries, -
 1             			! 3: Relative or absolute start time. 0: print at time intervals relative to the simulation start time. 1: print at absolute time intervals. No effect for monthly integrations
 1             			! 4: Printing & integrating interval, h. -1 for monthly integration
-8             			! 5: Number of inputs to avoid integration, -
+10             			! 5: Number of inputs to avoid integration, -
 1             			! 6: Output number to avoid integration
 2             			! 7: Output number to avoid integration
 3             			! 8: Output number to avoid integration
@@ -267,16 +270,19 @@ unitPrintHo		! 1: Logical unit number, -
 6             			! 11: Output number to avoid integration
 7             			! 12: Output number to avoid integration
 8             			! 13: Output number to avoid integration
+9             			! 14: Output number to avoid integration
+10             			! 15: Output number to avoid integration
+
 INPUTS #
-TOut TRT TIn TGroundFiller TGroundLay1 TGroundLay2 Q_kW Q_kWExt Q_kWReg
+TOut TRT TIn TGroundFiller TGroundLay1 TGroundLay2 TGroundLay3 TGroundLay4 TGroundLay5 TGroundLay6 Q_kW Q_kWExt Q_kWReg
 **
-TOut TRT TIn TGroundFiller TGroundLay1 TGroundLay2 Q_kW Q_kWExt Q_kWReg
+TOut TRT TIn TGroundFiller TGroundLay1 TGroundLay2 TGroundLay3 TGroundLay4 TGroundLay5 TGroundLay6 Q_kW Q_kWExt Q_kWReg
 
 ***************************************************************
 **BEGIN HP energy balance printer
 ***************************************************************
 EQUATIONS #
-QIn = MfrIn * CPWAT * (TIn - TOut) / 3600 ! (kW)
+QIn = MfrIn * Cp * (TIn - TOut) / 3600 ! (kW)
 qImb = -Q_kW + Q_kW  ! (kW) energy imbalance
 CONSTANTS 1
 unitPrint_EBal=270
