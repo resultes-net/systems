@@ -111,12 +111,18 @@ def btes(sim: api.Simulation):
     # sim.scalar["pitStoreQAccum_kW_Tot"] = sim.hourly["pitStoreQAccum_kW"].sum()
 
     #### Plots ####
-    fig, ax = api.line_plot(sim.hourly, ["BoHxTGroundLay1", "BoHxTGroundLay2", "BoHxTGroundLay3",
-                                         "BoHxTGroundLay4", "BoHxTGroundLay5", "BoHxTGroundLay6"])
+    fig, ax = api.line_plot(sim.hourly, ["BoHxT13", "BoHxT23", "BoHxT33",
+                                         "BoHxT43", "BoHxT53", "BoHxT63", "BoHxTGro3"])
     ax.set_ylabel("Temperature (°C)")
     _plt.grid()
     # _plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "t-btes-hourly", "btes")
+
+    fig, ax = api.line_plot(sim.hourly, ["BoHxTRT"])
+    ax.set_ylabel("Temperature (°C)")
+    _plt.grid()
+    # _plt.show()
+    api.export_plots_in_configured_formats(fig, sim.path, "trt-hourly", "btes")
 
     fig, ax = api.line_plot(sim.hourly, ["BoHxQ_kW"])
     ax.set_ylabel("Heat (kW)")

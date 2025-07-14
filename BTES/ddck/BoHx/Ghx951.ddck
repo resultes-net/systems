@@ -209,26 +209,88 @@ INPUTS 2
 TIn		! Temperature of GHX inlet, �C
 Mfr		! Mass flow rate for all borehole heat exchanger, kg/h
 0.0    0.0 
-    
+
+*********************
+****** OUTPUTS ******
+*********************
+
 EQUATIONS #
-TOut    = [85,1]
-MfrOut  = [85,2]
-Q_kW    = [85,3]		  				! Power extracted [kW]
+TOut    = [85,1] ! Outlet temperature [°C]
+MfrOut  = [85,2] ! Outlet mass flow rate [kg/h]
+Q_kW    = [85,3] ! Power extracted [kW]
+TEle    = [85,4] ! Element by element multiplication
+PLosses = [85,5] ! Pressure drop
+TRT     = [85,6] ! K temp. drop at RANDAUSSEN
+
+TDown1  = [85,7] ! Downstreaming fluid temperature 1 [°C]
+TDown2  = [85,8] ! Downstreaming fluid temperature 2 [°C]
+TDown3  = [85,9] ! Downstreaming fluid temperature 3 [°C]
+TDown4  = [85,10] ! Downstreaming fluid temperature 4 [°C]
+TDown5  = [85,11] ! Downstreaming fluid temperature 5 [°C]
+
+TUp1    = [85,12] ! Upstreaming fluid temperature 1 [°C]
+TUp2    = [85,13] ! Upstreaming fluid temperature 2 [°C]
+TUp3    = [85,14] ! Upstreaming fluid temperature 3 [°C]
+TUp4    = [85,15] ! Upstreaming fluid temperature 4 [°C]
+TUp5    = [85,16] ! Upstreaming fluid temperature 5 [°C]
+
+T11     = [85,17] ! Radial 1, axial 1 temperature [°C]
+T12     = [85,18] ! Radial 1, axial 2 temperature [°C]
+T13     = [85,19] ! Radial 1, axial 3 temperature [°C]
+T14     = [85,20] ! Radial 1, axial 4 temperature [°C]
+T15     = [85,21] ! Radial 1, axial 5 temperature [°C]
+
+T21     = [85,22] ! Radial 2, axial 1 temperature [°C]
+T22     = [85,23] ! Radial 2, axial 2 temperature [°C]
+T23     = [85,24] ! Radial 2, axial 3 temperature [°C]
+T24     = [85,25] ! Radial 2, axial 4 temperature [°C]
+T25     = [85,26] ! Radial 2, axial 5 temperature [°C]
+
+T31     = [85,27] ! Radial 3, axial 1 temperature [°C]
+T32     = [85,28] ! Radial 3, axial 2 temperature [°C]
+T33     = [85,29] ! Radial 3, axial 3 temperature [°C]
+T34     = [85,30] ! Radial 3, axial 4 temperature [°C]
+T35     = [85,31] ! Radial 3, axial 5 temperature [°C]
+
+T41     = [85,32] ! Radial 4, axial 1 temperature [°C]
+T42     = [85,33] ! Radial 4, axial 2 temperature [°C]
+T43     = [85,34] ! Radial 4, axial 3 temperature [°C]
+T44     = [85,35] ! Radial 4, axial 4 temperature [°C]
+T45     = [85,36] ! Radial 4, axial 5 temperature [°C]
+
+T51     = [85,37] ! Radial 5, axial 1 temperature [°C]
+T52     = [85,38] ! Radial 5, axial 2 temperature [°C]
+T53     = [85,39] ! Radial 5, axial 3 temperature [°C]
+T54     = [85,40] ! Radial 5, axial 4 temperature [°C]
+T55     = [85,41] ! Radial 5, axial 5 temperature [°C]
+
+T61     = [85,42] ! Radial 6, axial 1 temperature [°C]
+T62     = [85,43] ! Radial 6, axial 2 temperature [°C]
+T63     = [85,44] ! Radial 6, axial 3 temperature [°C]
+T64     = [85,45] ! Radial 6, axial 4 temperature [°C]
+T65     = [85,46] ! Radial 6, axial 5 temperature [°C]
+
+TGro1   = [85,47] ! Ground, axial 1 temperature [°C]
+TGro2   = [85,48] ! Ground, axial 2 temperature [°C]
+TGro3   = [85,49] ! Ground, axial 3 temperature [°C]
+TGro4   = [85,50] ! Ground, axial 4 temperature [°C]
+TGro5   = [85,51] ! Ground, axial 5 temperature [°C]
+
 Q_kWExt = GT(Q_kW,0)* Q_kW		! Changed automatically
 Q_kWReg = LT(Q_kW,0)* Q_kW     ! Changed automatically
-TRT     = [85,6]							! K temp. drop at RANDAUSSEN
+
 
 !the whole radial profile (6 values + boundary) at the center of the borehole lenght (axial 6 values, so at 3) (T(3,1)-T(3,2)...T(3,boundary condition)
 EQUATIONS #
-TGroundBoco   = [85,49]		! T(3,boco)
-TGroundFiller = [85,19]      ! filler temperatura material half of the borehole lenght T(3,filler)
-TGroundLay1 = [85,24]      ! ground temperature 1st layer half of the borehole lenght T(3,1st layer)
-TGroundLay2 = [85,29]      ! ground temperature 2nd layer half of the borehole lenght T(3,2nd layer)
-TGroundLay3 = [85,34]
-TGroundLay4 = [85,39]
-TGroundLay5 = [85,44]
-TGroundLay6 = [85,49]
-TGroundAve = (TGroundLay1 + TGroundLay2 + TGroundLay3 + TGroundLay4 + TGroundLay5 + TGroundLay6) / 6
+!TGroundBoco   = [85,49]		! T(3,boco)
+!TGroundFiller = [85,19]      ! filler temperatura material half of the borehole lenght T(3,filler)
+!T23 = [85,24]      ! ground temperature 1st layer half of the borehole lenght T(3,1st layer)
+!T33 = [85,29]      ! ground temperature 2nd layer half of the borehole lenght T(3,2nd layer)
+!T43 = [85,34]
+!T53 = [85,39]
+!T63 = [85,44]
+!TGro3 = [85,49]
+TGroundAve = (T13 + T23 + T33 + T43 + T53 + T63 + TGro3) / 7
 
 ***********************************
 ** Monthly printer
@@ -278,9 +340,9 @@ unitPrintHo		! 1: Logical unit number, -
 10             			! 15: Output number to avoid integration
 
 INPUTS #
-TOut TRT TIn TGroundFiller TGroundLay1 TGroundLay2 TGroundLay3 TGroundLay4 TGroundLay5 TGroundLay6 Q_kW Q_kWExt Q_kWReg
+TOut TRT TIn T13 T23 T33 T43 T53 T63 TGro3 Q_kW Q_kWExt Q_kWReg
 **
-TOut TRT TIn TGroundFiller TGroundLay1 TGroundLay2 TGroundLay3 TGroundLay4 TGroundLay5 TGroundLay6 Q_kW Q_kWExt Q_kWReg
+TOut TRT TIn T13 T23 T33 T43 T53 T63 TGro3 Q_kW Q_kWExt Q_kWReg
 
 ***************************************************************
 **BEGIN HP energy balance printer
@@ -323,9 +385,9 @@ NPlotsPerSim     		! 7: Number of plots per simulation
 0     		! 11: Output file units
 0     		! 12: Output file delimiter
 INPUTS #
-TOut TRT TIn TGroundFiller TGroundLay1 TGroundLay3 TGroundLay4 TGroundLay6 | Q_kW Q_kWExt Q_kWReg
+TOut TRT TIn T13 T23 T33 T43 T53 T63 TGro3 | Q_kW Q_kWExt Q_kWReg
 ****
-TOut TRT TIn TGroundFiller TGroundLay1 TGroundLay3 TGroundLay4 TGroundLay6 | Q_kW Q_kWExt Q_kWReg
+TOut TRT TIn T13 T23 T33 T43 T53 T63 TGro3 | Q_kW Q_kWExt Q_kWReg
 LABELS  3
 Temperatures     
 MassFlow 
