@@ -24,14 +24,14 @@ HpIsOn = ControlBorOnDischar  !NOT(ControlBorOnChar) ! Heat pump activation sign
 
 xFracValBuffToGhx = ControlBorOnChar
 
-**************
+******************
 *** Set points ***
-**************
+******************
 CONSTANTS #
 TSetDem = 50
 TSetBor = 10
 TSetTes = TSetDem + 10
-TSetColl = TSetDem + 10
+TSetColl = TSetTes + 10
 
 
 
@@ -58,15 +58,39 @@ xFracValDemMix = 1.-[441,5]
 EQUATIONS #
 T_set_ValGhxMix = TSetBor
 
-UNIT 441 TYPE 811 ! Passive Divider for heating
+UNIT 442 TYPE 811 ! Passive Divider for heating
 PARAMETERS 1
 50 !Nb.of iterations before fixing the value
 INPUTS 4
-TBolr_Val
-TTee2_Val
-MVal_SCnr
+TVal_ValGhxMix
+TTee_ValGhxMix
+MValGhxMix_PuGhx
 T_set_ValGhxMix
 *** INITIAL INPUT VALUES
 35.0 21.0 800.0 T_set_ValGhxMix
 EQUATIONS 1
-xFracValGhxMix = 1.-[441,5]
+xFracValGhxMix = 1.-[442,5]
+
+***********************************
+** Hourly printer
+***********************************
+CONSTANTS 1
+unitHourly = 33
+
+ASSIGN    temp\CTRL_HR.Prt    unitHourly
+
+UNIT 34 TYPE 46		! Printegrator Monthly Values for System
+PARAMETERS #
+unitHourly		! 1: Logical unit number, -
+-1            		! 2: Logical unit for monthly summaries, -
+1             		! 3: Relative or absolute start time. 0: print at time intervals relative to the simulation start time. 1: print at absolute time intervals. No effect for monthly integrations
+1             		! 4: Printing & integrating interval, h. -1 for monthly integration
+3             		! 5: Number of inputs to avoid integration, -
+1             		! 6: Output number to avoid integration
+2            		! 7: Output number to avoid integration
+3             		! 8: Output number to avoid integration
+INPUTS #
+Time ControlBorOnChar ControlBorOnDischar
+**
+Time ControlBorOnChar ControlBorOnDischar
+

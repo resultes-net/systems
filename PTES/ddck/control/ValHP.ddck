@@ -15,7 +15,7 @@
 ***************************************************************************
 
 EQUATIONS #
-myTHigh = $T_set
+myTHigh = $TSetDem
 myTLow = $TTee7_Val3
 
 dtOn = 5    ! Upper dead band coll. pump ON, JS: was 10 before, yield is higher with 7, to be improved
@@ -52,20 +52,20 @@ ASSIGN    temp\VAL_HP.Prt    unitStepValHp
 
 UNIT 520 TYPE 25! User defined Printer
 PARAMETERS 10
-$dtSim! 1 Printing interval
-$START! 2 Start time
-$STOP! 3 Stop time
-unitStepValHp! 4 Logical unit
-0! 5 Units printing mode
-0! 6 Relative or absolute start time
--1! 7 Overwrite or Append
--1! 8 Print header
-0! 9 Delimiter
-1! 10 Print labels
+$dtSim          ! 1 Printing interval
+$START          ! 2 Start time
+$STOP           ! 3 Stop time
+unitStepValHp   ! 4 Logical unit
+0               ! 5 Units printing mode
+0               ! 6 Relative or absolute start time
+-1              ! 7 Overwrite or Append
+-1              ! 8 Print header
+0               ! 9 Delimiter
+1               ! 10 Print labels
 INPUTS #
-$T_set  $TTee7_Val3 out $MTee7_Val3 $HPMfrCondMin $ValHPPri $HPTCondOut $HPcontrolfrCond_new
+$TSetDem  $TTee7_Val3 out $MTee7_Val3 $HPMfrCondMin $ValHPPri $HPTCondOut $HPcontrolfrCond_new
 **
-$T_set  $TTee7_Val3 out $MTee7_Val3 $HPMfrCondMin $ValHPPri $HPTCondOut $HPcontrolfrCond_new
+$TSetDem  $TTee7_Val3 out $MTee7_Val3 $HPMfrCondMin $ValHPPri $HPTCondOut $HPcontrolfrCond_new
 
 !CONSTANTS 1
 !unitStepValHp = 33

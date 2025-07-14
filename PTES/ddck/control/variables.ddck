@@ -20,7 +20,7 @@ ValStratControlTIn = TTee9_ValStrat
 ** Capacity control for HP
 EQUATIONS #
 HpControlTControlled = HPTCondOut
-HpControlTSet = T_set
+HpControlTSet = TSetDem
 HpControlOn = HPIsOn
 
 

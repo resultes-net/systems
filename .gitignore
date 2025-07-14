@@ -1,2 +1,4 @@
 debugParallelRun.dat
-/BTES/results/
+/*/results/
+/venv/
+/.idea/

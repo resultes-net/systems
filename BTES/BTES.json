@@ -31,6 +31,54 @@
         },
         "Block-10": {
             ".__BlockDict__": true,
+            "BlockDisplayName": "Tee3",
+            "BlockName": "TeePiece",
+            "__version__": "d8a12235-c3f9-4742-bb7b-2c92a26d66c5",
+            "teePieceModel": {
+                "__version__": "260c8083-5343-4345-8cb3-0cdd374bc076",
+                "blockItemModel": {
+                    "__version__": "7b792574-5fa6-4c3e-b2e3-7e4eb71d7746",
+                    "blockPosition": [
+                        -1460.0,
+                        380.0
+                    ],
+                    "flippedH": false,
+                    "flippedV": false,
+                    "rotationN": -1,
+                    "trnsysId": 688
+                },
+                "inputPortId": 866,
+                "outputPortIds": [
+                    867,
+                    868
+                ]
+            }
+        },
+        "Block-11": {
+            ".__BlockDict__": true,
+            "BlockDisplayName": "PuColl",
+            "BlockName": "Pump",
+            "__version__": "3d1e7f06-c7a6-49af-98b8-f593b34c5754",
+            "blockItemWithPrescribedMassFlow": {
+                "__version__": "e9fd1a0e-c00a-46e2-abfb-7381fa1b2e2d",
+                "blockItem": {
+                    "__version__": "7b792574-5fa6-4c3e-b2e3-7e4eb71d7746",
+                    "blockPosition": [
+                        -1860.0,
+                        59.0
+                    ],
+                    "flippedH": true,
+                    "flippedV": false,
+                    "rotationN": 0,
+                    "trnsysId": 171
+                },
+                "massFlowRateInKgPerH": 300.0
+            },
+            "inputPortId": 241,
+            "outputPortId": 242
+        },
+        "Block-12": {
+            ".__BlockDict__": true,
             "BlockDisplayName": "ValBuffToGhx",
             "BlockName": "TVentil",
             "IsTempering": false,
@@ -53,7 +101,7 @@
                 836
             ]
         },
-        "Block-11": {
+        "Block-13": {
             ".__BlockDict__": true,
             "BlockDisplayName": "PuHx",
             "BlockName": "Pump",
@@ -76,7 +124,7 @@
             "inputPortId": 248,
             "outputPortId": 249
         },
-        "Block-12": {
+        "Block-14": {
             ".__BlockDict__": true,
             "BlockDisplayName": "SCnr2",
             "BlockName": "SPCnr",
@@ -104,7 +152,7 @@
                 18
             ]
         },
-        "Block-13": {
+        "Block-15": {
             ".__BlockDict__": true,
             "BlockDisplayName": "PuGhx",
             "BlockName": "Pump",
@@ -127,7 +175,7 @@
             "inputPortId": 550,
             "outputPortId": 551
         },
-        "Block-14": {
+        "Block-16": {
             ".__BlockDict__": true,
             "BlockDisplayName": "PuHp",
             "BlockName": "Pump",
@@ -150,7 +198,7 @@
             "inputPortId": 572,
             "outputPortId": 573
         },
-        "Block-15": {
+        "Block-17": {
             ".__BlockDict__": true,
             "BlockDisplayName": "Coll",
             "BlockName": "Collector",
@@ -170,7 +218,7 @@
             "rotationN": 0,
             "trnsysId": 71
         },
-        "Block-16": {
+        "Block-18": {
             ".__BlockDict__": true,
             "BlockDisplayName": "QSnk",
             "BlockName": "Sink",
@@ -190,11 +238,11 @@
             "rotationN": -1,
             "trnsysId": 10
         },
-        "Block-17": {
+        "Block-19": {
             ".__BlockDict__": true,
             "BlockDisplayName": "ValGhxMix",
             "BlockName": "TVentil",
-            "IsTempering": false,
+            "IsTempering": true,
             "PositionForMassFlowSolver": "0.0",
             "__version__": "ccf7f590-c65e-4fa1-bf7c-1850a5f8985e",
             "blockItemModel": {
@@ -214,7 +262,7 @@
                 673
             ]
         },
-        "Block-18": {
+        "Block-2": {
             ".__BlockDict__": true,
             "BlockDisplayName": "Tee",
             "BlockName": "TeePiece",
@@ -239,7 +287,7 @@
                 ]
             }
         },
-        "Block-19": {
+        "Block-3": {
             ".__BlockDict__": true,
             "BlockDisplayName": "Gshx",
             "BlockName": "GroundSourceHx",
@@ -259,7 +307,7 @@
             "rotationN": 0,
             "trnsysId": 87
         },
-        "Block-2": {
+        "Block-4": {
             ".__BlockDict__": true,
             "BlockDisplayName": "Tes",
             "BlockName": "StorageTank",
@@ -340,7 +388,7 @@
             ],
             "trnsysId": 107
         },
-        "Block-3": {
+        "Block-5": {
             ".__BlockDict__": true,
             "BlockDisplayName": "Bolr",
             "BlockName": "Boiler",
@@ -360,7 +408,7 @@
             "rotationN": 0,
             "trnsysId": 109
         },
-        "Block-4": {
+        "Block-6": {
             ".__BlockDict__": true,
             "BlockDisplayName": "HP",
             "BlockName": "HP",
@@ -385,7 +433,7 @@
             ],
             "trnsysID": 158
         },
-        "Block-5": {
+        "Block-7": {
             ".__BlockDict__": true,
             "BlockDisplayName": "Hx",
             "BlockName": "ExternalHx",
@@ -410,7 +458,7 @@
             ],
             "trnsysID": 169
         },
-        "Block-6": {
+        "Block-8": {
             ".__BlockDict__": true,
             "BlockDisplayName": "Tee2",
             "BlockName": "TeePiece",
@@ -435,7 +483,7 @@
                 ]
             }
         },
-        "Block-7": {
+        "Block-9": {
             ".__BlockDict__": true,
             "BlockDisplayName": "ValSupplyMix",
             "BlockName": "TVentil",
@@ -458,54 +506,6 @@
                 766,
                 767
             ]
-        },
-        "Block-8": {
-            ".__BlockDict__": true,
-            "BlockDisplayName": "Tee3",
-            "BlockName": "TeePiece",
-            "__version__": "d8a12235-c3f9-4742-bb7b-2c92a26d66c5",
-            "teePieceModel": {
-                "__version__": "260c8083-5343-4345-8cb3-0cdd374bc076",
-                "blockItemModel": {
-                    "__version__": "7b792574-5fa6-4c3e-b2e3-7e4eb71d7746",
-                    "blockPosition": [
-                        -1460.0,
-                        380.0
-                    ],
-                    "flippedH": false,
-                    "flippedV": false,
-                    "rotationN": -1,
-                    "trnsysId": 688
-                },
-                "inputPortId": 866,
-                "outputPortIds": [
-                    867,
-                    868
-                ]
-            }
-        },
-        "Block-9": {
-            ".__BlockDict__": true,
-            "BlockDisplayName": "PuColl",
-            "BlockName": "Pump",
-            "__version__": "3d1e7f06-c7a6-49af-98b8-f593b34c5754",
-            "blockItemWithPrescribedMassFlow": {
-                "__version__": "e9fd1a0e-c00a-46e2-abfb-7381fa1b2e2d",
-                "blockItem": {
-                    "__version__": "7b792574-5fa6-4c3e-b2e3-7e4eb71d7746",
-                    "blockPosition": [
-                        -1860.0,
-                        59.0
-                    ],
-                    "flippedH": true,
-                    "flippedV": false,
-                    "rotationN": 0,
-                    "trnsysId": 171
-                },
-                "massFlowRateInKgPerH": 300.0
-            },
-            "inputPortId": 241,
-            "outputPortId": 242
         },
         "Connection-20": {
             ".__ConnectionDict__": true,
@@ -1526,10 +1526,10 @@
             "uValueInWPerM2K": 2.7777
         },
         "IDs": {
-            "GlobalId": 889,
+            "GlobalId": 893,
             "__idDct__": true,
-            "globalConnID": 581,
-            "trnsysID": 709
+            "globalConnID": 585,
+            "trnsysID": 713
         },
         "Strings": {
             "DiagramName": "BTES.json",

@@ -171,7 +171,7 @@ TEvapIn     	! 1: tevap,in, deg C
 MfrEvapIn     	! 2: Mfr,evap,in, kg/h
 TCondIn     	! 3: tcond,in, deg C
 MfrCondIn 		! 4: Mfr,cond,in, kg/h
-myIsOn     	! 5: gamma_ON, -
+myIsOn     	    ! 5: gamma_ON, -
 $RHamb_1     	! 6: RH_air_in
 tAmb     		! 7
 frCond     		! 8
@@ -250,7 +250,7 @@ dtCond = TCondOut-TCondIn
 CONSTANTS 1
 unitPrintHp = 31
 
-ASSIGN temp\HEAT_PUMP_MO.Prt unitPrintHp 
+ASSIGN temp\HP_MO.Prt unitPrintHp
 
 UNIT 32 TYPE 46      
 PARAMETERS 6   
@@ -269,25 +269,25 @@ $Time  QEvap_kW  QCond_kW PelComp_kW PelTot_kW
 ** Hourly printer
 ***********************************
 CONSTANTS 1
-unitHourlyHp = 33
+unitHourly = 33
 
-ASSIGN    temp\HEAT_PUMP_HR.Prt    unitHourlyHp     
+ASSIGN    temp\HP_HR.Prt    unitHourly
 
 UNIT 34 TYPE 46		! Printegrator Monthly Values for System
 PARAMETERS 9   
-unitHourlyHp		! 1: Logical unit number, -
+unitHourly		    ! 1: Logical unit number, -
 -1            		! 2: Logical unit for monthly summaries, -
 1             		! 3: Relative or absolute start time. 0: print at time intervals relative to the simulation start time. 1: print at absolute time intervals. No effect for monthly integrations
 1             		! 4: Printing & integrating interval, h. -1 for monthly integration
 4             		! 5: Number of inputs to avoid integration, -
-6             		! 6: Output number to avoid integration
-7             		! 7: Output number to avoid integration
-8             		! 8: Output number to avoid integration
-9             		! 9: Output number to avoid integration
-INPUTS 9
-$Time  QEvap_kW  QCond_kW  PelComp_kW PelTot_kW TEvapIn TEvapOut TCondIn TCondOut
+2             		! 6: Output number to avoid integration
+3            		! 7: Output number to avoid integration
+4             		! 8: Output number to avoid integration
+5             		! 9: Output number to avoid integration
+INPUTS #
+$Time TEvapIn TEvapOut TCondIn TCondOut myIsOn QEvap_kW  QCond_kW  PelComp_kW PelTot_kW
 **
-$Time  QEvap_kW  QCond_kW  PelComp_kW PelTot_kW TEvapIn TEvapOut TCondIn TCondOut
+$Time TEvapIn TEvapOut TCondIn TCondOut myIsOn QEvap_kW  QCond_kW  PelComp_kW PelTot_kW
 
 *************************************
 ** Online Plotter

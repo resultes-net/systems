@@ -13,51 +13,47 @@
 
 
 ***********************************
-** Control Temperatures
+** Inputs from other ddcks
 ***********************************
 
 EQUATIONS #
-myTHigh = $CollTOut
-myTLow = MAX($TNetReturn, $TTesBottom)
-
-myTCollOut = $CollTOut
-myTCollIn = $CollTIn
+THigh = $CollTOut
+TLow = MAX($TNetReturn, $TTesBottom)
+TMon = $CollTOut
 
 ***********************************
-** Primary pump
+** Outputs to other ddcks
 ***********************************
-
-CONSTANTS 2
-dtColOn = 15    ! Upper dead band coll. pump ON, JS: was 10 before, yield is higher with 7, to be improved
-dtColOff = -10   ! Lower dead band coll. pump OFF
 
 EQUATIONS #
-maxMyTMon = 150 ! 95
-myTMon = myTCollOut !$TesCollT5_Tes1
-!Col1_Tmax = Tes1_Tmax + 15
+puPriOn = puColOnRad * puColOnTemp ! Radiation + temperature control
+
+***********************************
+** Deadband control
+***********************************
+
+CONSTANTS #
+DtOn = 15       ! Upper dead band collector pump ON
+DtOff = -10     ! Upper dead band collector pump OFF
+TMonMax = 150   ! Maximum monitored temperature
 
 UNIT 55 TYPE 2
 PARAMETERS 2
-5           ! 1 No. of oscillations
-maxMyTMon   ! 2 High limit cut-out
+5               ! 1 No. of oscillations
+TMonMax         ! 2 High limit cut-out
 INPUTS 6
-myTHigh             ! Upper input temperature Th
-myTLow              ! Lower input temperature Tl
-myTMon             ! Monitoring temperature Tin
-puColOnTemp         ! 70,1 Input control function
-!puColOnPri         ! 70,1 Input control function
-dtColOn             ! Upper dead band dT
-dtColOff            ! Lower dead band dT
-0.0 20.0 0.0 0 dtColOn dtColOff
+THigh           ! 1 Upper input temperature Th
+TLow            ! 2 Lower input temperature Tl
+TMon            ! 3 Monitoring temperature Tin
+puColOnTemp     ! 4 70,1 Input control function
+!puColOnPri      ! 4 70,1 Input control function
+DtOn            ! 5 Upper dead band dT
+DtOff           ! 6 Lower dead band dT
+0.0 20.0 0.0 0 DtOn DtOff
 
-EQUATIONS 3
+EQUATIONS #
 puColOnRad = GT($IT_H,50*3.6) ! Radiation control
 puColOnTemp = [55,1] ! Temperature control
-puPriOn = puColOnRad * puColOnTemp ! Radiation + temperature control
-
-
-
-
 
 *************************************
 ********** Online Plotter ***********
@@ -65,21 +61,21 @@ puPriOn = puColOnRad * puColOnTemp ! Radiation + temperature control
 
 !UNIT 501 TYPE 65     ! Online Plotter HX
 !PARAMETERS 12
-!#     ! 1 Nb. of left-axis variables
-!#     ! 2 Nb. of right-axis variables
-!0     ! 3 Left axis minimum
-!100     ! 4 Left axis maximum -
-!0     ! 5 Right axis minimum
-!2     ! 6 Right axis maximum
-!$nPlotsPerSim     ! 7 Number of plots per simulation
-!12     ! 8 X-axis gridpoints
-!1     ! 9 Shut off Online w/o removing
-!-1     ! 10 Logical unit for output file
-!0     ! 11 Output file units
-!0     ! 12 Output file delimiter
+!#                   ! 1 Nb. of left-axis variables
+!#                   ! 2 Nb. of right-axis variables
+!0                   ! 3 Left axis minimum
+!200                 ! 4 Left axis maximum -
+!0                   ! 5 Right axis minimum
+!2                   ! 6 Right axis maximum
+!$nPlotsPerSim       ! 7 Number of plots per simulation
+!12                  ! 8 X-axis gridpoints
+!1                   ! 9 Shut off Online w/o removing
+!-1                  ! 10 Logical unit for output file
+!0                   ! 11 Output file units
+!0                   ! 12 Output file delimiter
 !INPUTS #
-!myTCollOut myTCollIn myTHigh myTLow myTMon $TesCollT4_Tes1 $TTee2_HxCollDemand | puPriOn puSecHpOn puSecDemandOn
-!$myTCollOut $myTCollIn $myTHigh $myTLow $myTMon $TesCollT4_Tes1 $TTee2_HxCollDemand | $puPriOn $puSecHpOn $puSecDemandOn
+!THigh TLow TMon TMonMax | puColOnRad puColOnTemp puPriOn
+!THigh TLow TMon TMonMax | puColOnRad puColOnTemp puPriOn
 !LABELS  3
 !Temperatures
 !MassFlows

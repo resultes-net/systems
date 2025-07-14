@@ -42,11 +42,12 @@ xFracValStrat = NOT(ValStratControlHot)
 EQUATIONS #
 HPIsOn = ValHPPri
 
-**************
-*** DEMAND ***
-**************
+******************
+*** SET-POINTS ***
+******************
 CONSTANTS #
-T_set = 50
+TSetDem = 50
+TSetColl = TSetDem + 20
 
 
 ***********************
@@ -61,7 +62,7 @@ ModePP23 = NOT(ValStratControlHot) ! charging through middle port GT(MfrSources,
 ** Mixing valve **
 ******************
 EQUATIONS #
-T_set_ValMix = T_set
+T_set_ValMix = TSetDem
 
 UNIT 441 TYPE 811 ! Passive Divider for heating 
 PARAMETERS 1

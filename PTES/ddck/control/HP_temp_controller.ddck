@@ -7,7 +7,7 @@ frCondMin = 0.20		    ! chosen without any knowledge of actual system
 frCondMax = 0.99			! chosen without any knowledge of actual system
 frCondMaxInc = 3.0
 frCondMaxDec = -3.0 !-0.4
-SetTHp = $T_set
+SetTHp = $TSetDem
 freezeMode = NOT($HPIsOn)
 
 EQUATIONS 1
