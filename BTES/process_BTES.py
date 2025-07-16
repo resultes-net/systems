@@ -18,6 +18,7 @@ def solar(sim: api.Simulation):
     sim.monthly["CollP_MW_MO"] = sim.monthly["CollP_kW_MO"] / 1000
 
     sim.scalar["CollP_kW_HO_Tot"] = sim.hourly["CollP_kW_HO"].sum()
+    sim.scalar["qSysOut_PipeLoss_Tot"] = sim.hourly["qSysOut_PipeLoss"].sum()
 
     # sim.scalar["HxCollHpPhxload_kW_Tot"] = sim.hourly["HxCollHpPhxload_kW"].sum()
     # sim.scalar["HxCollDemandPhxload_kW_Tot"] = sim.hourly["HxCollDemandPhxload_kW"].sum()
@@ -219,7 +220,7 @@ def balance(sim: api.Simulation):
     sim.scalar["QSources"] = sim.scalar["CollP_kW_HO_Tot"] + sim.scalar["BolrPOut_kW_Tot"]  + sim.scalar["HpPelComp_kW_Tot"]
     sim.scalar["QSinks"] = sim.scalar["QSnkP_kW_Tot"]
     sim.scalar["QStore"] = -sim.scalar["BoHxQ_kW_Tot"] + sim.scalar["TesQAcum_Tes1_Tot"]
-    sim.scalar["QLosses"] = sim.scalar["TesQLoss_Tes1_Tot"]
+    sim.scalar["QLosses"] = sim.scalar["TesQLoss_Tes1_Tot"] + sim.scalar["qSysOut_PipeLoss_Tot"]
 
     sim.scalar["QImb"] = sim.scalar["QSources"] - sim.scalar["QStore"] - sim.scalar["QSinks"] - sim.scalar["QLosses"]
 

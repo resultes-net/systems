@@ -65,11 +65,8 @@ MfrPD = MfrPDNew*relaxMfrPD + (1-relaxMfrPD)*MfrPDRc
 **check
 **********************************************
 EQUATIONS 1
-tAmb = $Tamb		! 15
+tAmb = $Tamb
 
-***********************************
-** Type
-***********************************
 CONSTANTS #		! Heat Pump: Size
 sizeUsed = sizeNom						! change this to scale the heat pump
 SizeRatio = sizeUsed/sizeNom
@@ -83,7 +80,7 @@ Moloss = 0
 Ctherm = 4		!1     
 Ualoss = 0     
 frCOP = 1     
-frCond = $HpControlfrCond_new !1
+frCond = $HpControlFracCond !1
 
 ***********************************************
 ** Begin PD CONTROLLER (currently not active)
@@ -135,6 +132,10 @@ TWPEvapIce = -100
 EtaDefrost = 0.4
 PelWPVen = 0
 PelCtr_kW = 0
+
+***********************************************
+** Begin Heat pump
+***********************************************
 
 UNIT 162 TYPE 977		! Compression Heat Pump Model v401
 PARAMETERS 28     

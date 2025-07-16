@@ -8,6 +8,11 @@
 ** Following this naming standard : qSysIn_name, qSysOut_name, elSysIn_name, elSysOut_name
 
 *************************************
+EQUATIONS 2
+*** single pipes
+qSysOut_PipeLoss = PipeLossTot
+qSysOut_spPipeIntTot = spPipeIntTot
+
 
 EQUATIONS 3
 *** double pipes
@@ -384,7 +389,7 @@ FwaterRho = RHOWAT ! [kg/m^3]
 FwaterCp = CPWAT_SI*0.001 ! [kJ/(kg*K)]
 
 ** Hydraulic loops
-EQUATIONS 10
+EQUATIONS 14
 ** loop1
 Lloop1Rho = FwaterRho
 Lloop1Cp = FwaterCp
@@ -402,6 +407,10 @@ Lloop5Rho = FwaterRho
 Lloop5Cp = FwaterCp
 
 ** loop2
+loop2NPipes = 3
+loop2Len = 2.0 ! [m]
+loop2Dia = 0.02 ! [m]
+loop2UVal = 9.99972 ! [kJ/(h*m^2*K)] (= 2.7777 W/(m^2*K))
 Lloop2Rho = FbrineRho
 Lloop2Cp = FbrineCp
 
@@ -1009,40 +1018,76 @@ EQUATIONS 2
 THxColl_Tee9 = [493,1]
 MHxColl_Tee9 = MHxColl_Tee9_A
 
-UNIT 494 TYPE 2221
-PARAMETERS 2
-mfrSolverAbsTol
-spTIni
-INPUTS 3
-MHxColl_PuCollPri_A THxCollSide1H TPuCollPri
-***
-0 spTIni spTIni
-EQUATIONS 2
-THxColl_PuCollPri = [494,1]
+UNIT 494 TYPE 931
+! HxColl_PuCollPri
+PARAMETERS 6
+loop2Dia ! diameter [m]
+loop2Len ! length [m]
+loop2UVal ! U-value [kJ/(h*m^2*K)] 
+Lloop2Rho ! density [kg/m^3]
+Lloop2Cp ! specific heat [kJ/(kg*K)]
+spTIni ! Initial fluid temperature [deg C]
+INPUTS 4
+THxCollSide1H ! input flow temperature [deg C]
+MHxColl_PuCollPri_A ! input mass flow [kg/h]
+TRoomStore ! ambient temperature [deg C]
+TPuCollPri ! reverse flow input temperature [deg C]
+***Initial values
+20 0.0 20 20
+
+EQUATIONS 5
+THxColl_PuCollPri = [494,1] ! Output flow temperature [deg C]
+PHxColl_PuCollPri_kW = [494,3]/3600 ! Dissipated heat [kW]
+PHxColl_PuCollPriConv_kW = [494,4]/3600 ! Convected heat [kW]
+PHxColl_PuCollPriInt_kJ = [494,5] ! Accumulated internal energy since start of simulation [kJ]
 MHxColl_PuCollPri = MHxColl_PuCollPri_A
 
-UNIT 495 TYPE 2221
-PARAMETERS 2
-mfrSolverAbsTol
-spTIni
-INPUTS 3
-MPuCollPri_Coll_A TPuCollPri TCollH
-***
-0 spTIni spTIni
-EQUATIONS 2
-TPuCollPri_Coll = [495,1]
+UNIT 495 TYPE 931
+! PuCollPri_Coll
+PARAMETERS 6
+loop2Dia ! diameter [m]
+loop2Len ! length [m]
+loop2UVal ! U-value [kJ/(h*m^2*K)] 
+Lloop2Rho ! density [kg/m^3]
+Lloop2Cp ! specific heat [kJ/(kg*K)]
+spTIni ! Initial fluid temperature [deg C]
+INPUTS 4
+TPuCollPri ! input flow temperature [deg C]
+MPuCollPri_Coll_A ! input mass flow [kg/h]
+TRoomStore ! ambient temperature [deg C]
+TCollH ! reverse flow input temperature [deg C]
+***Initial values
+20 0.0 20 20
+
+EQUATIONS 5
+TPuCollPri_Coll = [495,1] ! Output flow temperature [deg C]
+PPuCollPri_Coll_kW = [495,3]/3600 ! Dissipated heat [kW]
+PPuCollPri_CollConv_kW = [495,4]/3600 ! Convected heat [kW]
+PPuCollPri_CollInt_kJ = [495,5] ! Accumulated internal energy since start of simulation [kJ]
 MPuCollPri_Coll = MPuCollPri_Coll_A
 
-UNIT 496 TYPE 2221
-PARAMETERS 2
-mfrSolverAbsTol
-spTIni
-INPUTS 3
-MColl_HxColl_A TCollH THxCollSide1H
-***
-0 spTIni spTIni
-EQUATIONS 2
-TColl_HxColl = [496,1]
+UNIT 496 TYPE 931
+! Coll_HxColl
+PARAMETERS 6
+loop2Dia ! diameter [m]
+loop2Len ! length [m]
+loop2UVal ! U-value [kJ/(h*m^2*K)] 
+Lloop2Rho ! density [kg/m^3]
+Lloop2Cp ! specific heat [kJ/(kg*K)]
+spTIni ! Initial fluid temperature [deg C]
+INPUTS 4
+TCollH ! input flow temperature [deg C]
+MColl_HxColl_A ! input mass flow [kg/h]
+TRoomStore ! ambient temperature [deg C]
+THxCollSide1H ! reverse flow input temperature [deg C]
+***Initial values
+20 0.0 20 20
+
+EQUATIONS 5
+TColl_HxColl = [496,1] ! Output flow temperature [deg C]
+PColl_HxColl_kW = [496,3]/3600 ! Dissipated heat [kW]
+PColl_HxCollConv_kW = [496,4]/3600 ! Convected heat [kW]
+PColl_HxCollInt_kJ = [496,5] ! Accumulated internal energy since start of simulation [kJ]
 MColl_HxColl = MColl_HxColl_A
 
 UNIT 497 TYPE 2221
@@ -1402,6 +1447,23 @@ EQUATIONS 2
 TValHPSec_HP = [519,1]
 MValHPSec_HP = MValHPSec_HP_A
 
+*** Single pipe losses
+EQUATIONS 1
+spPipeEnIntTot = PHxColl_PuCollPriInt_kJ+PPuCollPri_CollInt_kJ+PColl_HxCollInt_kJ
+
+UNIT 100 TYPE 993
+PARAMETERS 1
+1 ! Number of inputs
+INPUTS 1
+spPipeEnIntTot
+**
+0
+
+EQUATIONS 4
+spPipeConvectedTot = PHxColl_PuCollPriConv_kW+PPuCollPri_CollConv_kW+PColl_HxCollConv_kW
+PipeLossTot = PHxColl_PuCollPri_kW+PPuCollPri_Coll_kW+PColl_HxColl_kW
+spPipeIntTot = (spPipeEnIntTot - [100,1]) / dtSim / 3600 ! kW
+spImbalance = spPipeConvectedTot - PipeLossTot - spPipeIntTot
 *** Double pipe energy balance
 EQUATIONS 5
 dpPipeConvectedTot = SCnr_SCnr2ColdConv + SCnr_SCnr2HotConv

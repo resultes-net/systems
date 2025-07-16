@@ -63,9 +63,9 @@ unitStepValHp   ! 4 Logical unit
 0               ! 9 Delimiter
 1               ! 10 Print labels
 INPUTS #
-$TSetDem  $TTee7_Val3 out $MTee7_Val3 $HPMfrCondMin $ValHPPri $HPTCondOut $HPcontrolfrCond_new
+$TSetDem  $TTee7_Val3 out $MTee7_Val3 $HPMfrCondMin $ValHPPri $HPTCondOut $HPcontrolFracCond
 **
-$TSetDem  $TTee7_Val3 out $MTee7_Val3 $HPMfrCondMin $ValHPPri $HPTCondOut $HPcontrolfrCond_new
+$TSetDem  $TTee7_Val3 out $MTee7_Val3 $HPMfrCondMin $ValHPPri $HPTCondOut $HPcontrolFracCond
 
 !CONSTANTS 1
 !unitStepValHp = 33

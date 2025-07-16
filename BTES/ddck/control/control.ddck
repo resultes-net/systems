@@ -2,7 +2,7 @@
 **BEGIN control.ddck
 *************************************
 EQUATIONS #
-
+TRoomStore = tAmb
 *************
 *** Pumps ***
 *************

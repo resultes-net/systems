@@ -4,10 +4,10 @@
             "@cp": "Lloop5Cp",
             "@mfr": "MBoHx_A",
             "@rho": "Lloop5Rho",
-            "@temp": "TPuGhx_Gshx"
+            "@temp": "TPuGhx_BoHx"
         },
         "Out": {
-            "@revtemp": "TGshx_Tee",
+            "@revtemp": "TBoHx_Tee",
             "@temp": "TBoHx"
         }
     },
@@ -43,7 +43,7 @@
             "@temp": "TPuHp_HP"
         },
         "CondOut": {
-            "@revtemp": "THP_Tes",
+            "@revtemp": "THp_Tes",
             "@temp": "THpCond"
         },
         "EvapIn": {
