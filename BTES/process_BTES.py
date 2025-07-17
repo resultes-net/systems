@@ -15,9 +15,9 @@ sys.path.append(dir_common)
 def solar(sim: api.Simulation):
 
     #### Calculations ####
-    sim.monthly["CollP_MW_MO"] = sim.monthly["CollP_kW_MO"] / 1000
+    sim.monthly["CollP_MW"] = sim.monthly["CollP_kW"] / 1000
 
-    sim.scalar["CollP_kW_HO_Tot"] = sim.hourly["CollP_kW_HO"].sum()
+    sim.scalar["CollP_kW_Tot"] = sim.hourly["CollP_kW"].sum()
     sim.scalar["qSysOut_PipeLoss_Tot"] = sim.hourly["qSysOut_PipeLoss"].sum()
 
     # sim.scalar["HxCollHpPhxload_kW_Tot"] = sim.hourly["HxCollHpPhxload_kW"].sum()
@@ -26,7 +26,7 @@ def solar(sim: api.Simulation):
 
     df = pd.DataFrame({
         'T': sim.hourly["CollTOut"],
-        'Q':  sim.hourly["CollP_kW_HO"] / 1000
+        'Q':  sim.hourly["CollP_kW"] / 1000
     })
 
     df = df.sort_values(by="T")
@@ -34,13 +34,13 @@ def solar(sim: api.Simulation):
 
 
     #### Plots ####
-    fig, ax = api.line_plot(sim.hourly, ["CollP_kW_HO"])
+    fig, ax = api.line_plot(sim.hourly, ["CollP_kW"])
     ax.set_ylabel("Power (kW)")
     _plt.grid()
     # _plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "solar-hourly", "solar")
 
-    fig, ax = api.bar_chart(sim.monthly, ["CollP_kW_MO"])
+    fig, ax = api.bar_chart(sim.monthly, ["CollP_kW"])
     ax.set_ylabel("Power (kW)")
     ax.legend()
     ax.legend_ = None
@@ -172,11 +172,11 @@ def hp(sim: api.Simulation):
     # _plt.show()
     api.export_plots_in_configured_formats(fig[0].figure, sim.path, "q_t", "hp")
 
-    fig, ax = api.line_plot(sim.hourly, ["HpmyIsOn"])
-    ax.set_ylabel("HP activation (-)")
-    _plt.grid()
-    # _plt.show()
-    api.export_plots_in_configured_formats(fig, sim.path, "act-hourly", "hp")
+    # fig, ax = api.line_plot(sim.hourly, ["HpmyIsOn"])
+    # ax.set_ylabel("HP activation (-)")
+    # _plt.grid()
+    # # _plt.show()
+    # api.export_plots_in_configured_formats(fig, sim.path, "act-hourly", "hp")
 
 def boiler(sim: api.Simulation):
 
@@ -211,13 +211,11 @@ def control(sim: api.Simulation):
     # _plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "mode-hourly", "control")
 
-
-
 def balance(sim: api.Simulation):
 
 
     #### Calculations ####
-    sim.scalar["QSources"] = sim.scalar["CollP_kW_HO_Tot"] + sim.scalar["BolrPOut_kW_Tot"]  + sim.scalar["HpPelComp_kW_Tot"]
+    sim.scalar["QSources"] = sim.scalar["CollP_kW_Tot"] + sim.scalar["BolrPOut_kW_Tot"]  + sim.scalar["HpPelComp_kW_Tot"]
     sim.scalar["QSinks"] = sim.scalar["QSnkP_kW_Tot"]
     sim.scalar["QStore"] = -sim.scalar["BoHxQ_kW_Tot"] + sim.scalar["TesQAcum_Tes1_Tot"]
     sim.scalar["QLosses"] = sim.scalar["TesQLoss_Tes1_Tot"] + sim.scalar["qSysOut_PipeLoss_Tot"]

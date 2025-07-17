@@ -275,20 +275,21 @@ unitHourlyHp = 33
 ASSIGN    temp\HEAT_PUMP_HR.Prt    unitHourlyHp     
 
 UNIT 34 TYPE 46		! Printegrator Monthly Values for System
-PARAMETERS 9   
+PARAMETERS #
 unitHourlyHp		! 1: Logical unit number, -
 -1            		! 2: Logical unit for monthly summaries, -
 1             		! 3: Relative or absolute start time. 0: print at time intervals relative to the simulation start time. 1: print at absolute time intervals. No effect for monthly integrations
 1             		! 4: Printing & integrating interval, h. -1 for monthly integration
-4             		! 5: Number of inputs to avoid integration, -
+5             		! 5: Number of inputs to avoid integration, -
 6             		! 6: Output number to avoid integration
 7             		! 7: Output number to avoid integration
 8             		! 8: Output number to avoid integration
 9             		! 9: Output number to avoid integration
-INPUTS 9
-$Time  QEvap_kW  QCond_kW  PelComp_kW PelTot_kW TEvapIn TEvapOut TCondIn TCondOut
+10             		! 10: Output number to avoid integration
+INPUTS 10
+$Time  QEvap_kW  QCond_kW  PelComp_kW PelTot_kW TEvapIn TEvapOut TCondIn TCondOut frCond
 **
-$Time  QEvap_kW  QCond_kW  PelComp_kW PelTot_kW TEvapIn TEvapOut TCondIn TCondOut
+$Time  QEvap_kW  QCond_kW  PelComp_kW PelTot_kW TEvapIn TEvapOut TCondIn TCondOut frCond
 
 *************************************
 ** Online Plotter
@@ -308,10 +309,10 @@ $nPlotsPerSim		! 7 Number of plots per simulation
 0					! 11 Output file units
 0					! 12 Output file delimiter
 INPUTS 20     
-TEvapIn TEvapOut TCondIn TCondOut myIsOnIsOn IsBlock $Nix $Nix  $Nix $Nix
+TEvapIn TEvapOut TCondIn TCondOut myIsOn IsBlock $Nix $Nix  $Nix $Nix
 MfrEvapIn MfrCondIn QEvap_kW QCond_kW   frCond dtEvap dtCond $Nix $Nix $Nix
 **
-TEvapIn TEvapOut TCondIn TCondOut myIsOnIsOn IsBlock $Nix $Nix  $Nix $Nix
+TEvapIn TEvapOut TCondIn TCondOut myIsOn IsBlock $Nix $Nix  $Nix $Nix
 MfrEvapIn MfrCondIn QEvap_kW QCond_kW   frCond dtEvap dtCond $Nix $Nix $Nix
 LABELS  3     
 Temperatures     
