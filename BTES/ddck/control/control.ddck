@@ -7,8 +7,8 @@ TRoomStore = tAmb
 *** Pumps ***
 *************
 
-MfrPuCollPri = SolarControlpuPriOn * CollMfrOut
-MfrPuCollSec = MfrPuCollPri * Lloop4Cp/Lloop3Cp !1000.0
+MfrPuCollPri = SolarControlPuPriOn * CollMfrOut
+MfrPuCollSec = SolarControlPuSecOn * MfrPuCollPri * Lloop4Cp/Lloop3Cp !1000.0
 
 
 

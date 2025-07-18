@@ -17,19 +17,31 @@
 ***********************************
 
 EQUATIONS #
+TColl = $CollTOut
 THigh = $CollTOut
 TLow = MAX($TNetReturn, $TTesBottom)
 TMon = $CollTOut
+Ghi = $IT_H
 
 ***********************************
 ** Outputs to other ddcks
 ***********************************
 
 EQUATIONS #
-puPriOn = puColOnRad * puColOnTemp ! Radiation + temperature control
+!puPriOn = puColOnRad * puColOnTemp ! Radiation + temperature control
+PuPriOn = PuPriRad*NOT(PuPriTHigh)
+PuSecOn = PuPriOn*puColSecTemp
+
 
 ***********************************
-** Deadband control
+** Primary loop pump
+***********************************
+EQUATIONS #
+PuPriRad = GT(Ghi, 100)
+PuPriTHigh = GT(TColl, 150)
+
+***********************************
+** Secondary loop pump
 ***********************************
 
 CONSTANTS #
@@ -45,7 +57,7 @@ INPUTS 6
 THigh           ! 1 Upper input temperature Th
 TLow            ! 2 Lower input temperature Tl
 TMon            ! 3 Monitoring temperature Tin
-puColOnTemp     ! 4 70,1 Input control function
+PuColSecTemp    ! 4 70,1 Input control function
 !puColOnPri      ! 4 70,1 Input control function
 DtOn            ! 5 Upper dead band dT
 DtOff           ! 6 Lower dead band dT
@@ -53,7 +65,7 @@ DtOff           ! 6 Lower dead band dT
 
 EQUATIONS #
 puColOnRad = GT($IT_H,50*3.6) ! Radiation control
-puColOnTemp = [55,1] ! Temperature control
+PuColSecTemp = [55,1] ! Temperature control
 
 *************************************
 ********** Online Plotter ***********
