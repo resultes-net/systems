@@ -51,18 +51,17 @@ EQUATIONS #
 ***********************************
 ** Begin CONSTANTS
 ***********************************
-
+EQUATIONS #
+Mode = 2.0
+UA_kW_K = 200
+UA = UA_kW_K*3600
 
 ***********************************
 ** Begin TYPE
 ***********************************
-CONSTANTS #
-UA_kW = 200
-UA = UA_kW*3600
-
 UNIT 1 TYPE 5
 PARAMETERS 4
-2.0     ! 1: Counter flow mode [-] ([2,2]). Do not change this parameter
+Mode    ! 1: 1 Parallel flow, 2 Counter flow mode, 3 Cold side mixed, 4 Hot side mixed, 5 Both unmixed, 6 Both mixed  [-] ([2,2]).
 CpSide1 ! 2: Specific heat of source side fluid [kJ/kg.K] ([0,+Inf])
 CpSide2 ! 3: Specific heat of load side fluid [kJ/kg.K] ([0,+Inf])
 UA      ! 4: Not used [-] ([0,+Inf])
