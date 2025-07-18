@@ -3,12 +3,10 @@
 **************************************************
 
 ***************************************************************************
-** This controller rules the activation of the pump of the solar collectors.
-** Two criteria must be matched at the same time:
-**      1. Radiation must be higher than 50 W/m2
-**      2. Outlet temperature of the collectors must be higher than
-**      MAX(Return temperature from the grid, bottom temperature of the storage).
-**      A deadband controller is introduced to make it smoother.
+** This controller rules the activation of the primary and secondary loop pump
+** of the solar collectors:
+**      Primary loop: minimum radiation and collector outlet not too high.
+**      Secondary loop: primary loop and temperature difference.
 ***************************************************************************
 
 
@@ -17,7 +15,6 @@
 ***********************************
 
 EQUATIONS #
-TColl = $CollTOut
 THigh = $CollTOut
 TLow = MAX($TNetReturn, $TTesBottom)
 TMon = $CollTOut
@@ -28,17 +25,18 @@ Ghi = $IT_H
 ***********************************
 
 EQUATIONS #
-!puPriOn = puColOnRad * puColOnTemp ! Radiation + temperature control
-PuPriOn = PuPriRad*NOT(PuPriTHigh)
-PuSecOn = PuPriOn*puColSecTemp
-
+PuPriOn = PuPriRad*NOT(PuPriTHigh)  ! Activation of primary loop pump: minimum radiation and collector outlet not too high
+PuSecOn = PuPriOn*puColSecTemp      ! Activation of secondary loop pump: primary loop pump and temperature difference
 
 ***********************************
 ** Primary loop pump
 ***********************************
+
 EQUATIONS #
-PuPriRad = GT(Ghi, 100)
-PuPriTHigh = GT(TColl, 150)
+TCollMax = 150
+GhiMin = 100
+PuPriRad = GT(Ghi, GhiMin)             ! Minimum radiation
+PuPriTHigh = GT(TMon, TCollMax)         ! Collector outlet not to high
 
 ***********************************
 ** Secondary loop pump
@@ -47,7 +45,7 @@ PuPriTHigh = GT(TColl, 150)
 CONSTANTS #
 DtOn = 15       ! Upper dead band collector pump ON
 DtOff = -10     ! Upper dead band collector pump OFF
-TMonMax = 150   ! Maximum monitored temperature
+TMonMax = 999   ! Maximum monitored temperature
 
 UNIT 55 TYPE 2
 PARAMETERS 2
@@ -64,33 +62,32 @@ DtOff           ! 6 Lower dead band dT
 0.0 20.0 0.0 0 DtOn DtOff
 
 EQUATIONS #
-puColOnRad = GT($IT_H,50*3.6) ! Radiation control
-PuColSecTemp = [55,1] ! Temperature control
+PuColSecTemp = [55,1] ! Temperature difference
 
 *************************************
 ********** Online Plotter ***********
 *************************************
 
-!UNIT 501 TYPE 65     ! Online Plotter HX
-!PARAMETERS 12
-!#                   ! 1 Nb. of left-axis variables
-!#                   ! 2 Nb. of right-axis variables
-!0                   ! 3 Left axis minimum
-!200                 ! 4 Left axis maximum -
-!0                   ! 5 Right axis minimum
-!2                   ! 6 Right axis maximum
-!$nPlotsPerSim       ! 7 Number of plots per simulation
-!12                  ! 8 X-axis gridpoints
-!1                   ! 9 Shut off Online w/o removing
-!-1                  ! 10 Logical unit for output file
-!0                   ! 11 Output file units
-!0                   ! 12 Output file delimiter
-!INPUTS #
-!THigh TLow TMon TMonMax | puColOnRad puColOnTemp puPriOn
-!THigh TLow TMon TMonMax | puColOnRad puColOnTemp puPriOn
-!LABELS  3
-!Temperatures
-!MassFlows
-!Solar_control
+UNIT 501 TYPE 65     ! Online Plotter HX
+PARAMETERS 12
+#                   ! 1 Nb. of left-axis variables
+#                   ! 2 Nb. of right-axis variables
+0                   ! 3 Left axis minimum
+200                 ! 4 Left axis maximum -
+0                   ! 5 Right axis minimum
+2                   ! 6 Right axis maximum
+$nPlotsPerSim       ! 7 Number of plots per simulation
+12                  ! 8 X-axis gridpoints
+1                   ! 9 Shut off Online w/o removing
+-1                  ! 10 Logical unit for output file
+0                   ! 11 Output file units
+0                   ! 12 Output file delimiter
+INPUTS #
+THigh TLow TMon TMonMax GhiMin | PuPriOn PuSecOn
+THigh TLow TMon TMonMax GhiMin | PuPriOn PuSecOn
+LABELS  3
+Temperatures
+MassFlows
+Solar_control
 
 

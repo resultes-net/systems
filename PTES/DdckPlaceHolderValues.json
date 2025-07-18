@@ -23,26 +23,26 @@
             "@temp": "TColl"
         }
     },
-    "HP": {
+    "Hp": {
         "CondIn": {
             "@cp": "Lloop7Cp",
-            "@mfr": "MHPCond_A",
+            "@mfr": "MHpCond_A",
             "@rho": "Lloop7Rho",
             "@temp": "TValHPSec_HP"
         },
         "CondOut": {
             "@revtemp": "THP_Tee5",
-            "@temp": "THPCond"
+            "@temp": "THpCond"
         },
         "EvapIn": {
             "@cp": "Lloop5Cp",
-            "@mfr": "MHPEvap_A",
+            "@mfr": "MHpEvap_A",
             "@rho": "Lloop5Rho",
             "@temp": "TValHPPri_HP"
         },
         "EvapOut": {
             "@revtemp": "THP_Tee6",
-            "@temp": "THPEvap"
+            "@temp": "THpEvap"
         }
     },
     "Hx": {

@@ -30,8 +30,8 @@ TBolrH=TBolr
 THxCollSide1H=THxCollSide1
 THxCollSide2H=THxCollSide2
 TQSrcH=TQSrc
-THPCondH=THPCond
-THPEvapH=THPEvap
+THpCondH=THpCond
+THpEvapH=THpEvap
 THxSide1H=THxSide1
 THxSide2H=THxSide2
 THxQSrcSide1H=THxQSrcSide1
@@ -101,8 +101,8 @@ mfrTolSwitchThreshold
 54 53 0 8      !12 : PuCollSec
 52 50 74 2     !13 : TeeStrat
 60 59 0 8      !14 : QSrc
-84 43 0 0      !15 : HPCond
-39 83 0 0      !16 : HPEvap
+84 43 0 0      !15 : HpCond
+39 83 0 0      !16 : HpEvap
 67 68 0 0      !17 : HxSide1
 70 69 0 0      !18 : HxSide2
 26 84 23 3     !19 : ValHPSec
@@ -223,10 +223,10 @@ MTeeStrat_B=[450,38]
 MTeeStrat_C=[450,39]
 MQSrc_A=[450,40]
 MQSrc_B=[450,41]
-MHPCond_A=[450,43]
-MHPCond_B=[450,44]
-MHPEvap_A=[450,46]
-MHPEvap_B=[450,47]
+MHpCond_A=[450,43]
+MHpCond_B=[450,44]
+MHpEvap_A=[450,46]
+MHpEvap_B=[450,47]
 MHxSide1_A=[450,49]
 MHxSide1_B=[450,50]
 MHxSide2_A=[450,52]
@@ -806,7 +806,7 @@ PARAMETERS 2
 mfrSolverAbsTol
 spTIni
 INPUTS 3
-MValHPPri_HP_A TValHPPri THPEvapH
+MValHPPri_HP_A TValHPPri THpEvapH
 ***
 0 spTIni spTIni
 EQUATIONS 2
@@ -864,7 +864,7 @@ PARAMETERS 2
 mfrSolverAbsTol
 spTIni
 INPUTS 3
-MHP_Tee5_A THPCondH TTee5
+MHP_Tee5_A THpCondH TTee5
 ***
 0 spTIni spTIni
 EQUATIONS 2
@@ -1428,7 +1428,7 @@ PARAMETERS 2
 mfrSolverAbsTol
 spTIni
 INPUTS 3
-MHP_Tee6_A THPEvapH TTee6
+MHP_Tee6_A THpEvapH TTee6
 ***
 0 spTIni spTIni
 EQUATIONS 2
@@ -1440,7 +1440,7 @@ PARAMETERS 2
 mfrSolverAbsTol
 spTIni
 INPUTS 3
-MValHPSec_HP_A TValHPSec THPCondH
+MValHPSec_HP_A TValHPSec THpCondH
 ***
 0 spTIni spTIni
 EQUATIONS 2
