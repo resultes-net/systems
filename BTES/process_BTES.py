@@ -178,6 +178,27 @@ def hp(sim: api.Simulation):
     # # _plt.show()
     # api.export_plots_in_configured_formats(fig, sim.path, "act-hourly", "hp")
 
+def hx(sim: api.Simulation):
+
+    #### Plots ####
+    fig, ax = api.line_plot(sim.hourly, ["HxQ_kW"])
+    ax.set_ylabel("Heat (kW)")
+    _plt.grid()
+    # _plt.show()
+    api.export_plots_in_configured_formats(fig, sim.path, "q-hourly", "hx")
+
+    fig, ax = api.line_plot(sim.hourly, ["HxEff"])
+    ax.set_ylabel("Efficiency (-)")
+    _plt.grid()
+    # _plt.show()
+    api.export_plots_in_configured_formats(fig, sim.path, "efficiency-hourly", "hx")
+
+    fig, ax = api.line_plot(sim.hourly, ["HxLMTD"])
+    ax.set_ylabel("LMTD (K)")
+    _plt.grid()
+    # _plt.show()
+    api.export_plots_in_configured_formats(fig, sim.path, "LMTD-hourly", "hx")
+
 def boiler(sim: api.Simulation):
 
     #### Calculations ####
@@ -239,6 +260,7 @@ if __name__ == "__main__":
 
     processing_steps = [
                         solar,
+                        hx,
                         tes,
                         btes,
                         hp,
