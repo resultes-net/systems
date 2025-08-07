@@ -88,15 +88,15 @@ def ptes(sim: api.Simulation):
 def hp(sim: api.Simulation):
 
     #### Calculations ####
-    sim.scalar["HPQEvap_kW_Tot"] = sim.hourly["HPQEvap_kW"].sum()
-    sim.scalar["HPQCond_kW_Tot"] = sim.hourly["HPQCond_kW"].sum()
-    sim.scalar["HPPelComp_kW_Tot"] = sim.hourly["HPPelComp_kW"].sum()
-    sim.scalar["HPCOP"] = sim.scalar["HPQCond_kW_Tot"] / sim.scalar["HPPelComp_kW_Tot"]
+    sim.scalar["HpQEvap_kW_Tot"] = sim.hourly["HpQEvap_kW"].sum()
+    sim.scalar["HpQCond_kW_Tot"] = sim.hourly["HpQCond_kW"].sum()
+    sim.scalar["HpPelComp_kW_Tot"] = sim.hourly["HpPelComp_kW"].sum()
+    sim.scalar["HpCOP"] = sim.scalar["HpQCond_kW_Tot"] / sim.scalar["HpPelComp_kW_Tot"]
 
     #### Q vs T ####
     plot_variables = [
-        ["HPQEvap_kW", "HPTEvapOut"],
-        ["HPQCond_kW", "HPTCondOut"],
+        ["HpQEvap_kW", "HpTEvapOut"],
+        ["HpQCond_kW", "HpTCondOut"],
 
     ]
 
@@ -168,7 +168,7 @@ def balance(sim: api.Simulation):
 
 
     #### Calculations ####
-    sim.scalar["QSources"] = sim.scalar["CollP_kW_Tot"] + sim.scalar["BolrPOut_kW_Tot"] + sim.scalar["QSrcP_kW_Tot"] + sim.scalar["HPPelComp_kW_Tot"]
+    sim.scalar["QSources"] = sim.scalar["CollP_kW_Tot"] + sim.scalar["BolrPOut_kW_Tot"] + sim.scalar["QSrcP_kW_Tot"] + sim.scalar["HpPelComp_kW_Tot"]
     sim.scalar["QSinks"] = sim.scalar["QSnkP_kW_Tot"]
     sim.scalar["QStore"] = sim.scalar["pitStoreQAccum_kW_Tot"]
     sim.scalar["QLosses"] = sim.scalar["pitStoreQLosses_kW_Tot"] + sim.scalar["qSysOut_PipeLoss_Tot"]
