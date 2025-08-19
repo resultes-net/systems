@@ -914,10 +914,10 @@ Q23_kW = Q23/3600
 Q31_kW = Q31/3600
 
 
-QLossesTo =        [319,	12]     ! 19 (kJ/hr) Top Losses
-QLossesEd =        [319,	13]     ! 20 (kJ/hr) Edge Losses
-QLossesBo =        [319,	14]     ! 21 (kJ/hr) Bottom Losses
-QLosses =     [319,	15]     ! 22 (kJ/hr) Total Tank Losses
+QLossesTo = [319,	12]     ! 19 (kJ/hr) Top Losses
+QLossesEd = [319,	13]     ! 20 (kJ/hr) Edge Losses
+QLossesBo = [319,	14]     ! 21 (kJ/hr) Bottom Losses
+QLosses   =     [319,	15]     ! 22 (kJ/hr) Total Tank Losses
 QLosses_kW = QLosses/3600
 
 QLossesGas =   [319,	16]     ! 23 (kJ/hr) Gas Flue Losses
@@ -931,6 +931,7 @@ QAux_kW = QAux/3600
 QMis_kW = QMis/3600
 QAccum_kW = QAccum/3600
 QHx_kW = QHx/3600
+QImb_kW = -(Q13_kW + Q23_kW + Q31_kW) - QLosses_kW - QAccum_kW
 
 
 
@@ -1083,6 +1084,26 @@ Q13_kW Q23_kW Q31_kW QDis_kW QAccum_kW
 **
 T13 T31 T23 M13 M31 M23 TTherStat1 TTherStat2 TTherStat3 QLosses_kW
 Q13_kW Q23_kW Q31_kW QDis_kW QAccum_kW
+
+***********************************
+** Monthly printer
+***********************************
+CONSTANTS 1
+unitMonthlyPit = 35
+
+ASSIGN    temp\PTES_MO.Prt    unitMonthlyPit
+
+UNIT 34 TYPE 46		! Printegrator Monthly Values for System
+PARAMETERS #
+unitMonthlyPit		! 1: Logical unit number, -
+-1            		! 2: Logical unit for monthly summaries, -
+1             		! 3: Relative or absolute start time. 0: print at time intervals relative to the simulation start time. 1: print at absolute time intervals. No effect for monthly integrations
+-1             		! 4: Printing & integrating interval, h. -1 for monthly integration
+0             		! 5: Number of inputs to avoid integration, -
+INPUTS #
+QLosses_kW Q13_kW Q23_kW Q31_kW QDis_kW QAccum_kW QImb_kW
+**
+QLosses_kW Q13_kW Q23_kW Q31_kW QDis_kW QAccum_kW QImb_kW
 
 
 *************************************

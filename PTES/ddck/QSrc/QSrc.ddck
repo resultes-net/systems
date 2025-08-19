@@ -7,7 +7,7 @@
 ***********************************
 CONSTANTS #
 dT = 20    ! [K]
-QUnscaled_MWh = 1 !90000070/1000
+QUnscaled_MWh = 0.5 !1 !90000070/1000
 Q_MWh = QUnscaled_MWh
 Scaling = Q_MWh/QUnscaled_MWh
 !P = 160
@@ -77,6 +77,27 @@ INPUTS #
 $Time P_kW M TIn TOut
 **
 $Time P_kW M TIn TOut
+
+***********************************
+** Monthly printer
+***********************************
+CONSTANTS 1
+unitPrintSourceMo = 35
+
+ASSIGN    temp\SOURCE_MO.Prt    unitPrintSourceMo
+
+UNIT 34 TYPE 46		! Printegrator Monthly Values for System
+PARAMETERS #
+unitPrintSourceMo		! 1: Logical unit number, -
+-1						! 2: Logical unit for monthly summaries, -
+1						! 3: Relative or absolute start time. 0: print at time intervals relative to the simulation start time. 1: print at absolute time intervals. No effect for monthly integrations
+-1						! 4: Printing & integrating interval, h. -1 for monthly integration
+1						! 5: Number of inputs to avoid integration, -
+1						! 6: Output number to avoid integration
+INPUTS #
+$Time P_kW
+**
+$Time P_kW
 
 
 

@@ -25,23 +25,51 @@ Ghi = $IT_H
 ***********************************
 
 EQUATIONS #
-PuPriOn = PuPriRad*NOT(PuPriTHigh)  ! Activation of primary loop pump: minimum radiation and collector outlet not too high
-PuSecOn = PuPriOn*puColSecTemp      ! Activation of secondary loop pump: primary loop pump and temperature difference
+PuPriOn = PuPriRad*PuPriTHigh  ! Activation of primary loop pump: minimum radiation and collector outlet not too high
+PuSecOn = PuPriOn*PuColSecTemp*PuColSecTes      ! Activation of secondary loop pump: primary loop pump and temperature difference
 
 ***********************************
 ** Primary loop pump
 ***********************************
 
 EQUATIONS #
-TCollMax = 150
+TCollMax = 150 !Outlet temperature in which the collector stops
+TCollMin = 130 !Temperature in which the collector starts again
 GhiMin = 100
 PuPriRad = GT(Ghi, GhiMin)             ! Minimum radiation
-PuPriTHigh = GT(TMon, TCollMax)         ! Collector outlet not to high
+!PuPriTHigh = GT(TMon, TCollMax)         ! Collector outlet not to high
+
+** Maximum collector temperature
+!CONSTANTS #
+!TTesMax = $TSetDem + 20       ! Upper dead band collector pump ON
+!TTesMin = $TSetDem + 10     ! Upper dead band collector pump OFF
+!TMonMax = 999   ! Maximum monitored temperature
+
+UNIT 60 TYPE 2
+PARAMETERS 2
+5               ! 1 No. of oscillations
+999         ! 2 High limit cut-out
+INPUTS 6
+THigh           ! 1 Upper input temperature Th
+$zero               ! 2 Lower input temperature Tl
+TMon            ! 3 Monitoring temperature Tin
+NotPuPriTHigh    ! 4 70,1 Input control function
+!puColOnPri      ! 4 70,1 Input control function
+TCollMax         ! 5 Upper dead band dT
+TCollMin         ! 6 Lower dead band dT
+0.0 20.0 0.0 0 TCollMax TCollMin
+
+EQUATIONS #
+NotPuPriTHigh = [60,1]
+PuPriTHigh = NOT([60,1]) ! Temperature difference
+
+
 
 ***********************************
 ** Secondary loop pump
 ***********************************
 
+** Temperature difference
 CONSTANTS #
 DtOn = 15       ! Upper dead band collector pump ON
 DtOff = -10     ! Upper dead band collector pump OFF
@@ -63,6 +91,30 @@ DtOff           ! 6 Lower dead band dT
 
 EQUATIONS #
 PuColSecTemp = [55,1] ! Temperature difference
+
+** Maximum tes temperature
+CONSTANTS #
+TTesMax = $TSetDem + 20       ! Upper dead band collector pump ON
+TTesMin = $TSetDem + 10     ! Upper dead band collector pump OFF
+!TMonMax = 999   ! Maximum monitored temperature
+
+UNIT 56 TYPE 2
+PARAMETERS 2
+5               ! 1 No. of oscillations
+999         ! 2 High limit cut-out
+INPUTS 6
+TTes           ! 1 Upper input temperature Th
+$zero               ! 2 Lower input temperature Tl
+TMon            ! 3 Monitoring temperature Tin
+NotPuColSecTes    ! 4 70,1 Input control function
+!puColOnPri      ! 4 70,1 Input control function
+TTesMax         ! 5 Upper dead band dT
+TTesMin         ! 6 Lower dead band dT
+0.0 20.0 0.0 0 TTesMax TTesMin
+
+EQUATIONS #
+NotPuColSecTes = [56,1]
+PuColSecTes = NOT([56,1]) ! Temperature difference
 
 *************************************
 ********** Online Plotter ***********

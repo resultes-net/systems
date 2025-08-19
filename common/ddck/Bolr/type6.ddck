@@ -81,7 +81,7 @@ POut_kW = [219,5]/3600
 CONSTANTS #
 unitPrintBoiler = 31
 
-ASSIGN temp\Boiler_MO.Prt unitPrintBoiler 
+ASSIGN temp\BOILER_MO.Prt unitPrintBoiler
 
 UNIT 32 TYPE 46      
 PARAMETERS #
@@ -102,7 +102,7 @@ $Time  POut_kW  PIn_kW  PLoss_kW
 CONSTANTS #
 unitPrintBoilerHr = 33
 
-ASSIGN    temp\Boiler_HR.Prt    unitPrintBoilerHr     
+ASSIGN    temp\BOILER_HR.Prt    unitPrintBoilerHr
 
 UNIT 34 TYPE 46		! Printegrator Monthly Values for System
 PARAMETERS #

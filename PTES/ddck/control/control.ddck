@@ -74,7 +74,7 @@ T_set_ValMix = TSetDem
 
 UNIT 441 TYPE 811 ! Passive Divider for heating 
 PARAMETERS 1
-5 !Nb.of iterations before fixing the value 
+10 !Nb.of iterations before fixing the value
 INPUTS 4 
 TBolr_ValMix
 TTee_ValMix

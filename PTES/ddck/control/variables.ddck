@@ -6,6 +6,7 @@
 EQUATIONS #
 TNetReturn = TTee6_Pump
 TTesBottom = pitStoreTTherStat3
+SolarControlTTes = pitStoreTTherStat1
 
 ** Stratification valve control.
 EQUATIONS #

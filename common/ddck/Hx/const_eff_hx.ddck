@@ -16,18 +16,21 @@
 ***********************************
 ** inputs from hydraulic solver
 ***********************************
-EQUATIONS 4
-TSourceIn = @temp(Side1In, TPiHXCoolBriIn)
-MfrSourceIn = ABS(@mfr(Side1In, MfrPiHXCoolBriIn))
-TLoadIn = @temp(Side2In, TPiHXCoolWatIn)
-MfrLoadIn = ABS(@mfr(Side2In, MfrPiHxCoolWatIn))
+EQUATIONS #
+CpSide1 = @cp(Side1In)
+TSide1In = @temp(Side1In)
+MSide1 = @mfr(Side1In)
+
+CpSide2 = @cp(Side2In)
+TSide2In = @temp(Side2In)
+MSide2 = @mfr(Side2In)
 
 ***********************************
 ** outputs to hydraulic solver
 ***********************************
 EQUATIONS 2
-@temp(Side1Out, TsourceOut) = [500,1]		!Source-side outlet temperature	C
-@temp(Side2Out, TLoadOut) = [500,3]			!Load side outlet temperature	C
+@temp(Side1Out, TsourceOut) = TSide1Out		!Source-side outlet temperature	C
+@temp(Side2Out, TLoadOut) = TSide2Out			!Load side outlet temperature	C
 
 ******************************************************************************************
 ** outputs to energy balance in kWh and ABSOLUTE value
@@ -38,25 +41,90 @@ EQUATIONS 2
 ** Dependencies with other ddck
 ***********************************
 CONSTANTS 1
-HX_efficiency = 0.95
+Eff = 0.95
 
 UNIT 500 TYPE 91		! Heat Exchanger with Constant Effectiveness
-PARAMETERS 3
-HX_efficiency		! 1: HX Efficiency [-]
-@cp(Side1In, CPWAT)		! 2: Specific heat of source side fluid [kJ/kgK]
-@cp(Side2In, CPWAT)     	! 3: Specific heat of load side fluid [kJ/kgK]
-INPUTS 4
-TSourceIn		! Source side inlet temperature	C
-MfrSourceIn		! Source side flow rate	kg/hr
-TLoadIn			! Load side inlet temperature	C
-MfrLoadIn		! Load side flow rate	kg/hr
-TSourceIn MfrSourceIn TLoadIn MfrLoadIn
+PARAMETERS #
+Eff		! 1: HX Efficiency [-]
+CpSide1		! 2: Specific heat of source side fluid [kJ/kgK]
+CpSide2     	! 3: Specific heat of load side fluid [kJ/kgK]
+INPUTS #
+TSide1In		! Source side inlet temperature	C
+MSide1		! Source side flow rate	kg/hr
+TSide2In			! Load side inlet temperature	C
+MSide2		! Load side flow rate	kg/hr
+TSide1In MSide1 TSide2In MSide2
 
-EQUATIONS 4
-MfrSource = [500,2]		! Source side flow rate	kg/hr
-MrfLoad = [500,4]		! Load side flow rate	kg/hr
-HTR_HX = [500,5]		! Heat transfer rate	kJ/hr
-OHTC_HX = [500,6]		! Overall heat transfer coefficient	kJ/hr.K
+EQUATIONS #
+TSide1Out = [500,1]
+MSide1Out = [500,2]		! Source side flow rate	kg/hr
+TSide2Out = [500,3]
+MSide2Out = [500,4]		! Load side flow rate	kg/hr
+Q         = [500,5]		! Heat transfer rate	kJ/hr
+UA        = [500,6]		! Overall heat transfer coefficient	kJ/hr.K
+Q_kW      = Q/3600
+
+***********************************
+** Calculations
+***********************************
+EQUATIONS #
+TDeltaA = MAX(TSide1In-TSide2Out, 1e-10)
+TDeltaB = MAX(TSide1Out-TSide2In, 1e-10)
+LMTD = (TDeltaA-TDeltaB)/MAX((LOG(TDeltaA)-LOG(TDeltaB)), 1e-10)
+
+QSide1_kW = MSide1 * CpSide1 * (TSide1Out-TSide1In)/3600
+QSide2_kW = MSide2 * CpSide2 * (TSide2Out-TSide2In)/3600
+
+
+***********************************
+** Monthly printer
+***********************************
+CONSTANTS 1
+unitMo= 35
+
+ASSIGN temp\HX_MO.prt unitMo
+UNIT 39 TYPE 46		! Printegrator Monthly Values for System
+PARAMETERS #
+unitMo              ! 1: Logical unit number, -
+-1            		! 2: Logical unit for monthly summaries, -
+1             		! 3: Relative or absolute start time. 0: print at time intervals relative to the simulation start time. 1: print at absolute time intervals. No effect for monthly integrations
+-1             		! 4: Printing & integrating interval, h. -1 for monthly integration
+2            		! 5: Number of inputs to avoid integration, -
+4            		! 6: Output number to avoid integration
+5            		! 7: Output number to avoid integration
+INPUTS #
+Q_kW QSide1_kW QSide2_kW Eff LMTD
+Q_kW QSide1_kW QSide2_kW Eff LMTD
+
+
+***********************************
+** Hourly printer
+***********************************
+CONSTANTS 1
+unitHo= 33
+
+ASSIGN temp\HX_HR.prt unitHo
+UNIT 34 TYPE 46		! Printegrator Monthly Values for System
+PARAMETERS #
+unitHo              ! 1: Logical unit number, -
+-1            		! 2: Logical unit for monthly summaries, -
+1             		! 3: Relative or absolute start time. 0: print at time intervals relative to the simulation start time. 1: print at absolute time intervals. No effect for monthly integrations
+1             		! 4: Printing & integrating interval, h. -1 for monthly integration
+7            		! 5: Number of inputs to avoid integration, -
+5            		! 6: Output number to avoid integration
+6            		! 7: Output number to avoid integration
+7            		! 8: Output number to avoid integration
+8            		! 9: Output number to avoid integration
+9            		! 10 Output number to avoid integration
+10            		! 11: Output number to avoid integration
+11            		! 12: Output number to avoid integration
+INPUTS #
+Q_kW QSide1_kW QSide2_kW Eff LMTD TSide1In TSide1Out MSide1 TSide2In TSide2Out MSide2
+Q_kW QSide1_kW QSide2_kW Eff LMTD TSide1In TSide1Out MSide1 TSide2In TSide2Out MSide2
+
+***********************************
+** Online Plotter
+***********************************
 
 !UNIT 501 TYPE 65		! Online Plotter HX
 !PARAMETERS 12
@@ -81,28 +149,12 @@ OHTC_HX = [500,6]		! Overall heat transfer coefficient	kJ/hr.K
 !HX
 !
 
-EQUATIONS 3
-Phx_source_kW = MfrSource*(TSourceIn-@temp(Side1Out, TsourceOut))*@cp(Side1In, CPWAT)/3600
-Phx_load_kW = -MrfLoad*(@temp(Side2Out, TLoadOut)-TLoadIn)*@cp(Side2In, CPWAT)/3600
-Phx_dev_kW = ABS(Phx_source_kW - Phx_load_kW)
+!EQUATIONS 3
+!Phx_source_kW = MfrSource*(TSourceIn-@temp(Side1Out, TsourceOut))*@cp(Side1In, CPWAT)/3600
+!Phx_load_kW = -MrfLoad*(@temp(Side2Out, TLoadOut)-TLoadIn)*@cp(Side2In, CPWAT)/3600
+!Phx_dev_kW = ABS(Phx_source_kW - Phx_load_kW)
 
-***********************************
-** Hourly printer
-***********************************
-!CONSTANTS 1
-!unitHoPrintHE1 = 33
-!
-!ASSIGN temp\HE1_HR.prt unitHoPrintHE1
-!UNIT 34 TYPE 46		! Printegrator Monthly Values for System
-!PARAMETERS 5
-!unitHoPrintHE1      ! 1: Logical unit number, -
-!-1            		! 2: Logical unit for monthly summaries, -
-!1             		! 3: Relative or absolute start time. 0: print at time intervals relative to the simulation start time. 1: print at absolute time intervals. No effect for monthly integrations
-!1             		! 4: Printing & integrating interval, h. -1 for monthly integration
-!0             		! 5: Number of inputs to avoid integration, -
-!INPUTS 3
-!Phx_source_kW Phx_load_kW Phx_dev_kW
-!Phxsource_kW Phxload_kW Phx_dev_kW
+
 
 *******************************
 **END Const_eff_HX.ddck
