@@ -28,7 +28,7 @@
             "@cp": "Lloop4Cp",
             "@mfr": "MColl_A",
             "@rho": "Lloop4Rho",
-            "@temp": "TPump2_Coll"
+            "@temp": "TPuCollPri_Coll"
         },
         "Out": {
             "@revtemp": "TColl_Hx",
@@ -65,7 +65,7 @@
             "@temp": "TColl_Hx"
         },
         "Side1Out": {
-            "@revtemp": "THx_PuColl",
+            "@revtemp": "THx_PuCollPri",
             "@temp": "THxSide1"
         },
         "Side2In": {

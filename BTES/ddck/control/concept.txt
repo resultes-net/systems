@@ -3,7 +3,7 @@ T_ret_supply = 60
 
 soalr thermal as always: match flow SOLAR_set = T_TESUp_set (on the primary part +DTLM HX)
 
-T_TESUp_set = T_for_supply +10.0 (90)
+T_TESUp_set = T_for_supply + 10.0 (90)
 
 T_TESUp_ma = 100 (Pmax)
 

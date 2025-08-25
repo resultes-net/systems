@@ -230,7 +230,7 @@
             "blockItemModel": {
                 "__version__": "7b792574-5fa6-4c3e-b2e3-7e4eb71d7746",
                 "blockPosition": [
-                    -540.0,
+                    -539.2464795524692,
                     140.0
                 ],
                 "flippedH": false,
@@ -496,7 +496,7 @@
             "BlockDisplayName": "ValMix",
             "BlockName": "TVentil",
             "IsTempering": true,
-            "PositionForMassFlowSolver": "0.0",
+            "PositionForMassFlowSolver": "0.3677402735112968",
             "__version__": "ccf7f590-c65e-4fa1-bf7c-1850a5f8985e",
             "blockItemModel": {
                 "__version__": "7b792574-5fa6-4c3e-b2e3-7e4eb71d7746",
@@ -563,7 +563,7 @@
             "BlockDisplayName": "ValStrat",
             "BlockName": "TVentil",
             "IsTempering": false,
-            "PositionForMassFlowSolver": "0.0",
+            "PositionForMassFlowSolver": "1.0",
             "__version__": "ccf7f590-c65e-4fa1-bf7c-1850a5f8985e",
             "blockItemModel": {
                 "__version__": "7b792574-5fa6-4c3e-b2e3-7e4eb71d7746",
@@ -2473,8 +2473,24 @@
             "name": "QSnk_SCnr2",
             "segmentsCorners": [
                 [
-                    -528.0,
+                    -521.6403838734568,
                     120.0
+                ],
+                [
+                    -521.6403838734568,
+                    121.31679205246913
+                ],
+                [
+                    -520.8868634259259,
+                    121.31679205246913
+                ],
+                [
+                    -520.8868634259259,
+                    120.56327160493825
+                ],
+                [
+                    -528.0,
+                    120.56327160493825
                 ],
                 [
                     -528.0,
@@ -2564,7 +2580,7 @@
                     110.0
                 ]
             ],
-            "shallBeSimulated": false,
+            "shallBeSimulated": true,
             "toPortId": 8,
             "trnsysId": 857
         },
@@ -2793,10 +2809,10 @@
             "uValueInWPerM2K": 2.7777
         },
         "IDs": {
-            "GlobalId": 1163,
+            "GlobalId": 1164,
             "__idDct__": true,
-            "globalConnID": 759,
-            "trnsysID": 927
+            "globalConnID": 760,
+            "trnsysID": 928
         },
         "Strings": {
             "DiagramName": "PTES.json",

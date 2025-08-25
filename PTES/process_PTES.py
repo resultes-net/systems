@@ -219,7 +219,7 @@ def to_json(sim: api.Simulation):
     
 if __name__ == "__main__":
     path_to_sim = _pl.Path(r"C:\Daten\GIT\systems\PTES\results")
-    api.global_settings.reader.force_reread_prt = True
+    api.global_settings.reader.force_reread_prt = False
     api.global_settings.reader.read_step_files = True
 
     processing_steps = [

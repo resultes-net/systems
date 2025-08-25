@@ -215,10 +215,10 @@ def sink(sim: api.Simulation):
 
     #### Calculations ####
     sim.scalar["QSnkP_kW_Tot"] = sim.hourly["QSnkP_kW"].sum()
-    sim.scalar["QSnkPout_kW_Tot"] = sim.hourly["QSnkPout_kW"].sum()
+    # sim.scalar["QSnkPout_kW_Tot"] = sim.hourly["QSnkPout_kW"].sum()
 
     #### Plots ####
-    fig, ax = api.line_plot(sim.hourly, ["QSnkP_kW", "QSnkPout_kW"])
+    fig, ax = api.line_plot(sim.hourly, ["QSnkP_kW"])
     ax.set_ylabel("Power (kW)")
     _plt.grid()
     # _plt.show()
@@ -242,6 +242,18 @@ def balance(sim: api.Simulation):
     sim.scalar["QLosses"] = sim.scalar["TesQLoss_Tes1_Tot"] + sim.scalar["qSysOut_PipeLoss_Tot"]
 
     sim.scalar["QImb"] = sim.scalar["QSources"] - sim.scalar["QStore"] - sim.scalar["QSinks"] - sim.scalar["QLosses"]
+
+    #### Plots ####
+    fig, ax = api.energy_balance(
+        sim.monthly,
+        q_in_columns=["CollP_kW_calc", "HpPelComp_kW", "BolrPOut_kW", "BoHxQ_kW"],
+        q_out_columns=["QSnkP_kW", "TesQAcum_Tes1", "TesQLoss_Tes1", "qSysOut_dpToFFieldTot"], #, "qSysOut_dpPipeIntTot", "qSysOut_dpSoilIntTot"],
+        xlabel=""
+    )
+    api.export_plots_in_configured_formats(fig, sim.path, "balance-monthly", "balance")
+
+
+
 
 def kpi(sim: api.Simulation):
 
