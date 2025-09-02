@@ -18,7 +18,7 @@ scaling = demand_MWh/unscaledDemand_MWh
 EQUATIONS #
 profileUnit = 50
 
-ASSIGN  ..\ddck\QSnk\profile.csv profileUnit
+ASSIGN  ..\..\ddck\QSnk\profile.csv profileUnit
 UNIT 33 TYPE 9      !Changed automatically
 Parameters #
 5     ! 1 Mode
