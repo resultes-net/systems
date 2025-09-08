@@ -1,0 +1,190 @@
+*************************************
+** BEGIN hydraulic.ddck
+*************************************
+
+*************************************
+** Outputs to energy balance in kWh
+
+** Following this naming standard : qSysIn_name, qSysOut_name, elSysIn_name, elSysOut_name
+
+*************************************
+
+
+
+
+EQUATIONS 2
+*** Black box component temperatures
+THpCondH=THpCond
+THpEvapH=THpEvap
+
+*** Default global PARAMETERS for single pipes
+CONSTANTS 1
+spTIni = 20
+
+UNIT 450 TYPE 9352
+PARAMETERS 44
+mfrSolverAbsTol
+mfrSolverRelTol
+mfrTolSwitchThreshold
+10
+9 10 0 0       !1 : HpCond
+7 8 0 0        !2 : HpEvap
+7 0 0 6        !3 : EvapIn
+8 0 0 7        !4 : EvapOut
+9 0 0 6        !5 : CondIn
+10 0 0 7       !6 : CondOut
+3 2 0 0        !7 : EvapIn_Hp
+2 4 0 0        !8 : Hp_EvapOut
+5 1 0 0        !9 : CondIn_Hp
+1 6 0 0        !10 : Hp_CondOut
+INPUTS 10! for Type 9351
+0,0 0,0 MfrEvapIn MfrEvapOut MfrCondIn MfrCondOut 0,0 0,0 0,0 0,0 
+*** Initial Inputs
+0 0 0 0 0 0 0 0 0 0 
+
+
+EQUATIONS 16	! Output up to three (A,B,C) mass flow rates of each component, positive = input/inlet, negative = output/outlet 
+MHpCond_A=[450,1]
+MHpCond_B=[450,2]
+MHpEvap_A=[450,4]
+MHpEvap_B=[450,5]
+MEvapIn_A=[450,7]
+MEvapOut_A=[450,10]
+MCondIn_A=[450,13]
+MCondOut_A=[450,16]
+MEvapIn_Hp_A=[450,19]
+MEvapIn_Hp_B=[450,20]
+MHp_EvapOut_A=[450,22]
+MHp_EvapOut_B=[450,23]
+MCondIn_Hp_A=[450,25]
+MCondIn_Hp_B=[450,26]
+MHp_CondOut_A=[450,28]
+MHp_CondOut_B=[450,29]
+
+
+** Fluids:
+EQUATIONS 4
+** brine
+FbrineRho = RHOBRI ! [kg/m^3]
+FbrineCp = CPBRI_SI*0.001 ! [kJ/(kg*K)]
+** water
+FwaterRho = RHOWAT ! [kg/m^3]
+FwaterCp = CPWAT_SI*0.001 ! [kJ/(kg*K)]
+
+** Hydraulic loops
+EQUATIONS 4
+** loop1
+Lloop1Rho = FwaterRho
+Lloop1Cp = FwaterCp
+
+** loop2
+Lloop2Rho = FwaterRho
+Lloop2Cp = FwaterCp
+
+
+! EvapIn
+EQUATIONS 1
+TEvapIn = Tcw
+
+EQUATIONS 1
+TEvapOut = THp_EvapOut
+
+! CondIn
+EQUATIONS 1
+TCondIn = Tcw
+
+EQUATIONS 1
+TCondOut = THp_CondOut
+
+UNIT 451 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MEvapIn_Hp_A TEvapIn THpEvapH
+***
+0 spTIni spTIni
+EQUATIONS 2
+TEvapIn_Hp = [451,1]
+MEvapIn_Hp = MEvapIn_Hp_A
+
+UNIT 452 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MHp_EvapOut_A THpEvapH TEvapOut
+***
+0 spTIni spTIni
+EQUATIONS 2
+THp_EvapOut = [452,1]
+MHp_EvapOut = MHp_EvapOut_A
+
+UNIT 453 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MCondIn_Hp_A TCondIn THpCondH
+***
+0 spTIni spTIni
+EQUATIONS 2
+TCondIn_Hp = [453,1]
+MCondIn_Hp = MCondIn_Hp_A
+
+UNIT 454 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MHp_CondOut_A THpCondH TCondOut
+***
+0 spTIni spTIni
+EQUATIONS 2
+THp_CondOut = [454,1]
+MHp_CondOut = MHp_CondOut_A
+
+ASSIGN only_hp_control_Mfr.prt 455
+
+UNIT 455 TYPE 25! User defined Printer
+PARAMETERS 10
+dtSim! 1 Printing interval
+START! 2 Start time
+STOP! 3 Stop time
+455! 4 Logical unit
+0! 5 Units printing mode
+0! 6 Relative or absolute start time
+-1! 7 Overwrite or Append
+-1! 8 Print header
+0! 9 Delimiter
+1! 10 Print labels
+
+INPUTS 4
+MEvapIn_Hp MHp_EvapOut MCondIn_Hp MHp_CondOut
+
+***
+MEvapIn_Hp MHp_EvapOut MCondIn_Hp MHp_CondOut
+
+
+ASSIGN only_hp_control_T.prt 456
+
+UNIT 456 TYPE 25! User defined Printer
+PARAMETERS 10
+dtSim! 1 Printing interval
+START! 2 Start time
+STOP! 3 Stop time
+456! 4 Logical unit
+0! 5 Units printing mode
+0! 6 Relative or absolute start time
+-1! 7 Overwrite or Append
+-1! 8 Print header
+0! 9 Delimiter
+1! 10 Print labels
+
+INPUTS 4
+TEvapIn_Hp THp_EvapOut TCondIn_Hp THp_CondOut
+
+***
+TEvapIn_Hp THp_EvapOut TCondIn_Hp THp_CondOut
+
+

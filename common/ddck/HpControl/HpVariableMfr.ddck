@@ -23,6 +23,8 @@ FracCondMax = 1.00
 FracCondMaxInc = 3.0
 FracCondMaxDec = -3.0 !-0.4
 FreezeMode = NOT(On)
+P = 0.25
+D = 0.1
 
 !EQUATIONS 1
 !THp = On*TControlled + NOT(On)*TSet
@@ -37,9 +39,9 @@ PARAMETERS 9
 FracCondMin		    ! 2: lowest possible output value
 FracCondMax		    ! 3: highest possible output value
 1					! 4: mode of action: 1 = positive, (increase in manipulated value causes increase in process variable), -1 = negative
-0.25        		! 5: By how much shall the manipulated variable be changed per hour if the process variable is 1 unit off?
-0.1 !4				! 6: A high value for D counteracts overshoot / counteracts high rates of increase or decrease in the process variable.
-0.2				    ! 7: maximum rate of setpoint change per hour
+P        		! 5: By how much shall the manipulated variable be changed per hour if the process variable is 1 unit off?
+D !4				! 6: A high value for D counteracts overshoot / counteracts high rates of increase or decrease in the process variable.
+20				    ! 7: maximum rate of setpoint change per hour
 FracCondMaxInc		! 8: maximum rate of increase of the manipulated variable (positive value)
 FracCondMaxDec		! 9: maximum rate of decrease of the manipulated variable (negative value)
 INPUTS 5
@@ -49,7 +51,7 @@ FreezeMode			! 3: freeze manipulated variable (1) or let act (0)
 $Nix				! 4: Manual (1) or automatic (0) manipulated variable
 $Nix		        ! 5: manual manipulated variable
 *** INITIAL INPUT VALUES
-0.0   0.0   0.0   0.0    0.0
+50.0   55   0.0   0.0    0.0
 *** OUTPUTS
 ** 1: manipulated variable, 2: current setpoint, 3: current deviation
 
@@ -58,3 +60,29 @@ EQUATIONS #		! ASHP ON-Signal and mass flow
 FracCond      = [157,1]  ! Manipulated frCond
 THpOutSet       = [157,2]  ! Setpoint
 THpOut          = [157,3]  ! Current value
+
+***********************************
+** Time step printer
+***********************************
+
+CONSTANTS 1
+unitStepHpCtrl = 33
+
+ASSIGN    temp\HP_CTRL_DT.Prt    unitStepHpCtrl
+
+UNIT 520 TYPE 25! User defined Printer
+PARAMETERS 10
+$dtSim          ! 1 Printing interval
+$START          ! 2 Start time
+$STOP           ! 3 Stop time
+unitStepHpCtrl   ! 4 Logical unit
+0               ! 5 Units printing mode
+0               ! 6 Relative or absolute start time
+-1              ! 7 Overwrite or Append
+-1              ! 8 Print header
+0               ! 9 Delimiter
+1               ! 10 Print labels
+INPUTS #
+TControlled TSet FracCond On
+TControlled TSet FracCond On
+

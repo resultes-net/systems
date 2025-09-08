@@ -1,0 +1,20 @@
+*************************************
+**BEGIN hydraulic_control.ddck
+*************************************
+EQUATIONS #
+*** Massflowrates
+MfrEvapIn = 1000.0
+MfrEvapOut = -1000.0
+MfrCondIn = profilesMfrCondIn !1000.0
+MfrCondOut = -profilesMfrCondIn !-1000.0
+
+*** Hp activation
+HpIsOn = 1
+HpControlOn = HpIsOn
+HpControlTControlled = HpTCondOut
+HpControlTSet = profilesTSet
+
+*** Temperatures
+
+
+

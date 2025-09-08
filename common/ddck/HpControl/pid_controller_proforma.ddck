@@ -1,0 +1,194 @@
+*******************************
+** BEGIN pid_controller.ddck
+*******************************
+
+************************************************************************************************************************
+** Description: 
+** PID controller
+************************************************************************************************************************
+
+************************************************************************************************************************
+** Details: 
+** The PID controller calculates the control signal (u) required to maintain the controlled variable (y) at the setpoint
+** (ySet). Its control signal is proportional to the tracking error, as well as to the integral and the derivative of
+** that tracking error. It is based on state-of-the-art discrete algorithms for PID controllers and implements anti-
+** windup for the integrator. The PID controller can operate in two modes: mode 0 implements a "real life" (non-
+** iterative) controller, and mode 1 implements an iterative controller (Note that the Iterative Feedback Controller,
+** Type 22, might be easier to use in that configuration). Note on the transposition of parameter tuning to real-world
+** controllers: even if your simulation uses a very short timestep and if you use mode 0, the tuned parameters may be
+** different from the ones you would need to use in a real controller applied to the simulated system. Optimal
+** parameters depend on the algorithm used in the PID, for which different implementations are available.
+************************************************************************************************************************
+
+***********************************
+** inputs from hydraulic solver
+***********************************
+EQUATIONS 2
+TIn = @temp(In)
+M = @mfr(In)
+
+***********************************
+** outputs to hydraulic solver
+***********************************
+EQUATIONS 1
+@temp(Out) = TOut
+
+***********************************
+** outputs to other ddck
+***********************************
+
+
+******************************************************************************************
+** outputs to energy balance in kWh and ABSOLUTE value
+******************************************************************************************
+
+
+***********************************
+** Dependencies with other ddck
+***********************************
+
+
+***********************************
+** Begin CONSTANTS
+***********************************
+EQUATIONS #
+Mode = 0
+NIter = 10
+
+
+***********************************
+** Begin TYPE
+***********************************
+UNIT 1 TYPE 23
+PARAMETERS 2
+** Controller's operation mode. Mode 0 implements a "real-life" (i.e. non-iterative) controller which performs its
+** calculations after "measuring" the system's outputs (i.e. after convergence in TRNSYS) and maintains its outputs at a
+** constant level until the end of the next timestep. Mode 1 implements an iterative controller that uses TRNSYS
+** iterations to adjust its outputs. Mode 1 will usually provide a faster response at the expense of more iterations and
+** the optimal parameters may be far from real-world values for a similar system. Mode 0 does not cause more TRNSYS
+** iterations but it may require that you reduce the timestep in order to obtain a satisfactory closed-loop response.
+** Note that Type 22 (Iterative feedback controller) offers an alternative to mode 1 and is easier to configure).
+0.0 ! 1: Mode [-] ([0,1])
+
+** Number of iterations after which the controller's output will stick to its current value in order to promote
+** convergence. If you set this parameter to 0 (or less), the controller will stick a few iterations before the maximum
+** number of iterations set in the general simulation parameters, so TRNSYS gets a chance to converge at the current
+** time step. Set this parameter to a very large value if you do not want this to happen. (NOTE: This parameter is
+** ignored in mode 0)
+0.0 ! 2: Maximum number of oscillations [-] ([0,+Inf])
+
+INPUTS 13
+** ySet is the setpoint for the controlled variable. The controller will calculate the control signal that zeroes (or
+** minimizes) the tracking error (e = ySet-y).
+0,0 ! 1: Setpoint [any] ([-Inf,+Inf])
+
+** y is the controlled variable that will track the setpoint (ySet).
+0,0 ! 2: Controlled variable [any] ([-Inf,+Inf])
+
+** ON / OFF signal for the controller. The control signal is always zero if this input = 0, other values are interpreted
+** as "ON".
+TIn ! 3: On / Off signal [-] ([-Inf,+Inf])
+
+** Minimum value of the control signal. The controller saturates the calculated control signal to have uMin <= u <=
+** uMax.
+0,0 ! 4: Minimum control signal [any] ([-Inf,+Inf])
+
+** Minimum value of the control signal. The controller saturates the calculated control signal to have uMin <= u <=
+** uMax.
+M ! 5: Maximum control signal [any] ([-Inf,+Inf])
+
+** This is the minimum control signal (absolute value) for which a non-zero output will be set. It is different from
+** uMin. Control values lower than uThreshold in absolute value will be zeroed. For example, this can be used to model a
+** pump that has a minimum operating flowrate: in that case uThreshold should be set to the minimum flowrate and uMin
+** should be set to 0. Another example is a control signal where uMin = -100, uMax = 100 and uThreshold = 10. This means
+** that values between -100 and 100 are acceptable but values lower than 10 in absolute value will be set to zero.
+0,0 ! 6: Threshold for non-zero output [any] ([0,+Inf])
+
+** This is the gain of the PID controller (acts on the 3 parts of the signal: proportional, integral and derivative).
+0,0 ! 7: Gain constant [any] ([-Inf,+Inf])
+
+** This is Ti, the integral (or reset) time of the controller. You can set Ti to 0 to disable integral control.
+0,0 ! 8: Integral time [hr] ([0,+Inf])
+
+** This is Td, the derivative time of the controller. You can set Td to 0 to disable the derivative control.
+0,0 ! 9: Derivative time [hr] ([0,+Inf])
+
+** Tracking (anti-windup) time constant. That time constant is used to de-saturate the integrator in case the control
+** signal is saturated by the minimum, maximum or threshold values. 0 means no anti-windup (not recommended) and -1
+** means "use default value" (Tt = Ti). It is generally recommended to set Tt to 0.1 .. 1 Ti.
+0,0 ! 10: Tracking time for anti-windup [hr] ([-1,+Inf])
+
+** b is the fraction of ySet used in the proportional effect: vp = Kc * (b*ySet-y). This parameter should be set between
+** 0 and 1. Using values less than 1 allows for smoother transitions in case of fast setpoint changes but it will lead
+** to a more slugish response to such a setpoint change.
+0,0 ! 11: Fraction of ySet for proportional effect [-] ([0,1])
+
+** g is the fraction of ySet used in the derivative effect, which is proportional to the derivative of (g*ySet-y). This
+** parameter should be set to a value between 0 and 1. Using values less than 1 allows for smoother transitions in case
+** of fast setpoint changes but it will lead to a more slugish response to such a setpoint change. Often in servo
+** control g is 1 while in process control g is 0.
+0,0 ! 12: Fraction of ySet for derivative effect [-] ([0,1])
+
+** N is the high-frequency limit of the derivative gain. The derivative effect is basically multiplied by (Td/(Td+N
+** delta_t)). N should be a positive number. N is usually set in the range [3 ; 20]. The default value is N=10.
+0,0 ! 13: High-frequency limit on derivative [-] ([0,+Inf])
+
+** initial values
+0.0 ! 1: Setpoint  initial value
+0.0 ! 2: Controlled variable  initial value
+1.0 ! 3: On / Off signal  initial value
+-1000000.0 ! 4: Minimum control signal  initial value
+1000000.0 ! 5: Maximum control signal  initial value
+0.0 ! 6: Threshold for non-zero output  initial value
+1.0 ! 7: Gain constant  initial value
+1.0 ! 8: Integral time  initial value
+0.0 ! 9: Derivative time  initial value
+-1.0 ! 10: Tracking time for anti-windup  initial value
+1.0 ! 11: Fraction of ySet for proportional effect  initial value
+1.0 ! 12: Fraction of ySet for derivative effect  initial value
+10.0 ! 13: High-frequency limit on derivative  initial value
+
+EQUATIONS 1 ! 7
+** Control signal. This is the controller output
+! XXX = [1, 1] ! Control signal [any] ([-Inf,+Inf])
+
+** Tracking error (ySet-y)
+! XXX = [1, 2] ! Tracking error [any] ([-Inf,+Inf])
+
+** Unsaturated control signal: calculated value before taking the minimum, maximum and threshold values into account.
+** This output is mostly used for debugging purposes, the control signal (u) that should be connected to the controlled
+** system is output 1.
+! XXX = [1, 3] ! Unsaturated control signal [any] ([-Inf,+Inf])
+
+** This is the part of the control signal that is proportional to the tracking error (before saturation).
+! XXX = [1, 4] ! Proportional action [-] ([-Inf,+Inf])
+
+** This is the part of the control signal that is proportional to the integral of the tracking error (before
+** saturation). Note that anti-windup has not been applied to this value.
+! XXX = [1, 5] ! Integral action [-] ([-Inf,+Inf])
+
+** This is the part of the control signal that is proportional to the derivative of the tracking error (before
+** saturation).
+TOut = [1, 6] ! Derivative action [-] ([-Inf,+Inf])
+
+** Controller status. 0 means the controller is OFF. The following values are added to status to indicate the controller
+** status: 1 if the controller is ON, 2 if the control signal is set to 0 because of the threshold value, 4 if it is
+** constrained by the minimum value, 8 if it is constrained by the maximum value. All flags are summed so that the
+** status for "ON, at the maximum value" is 1+8=9.
+! XXX = [1, 7] ! Controller status [-] ([0,+Inf])
+
+
+***********************************
+** Monthly printer
+***********************************
+
+
+***********************************
+** Hourly printer
+***********************************
+
+
+***********************************
+** Online Plotter
+***********************************
+

@@ -1,0 +1,40 @@
+{
+    "CondOut": {
+        "In": {
+            "@cp": "Lloop2Cp",
+            "@mfr": "MCondOut_A",
+            "@rho": "Lloop2Rho",
+            "@temp": "THp_CondOut"
+        }
+    },
+    "EvapOut": {
+        "In": {
+            "@cp": "Lloop1Cp",
+            "@mfr": "MEvapOut_A",
+            "@rho": "Lloop1Rho",
+            "@temp": "THp_EvapOut"
+        }
+    },
+    "Hp": {
+        "CondIn": {
+            "@cp": "Lloop2Cp",
+            "@mfr": "MHpCond_A",
+            "@rho": "Lloop2Rho",
+            "@temp": "TCondIn_Hp"
+        },
+        "CondOut": {
+            "@revtemp": "THp_CondOut",
+            "@temp": "THpCond"
+        },
+        "EvapIn": {
+            "@cp": "Lloop1Cp",
+            "@mfr": "MHpEvap_A",
+            "@rho": "Lloop1Rho",
+            "@temp": "TEvapIn_Hp"
+        },
+        "EvapOut": {
+            "@revtemp": "THp_EvapOut",
+            "@temp": "THpEvap"
+        }
+    }
+}

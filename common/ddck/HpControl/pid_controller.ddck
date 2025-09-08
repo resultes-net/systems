@@ -1,0 +1,138 @@
+*******************************
+** BEGIN pid_controller.ddck
+*******************************
+
+************************************************************************************************************************
+** Description: 
+** PID controller
+************************************************************************************************************************
+
+************************************************************************************************************************
+** Details: 
+** The PID controller calculates the control signal (u) required to maintain the controlled variable (y) at the setpoint
+** (ySet). Its control signal is proportional to the tracking error, as well as to the integral and the derivative of
+** that tracking error. It is based on state-of-the-art discrete algorithms for PID controllers and implements anti-
+** windup for the integrator. The PID controller can operate in two modes: mode 0 implements a "real life" (non-
+** iterative) controller, and mode 1 implements an iterative controller (Note that the Iterative Feedback Controller,
+** Type 22, might be easier to use in that configuration). Note on the transposition of parameter tuning to real-world
+** controllers: even if your simulation uses a very short timestep and if you use mode 0, the tuned parameters may be
+** different from the ones you would need to use in a real controller applied to the simulated system. Optimal
+** parameters depend on the algorithm used in the PID, for which different implementations are available.
+************************************************************************************************************************
+
+
+***********************************
+** outputs to other ddck
+***********************************
+
+
+
+***********************************
+** Dependencies with other ddck
+***********************************
+** Inputs
+EQUATIONS #
+ySet = TSet       ! 1: Setpoint
+y =  TControlled         ! 2: Controlled variable
+!On =          ! 3: On / Off signal
+
+
+
+** Outputs
+FracCond = u
+
+
+***********************************
+** Begin CONSTANTS
+***********************************
+EQUATIONS #
+** Parameters
+Mode = 0        ! 0: Real, non-iterative; 1: Iterative
+NIter = 10      ! 1: Number of iterations after which the controller's output will stick to its current value in order to promote convergence. Only when Mode = 1
+
+** Inputs
+uMin = 0.2       ! 4: Minimum control signal
+uMax = 1.0       ! 5: Maximum control signal
+uLim = 0         ! 6: Threshold for non-zero output
+P    = 0.5       ! 7: Gain constant
+Ti   = 0         ! 8: Integral time
+Td   = 0         ! 9: Derivative time
+Tt   = Ti         ! 10: Tracking time for anti-windup
+B    = 1         ! 11: Fraction of ySet for proportional effect
+G    = 1         ! 12: Fraction of ySet for derivative effect
+N    = 10        ! 13: High-frequency limit on derivative
+
+
+
+***********************************
+** Begin TYPE
+***********************************
+UNIT 1 TYPE 23
+PARAMETERS 2
+Mode        ! 1: Mode [-] ([0,1])
+NIter       ! 2: Maximum number of oscillations [-] ([0,+Inf])
+INPUTS 13
+ySet        ! 1: Setpoint
+y           ! 2: Controlled variable
+On          ! 3: On / Off signal
+uMin        ! 4: Minimum control signal
+uMax        ! 5: Maximum control signal
+uLim        ! 6: Threshold for non-zero output
+P           ! 7: Gain constant
+Ti          ! 8: Integral time
+Td          ! 9: Derivative time
+Tt          ! 10: Tracking time for anti-windup
+b           ! 11: Fraction of ySet for proportional effect
+g           ! 12: Fraction of ySet for derivative effect
+N           ! 13: High-frequency limit on derivative
+** initial values
+0.0 ! 1: Setpoint  initial value
+0.0 ! 2: Controlled variable  initial value
+1.0 ! 3: On / Off signal  initial value
+-1000000.0 ! 4: Minimum control signal  initial value
+1000000.0 ! 5: Maximum control signal  initial value
+0.0 ! 6: Threshold for non-zero output  initial value
+1.0 ! 7: Gain constant  initial value
+1.0 ! 8: Integral time  initial value
+0.0 ! 9: Derivative time  initial value
+-1.0 ! 10: Tracking time for anti-windup  initial value
+1.0 ! 11: Fraction of ySet for proportional effect  initial value
+1.0 ! 12: Fraction of ySet for derivative effect  initial value
+10.0 ! 13: High-frequency limit on derivative  initial value
+
+EQUATIONS # ! 7
+** Outputs
+U            =  [1, 1] ! Control signal [any] ([-Inf,+Inf])
+E            =  [1, 2] ! Tracking error [any] ([-Inf,+Inf])
+UUnsaturated =  [1, 3] ! Unsaturated control signal [any] ([-Inf,+Inf])
+UP           =  [1, 4] ! Proportional action [-] ([-Inf,+Inf])
+UI           =  [1, 5] ! Integral action [-] ([-Inf,+Inf])
+UD           =  [1, 6] ! Derivative action [-] ([-Inf,+Inf])
+OnStatus     =  [1, 7] ! Controller status [-] ([0,+Inf])
+
+***********************************
+** Time step printer
+***********************************
+
+CONSTANTS 1
+unitStepHpCtrl = 33
+
+ASSIGN    temp\HP_CTRL_DT.Prt    unitStepHpCtrl
+
+UNIT 520 TYPE 25! User defined Printer
+PARAMETERS 10
+$dtSim          ! 1 Printing interval
+$START          ! 2 Start time
+$STOP           ! 3 Stop time
+unitStepHpCtrl   ! 4 Logical unit
+0               ! 5 Units printing mode
+0               ! 6 Relative or absolute start time
+-1              ! 7 Overwrite or Append
+-1              ! 8 Print header
+0               ! 9 Delimiter
+1               ! 10 Print labels
+INPUTS #
+TControlled TSet FracCond On E UP UI UD OnStatus
+TControlled TSet FracCond On E UP UI UD OnStatus
+
+

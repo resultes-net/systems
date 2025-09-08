@@ -1,0 +1,305 @@
+{
+    "Blocks": {
+        ".__BlockDct__": true,
+        "Block-1": {
+            ".__BlockDict__": true,
+            "BlockDisplayName": "Hp",
+            "BlockName": "HP",
+            "FlippedH": false,
+            "FlippedV": false,
+            "HeatPumpPosition": [
+                -20.0,
+                -20.0
+            ],
+            "PortsIDIn": [
+                1,
+                2
+            ],
+            "PortsIDOut": [
+                3,
+                4
+            ],
+            "RotationN": 0,
+            "childIds": [
+                1,
+                2
+            ],
+            "trnsysID": 1
+        },
+        "Block-2": {
+            ".__BlockDict__": true,
+            "BlockDisplayName": "EvapIn",
+            "BlockName": "WTap_main",
+            "__version__": "14afd9a0-54d6-44c7-b147-c79af3b782bb",
+            "blockItemWithPrescribedMassFlow": {
+                "__version__": "e9fd1a0e-c00a-46e2-abfb-7381fa1b2e2d",
+                "blockItem": {
+                    "__version__": "7b792574-5fa6-4c3e-b2e3-7e4eb71d7746",
+                    "blockPosition": [
+                        -119.0,
+                        -20.0
+                    ],
+                    "flippedH": true,
+                    "flippedV": false,
+                    "rotationN": 0,
+                    "trnsysId": 3
+                },
+                "massFlowRateInKgPerH": 1000.0
+            },
+            "portId": 5
+        },
+        "Block-3": {
+            ".__BlockDict__": true,
+            "BlockDisplayName": "EvapOut",
+            "BlockName": "WTap",
+            "__version__": "14afd9a0-54d6-44c7-b147-c79af3b782bb",
+            "blockItemWithPrescribedMassFlow": {
+                "__version__": "e9fd1a0e-c00a-46e2-abfb-7381fa1b2e2d",
+                "blockItem": {
+                    "__version__": "7b792574-5fa6-4c3e-b2e3-7e4eb71d7746",
+                    "blockPosition": [
+                        -120.0,
+                        60.0
+                    ],
+                    "flippedH": true,
+                    "flippedV": false,
+                    "rotationN": 0,
+                    "trnsysId": 5
+                },
+                "massFlowRateInKgPerH": 1000.0
+            },
+            "portId": 7
+        },
+        "Block-4": {
+            ".__BlockDict__": true,
+            "BlockDisplayName": "CondIn",
+            "BlockName": "WTap_main",
+            "__version__": "14afd9a0-54d6-44c7-b147-c79af3b782bb",
+            "blockItemWithPrescribedMassFlow": {
+                "__version__": "e9fd1a0e-c00a-46e2-abfb-7381fa1b2e2d",
+                "blockItem": {
+                    "__version__": "7b792574-5fa6-4c3e-b2e3-7e4eb71d7746",
+                    "blockPosition": [
+                        160.0,
+                        60.0
+                    ],
+                    "flippedH": false,
+                    "flippedV": false,
+                    "rotationN": 0,
+                    "trnsysId": 7
+                },
+                "massFlowRateInKgPerH": 1000.0
+            },
+            "portId": 9
+        },
+        "Block-5": {
+            ".__BlockDict__": true,
+            "BlockDisplayName": "CondOut",
+            "BlockName": "WTap",
+            "__version__": "14afd9a0-54d6-44c7-b147-c79af3b782bb",
+            "blockItemWithPrescribedMassFlow": {
+                "__version__": "e9fd1a0e-c00a-46e2-abfb-7381fa1b2e2d",
+                "blockItem": {
+                    "__version__": "7b792574-5fa6-4c3e-b2e3-7e4eb71d7746",
+                    "blockPosition": [
+                        160.0,
+                        -20.0
+                    ],
+                    "flippedH": false,
+                    "flippedV": false,
+                    "rotationN": 0,
+                    "trnsysId": 11
+                },
+                "massFlowRateInKgPerH": 1000.0
+            },
+            "portId": 13
+        },
+        "Connection-6": {
+            ".__ConnectionDict__": true,
+            "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
+            "connectionId": 6,
+            "diameterInCm": 2.0,
+            "fromPortId": 5,
+            "id": 14,
+            "labelPos": [
+                -57.0,
+                -3.0
+            ],
+            "lengthInM": 2.0,
+            "massFlowLabelPos": [
+                -204.91666666666666,
+                -54.388888888888886
+            ],
+            "name": "EvapIn_Hp",
+            "segmentsCorners": [
+                [
+                    -80.83333333333333,
+                    0.0
+                ],
+                [
+                    -80.83333333333333,
+                    -1.3888888888888888
+                ],
+                [
+                    -40.0,
+                    -1.3888888888888888
+                ],
+                [
+                    -40.0,
+                    0.0
+                ]
+            ],
+            "shallBeSimulated": false,
+            "toPortId": 1,
+            "trnsysId": 12,
+            "uValueInWPerM2K": 2.7777
+        },
+        "Connection-7": {
+            ".__ConnectionDict__": true,
+            "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
+            "connectionId": 7,
+            "diameterInCm": 2.0,
+            "fromPortId": 3,
+            "id": 15,
+            "labelPos": [
+                -23.0,
+                77.0
+            ],
+            "lengthInM": 2.0,
+            "massFlowLabelPos": [
+                -227.16666666666669,
+                105.47222222222223
+            ],
+            "name": "Hp_EvapOut",
+            "segmentsCorners": [
+                [
+                    -40.0,
+                    80.0
+                ],
+                [
+                    -40.0,
+                    81.94444444444444
+                ],
+                [
+                    -35.138888888888886,
+                    81.94444444444444
+                ],
+                [
+                    -35.138888888888886,
+                    80.0
+                ]
+            ],
+            "shallBeSimulated": false,
+            "toPortId": 7,
+            "trnsysId": 13,
+            "uValueInWPerM2K": 2.7777
+        },
+        "Connection-8": {
+            ".__ConnectionDict__": true,
+            "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
+            "connectionId": 8,
+            "diameterInCm": 2.0,
+            "fromPortId": 9,
+            "id": 16,
+            "labelPos": [
+                137.0,
+                77.0
+            ],
+            "lengthInM": 2.0,
+            "massFlowLabelPos": [
+                96.02777777777783,
+                106.16666666666669
+            ],
+            "name": "CondIn_Hp",
+            "segmentsCorners": [
+                [
+                    135.83333333333331,
+                    80.0
+                ],
+                [
+                    135.83333333333331,
+                    81.25
+                ],
+                [
+                    117.0,
+                    81.25
+                ],
+                [
+                    117.0,
+                    80.0
+                ]
+            ],
+            "shallBeSimulated": false,
+            "toPortId": 2,
+            "trnsysId": 14,
+            "uValueInWPerM2K": 2.7777
+        },
+        "Connection-9": {
+            ".__ConnectionDict__": true,
+            "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
+            "connectionId": 9,
+            "diameterInCm": 2.0,
+            "fromPortId": 4,
+            "id": 17,
+            "labelPos": [
+                97.0,
+                -3.0
+            ],
+            "lengthInM": 2.0,
+            "massFlowLabelPos": [
+                113.66666666666669,
+                -40.49999999999999
+            ],
+            "name": "Hp_CondOut",
+            "segmentsCorners": [
+                [
+                    118.5,
+                    0.0
+                ],
+                [
+                    118.5,
+                    0.0
+                ]
+            ],
+            "shallBeSimulated": false,
+            "toPortId": 13,
+            "trnsysId": 15,
+            "uValueInWPerM2K": 2.7777
+        },
+        "IDs": {
+            "GlobalId": 26,
+            "__idDct__": true,
+            "globalConnID": 16,
+            "trnsysID": 23
+        },
+        "Strings": {
+            "DiagramName": "only_hp_control.json",
+            "ProjectFolder": "C:\\Daten\\GIT\\systems\\only_hp_control",
+            "__nameDct__": true
+        }
+    },
+    "hydraulicLoops": [
+        {
+            "__version__": "1e16cd15-83b9-46fa-ac63-11b2b2209af1",
+            "connectionsDefinitionMode": "dummy-pipes",
+            "connectionsTrnsysId": [
+                12,
+                13
+            ],
+            "fluidName": "water",
+            "hasUserDefinedName": false,
+            "name": "loop1"
+        },
+        {
+            "__version__": "1e16cd15-83b9-46fa-ac63-11b2b2209af1",
+            "connectionsDefinitionMode": "dummy-pipes",
+            "connectionsTrnsysId": [
+                14,
+                15
+            ],
+            "fluidName": "water",
+            "hasUserDefinedName": false,
+            "name": "loop2"
+        }
+    ]
+}

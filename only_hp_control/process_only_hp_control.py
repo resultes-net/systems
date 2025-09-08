@@ -78,37 +78,12 @@ def ptes(sim: api.Simulation):
     sim.scalar["pitStoreQ31_kW_Tot"] = sim.hourly["pitStoreQ31_kW"].sum()
     sim.scalar["pitStoreQAccum_kW_Tot"] = sim.hourly["pitStoreQAccum_kW"].sum()
 
-    sim.scalar["pitStoreQCharge_Tot"] = sim.scalar["pitStoreQ13_kW_Tot"] + sim.scalar["pitStoreQ23_kW_Tot"]
-    sim.scalar["pitStoreQDisharge_Tot"] = sim.scalar["pitStoreQ31_kW_Tot"]
-
-    sim.hourly["pitStoreSoc"] = (sim.hourly["pitStoreTAvgTank"]-0)/(95-0)
-
-    ## Efficiency calculation
-    # sim.scalar["pitStoreEff"] = (sim.scalar["pitStoreQDisharge_Tot"] + max(0,sim.scalar["pitStoreQAccum_kW_Tot"]) + sim.scalar["pitStoreQLosses_kW_Tot"]) / ...
-    # (sim.scalar["pitStoreQDisharge_Tot"] + max(0, sim.scalar["pitStoreQAccum_kW_Tot"]))
-
-
-
     #### Plots ####
     fig, ax = api.line_plot(sim.hourly, ["pitStoreTTherStat1", "pitStoreTTherStat2", "pitStoreTTherStat3"])
     ax.set_ylabel("Temperature (°C)")
     _plt.grid()
     # _plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "t-ptes-hourly", "ptes")
-
-    fig, ax = api.line_plot(sim.hourly, ["pitStoreSoc"])
-    ax.set_ylabel("SOC (-)")
-    _plt.grid()
-    # _plt.show()
-    api.export_plots_in_configured_formats(fig, sim.path, "soc-hourly", "ptes")
-
-    fig, ax = api.energy_balance(
-        sim.monthly,
-        q_in_columns=[],
-        q_out_columns=["pitStoreQ13_kW", "pitStoreQ23_kW", "pitStoreQ31_kW", "pitStoreQLosses_kW", "pitStoreQAccum_kW"],
-        xlabel=""
-    )
-    api.export_plots_in_configured_formats(fig, sim.path, "balance-monthly", "ptes")
 
 def hp(sim: api.Simulation):
 
@@ -117,22 +92,6 @@ def hp(sim: api.Simulation):
     sim.scalar["HpQCond_kW_Tot"] = sim.hourly["HpQCond_kW"].sum()
     sim.scalar["HpPelComp_kW_Tot"] = sim.hourly["HpPelComp_kW"].sum()
     sim.scalar["HpCOP"] = sim.scalar["HpQCond_kW_Tot"] / sim.scalar["HpPelComp_kW_Tot"]
-    sim.step["HpControlFracCond_100"] = sim.step["HpControlFracCond"] * 100
-
-    #### Control ####
-    fig, ax = api.line_plot(sim.step, ["HpControlTControlled", "HpControlTSet", "HpControlFracCond_100"])
-    _plt.ylim(0, 110)
-    _plt.grid()
-    _plt.show()
-    api.export_plots_in_configured_formats(fig, sim.path, "hp-control", "hp")
-
-    fig, ax = api.energy_balance(
-        sim.monthly,
-        q_in_columns=["HpPelComp_kW", "HpQEvap_kW"],
-        q_out_columns=["HpQCond_kW"],
-        xlabel=""
-    )
-    api.export_plots_in_configured_formats(fig, sim.path, "balance-monthly", "hp")
 
     #### Q vs T ####
     plot_variables = [
@@ -245,10 +204,8 @@ def balance(sim: api.Simulation):
         sim.monthly,
         q_in_columns=["CollP_kW_calc", "HpPelComp_kW", "BolrPOut_kW", "QSrcP_kW"],
         q_out_columns=["QSnkP_kW", "pitStoreQAccum_kW", "pitStoreQLosses_kW", "qSysOut_PipeLoss", "qSysOut_dpToFFieldTot", "qSysOut_dpPipeIntTot", "qSysOut_dpSoilIntTot"],
-        xlabel="",
-        cmap = "Paired"
+        xlabel=""
     )
-    ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
     api.export_plots_in_configured_formats(fig, sim.path, "balance-monthly", "balance")
 
 
@@ -259,24 +216,24 @@ def kpi(sim: api.Simulation):
 
 def to_json(sim: api.Simulation):
     sim.scalar.to_json(sim.path + "\output.json", orient="records", indent=4)
+
+def control(sim:api.Simulation):
+    sim.step["HpControlFracCond_100"] = sim.step["HpControlFracCond"] * 100
+
+    fig, ax = api.line_plot(sim.step, ["HpControlTControlled", "HpControlTSet", "HpControlFracCond_100"])
+    _plt.ylim(0, 110)
+    _plt.grid()
+    _plt.show()
+    api.export_plots_in_configured_formats(fig, sim.path, "hp-control", "hp")
+
     
 if __name__ == "__main__":
-    path_to_sim = _pl.Path(r"C:\Daten\GIT\systems\PTES\results")
+    path_to_sim = _pl.Path(r"C:\Daten\GIT\systems\only_hp_control\results")
     api.global_settings.reader.force_reread_prt = True
     api.global_settings.reader.read_step_files = True
 
     processing_steps = [
-                        solar,
-                        hx,
-                        ptes,
-                        hp,
-                        boiler,
-                        source,
-                        sink,
-                        district,
-                        balance,
-                        kpi,
-                        to_json,
+                        control,
                         ]
 
     simulation_data = api.process_whole_result_set(
