@@ -123,7 +123,7 @@ def hp(sim: api.Simulation):
     fig, ax = api.line_plot(sim.step, ["HpControlTControlled", "HpControlTSet", "HpControlFracCond_100"])
     _plt.ylim(0, 110)
     _plt.grid()
-    _plt.show()
+    # _plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "hp-control", "hp")
 
     fig, ax = api.energy_balance(

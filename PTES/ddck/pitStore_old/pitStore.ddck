@@ -58,14 +58,14 @@
 !T43 = TPS_VPSDiv4a
 
 EQUATIONS #
-T13     = @temp(HotIn) !$TTeeStrat_pitStoreTes! Hardcoded from hydraulic
-M13     = $ModePP13 * ABS(@mfr(HotIn)) !$ModePP13 * ABS($MpitStoreTesDpL99_5_A)! Hardcoded from hydraulic
+T13     = $TTeeStrat_pitStoreTes! Hardcoded from hydraulic
+M13     = $ModePP13 * ABS($MpitStoreTesDpL99_5_A)! Hardcoded from hydraulic
 
-T31     = @revtemp(MediumOut) !$TpitStoreTes_Tee3! Hardcoded from hydraulic
-M31     = $ModePP31 * ABS(@mfr(HotIn)) !$ModePP31 * ABS($MpitStoreTesDpL99_5_A)! Hardcoded from hydraulic
+T31     = $TpitStoreTes_Tee3! Hardcoded from hydraulic
+M31     = $ModePP31 * ABS($MpitStoreTesDpL99_5_A)! Hardcoded from hydraulic
 
-T23     = @temp(MediumIn) !$TValStrat_pitStore! Hardcoded from hydraulic
-M23     = $ModePP23 * ABS(@mfr(MediumIn)) !$ModePP23 * ABS($MpitStoreTesDpL50_1_A) ! Hardcoded from hydraulic
+T23     = $TValStrat_pitStore! Hardcoded from hydraulic
+M23     = $ModePP23 * ABS($MpitStoreTesDpL50_1_A) ! Hardcoded from hydraulic
 
 
 
@@ -88,11 +88,8 @@ M23     = $ModePP23 * ABS(@mfr(MediumIn)) !$ModePP23 * ABS($MpitStoreTesDpL50_1_
 
 ! Don't understand this
 EQUATIONS #
-!$TpitStoreTesDpL99_5 = $ModePP13*TOutPP13 + $ModePP31*TOutPP31
-!$TpitStoreTesDpL50_1 = TOutPP23
-
-@temp(HotOut) = $ModePP13*TOutPP13 + $ModePP31*TOutPP31
-@temp(MediumOut) = TOutPP23
+$TpitStoreTesDpL99_5 = $ModePP13*TOutPP13 + $ModePP31*TOutPP31
+$TpitStoreTesDpL50_1 = TOutPP23
 
 
 

@@ -134,5 +134,27 @@
             "@revtemp": "TQSrc_HxQSrc",
             "@temp": "TQSrc"
         }
+    },
+    "pitStore": {
+        "HotIn": {
+            "@cp": "Lloop5Cp",
+            "@mfr": "MpitStoreHot_A",
+            "@rho": "Lloop5Rho",
+            "@temp": "TTeeStrat_pitStore"
+        },
+        "HotOut": {
+            "@revtemp": "TpitStore_Tee32",
+            "@temp": "TpitStoreHot"
+        },
+        "MediumIn": {
+            "@cp": "Lloop5Cp",
+            "@mfr": "MpitStoreMedium_A",
+            "@rho": "Lloop5Rho",
+            "@temp": "TValStrat_pitStore"
+        },
+        "MediumOut": {
+            "@revtemp": "TpitStore_Tee3",
+            "@temp": "TpitStoreMedium"
+        }
     }
 }
