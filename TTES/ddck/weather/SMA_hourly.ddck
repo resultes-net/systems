@@ -26,9 +26,9 @@ unitWeatherData=38
 unitWeatherData2=39
 unitWeatherData3=40
 
-ASSIGN PATH$\weather\MeteoSwiss\SMA\SMA_hourly.99 unitWeatherData
-ASSIGN PATH$\weather\MeteoSwiss\SMA\SMA_hourly.99 unitWeatherData2
-ASSIGN PATH$\weather\MeteoSwiss\SMA\SMA_hourly.99 unitWeatherData3
+ASSIGN ..\..\ddck\weather\MeteoSwiss\SMA\SMA_hourly.99 unitWeatherData
+ASSIGN ..\..\ddck\weather\MeteoSwiss\SMA\SMA_hourly.99 unitWeatherData2
+ASSIGN ..\..\ddck\weather\MeteoSwiss\SMA\SMA_hourly.99 unitWeatherData3
 
 
 *******************************
