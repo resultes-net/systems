@@ -61,7 +61,7 @@ EQUATIONS #
 T13     = @temp(HotIn) !$TTeeStrat_pitStoreTes! Hardcoded from hydraulic
 M13     = $ModePP13 * ABS(@mfr(HotIn)) !$ModePP13 * ABS($MpitStoreTesDpL99_5_A)! Hardcoded from hydraulic
 
-T31     = @revtemp(MediumOut) !$TpitStoreTes_Tee3! Hardcoded from hydraulic
+T31     = @revtemp(HotOut) !$TpitStoreTes_Tee3! Hardcoded from hydraulic
 M31     = $ModePP31 * ABS(@mfr(HotIn)) !$ModePP31 * ABS($MpitStoreTesDpL99_5_A)! Hardcoded from hydraulic
 
 T23     = @temp(MediumIn) !$TValStrat_pitStore! Hardcoded from hydraulic

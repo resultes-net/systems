@@ -11,6 +11,7 @@ def solar(sim: api.Simulation):
     sim.monthly["CollP_MW"] = sim.monthly["CollP_kW"] / 1000
 
     sim.scalar["CollP_kW_calc_Tot"] = sim.hourly["CollP_kW_calc"].sum()
+    sim.scalar["Q_kW_m2"] = sim.scalar["CollP_kW_calc_Tot"] / sim.scalar["CollAcollAp"]
     sim.scalar["qSysOut_PipeLoss_Tot"] = sim.hourly["qSysOut_PipeLoss"].sum()
 
     # sim.scalar["HxCollHpPhxload_kW_Tot"] = sim.hourly["HxCollHpPhxload_kW"].sum()
@@ -82,6 +83,12 @@ def ptes(sim: api.Simulation):
     sim.scalar["pitStoreQDisharge_Tot"] = sim.scalar["pitStoreQ31_kW_Tot"]
 
     sim.hourly["pitStoreSoc"] = (sim.hourly["pitStoreTAvgTank"]-0)/(95-0)
+
+    ## Energy density calculation
+    m = sim.scalar["pitStoreV"]*sim.scalar["pitStoreFlDen"]
+    cp = sim.scalar["pitStoreFlSpeHeat"]
+    rho = sim.scalar["pitStoreFlDen"]
+    sim.scalar["rhoQ"] = (max(sim.hourly["pitStoreTAvgTank"]) - min(sim.hourly["pitStoreTAvgTank"])) * rho * cp/3600
 
     ## Efficiency calculation
     # sim.scalar["pitStoreEff"] = (sim.scalar["pitStoreQDisharge_Tot"] + max(0,sim.scalar["pitStoreQAccum_kW_Tot"]) + sim.scalar["pitStoreQLosses_kW_Tot"]) / ...
@@ -195,6 +202,7 @@ def sink(sim: api.Simulation):
 
     #### Calculations ####
     sim.scalar["QSnkP_kW_Tot"] = sim.hourly["QSnkP_kW"].sum()
+    sim.step["QSnkPreal_kW"] = 0
 
     #### Plots ####
     fig, ax = api.line_plot(sim.hourly, ["QSnkP_kW"])
@@ -236,7 +244,7 @@ def balance(sim: api.Simulation):
     sim.scalar["QSources"] = sim.scalar["CollP_kW_calc_Tot"] + sim.scalar["BolrPOut_kW_Tot"] + sim.scalar["QSrcP_kW_Tot"] + sim.scalar["HpPelComp_kW_Tot"]
     sim.scalar["QSinks"] = sim.scalar["QSnkP_kW_Tot"]
     sim.scalar["QStore"] = sim.scalar["pitStoreQAccum_kW_Tot"]
-    sim.scalar["QLosses"] = sim.scalar["pitStoreQLosses_kW_Tot"] + sim.scalar["qSysOut_PipeLoss_Tot"] + sim.scalar["qSysOut_dpPipeIntTot_Tot"]
+    sim.scalar["QLosses"] = sim.scalar["pitStoreQLosses_kW_Tot"]# + sim.scalar["qSysOut_PipeLoss_Tot"] + sim.scalar["qSysOut_dpPipeIntTot_Tot"]
 
     sim.scalar["QImb"] = sim.scalar["QSources"] - sim.scalar["QStore"] - sim.scalar["QSinks"] - sim.scalar["QLosses"]
 
@@ -244,7 +252,8 @@ def balance(sim: api.Simulation):
     fig, ax = api.energy_balance(
         sim.monthly,
         q_in_columns=["CollP_kW_calc", "HpPelComp_kW", "BolrPOut_kW", "QSrcP_kW"],
-        q_out_columns=["QSnkP_kW", "pitStoreQAccum_kW", "pitStoreQLosses_kW", "qSysOut_PipeLoss", "qSysOut_dpToFFieldTot", "qSysOut_dpPipeIntTot", "qSysOut_dpSoilIntTot"],
+        q_out_columns=["QSnkP_kW", "pitStoreQAccum_kW", "pitStoreQLosses_kW"],
+    # , "qSysOut_PipeLoss", "qSysOut_dpToFFieldTot", "qSysOut_dpPipeIntTot", "qSysOut_dpSoilIntTot"
         xlabel="",
         cmap = "Paired"
     )

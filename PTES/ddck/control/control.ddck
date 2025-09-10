@@ -35,7 +35,8 @@ MfrQSnk = QSnkM ! 500
 xFracValHXPri = NOT(ValHXOut)
 xFracValHXSec = xFracValHXPri
 
-ValHPPri = ValHPOut*GT(MTee7_Val3, HPMfrCondMin)
+HpAct = 1
+ValHPPri = ValHPOut*GT(MTee7_Val3, HPMfrCondMin)*HpAct
 xFracValHPPri = NOT(ValHPPri)
 xFracValHPSec = xFracValHPPri
 

@@ -32,6 +32,7 @@ profileSnkUnit  ! 7 Logical unit for input file
 
 EQUATIONS #
 P_kW = scaling*MAX([33,2],0) !Power of sink read from profile
+PReal_kW = cp*$MSCnr2_QSnk*($TSCnr2_QSnk - $TQSnk_SCnr2)/3600
 @energy(out, heat, :) = P_kW
 
 
@@ -80,9 +81,9 @@ unitPrintSink		! 1: Logical unit number, -
 4						! 7: Output number to avoid integration
 5						! 8: Output number to avoid integration
 INPUTS #
-$Time P_kW M TIn TOut
+$Time P_kW M TIn TOut PReal_kW
 **
-$Time P_kW M TIn TOut
+$Time P_kW M TIn TOut PReal_kW
 
 ***********************************
 ** Monthly printer
@@ -101,9 +102,9 @@ unitPrintSinkMo		! 1: Logical unit number, -
 1						! 5: Number of inputs to avoid integration, -
 1						! 6: Output number to avoid integration
 INPUTS #
-$Time P_kW
+$Time P_kW PReal_kW
 **
-$Time P_kW
+$Time P_kW PReal_kW
 
 
 
