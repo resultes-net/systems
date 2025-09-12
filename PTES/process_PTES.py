@@ -241,23 +241,30 @@ def balance(sim: api.Simulation):
     # sim.monthly["QStore"]   = sim.monthly["pitStoreQAccum_kW"]
     # sim.monthly["QLosses"]  = sim.monthly["pitStoreQLosses_kW"] + sim.monthly["qSysOut_PipeLoss"]
 
+    sim.monthly["QDistrict"] = sim.monthly["qSysOut_dpToFFieldTot"] + sim.monthly["qSysOut_dpPipeIntTot"] + sim.monthly["qSysOut_dpSoilIntTot"]
+
     sim.scalar["QSources"] = sim.scalar["CollP_kW_calc_Tot"] + sim.scalar["BolrPOut_kW_Tot"] + sim.scalar["QSrcP_kW_Tot"] + sim.scalar["HpPelComp_kW_Tot"]
     sim.scalar["QSinks"] = sim.scalar["QSnkP_kW_Tot"]
     sim.scalar["QStore"] = sim.scalar["pitStoreQAccum_kW_Tot"]
-    sim.scalar["QLosses"] = sim.scalar["pitStoreQLosses_kW_Tot"]# + sim.scalar["qSysOut_PipeLoss_Tot"] + sim.scalar["qSysOut_dpPipeIntTot_Tot"]
+    sim.scalar["QLosses"] = sim.scalar["pitStoreQLosses_kW_Tot"] + sim.scalar["qSysOut_PipeLoss_Tot"] + sim.scalar["qSysOut_dpPipeIntTot_Tot"]
 
     sim.scalar["QImb"] = sim.scalar["QSources"] - sim.scalar["QStore"] - sim.scalar["QSinks"] - sim.scalar["QLosses"]
 
     #### Plots ####
+    names_legend = ['$Q_{Coll}$','$P_{Comp}$','$Q_{Boiler}$','$Q_{Source}$',
+                    '$Q_{Demand}$','$Q_{PTES,Accum}$','$Q_{PTES,Losses}$','$Q_{Pipes}$','$Q_{District}$','$Q_{Imb}$']
+
     fig, ax = api.energy_balance(
         sim.monthly,
         q_in_columns=["CollP_kW_calc", "HpPelComp_kW", "BolrPOut_kW", "QSrcP_kW"],
-        q_out_columns=["QSnkP_kW", "pitStoreQAccum_kW", "pitStoreQLosses_kW"],
-    # , "qSysOut_PipeLoss", "qSysOut_dpToFFieldTot", "qSysOut_dpPipeIntTot", "qSysOut_dpSoilIntTot"
+        q_out_columns=["QSnkP_kW", "pitStoreQAccum_kW", "pitStoreQLosses_kW", "qSysOut_PipeLoss", "QDistrict"],
         xlabel="",
         cmap = "Paired"
     )
-    ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+    _plt.legend(names_legend, bbox_to_anchor=(1.05, 1), loc='upper left')
+    # _plt.show()
+
+    # _plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
     api.export_plots_in_configured_formats(fig, sim.path, "balance-monthly", "balance")
 
 
@@ -271,7 +278,7 @@ def to_json(sim: api.Simulation):
     
 if __name__ == "__main__":
     path_to_sim = _pl.Path(r"C:\Daten\GIT\systems\PTES\results")
-    api.global_settings.reader.force_reread_prt = True
+    api.global_settings.reader.force_reread_prt = False
     api.global_settings.reader.read_step_files = True
 
     processing_steps = [

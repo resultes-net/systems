@@ -17,45 +17,9 @@
 ** Following this naming standard : qSysIn_name, qSysOut_name, elSysIn_name, elSysOut_name
 ******************************************************************************************
 
-!EQUATIONS 2
-!@energy(out, heat, :, loss, total) = :PLoss    ! (kW)
-!@energy(out, heat, :, IntTot) = :PStorRate     ! (kW)
-
-
 ***********************************
 ** inputs from hydraulic solver
 ***********************************
-
-!EQUATIONS 4
-!T12 = TPS_VPSDiv1a
-!M12 = ModePP12*ABS(MPSDpR99_69_A)
-!M21 = ModePP21*ABS(MPSDpR99_69_A)
-!T21 = TPS_VPSDiv2a
-!EQUATIONS 4
-!T13 = TPS_VPSDiv1b
-!M13 = ModePP13*ABS(MPSDpR95_35_A)
-!M31 = ModePP31*ABS(MPSDpR95_35_A)
-!T31 = TPS_VPSDiv3b
-!EQUATIONS 4
-!T14 = TPS_VPSDiv1b2
-!M14 = ModePP14*ABS(MPSDpR91_1_A)
-!M41 = ModePP41*ABS(MPSDpR91_1_A)
-!T41 = TPS_VPSDiv4b2
-!EQUATIONS 4
-!T23 = TPS_VPSDiv2b
-!M23 = ModePP23*ABS(MPSDpR65_5_A)
-!M32 = ModePP32*ABS(MPSDpR65_5_A)
-!T32 = TPS_VPSDiv4b
-!EQUATIONS 4
-!T24 = TPS_VPSDiv2b2
-!M24 = ModePP24*ABS(MPSDpR61_31_A)
-!M42 = ModePP42*ABS(MPSDpR61_31_A)
-!T42 = TPS_VPSDiv3b2
-!EQUATIONS 4
-!T34 = TPS_VPSDiv3a
-!M34 = ModePP34*ABS(MPSDpR39_9_A)
-!M43 = ModePP43*ABS(MPSDpR39_9_A)
-!T43 = TPS_VPSDiv4a
 
 EQUATIONS #
 T13     = @temp(HotIn) !$TTeeStrat_pitStoreTes! Hardcoded from hydraulic
@@ -67,60 +31,17 @@ M31     = $ModePP31 * ABS(@mfr(HotIn)) !$ModePP31 * ABS($MpitStoreTesDpL99_5_A)!
 T23     = @temp(MediumIn) !$TValStrat_pitStore! Hardcoded from hydraulic
 M23     = $ModePP23 * ABS(@mfr(MediumIn)) !$ModePP23 * ABS($MpitStoreTesDpL50_1_A) ! Hardcoded from hydraulic
 
-
-
-
-
-
 ***********************************
 ** outputs to hydraulic solver
 ***********************************
 
-
-!EQUATIONS 6
-!*** direct port outputs
-!TPSDpR99_69 = ModePP12*TOutPP12 + ModePP21*TOutPP21
-!TPSDpR95_35 = ModePP13*TOutPP13 + ModePP31*TOutPP31
-!TPSDpR91_1 = ModePP14*TOutPP14 + ModePP41*TOutPP41
-!TPSDpR65_5 = ModePP32*TOutPP32
-!TPSDpR61_31 = ModePP42*TOutPP42
-!TPSDpR39_9 = ModePP34*TOutPP34 + ModePP43*TOutPP43
-
-! Don't understand this
 EQUATIONS #
-!$TpitStoreTesDpL99_5 = $ModePP13*TOutPP13 + $ModePP31*TOutPP31
-!$TpitStoreTesDpL50_1 = TOutPP23
-
 @temp(HotOut) = $ModePP13*TOutPP13 + $ModePP31*TOutPP31
 @temp(MediumOut) = TOutPP23
-
-
 
 **********************
 ** port definitions **
 **********************
-
-!EQUATIONS 20
-!TInPP12        = T12       ! 1  (C) Inlet Temperature  for Port-12
-!MfrInPP12      = M12       ! 2  (kg/hr) Inlet Flowrate for Port-12
-!TInPP13        = T13       ! 3  (C) Inlet Temperature  for Port-13
-!MfrInPP13      = M13       ! 4  (kg/hr) Inlet Flowrate for Port-13
-!TInPP14        = T14       ! 3  (C) Inlet Temperature  for Port-14
-!MfrInPP14      = M14       ! 4  (kg/hr) Inlet Flowrate for Port-14
-!TInPP34        = T34       ! 3  (C) Inlet Temperature  for Port-34
-!MfrInPP34      = M34       ! 4  (kg/hr) Inlet Flowrate for Port-34
-!TInPP21        = T21       ! 3  (C) Inlet Temperature  for Port-21
-!MfrInPP21      = M21       ! 4  (kg/hr) Inlet Flowrate for Port-21
-!TInPP31        = T31       ! 3  (C) Inlet Temperature  for Port-31
-!MfrInPP31      = M31       ! 4  (kg/hr) Inlet Flowrate for Port-31
-!TInPP41        = T41       ! 3  (C) Inlet Temperature  for Port-41
-!MfrInPP41      = M41       ! 4  (kg/hr) Inlet Flowrate for Port-41
-!TInPP32        = T32       ! 3  (C) Inlet Temperature  for Port-32
-!MfrInPP32      = M32       ! 4  (kg/hr) Inlet Flowrate for Port-32
-!TInPP42        = T42       ! 3  (C) Inlet Temperature  for Port-42
-!MfrInPP42      = M42       ! 4  (kg/hr) Inlet Flowrate for Port-42
-!TInPP43        = T43       ! 3  (C) Inlet Temperature  for Port-43
-!MfrInPP43      = M43       ! 4  (kg/hr) Inlet Flowrate for Port-43
 
 EQUATIONS #
 TInPP13        = T13        ! 1  (C) Inlet Temperature  for Port-13
@@ -720,26 +641,6 @@ NTherStat2
 NTherStat3
 
 INPUTS #
-!TInPP12
-!MfrInPP12
-!TInPP13
-!MfrInPP13
-!TInPP14
-!MfrInPP14
-!TInPP34
-!MfrInPP34
-!TInPP21
-!MfrInPP21
-!TInPP31
-!MfrInPP31
-!TInPP41
-!MfrInPP41
-!TInPP32
-!MfrInPP32
-!TInPP42
-!MfrInPP42
-!TInPP43
-!MfrInPP43
 TInPP13
 MfrInPP13
 TInPP23
@@ -863,28 +764,6 @@ AuxHeInpN50
 
 ** OUTPUTS
 EQUATIONS #
-!TOutPP12   =    [319,1 ]    ! 1  (C) Temperature  at Outlet-12
-!MfrOutPP12 =    [319,2 ]    ! 2  (kg/hr) Flowrate at Outlet-12
-!TOutPP13   =    [319,3 ]    ! 3  (C) Temperature  at Outlet-13
-!MfrOutPP13 =    [319,4 ]    ! 4  (kg/hr) Flowrate at Outlet-13
-!TOutPP14   =    [319,5 ]    ! 5  (C) Temperature  at Outlet-14
-!MfrOutPP14 =    [319,6 ]    ! 6  (kg/hr) Flowrate at Outlet-14
-!TOutPP34   =    [319,7 ]    ! 7  (C) Temperature  at Outlet-34
-!MfrOutPP34 =    [319,8 ]    ! 8  (kg/hr) Flowrate at Outlet-34
-!TOutPP21   =    [319,9 ]    ! 9  (C) Temperature  at Outlet-21
-!MfrOutPP21 =    [319,10]    ! 10 (kg/hr) Flowrate at Outlet-21
-!TOutPP31   =    [319,11]    ! 11 (C) Temperature  at Outlet-31
-!MfrOutPP31 =    [319,12]    ! 12 (kg/hr) Flowrate at Outlet-31
-!TOutPP41   =    [319,13]    ! 13 (C) Temperature  at Outlet-41
-!MfrOutPP41 =    [319,14]    ! 14 (kg/hr) Flowrate at Outlet-41
-!TOutPP32   =    [319,15]    ! 15 (C) Temperature  at Outlet-32
-!MfrOutPP32 =    [319,16]    ! 16 (kg/hr) Flowrate at Outlet-32
-!TOutPP42   =    [319,17]    ! 17 (C) Temperature  at Outlet-42
-!MfrOutPP42 =    [319,18]    ! 18 (kg/hr) Flowrate at Outlet-42
-!TOutPP43   =    [319,19]    ! 19 (C) Temperature  at Outlet-43
-!MfrOutPP43 =    [319,20]    ! 20 (kg/hr) Flowrate at Outlet-43
-
-
 TOutPP13   =    [319,1]    ! 1  (C) Temperature  at Outlet-13
 MfrOutPP13 =    [319,2]    ! 2  (kg/hr) Flowrate at Outlet-13
 TOutPP23   =    [319,3]    ! 3  (C) Temperature  at Outlet-23
@@ -896,17 +775,6 @@ MfrOutPP31 =    [319,6]    ! 6  (kg/hr) Flowrate at Outlet-31
 TAvgTank =    [319,	7]      ! 7 (C) Average Tank Temperature
 QDis   =    [319,	8]      ! 8 (kJ/hr) Energy Delivery Rate
 QDis_kW = QDis/3600
-
-!DelEnP12 =    [319,	9]      ! 9 (kJ/hr) Energy Delivered to Port12
-!Q13 =    [319,	10]     ! 10 (kJ/hr) Energy Delivered to Port13
-!DelEnP14 =    [319,	11]     ! 11 (kJ/hr) Energy Delivered to Port14
-!DelEnP34 =    [319,	12]     ! 12 (kJ/hr) Energy Delivered to Port34
-!DelEnP21 =    [319,	13]     ! 13 (kJ/hr) Energy Delivered to Port21
-!Q31 =    [319,	14]     ! 14 (kJ/hr) Energy Delivered to Port31
-!DelEnP41 =    [319,	15]     ! 15 (kJ/hr) Energy Delivered to Port41
-!DelEnP32 =    [319,	16]     ! 16 (kJ/hr) Energy Delivered to Port32
-!DelEnP42 =    [319,	17]     ! 17 (kJ/hr) Energy Delivered to Port42
-!DelEnP43 =    [319,	18]     ! 18 (kJ/hr) Energy Delivered to Port43
 
 Q13 =    [319,	9]     ! 9 (kJ/hr) Energy Delivered to Port13
 Q23 =    [319,	10]     ! 10 (kJ/hr) Energy Delivered to Port23
@@ -1056,10 +924,6 @@ PerN50 = GE(TTankN50,TDef) * (HLay*(RadL1-49*dRadL)^2*$PI/StVolume)
 
 HotWatProportion = PerN1+PerN2+PerN3+PerN4+PerN5+PerN6+PerN7+PerN8+PerN9+PerN10+PerN11+PerN12+PerN13+PerN14+PerN15+PerN16+PerN17+PerN18+PerN19+PerN20+PerN21+PerN22+PerN23+PerN24+PerN25+PerN26+PerN27+PerN28+PerN29+PerN30+PerN31+PerN32+PerN33+PerN34+PerN35+PerN36+PerN37+PerN38+PerN39+PerN40+PerN41+PerN42+PerN43+PerN44+PerN45+PerN46+PerN47+PerN48+PerN49+PerN50
 
-
-
-
-
 ***********************************
 ** Hourly printer
 ***********************************
@@ -1109,7 +973,6 @@ QLosses_kW Q13_kW Q23_kW Q31_kW QDis_kW QAccum_kW QImb_kW
 **
 QLosses_kW Q13_kW Q23_kW Q31_kW QDis_kW QAccum_kW QImb_kW
 
-
 *************************************
 ** Online Plotter
 *************************************
@@ -1134,37 +997,6 @@ LABELS  3
 Temperatures
 EnergyFlows
 PTES
-
-***************************************************************
-**BEGIN PTES energy balance printer
-***************************************************************
-!EQUATIONS #
-!!QDis_kW = QDis / 3600   ! (kW)
-!!QAccum_kW = QAccum / 3600    ! (kW)
-!!QLosses_kW = QLosses / 3600     ! (kW)
-!QStore = (TAvgTank - 10) * $CPWAT * StVolume * $RHOWAT / 3600000   ! (MWh)
-!
-!
-!EQUATIONS 1
-!qImb = QAccum_kW + QDis_kW + QLosses_kW
-!
-!CONSTANTS 1
-!unitPrint_EBal=223
-!
-!ASSIGN temp\PTES_BAL.prt unitPrint_EBal
-!
-!UNIT 223 Type 46
-!PARAMETERS 5
-!unitPrint_EBal !1: Logical unit number
-!-1 !2: for monthly summaries
-!1  !3: 1:print at absolute times
-!-1 !4 -1: monthly integration
-!0  !5 number of outputs to avoid integration
-!!1  !6 output number to avoid integration
-!INPUTS 5
-!$TIME QAccum_kW QDis_kW QLosses_kW qImb
-!**
-!$TIME QAccum_kW QDis_kW QLosses_kW qImb
 
 **************************************
 **END type1535.dck

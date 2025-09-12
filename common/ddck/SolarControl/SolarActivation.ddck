@@ -94,8 +94,8 @@ PuColSecTemp = [55,1] ! Temperature difference
 
 ** Maximum tes temperature
 CONSTANTS #
-TTesMax = $TSetDem + 15       ! Upper dead band collector pump ON
-TTesMin = $TSetDem + 10     ! Upper dead band collector pump OFF
+TTesMax = 95 !$TSetDem + 15       ! Upper dead band collector pump ON
+TTesMin = 90 !$TSetDem + 10     ! Upper dead band collector pump OFF
 !TMonMax = 999   ! Maximum monitored temperature
 
 UNIT 56 TYPE 2
