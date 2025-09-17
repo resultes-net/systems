@@ -1,4 +1,5 @@
 import pathlib as _pl
+import matplotlib as _mpl
 import matplotlib.pyplot as _plt
 import numpy as np
 import pandas as pd
@@ -21,30 +22,24 @@ from pytrnsys_process import api
 
 def compare_plot(sims_data: api.SimulationsData):
 
-
-    # filtered_scalar = sims_data.scalar[sims_data.scalar['acceptableSimulation']]
-    #
-    # fig, ax = api.scatter_plot(
-    #     filtered_scalar,
-    #     "HVFPAcollAp",
-    #     "AmCHPelCoolComp_kW_Tot",
-    #     group_by_color="AdCHsizeHpUsed_kW",
-    # )
-    # ax.grid(True)
-    # # _plt.show()
-    # api.export_plots_in_configured_formats(fig.figure, sims_data.path_to_simulations, "p_comp", "../comparison")
-
     # RENEWABLE FACTOR
     fig, ax = api.scalar_compare_plot(
         sims_data.scalar,
         "szVperDemand_m3_per_MWh",
         "FactorRenewable",
         group_by_color="HpAct",
+        group_by_marker="szAperDemand_m2_per_MWh"
     )
-    names_legend = ['HP OFF', 'HP ON']
+
+    axes = fig.get_axes()
+    legends = [c for c in axes[1].get_children() if isinstance(c, _mpl.legend.Legend)]
+    legends[0].set_title("HP")
+    legends[1].set_title("$A_{coll}/Q_{demand}~[m^2/MWh]$")
+
+
     ax.grid(True)
-    ax.legend(names_legend, bbox_to_anchor=(1.05, 1), loc='upper left')
-    # _plt.show()
+    ax.set_xlabel('$V_{PTES}/Q_{demand}~[m^3/MWh]$')
+    ax.set_ylabel('$f_{renewable}~[-]$')
     api.export_plots_in_configured_formats(fig.figure, sims_data.path_to_simulations, "factor", "../comparison")
 
     # SOLAR
@@ -53,6 +48,7 @@ def compare_plot(sims_data: api.SimulationsData):
         "szVperDemand_m3_per_MWh",
         "Q_kW_m2",
         group_by_color="HpAct",
+        group_by_marker="szAperDemand_m2_per_MWh"
     )
 
     ax.grid(True)

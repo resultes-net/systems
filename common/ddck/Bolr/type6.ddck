@@ -46,7 +46,7 @@ tRoomStore = $tamb
 ** Beginning TYPE
 ***********************************
 CONSTANTS #
-PBoiNom_kW = 5000
+PBoiNom_kW = 50000
 PBoiNom = PBoiNom_kW*3600  ! 360000*10
 MflowBoilerNom = 3000
 
