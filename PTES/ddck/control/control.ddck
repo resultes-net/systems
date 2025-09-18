@@ -3,61 +3,43 @@
 *************************************
 EQUATIONS #
 
-*************
-*** TEMPS ***
-*************
-
+** Weather
 TRoomStore = tAmb
 
-
-*************
-*** Pumps ***
-*************
-
+** Collectors
 MfrPuCollPri = SolarControlPuPriOn * CollMfrOut !MfrPuCollPriSet
 MfrPuCollSec = SolarControlPuSecOn * MfrPuCollPri * Lloop2Cp/Lloop5Cp !1000.0
+TSetColl = TSetDem + 20
 
-
-MfrPuSrcSec = MfrQSrc !1000.0
+** Auxiliary source
 MfrQSrc = QSrcM
-
+MfrPuSrcSec = MfrQSrc !1000.0
 MfrSources = MfrPuCollSec + MfrPuSrcSec
 
-MfrPump = ValHPOut*MTee_ValHXSec*HPMfrEvapCondRatio + NOT(ValHPOut)*MTee_ValHXSec  !HPMfrHpEvapNom !1000.0
-MfrDemand = MfrPump
-
+** Demand
 MfrQSnk = QSnkM ! 500
+TSetDem = 50
 
-**************
-*** Valves ***
-**************
-
+** HX
 xFracValHXPri = NOT(ValHXOut)
 xFracValHXSec = xFracValHXPri
 
+** HP
 HpAct = 1
 ValHPPri = ValHPOut*GT(MTee7_Val3, HPMfrCondMin)*HpAct
+HPIsOn = ValHPPri
 xFracValHPPri = NOT(ValHPPri)
 xFracValHPSec = xFracValHPPri
 
+** Stratification
 xFracValStrat = NOT(ValStratControlHot)
-!xFracVal3 = 0 !GT(ModePP23, 0)
 
-**********
-*** HP ***
-**********
+** Primary
+MfrPump = ValHPOut*MTee_ValHXSec*HPMfrEvapCondRatio + NOT(ValHPOut)*MTee_ValHXSec  !HPMfrHpEvapNom !1000.0
+MfrDemand = MfrPump
 
-EQUATIONS #
-HPIsOn = ValHPPri
-
-******************
-*** SET-POINTS ***
-******************
-CONSTANTS #
-TSetDem = 50
-TSetColl = TSetDem + 20
-
-
+** HP recirculation
+MfrPuRecirc = (GT(MfrQSnk,HPMfrCondMin)*MfrQSnk + LE(MfrQSnk,HPMfrCondMin)*HPMfrCondMin) * HPIsOn
 
 ***********************
 ** Pit storage modes **
@@ -67,9 +49,9 @@ ModePP13 = GT(MfrSources, MfrDemand)*ValStratControlHot ! charging through upper
 ModePP31 = LE(MfrSources, MfrDemand) + GE(MfrSources, MfrDemand)*ModePP23 ! discharging
 ModePP23 = NOT(ValStratControlHot) ! charging through middle port GT(MfrSources, MfrDemand)*
 
-******************
-** Mixing valve **
-******************
+*************************
+** Demand mixing valve **
+*************************
 EQUATIONS #
 T_set_ValMix = TSetDem
 
