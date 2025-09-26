@@ -276,14 +276,14 @@ def kpi(sim: api.Simulation):
 
     #### Calculations ####
     sim.scalar["FactorRenewable"] = (sim.scalar["QSnkP_kW_Tot"] - sim.scalar["BolrPOut_kW_Tot"]) / sim.scalar["QSnkP_kW_Tot"]
-    5
+    sim.scalar["szVperDemand_m3_per_MWh"] = sim.scalar["VTotBtes"] / sim.scalar["QSnkP_kW_Tot"]
 
 def to_json(sim: api.Simulation):
     sim.scalar.to_json(sim.path + "\output.json", orient="records", indent=4)
     
 if __name__ == "__main__":
     path_to_sim = _pl.Path(r"C:\Daten\GIT\systems\BTES\results")
-    api.global_settings.reader.force_reread_prt = False
+    api.global_settings.reader.force_reread_prt = True
     api.global_settings.reader.read_step_files = False
 
     processing_steps = [

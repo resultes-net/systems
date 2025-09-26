@@ -264,6 +264,8 @@ M4 = $PI*((4*dR)^2-(3*dR)^2)*LProbes*rhoGround
 M5 = $PI*((5*dR)^2-(4*dR)^2)*LProbes*rhoGround
 M6 = $PI*((6*dR)^2-(5*dR)^2)*LProbes*rhoGround
 MTot = M1+M2+M3+M4+M5
+MTotBtes = MTot*NProbes
+VTotBtes = MTotBtes/rhoGround
 
 T1Avg = (T11+T12+T13+T14+T15)/5
 T2Avg = (T21+T22+T23+T24+T25)/5
