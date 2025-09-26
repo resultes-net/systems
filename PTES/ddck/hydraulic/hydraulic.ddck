@@ -82,105 +82,113 @@ dpRadNdDist = dpSoilThickness/dpNrSlRad ! Radial distance of any node in m
 dpNrSlCirc = 4  ! Number of circumferential soil nodes
 
 UNIT 450 TYPE 9352
-PARAMETERS 340
+PARAMETERS 368
 mfrSolverAbsTol
 mfrSolverRelTol
 mfrTolSwitchThreshold
-84
-73 42 0 0      !1 : SCnrCold
-66 74 0 0      !2 : SCnrHot
-73 72 0 0      !3 : SCnr2Cold
-71 74 0 0      !4 : SCnr2Hot
-57 58 0 0      !5 : Coll
-71 72 0 8      !6 : QSnk
-24 65 0 0      !7 : Bolr
-58 56 0 0      !8 : HxCollSide1
-53 55 0 0      !9 : HxCollSide2
-56 57 0 8      !10 : PuCollPri
-45 48 76 2     !11 : Tee2
-54 53 0 8      !12 : PuCollSec
-52 50 81 2     !13 : TeeStrat
-60 59 0 8      !14 : QSrc
-78 43 0 0      !15 : HpCond
-39 77 0 0      !16 : HpEvap
-67 68 0 0      !17 : HxSide1
-70 69 0 0      !18 : HxSide2
-26 78 23 3     !19 : ValHPSec
-44 70 25 3     !20 : ValHXSec
-69 26 25 2     !21 : Tee7
-43 24 23 2     !22 : Tee5
+91
+77 40 0 0      !1 : SCnrCold
+61 78 0 0      !2 : SCnrHot
+77 75 0 0      !3 : SCnr2Cold
+76 78 0 0      !4 : SCnr2Hot
+53 54 0 0      !5 : Coll
+76 75 0 8      !6 : QSnk
+88 79 0 0      !7 : Bolr
+54 52 0 0      !8 : HxCollSide1
+49 51 0 0      !9 : HxCollSide2
+52 53 0 8      !10 : PuCollPri
+41 44 74 2     !11 : Tee2
+50 49 0 8      !12 : PuCollSec
+48 46 70 2     !13 : TeeStrat
+56 55 0 8      !14 : QSrc
+83 85 0 0      !15 : HpCond
+37 67 0 0      !16 : HpEvap
+62 63 0 0      !17 : HxSide1
+65 64 0 0      !18 : HxSide2
+91 82 23 3     !19 : ValHPSec
+87 65 24 3     !20 : ValHXSec
+64 91 24 2     !21 : Tee7
+89 88 23 2     !22 : Tee5
 19 22 0 0      !23 : Val3_Tee5
-22 7 0 0       !24 : Tee5_Bolr
-20 21 0 0      !25 : Val5_Tee7
-21 19 0 0      !26 : Tee7_Val3
-50 67 31 3     !27 : ValHXPri
-32 39 33 3     !28 : ValHPPri
-32 68 31 2     !29 : Tee4
-47 77 33 2     !30 : Tee6
-27 29 0 0      !31 : Val2_Tee4
-29 28 0 0      !32 : Tee4_Val4
-28 30 0 0      !33 : Val4_Tee6
-59 60 0 0      !34 : HxQSrcSide1
-62 63 0 0      !35 : HxQSrcSide2
-54 45 61 2     !36 : Tee8
-55 51 63 2     !37 : Tee9
-61 62 0 8      !38 : PuSrcSec
-28 16 0 0      !39 : ValHPPri_HP
-44 42 64 2     !40 : Tee
-66 65 64 3     !41 : ValMix
-1 40 0 0       !42 : SCnr_Tee
-15 22 0 0      !43 : HP_Tee5
-40 20 0 0      !44 : Tee_ValHXSec
-11 36 0 0      !45 : Tee2_Tee8
-47 48 0 8      !46 : Pump
-30 46 0 0      !47 : Tee6_Pump
-46 11 0 0      !48 : Pump_Tee2
-51 52 82 3     !49 : ValStrat
-13 27 0 0      !50 : TeeStrat_ValHXPri
-37 49 0 0      !51 : Tee9_ValStrat
-49 13 0 0      !52 : ValStrat_TeeStrat
-12 9 0 0       !53 : PuCollSec_HxColl
-36 12 0 0      !54 : Tee8_PuCollSec
-9 37 0 0       !55 : HxColl_Tee9
-8 10 0 0       !56 : HxColl_PuCollPri
-10 5 0 0       !57 : PuCollPri_Coll
-5 8 0 0        !58 : Coll_HxColl
-14 34 0 0      !59 : QSrc_HxQSrc
-34 14 0 0      !60 : HxQSrc_QSrc
-36 38 0 0      !61 : Tee8_PuSrcSec
-38 35 0 0      !62 : PuSrcSec_HxQSrc
-35 37 0 0      !63 : HxQSrc_Tee9
-40 41 0 0      !64 : Tee_ValMix
-7 41 0 0       !65 : Bolr_ValMix
-41 2 0 0       !66 : ValMix_SCnr
-27 17 0 0      !67 : ValHXPri_Hx
-17 29 0 0      !68 : Hx_Tee4
-18 21 0 0      !69 : Hx_Tee7
-20 18 0 0      !70 : ValHXSec_Hx
-4 6 0 0        !71 : SCnr2_QSnk
-6 3 0 0        !72 : QSnk_SCnr2
-3 1 0 0        !73 : SCnr_SCnr2Cold
-2 4 0 0        !74 : SCnr_SCnr2Hot
-76 83 84 2     !75 : Tee3
-11 75 0 0      !76 : Tee2_Tee3
-16 30 0 0      !77 : HP_Tee6
-19 15 0 0      !78 : ValHPSec_HP
-82 83 0 0      !79 : pitStoreMedium
-81 84 0 0      !80 : pitStoreHot
-13 80 0 0      !81 : TeeStrat_pitStore
-49 79 0 0      !82 : ValStrat_pitStore
-79 75 0 0      !83 : pitStore_Tee3
-80 75 0 0      !84 : pitStore_Tee32
-INPUTS 84! for Type 9351
+20 21 0 0      !24 : Val5_Tee7
+46 62 29 3     !25 : ValHXPri
+30 37 31 3     !26 : ValHPPri
+30 63 29 2     !27 : Tee4
+43 67 31 2     !28 : Tee6
+25 27 0 0      !29 : Val2_Tee4
+27 26 0 0      !30 : Tee4_Val4
+26 28 0 0      !31 : Val4_Tee6
+55 56 0 0      !32 : HxQSrcSide1
+58 59 0 0      !33 : HxQSrcSide2
+50 41 57 2     !34 : Tee8
+51 47 59 2     !35 : Tee9
+57 58 0 8      !36 : PuSrcSec
+26 16 0 0      !37 : ValHPPri_HP
+87 40 60 2     !38 : Tee
+61 79 60 3     !39 : ValMix
+1 38 0 0       !40 : SCnr_Tee
+11 34 0 0      !41 : Tee2_Tee8
+43 44 0 8      !42 : Pump
+28 42 0 0      !43 : Tee6_Pump
+42 11 0 0      !44 : Pump_Tee2
+47 48 71 3     !45 : ValStrat
+13 25 0 0      !46 : TeeStrat_ValHXPri
+35 45 0 0      !47 : Tee9_ValStrat
+45 13 0 0      !48 : ValStrat_TeeStrat
+12 9 0 0       !49 : PuCollSec_HxColl
+34 12 0 0      !50 : Tee8_PuCollSec
+9 35 0 0       !51 : HxColl_Tee9
+8 10 0 0       !52 : HxColl_PuCollPri
+10 5 0 0       !53 : PuCollPri_Coll
+5 8 0 0        !54 : Coll_HxColl
+14 32 0 0      !55 : QSrc_HxQSrc
+32 14 0 0      !56 : HxQSrc_QSrc
+34 36 0 0      !57 : Tee8_PuSrcSec
+36 33 0 0      !58 : PuSrcSec_HxQSrc
+33 35 0 0      !59 : HxQSrc_Tee9
+38 39 0 0      !60 : Tee_ValMix
+39 2 0 0       !61 : ValMix_SCnr
+25 17 0 0      !62 : ValHXPri_Hx
+17 27 0 0      !63 : Hx_Tee4
+18 21 0 0      !64 : Hx_Tee7
+20 18 0 0      !65 : ValHXSec_Hx
+73 72 74 2     !66 : Tee3
+16 28 0 0      !67 : HP_Tee6
+71 73 0 0      !68 : pitStoreMedium
+70 72 0 0      !69 : pitStoreHot
+13 69 0 0      !70 : TeeStrat_pitStore
+45 68 0 0      !71 : ValStrat_pitStore
+69 66 0 0      !72 : pitStore_Tee3
+68 66 0 0      !73 : pitStore_Tee32
+66 11 0 0      !74 : Tee3_Tee2
+6 3 0 0        !75 : QSnk_SCnr2
+4 6 0 0        !76 : SCnr2_QSnk
+3 1 0 0        !77 : SCnr_SCnr2Cold
+2 4 0 0        !78 : SCnr_SCnr2Hot
+7 39 0 0       !79 : Bolr_ValMix
+90 83 0 8      !80 : PuRecirc
+90 82 86 2     !81 : Tee10
+19 81 0 0      !82 : ValHPSec_Tee10
+80 15 0 0      !83 : PuRecirc_Hp
+89 85 86 2     !84 : Tee11
+15 84 0 0      !85 : Hp_Tee11
+84 81 0 0      !86 : Tee11_Tee10
+38 20 0 0      !87 : Tee_ValHXSec
+22 7 0 0       !88 : Tee5_Bolr
+84 22 0 0      !89 : Tee11_Tee5
+81 80 0 0      !90 : Tee10_PuRecirc
+21 19 0 0      !91 : Tee7_ValHPSec
+INPUTS 91! for Type 9351
 0,0 0,0 0,0 0,0 0,0 MfrQSnk 0,0 0,0 0,0 MfrPuCollPri 
 0,0 MfrPuCollSec 0,0 MfrQSrc 0,0 0,0 0,0 0,0 xFracValHPSec xFracValHXSec 
-0,0 0,0 0,0 0,0 0,0 0,0 xFracValHXPri xFracValHPPri 0,0 0,0 
-0,0 0,0 0,0 0,0 0,0 0,0 0,0 MfrPuSrcSec 0,0 0,0 
-xFracValMix 0,0 0,0 0,0 0,0 MfrPump 0,0 0,0 xFracValStrat 0,0 
+0,0 0,0 0,0 0,0 xFracValHXPri xFracValHPPri 0,0 0,0 0,0 0,0 
+0,0 0,0 0,0 0,0 0,0 MfrPuSrcSec 0,0 0,0 xFracValMix 0,0 
+0,0 MfrPump 0,0 0,0 xFracValStrat 0,0 0,0 0,0 0,0 0,0 
 0,0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 
 0,0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 
+0,0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 MfrPuRecirc 
 0,0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 
-0,0 0,0 0,0 0,0 
+0,0 
 *** Initial Inputs
 0 0 0 0 0 0 0 0 0 0 
 0 0 0 0 0 0 0 0 0 0 
@@ -190,9 +198,10 @@ xFracValMix 0,0 0,0 0,0 0,0 MfrPump 0,0 0,0 xFracValStrat 0,0
 0 0 0 0 0 0 0 0 0 0 
 0 0 0 0 0 0 0 0 0 0 
 0 0 0 0 0 0 0 0 0 0 
-0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 
+0 
 
-EQUATIONS 184	! Output up to three (A,B,C) mass flow rates of each component, positive = input/inlet, negative = output/outlet 
+EQUATIONS 200	! Output up to three (A,B,C) mass flow rates of each component, positive = input/inlet, negative = output/outlet 
 MSCnrCold_A=[450,1]
 MSCnrCold_B=[450,2]
 MSCnrHot_A=[450,4]
@@ -245,138 +254,154 @@ MTee5_B=[450,65]
 MTee5_C=[450,66]
 MVal3_Tee5_A=[450,67]
 MVal3_Tee5_B=[450,68]
-MTee5_Bolr_A=[450,70]
-MTee5_Bolr_B=[450,71]
-MVal5_Tee7_A=[450,73]
-MVal5_Tee7_B=[450,74]
-MTee7_Val3_A=[450,76]
-MTee7_Val3_B=[450,77]
-MValHXPri_A=[450,79]
-MValHXPri_B=[450,80]
-MValHXPri_C=[450,81]
-MValHPPri_A=[450,82]
-MValHPPri_B=[450,83]
-MValHPPri_C=[450,84]
-MTee4_A=[450,85]
-MTee4_B=[450,86]
-MTee4_C=[450,87]
-MTee6_A=[450,88]
-MTee6_B=[450,89]
-MTee6_C=[450,90]
-MVal2_Tee4_A=[450,91]
-MVal2_Tee4_B=[450,92]
-MTee4_Val4_A=[450,94]
-MTee4_Val4_B=[450,95]
-MVal4_Tee6_A=[450,97]
-MVal4_Tee6_B=[450,98]
-MHxQSrcSide1_A=[450,100]
-MHxQSrcSide1_B=[450,101]
-MHxQSrcSide2_A=[450,103]
-MHxQSrcSide2_B=[450,104]
-MTee8_A=[450,106]
-MTee8_B=[450,107]
-MTee8_C=[450,108]
-MTee9_A=[450,109]
-MTee9_B=[450,110]
-MTee9_C=[450,111]
-MPuSrcSec_A=[450,112]
-MPuSrcSec_B=[450,113]
-MValHPPri_HP_A=[450,115]
-MValHPPri_HP_B=[450,116]
-MTee_A=[450,118]
-MTee_B=[450,119]
-MTee_C=[450,120]
-MValMix_A=[450,121]
-MValMix_B=[450,122]
-MValMix_C=[450,123]
-MSCnr_Tee_A=[450,124]
-MSCnr_Tee_B=[450,125]
-MHP_Tee5_A=[450,127]
-MHP_Tee5_B=[450,128]
-MTee_ValHXSec_A=[450,130]
-MTee_ValHXSec_B=[450,131]
-MTee2_Tee8_A=[450,133]
-MTee2_Tee8_B=[450,134]
-MPump_A=[450,136]
-MPump_B=[450,137]
-MTee6_Pump_A=[450,139]
-MTee6_Pump_B=[450,140]
-MPump_Tee2_A=[450,142]
-MPump_Tee2_B=[450,143]
-MValStrat_A=[450,145]
-MValStrat_B=[450,146]
-MValStrat_C=[450,147]
-MTeeStrat_ValHXPri_A=[450,148]
-MTeeStrat_ValHXPri_B=[450,149]
-MTee9_ValStrat_A=[450,151]
-MTee9_ValStrat_B=[450,152]
-MValStrat_TeeStrat_A=[450,154]
-MValStrat_TeeStrat_B=[450,155]
-MPuCollSec_HxColl_A=[450,157]
-MPuCollSec_HxColl_B=[450,158]
-MTee8_PuCollSec_A=[450,160]
-MTee8_PuCollSec_B=[450,161]
-MHxColl_Tee9_A=[450,163]
-MHxColl_Tee9_B=[450,164]
-MHxColl_PuCollPri_A=[450,166]
-MHxColl_PuCollPri_B=[450,167]
-MPuCollPri_Coll_A=[450,169]
-MPuCollPri_Coll_B=[450,170]
-MColl_HxColl_A=[450,172]
-MColl_HxColl_B=[450,173]
-MQSrc_HxQSrc_A=[450,175]
-MQSrc_HxQSrc_B=[450,176]
-MHxQSrc_QSrc_A=[450,178]
-MHxQSrc_QSrc_B=[450,179]
-MTee8_PuSrcSec_A=[450,181]
-MTee8_PuSrcSec_B=[450,182]
-MPuSrcSec_HxQSrc_A=[450,184]
-MPuSrcSec_HxQSrc_B=[450,185]
-MHxQSrc_Tee9_A=[450,187]
-MHxQSrc_Tee9_B=[450,188]
-MTee_ValMix_A=[450,190]
-MTee_ValMix_B=[450,191]
-MBolr_ValMix_A=[450,193]
-MBolr_ValMix_B=[450,194]
-MValMix_SCnr_A=[450,196]
-MValMix_SCnr_B=[450,197]
-MValHXPri_Hx_A=[450,199]
-MValHXPri_Hx_B=[450,200]
-MHx_Tee4_A=[450,202]
-MHx_Tee4_B=[450,203]
-MHx_Tee7_A=[450,205]
-MHx_Tee7_B=[450,206]
-MValHXSec_Hx_A=[450,208]
-MValHXSec_Hx_B=[450,209]
-MSCnr2_QSnk_A=[450,211]
-MSCnr2_QSnk_B=[450,212]
-MQSnk_SCnr2_A=[450,214]
-MQSnk_SCnr2_B=[450,215]
-MSCnr_SCnr2Cold_A=[450,217]
-MSCnr_SCnr2Cold_B=[450,218]
-MSCnr_SCnr2Hot_A=[450,220]
-MSCnr_SCnr2Hot_B=[450,221]
-MTee3_A=[450,223]
-MTee3_B=[450,224]
-MTee3_C=[450,225]
-MTee2_Tee3_A=[450,226]
-MTee2_Tee3_B=[450,227]
-MHP_Tee6_A=[450,229]
-MHP_Tee6_B=[450,230]
-MValHPSec_HP_A=[450,232]
-MValHPSec_HP_B=[450,233]
-MpitStoreMedium_A=[450,235]
-MpitStoreMedium_B=[450,236]
-MpitStoreHot_A=[450,238]
-MpitStoreHot_B=[450,239]
-MTeeStrat_pitStore_A=[450,241]
-MTeeStrat_pitStore_B=[450,242]
-MValStrat_pitStore_A=[450,244]
-MValStrat_pitStore_B=[450,245]
-MpitStore_Tee3_A=[450,247]
-MpitStore_Tee3_B=[450,248]
-MpitStore_Tee32_A=[450,250]
-MpitStore_Tee32_B=[450,251]
+MVal5_Tee7_A=[450,70]
+MVal5_Tee7_B=[450,71]
+MValHXPri_A=[450,73]
+MValHXPri_B=[450,74]
+MValHXPri_C=[450,75]
+MValHPPri_A=[450,76]
+MValHPPri_B=[450,77]
+MValHPPri_C=[450,78]
+MTee4_A=[450,79]
+MTee4_B=[450,80]
+MTee4_C=[450,81]
+MTee6_A=[450,82]
+MTee6_B=[450,83]
+MTee6_C=[450,84]
+MVal2_Tee4_A=[450,85]
+MVal2_Tee4_B=[450,86]
+MTee4_Val4_A=[450,88]
+MTee4_Val4_B=[450,89]
+MVal4_Tee6_A=[450,91]
+MVal4_Tee6_B=[450,92]
+MHxQSrcSide1_A=[450,94]
+MHxQSrcSide1_B=[450,95]
+MHxQSrcSide2_A=[450,97]
+MHxQSrcSide2_B=[450,98]
+MTee8_A=[450,100]
+MTee8_B=[450,101]
+MTee8_C=[450,102]
+MTee9_A=[450,103]
+MTee9_B=[450,104]
+MTee9_C=[450,105]
+MPuSrcSec_A=[450,106]
+MPuSrcSec_B=[450,107]
+MValHPPri_HP_A=[450,109]
+MValHPPri_HP_B=[450,110]
+MTee_A=[450,112]
+MTee_B=[450,113]
+MTee_C=[450,114]
+MValMix_A=[450,115]
+MValMix_B=[450,116]
+MValMix_C=[450,117]
+MSCnr_Tee_A=[450,118]
+MSCnr_Tee_B=[450,119]
+MTee2_Tee8_A=[450,121]
+MTee2_Tee8_B=[450,122]
+MPump_A=[450,124]
+MPump_B=[450,125]
+MTee6_Pump_A=[450,127]
+MTee6_Pump_B=[450,128]
+MPump_Tee2_A=[450,130]
+MPump_Tee2_B=[450,131]
+MValStrat_A=[450,133]
+MValStrat_B=[450,134]
+MValStrat_C=[450,135]
+MTeeStrat_ValHXPri_A=[450,136]
+MTeeStrat_ValHXPri_B=[450,137]
+MTee9_ValStrat_A=[450,139]
+MTee9_ValStrat_B=[450,140]
+MValStrat_TeeStrat_A=[450,142]
+MValStrat_TeeStrat_B=[450,143]
+MPuCollSec_HxColl_A=[450,145]
+MPuCollSec_HxColl_B=[450,146]
+MTee8_PuCollSec_A=[450,148]
+MTee8_PuCollSec_B=[450,149]
+MHxColl_Tee9_A=[450,151]
+MHxColl_Tee9_B=[450,152]
+MHxColl_PuCollPri_A=[450,154]
+MHxColl_PuCollPri_B=[450,155]
+MPuCollPri_Coll_A=[450,157]
+MPuCollPri_Coll_B=[450,158]
+MColl_HxColl_A=[450,160]
+MColl_HxColl_B=[450,161]
+MQSrc_HxQSrc_A=[450,163]
+MQSrc_HxQSrc_B=[450,164]
+MHxQSrc_QSrc_A=[450,166]
+MHxQSrc_QSrc_B=[450,167]
+MTee8_PuSrcSec_A=[450,169]
+MTee8_PuSrcSec_B=[450,170]
+MPuSrcSec_HxQSrc_A=[450,172]
+MPuSrcSec_HxQSrc_B=[450,173]
+MHxQSrc_Tee9_A=[450,175]
+MHxQSrc_Tee9_B=[450,176]
+MTee_ValMix_A=[450,178]
+MTee_ValMix_B=[450,179]
+MValMix_SCnr_A=[450,181]
+MValMix_SCnr_B=[450,182]
+MValHXPri_Hx_A=[450,184]
+MValHXPri_Hx_B=[450,185]
+MHx_Tee4_A=[450,187]
+MHx_Tee4_B=[450,188]
+MHx_Tee7_A=[450,190]
+MHx_Tee7_B=[450,191]
+MValHXSec_Hx_A=[450,193]
+MValHXSec_Hx_B=[450,194]
+MTee3_A=[450,196]
+MTee3_B=[450,197]
+MTee3_C=[450,198]
+MHP_Tee6_A=[450,199]
+MHP_Tee6_B=[450,200]
+MpitStoreMedium_A=[450,202]
+MpitStoreMedium_B=[450,203]
+MpitStoreHot_A=[450,205]
+MpitStoreHot_B=[450,206]
+MTeeStrat_pitStore_A=[450,208]
+MTeeStrat_pitStore_B=[450,209]
+MValStrat_pitStore_A=[450,211]
+MValStrat_pitStore_B=[450,212]
+MpitStore_Tee3_A=[450,214]
+MpitStore_Tee3_B=[450,215]
+MpitStore_Tee32_A=[450,217]
+MpitStore_Tee32_B=[450,218]
+MTee3_Tee2_A=[450,220]
+MTee3_Tee2_B=[450,221]
+MQSnk_SCnr2_A=[450,223]
+MQSnk_SCnr2_B=[450,224]
+MSCnr2_QSnk_A=[450,226]
+MSCnr2_QSnk_B=[450,227]
+MSCnr_SCnr2Cold_A=[450,229]
+MSCnr_SCnr2Cold_B=[450,230]
+MSCnr_SCnr2Hot_A=[450,232]
+MSCnr_SCnr2Hot_B=[450,233]
+MBolr_ValMix_A=[450,235]
+MBolr_ValMix_B=[450,236]
+MPuRecirc_A=[450,238]
+MPuRecirc_B=[450,239]
+MTee10_A=[450,241]
+MTee10_B=[450,242]
+MTee10_C=[450,243]
+MValHPSec_Tee10_A=[450,244]
+MValHPSec_Tee10_B=[450,245]
+MPuRecirc_Hp_A=[450,247]
+MPuRecirc_Hp_B=[450,248]
+MTee11_A=[450,250]
+MTee11_B=[450,251]
+MTee11_C=[450,252]
+MHp_Tee11_A=[450,253]
+MHp_Tee11_B=[450,254]
+MTee11_Tee10_A=[450,256]
+MTee11_Tee10_B=[450,257]
+MTee_ValHXSec_A=[450,259]
+MTee_ValHXSec_B=[450,260]
+MTee5_Bolr_A=[450,262]
+MTee5_Bolr_B=[450,263]
+MTee11_Tee5_A=[450,265]
+MTee11_Tee5_B=[450,266]
+MTee10_PuRecirc_A=[450,268]
+MTee10_PuRecirc_B=[450,269]
+MTee7_ValHPSec_A=[450,271]
+MTee7_ValHPSec_B=[450,272]
 
 
 ** Fluids:
@@ -398,10 +423,6 @@ Lloop1Cp = FwaterCp
 Lloop4Rho = FwaterRho
 Lloop4Cp = FwaterCp
 
-** loop7
-Lloop7Rho = FwaterRho
-Lloop7Cp = FwaterCp
-
 ** loop5
 Lloop5Rho = FwaterRho
 Lloop5Cp = FwaterCp
@@ -413,6 +434,10 @@ loop2Dia = 0.02 ! [m]
 loop2UVal = 9.99972 ! [kJ/(h*m^2*K)] (= 2.7777 W/(m^2*K))
 Lloop2Rho = FbrineRho
 Lloop2Cp = FbrineCp
+
+** loop6
+Lloop6Rho = FwaterRho
+Lloop6Cp = FwaterCp
 
 
 ! BEGIN SCnr
@@ -489,7 +514,7 @@ MTee2_B
 MTee2_C
 TTee2_Tee8
 TPump_Tee2
-TTee2_Tee3
+TTee3_Tee2
 ***
 0
 0
@@ -538,8 +563,8 @@ INPUTS 6
 MValHPSec_A
 MValHPSec_B
 MValHPSec_C
-TTee7_Val3
-TValHPSec_HP
+TTee7_ValHPSec
+TValHPSec_Tee10
 TVal3_Tee5
 ***Initial values
 0 0 0 20 20 20 
@@ -568,7 +593,7 @@ MTee7_A
 MTee7_B
 MTee7_C
 THx_Tee7
-TTee7_Val3
+TTee7_ValHPSec
 TVal5_Tee7
 ***
 0
@@ -586,7 +611,7 @@ INPUTS 6
 MTee5_A
 MTee5_B
 MTee5_C
-THP_Tee5
+TTee11_Tee5
 TTee5_Bolr
 TVal3_Tee5
 ***
@@ -616,38 +641,14 @@ PARAMETERS 2
 mfrSolverAbsTol
 spTIni
 INPUTS 3
-MTee5_Bolr_A TTee5 TBolrH
-***
-0 spTIni spTIni
-EQUATIONS 2
-TTee5_Bolr = [464,1]
-MTee5_Bolr = MTee5_Bolr_A
-
-UNIT 465 TYPE 2221
-PARAMETERS 2
-mfrSolverAbsTol
-spTIni
-INPUTS 3
 MVal5_Tee7_A TValHXSec TTee7
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TVal5_Tee7 = [465,1]
+TVal5_Tee7 = [464,1]
 MVal5_Tee7 = MVal5_Tee7_A
 
-UNIT 466 TYPE 2221
-PARAMETERS 2
-mfrSolverAbsTol
-spTIni
-INPUTS 3
-MTee7_Val3_A TTee7 TValHPSec
-***
-0 spTIni spTIni
-EQUATIONS 2
-TTee7_Val3 = [466,1]
-MTee7_Val3 = MTee7_Val3_A
-
-UNIT 467 TYPE 929
+UNIT 465 TYPE 929
 !ValHXPri
 PARAMETERS 0
 INPUTS 6
@@ -660,9 +661,9 @@ TVal2_Tee4
 ***Initial values
 0 0 0 20 20 20 
 EQUATIONS 1
-TValHXPri= [467,1]
+TValHXPri= [465,1]
 
-UNIT 468 TYPE 929
+UNIT 466 TYPE 929
 !ValHPPri
 PARAMETERS 0
 INPUTS 6
@@ -675,10 +676,10 @@ TVal4_Tee6
 ***Initial values
 0 0 0 20 20 20 
 EQUATIONS 1
-TValHPPri= [468,1]
+TValHPPri= [466,1]
 
 ! Tee4
-UNIT 469 TYPE 929
+UNIT 467 TYPE 929
 INPUTS 6
 MTee4_A
 MTee4_B
@@ -694,10 +695,10 @@ TVal2_Tee4
 20.0
 20.0
 EQUATIONS 1
-TTee4 = [469,1]
+TTee4 = [467,1]
 
 ! Tee6
-UNIT 470 TYPE 929
+UNIT 468 TYPE 929
 INPUTS 6
 MTee6_A
 MTee6_B
@@ -713,9 +714,9 @@ TVal4_Tee6
 20.0
 20.0
 EQUATIONS 1
-TTee6 = [470,1]
+TTee6 = [468,1]
 
-UNIT 471 TYPE 2221
+UNIT 469 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -724,10 +725,10 @@ MVal2_Tee4_A TValHXPri TTee4
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TVal2_Tee4 = [471,1]
+TVal2_Tee4 = [469,1]
 MVal2_Tee4 = MVal2_Tee4_A
 
-UNIT 472 TYPE 2221
+UNIT 470 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -736,10 +737,10 @@ MTee4_Val4_A TTee4 TValHPPri
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TTee4_Val4 = [472,1]
+TTee4_Val4 = [470,1]
 MTee4_Val4 = MTee4_Val4_A
 
-UNIT 473 TYPE 2221
+UNIT 471 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -748,11 +749,11 @@ MVal4_Tee6_A TValHPPri TTee6
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TVal4_Tee6 = [473,1]
+TVal4_Tee6 = [471,1]
 MVal4_Tee6 = MVal4_Tee6_A
 
 ! Tee8
-UNIT 474 TYPE 929
+UNIT 472 TYPE 929
 INPUTS 6
 MTee8_A
 MTee8_B
@@ -768,10 +769,10 @@ TTee8_PuSrcSec
 20.0
 20.0
 EQUATIONS 1
-TTee8 = [474,1]
+TTee8 = [472,1]
 
 ! Tee9
-UNIT 475 TYPE 929
+UNIT 473 TYPE 929
 INPUTS 6
 MTee9_A
 MTee9_B
@@ -787,9 +788,9 @@ THxQSrc_Tee9
 20.0
 20.0
 EQUATIONS 1
-TTee9 = [475,1]
+TTee9 = [473,1]
 
-UNIT 476 TYPE 2221
+UNIT 474 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -798,10 +799,10 @@ MPuSrcSec_A TTee8_PuSrcSec TPuSrcSec_HxQSrc
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TPuSrcSec = [476,1]
+TPuSrcSec = [474,1]
 MPuSrcSec = MPuSrcSec_A
 
-UNIT 477 TYPE 2221
+UNIT 475 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -810,11 +811,11 @@ MValHPPri_HP_A TValHPPri THpEvapH
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TValHPPri_HP = [477,1]
+TValHPPri_HP = [475,1]
 MValHPPri_HP = MValHPPri_HP_A
 
 ! Tee
-UNIT 478 TYPE 929
+UNIT 476 TYPE 929
 INPUTS 6
 MTee_A
 MTee_B
@@ -830,9 +831,9 @@ TTee_ValMix
 20.0
 20.0
 EQUATIONS 1
-TTee = [478,1]
+TTee = [476,1]
 
-UNIT 479 TYPE 929
+UNIT 477 TYPE 929
 !ValMix
 PARAMETERS 0
 INPUTS 6
@@ -845,9 +846,9 @@ TTee_ValMix
 ***Initial values
 0 0 0 20 20 20 
 EQUATIONS 1
-TValMix= [479,1]
+TValMix= [477,1]
 
-UNIT 480 TYPE 2221
+UNIT 478 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -856,34 +857,10 @@ MSCnr_Tee_A TSCnrCold TTee
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TSCnr_Tee = [480,1]
+TSCnr_Tee = [478,1]
 MSCnr_Tee = MSCnr_Tee_A
 
-UNIT 481 TYPE 2221
-PARAMETERS 2
-mfrSolverAbsTol
-spTIni
-INPUTS 3
-MHP_Tee5_A THpCondH TTee5
-***
-0 spTIni spTIni
-EQUATIONS 2
-THP_Tee5 = [481,1]
-MHP_Tee5 = MHP_Tee5_A
-
-UNIT 482 TYPE 2221
-PARAMETERS 2
-mfrSolverAbsTol
-spTIni
-INPUTS 3
-MTee_ValHXSec_A TTee TValHXSec
-***
-0 spTIni spTIni
-EQUATIONS 2
-TTee_ValHXSec = [482,1]
-MTee_ValHXSec = MTee_ValHXSec_A
-
-UNIT 483 TYPE 2221
+UNIT 479 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -892,10 +869,10 @@ MTee2_Tee8_A TTee2 TTee8
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TTee2_Tee8 = [483,1]
+TTee2_Tee8 = [479,1]
 MTee2_Tee8 = MTee2_Tee8_A
 
-UNIT 484 TYPE 2221
+UNIT 480 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -904,10 +881,10 @@ MPump_A TTee6_Pump TPump_Tee2
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TPump = [484,1]
+TPump = [480,1]
 MPump = MPump_A
 
-UNIT 485 TYPE 2221
+UNIT 481 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -916,10 +893,10 @@ MTee6_Pump_A TTee6 TPump
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TTee6_Pump = [485,1]
+TTee6_Pump = [481,1]
 MTee6_Pump = MTee6_Pump_A
 
-UNIT 486 TYPE 2221
+UNIT 482 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -928,10 +905,10 @@ MPump_Tee2_A TPump TTee2
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TPump_Tee2 = [486,1]
+TPump_Tee2 = [482,1]
 MPump_Tee2 = MPump_Tee2_A
 
-UNIT 487 TYPE 929
+UNIT 483 TYPE 929
 !ValStrat
 PARAMETERS 0
 INPUTS 6
@@ -944,9 +921,9 @@ TValStrat_pitStore
 ***Initial values
 0 0 0 20 20 20 
 EQUATIONS 1
-TValStrat= [487,1]
+TValStrat= [483,1]
 
-UNIT 488 TYPE 2221
+UNIT 484 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -955,10 +932,10 @@ MTeeStrat_ValHXPri_A TTeeStrat TValHXPri
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TTeeStrat_ValHXPri = [488,1]
+TTeeStrat_ValHXPri = [484,1]
 MTeeStrat_ValHXPri = MTeeStrat_ValHXPri_A
 
-UNIT 489 TYPE 2221
+UNIT 485 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -967,10 +944,10 @@ MTee9_ValStrat_A TTee9 TValStrat
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TTee9_ValStrat = [489,1]
+TTee9_ValStrat = [485,1]
 MTee9_ValStrat = MTee9_ValStrat_A
 
-UNIT 490 TYPE 2221
+UNIT 486 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -979,10 +956,10 @@ MValStrat_TeeStrat_A TValStrat TTeeStrat
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TValStrat_TeeStrat = [490,1]
+TValStrat_TeeStrat = [486,1]
 MValStrat_TeeStrat = MValStrat_TeeStrat_A
 
-UNIT 491 TYPE 2221
+UNIT 487 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -991,10 +968,10 @@ MPuCollSec_HxColl_A TPuCollSec THxCollSide2H
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TPuCollSec_HxColl = [491,1]
+TPuCollSec_HxColl = [487,1]
 MPuCollSec_HxColl = MPuCollSec_HxColl_A
 
-UNIT 492 TYPE 2221
+UNIT 488 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -1003,10 +980,10 @@ MTee8_PuCollSec_A TTee8 TPuCollSec
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TTee8_PuCollSec = [492,1]
+TTee8_PuCollSec = [488,1]
 MTee8_PuCollSec = MTee8_PuCollSec_A
 
-UNIT 493 TYPE 2221
+UNIT 489 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -1015,10 +992,10 @@ MHxColl_Tee9_A THxCollSide2H TTee9
 ***
 0 spTIni spTIni
 EQUATIONS 2
-THxColl_Tee9 = [493,1]
+THxColl_Tee9 = [489,1]
 MHxColl_Tee9 = MHxColl_Tee9_A
 
-UNIT 494 TYPE 931
+UNIT 490 TYPE 931
 ! HxColl_PuCollPri
 PARAMETERS 6
 loop2Dia ! diameter [m]
@@ -1036,13 +1013,13 @@ TPuCollPri ! reverse flow input temperature [deg C]
 20 0.0 20 20
 
 EQUATIONS 5
-THxColl_PuCollPri = [494,1] ! Output flow temperature [deg C]
-PHxColl_PuCollPri_kW = [494,3]/3600 ! Dissipated heat [kW]
-PHxColl_PuCollPriConv_kW = [494,4]/3600 ! Convected heat [kW]
-PHxColl_PuCollPriInt_kJ = [494,5] ! Accumulated internal energy since start of simulation [kJ]
+THxColl_PuCollPri = [490,1] ! Output flow temperature [deg C]
+PHxColl_PuCollPri_kW = [490,3]/3600 ! Dissipated heat [kW]
+PHxColl_PuCollPriConv_kW = [490,4]/3600 ! Convected heat [kW]
+PHxColl_PuCollPriInt_kJ = [490,5] ! Accumulated internal energy since start of simulation [kJ]
 MHxColl_PuCollPri = MHxColl_PuCollPri_A
 
-UNIT 495 TYPE 931
+UNIT 491 TYPE 931
 ! PuCollPri_Coll
 PARAMETERS 6
 loop2Dia ! diameter [m]
@@ -1060,13 +1037,13 @@ TCollH ! reverse flow input temperature [deg C]
 20 0.0 20 20
 
 EQUATIONS 5
-TPuCollPri_Coll = [495,1] ! Output flow temperature [deg C]
-PPuCollPri_Coll_kW = [495,3]/3600 ! Dissipated heat [kW]
-PPuCollPri_CollConv_kW = [495,4]/3600 ! Convected heat [kW]
-PPuCollPri_CollInt_kJ = [495,5] ! Accumulated internal energy since start of simulation [kJ]
+TPuCollPri_Coll = [491,1] ! Output flow temperature [deg C]
+PPuCollPri_Coll_kW = [491,3]/3600 ! Dissipated heat [kW]
+PPuCollPri_CollConv_kW = [491,4]/3600 ! Convected heat [kW]
+PPuCollPri_CollInt_kJ = [491,5] ! Accumulated internal energy since start of simulation [kJ]
 MPuCollPri_Coll = MPuCollPri_Coll_A
 
-UNIT 496 TYPE 931
+UNIT 492 TYPE 931
 ! Coll_HxColl
 PARAMETERS 6
 loop2Dia ! diameter [m]
@@ -1084,13 +1061,13 @@ THxCollSide1H ! reverse flow input temperature [deg C]
 20 0.0 20 20
 
 EQUATIONS 5
-TColl_HxColl = [496,1] ! Output flow temperature [deg C]
-PColl_HxColl_kW = [496,3]/3600 ! Dissipated heat [kW]
-PColl_HxCollConv_kW = [496,4]/3600 ! Convected heat [kW]
-PColl_HxCollInt_kJ = [496,5] ! Accumulated internal energy since start of simulation [kJ]
+TColl_HxColl = [492,1] ! Output flow temperature [deg C]
+PColl_HxColl_kW = [492,3]/3600 ! Dissipated heat [kW]
+PColl_HxCollConv_kW = [492,4]/3600 ! Convected heat [kW]
+PColl_HxCollInt_kJ = [492,5] ! Accumulated internal energy since start of simulation [kJ]
 MColl_HxColl = MColl_HxColl_A
 
-UNIT 497 TYPE 2221
+UNIT 493 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -1099,10 +1076,10 @@ MQSrc_HxQSrc_A TQSrcH THxQSrcSide1H
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TQSrc_HxQSrc = [497,1]
+TQSrc_HxQSrc = [493,1]
 MQSrc_HxQSrc = MQSrc_HxQSrc_A
 
-UNIT 498 TYPE 2221
+UNIT 494 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -1111,10 +1088,10 @@ MHxQSrc_QSrc_A THxQSrcSide1H TQSrcH
 ***
 0 spTIni spTIni
 EQUATIONS 2
-THxQSrc_QSrc = [498,1]
+THxQSrc_QSrc = [494,1]
 MHxQSrc_QSrc = MHxQSrc_QSrc_A
 
-UNIT 499 TYPE 2221
+UNIT 495 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -1123,10 +1100,10 @@ MTee8_PuSrcSec_A TTee8 TPuSrcSec
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TTee8_PuSrcSec = [499,1]
+TTee8_PuSrcSec = [495,1]
 MTee8_PuSrcSec = MTee8_PuSrcSec_A
 
-UNIT 500 TYPE 2221
+UNIT 496 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -1135,10 +1112,10 @@ MPuSrcSec_HxQSrc_A TPuSrcSec THxQSrcSide2H
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TPuSrcSec_HxQSrc = [500,1]
+TPuSrcSec_HxQSrc = [496,1]
 MPuSrcSec_HxQSrc = MPuSrcSec_HxQSrc_A
 
-UNIT 501 TYPE 2221
+UNIT 497 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -1147,10 +1124,10 @@ MHxQSrc_Tee9_A THxQSrcSide2H TTee9
 ***
 0 spTIni spTIni
 EQUATIONS 2
-THxQSrc_Tee9 = [501,1]
+THxQSrc_Tee9 = [497,1]
 MHxQSrc_Tee9 = MHxQSrc_Tee9_A
 
-UNIT 502 TYPE 2221
+UNIT 498 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -1159,22 +1136,10 @@ MTee_ValMix_A TTee TValMix
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TTee_ValMix = [502,1]
+TTee_ValMix = [498,1]
 MTee_ValMix = MTee_ValMix_A
 
-UNIT 503 TYPE 2221
-PARAMETERS 2
-mfrSolverAbsTol
-spTIni
-INPUTS 3
-MBolr_ValMix_A TBolrH TValMix
-***
-0 spTIni spTIni
-EQUATIONS 2
-TBolr_ValMix = [503,1]
-MBolr_ValMix = MBolr_ValMix_A
-
-UNIT 504 TYPE 2221
+UNIT 499 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -1183,10 +1148,10 @@ MValMix_SCnr_A TValMix TSCnrHot
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TValMix_SCnr = [504,1]
+TValMix_SCnr = [499,1]
 MValMix_SCnr = MValMix_SCnr_A
 
-UNIT 505 TYPE 2221
+UNIT 500 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -1195,10 +1160,10 @@ MValHXPri_Hx_A TValHXPri THxSide1H
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TValHXPri_Hx = [505,1]
+TValHXPri_Hx = [500,1]
 MValHXPri_Hx = MValHXPri_Hx_A
 
-UNIT 506 TYPE 2221
+UNIT 501 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -1207,10 +1172,10 @@ MHx_Tee4_A THxSide1H TTee4
 ***
 0 spTIni spTIni
 EQUATIONS 2
-THx_Tee4 = [506,1]
+THx_Tee4 = [501,1]
 MHx_Tee4 = MHx_Tee4_A
 
-UNIT 507 TYPE 2221
+UNIT 502 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -1219,10 +1184,10 @@ MHx_Tee7_A THxSide2H TTee7
 ***
 0 spTIni spTIni
 EQUATIONS 2
-THx_Tee7 = [507,1]
+THx_Tee7 = [502,1]
 MHx_Tee7 = MHx_Tee7_A
 
-UNIT 508 TYPE 2221
+UNIT 503 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -1231,22 +1196,101 @@ MValHXSec_Hx_A TValHXSec THxSide2H
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TValHXSec_Hx = [508,1]
+TValHXSec_Hx = [503,1]
 MValHXSec_Hx = MValHXSec_Hx_A
+
+! Tee3
+UNIT 504 TYPE 929
+INPUTS 6
+MTee3_A
+MTee3_B
+MTee3_C
+TpitStore_Tee32
+TpitStore_Tee3
+TTee3_Tee2
+***
+0
+0
+0
+20.0
+20.0
+20.0
+EQUATIONS 1
+TTee3 = [504,1]
+
+UNIT 505 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MHP_Tee6_A THpEvapH TTee6
+***
+0 spTIni spTIni
+EQUATIONS 2
+THP_Tee6 = [505,1]
+MHP_Tee6 = MHP_Tee6_A
+
+UNIT 506 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MTeeStrat_pitStore_A TTeeStrat TpitStoreHotH
+***
+0 spTIni spTIni
+EQUATIONS 2
+TTeeStrat_pitStore = [506,1]
+MTeeStrat_pitStore = MTeeStrat_pitStore_A
+
+UNIT 507 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MValStrat_pitStore_A TValStrat TpitStoreMediumH
+***
+0 spTIni spTIni
+EQUATIONS 2
+TValStrat_pitStore = [507,1]
+MValStrat_pitStore = MValStrat_pitStore_A
+
+UNIT 508 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MpitStore_Tee3_A TpitStoreHotH TTee3
+***
+0 spTIni spTIni
+EQUATIONS 2
+TpitStore_Tee3 = [508,1]
+MpitStore_Tee3 = MpitStore_Tee3_A
 
 UNIT 509 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
 INPUTS 3
-MSCnr2_QSnk_A TSCnr2Hot TQSnkH
+MpitStore_Tee32_A TpitStoreMediumH TTee3
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TSCnr2_QSnk = [509,1]
-MSCnr2_QSnk = MSCnr2_QSnk_A
+TpitStore_Tee32 = [509,1]
+MpitStore_Tee32 = MpitStore_Tee32_A
 
 UNIT 510 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MTee3_Tee2_A TTee3 TTee2
+***
+0 spTIni spTIni
+EQUATIONS 2
+TTee3_Tee2 = [510,1]
+MTee3_Tee2 = MTee3_Tee2_A
+
+UNIT 511 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
@@ -1255,8 +1299,20 @@ MQSnk_SCnr2_A TQSnkH TSCnr2Cold
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TQSnk_SCnr2 = [510,1]
+TQSnk_SCnr2 = [511,1]
 MQSnk_SCnr2 = MQSnk_SCnr2_A
+
+UNIT 512 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MSCnr2_QSnk_A TSCnr2Hot TQSnkH
+***
+0 spTIni spTIni
+EQUATIONS 2
+TSCnr2_QSnk = [512,1]
+MSCnr2_QSnk = MSCnr2_QSnk_A
 
 CONSTANTS 4
 SCnr_SCnr2_Len = 579.404
@@ -1265,7 +1321,7 @@ SCnr_SCnr2_NrSlAx = INT(SCnr_SCnr2_Len*dpNrSlAxRef/dpLengthRef) + 1
 SCnr_SCnr2_NrFlNds = dpNrFlNdsToNrSlAxRatio*SCnr_SCnr2_NrSlAx
 SCnr_SCnr2_NrSlCirc = dpNrSlCirc
 
-UNIT 511 TYPE 9511
+UNIT 513 TYPE 9511
 ! SCnr_SCnr2
 PARAMETERS 36
 ****** pipe and soil properties ******
@@ -1327,32 +1383,56 @@ dpTIniHot
 dpTIniHot
 
 EQUATIONS 14
-TSCnr_SCnr2Cold = [511,1]  ! Outlet fluid temperature, deg C
+TSCnr_SCnr2Cold = [513,1]  ! Outlet fluid temperature, deg C
 MSCnr_SCnr2Cold = MSCnr_SCnr2Cold_A  ! Outlet mass flow rate, kg/h
 
-TSCnr_SCnr2Hot = [511,3]  ! Outlet fluid temperature, deg C
+TSCnr_SCnr2Hot = [513,3]  ! Outlet fluid temperature, deg C
 MSCnr_SCnr2Hot = MSCnr_SCnr2Hot_A  ! Outlet mass flow rate, kg/h
 
-SCnr_SCnr2ColdConv = [511,7]*-1*1/3600 ! Convected heat [kW]
-SCnr_SCnr2ColdInt = [511,9]*1/3600 ! Change in fluid's internal heat content compared to previous time step [kW]
-SCnr_SCnr2ColdDiss = [511,11]*1/3600 ! Dissipated heat to casing (aka gravel) [kW]
-SCnr_SCnr2HotConv = [511,8]*-1*1/3600 ! Convected heat [kW]
-SCnr_SCnr2HotInt = [511,10]*1/3600 ! Change in fluid's internal heat content compared to previous time step [kW]
-SCnr_SCnr2HotDiss = [511,12]*1/3600 ! Dissipated heat to casing (aka gravel) [kW]
-SCnr_SCnr2Exch = [511,13]*1/3600 ! Dissipated heat from cold pipe to hot pipe [kW]
-SCnr_SCnr2GrSl = [511,14]*1/3600 ! Dissipated heat from gravel to soil [kW]
-SCnr_SCnr2SlFf = [511,15]*1/3600 ! Dissipated heat from soil to "far field" [kW]
-SCnr_SCnr2SlInt = [511,16]*1/3600 ! Change in soil's internal heat content compared to previous time step [kW]
+SCnr_SCnr2ColdConv = [513,7]*-1*1/3600 ! Convected heat [kW]
+SCnr_SCnr2ColdInt = [513,9]*1/3600 ! Change in fluid's internal heat content compared to previous time step [kW]
+SCnr_SCnr2ColdDiss = [513,11]*1/3600 ! Dissipated heat to casing (aka gravel) [kW]
+SCnr_SCnr2HotConv = [513,8]*-1*1/3600 ! Convected heat [kW]
+SCnr_SCnr2HotInt = [513,10]*1/3600 ! Change in fluid's internal heat content compared to previous time step [kW]
+SCnr_SCnr2HotDiss = [513,12]*1/3600 ! Dissipated heat to casing (aka gravel) [kW]
+SCnr_SCnr2Exch = [513,13]*1/3600 ! Dissipated heat from cold pipe to hot pipe [kW]
+SCnr_SCnr2GrSl = [513,14]*1/3600 ! Dissipated heat from gravel to soil [kW]
+SCnr_SCnr2SlFf = [513,15]*1/3600 ! Dissipated heat from soil to "far field" [kW]
+SCnr_SCnr2SlInt = [513,16]*1/3600 ! Change in soil's internal heat content compared to previous time step [kW]
 
-! Tee3
-UNIT 512 TYPE 929
+UNIT 514 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MBolr_ValMix_A TBolrH TValMix
+***
+0 spTIni spTIni
+EQUATIONS 2
+TBolr_ValMix = [514,1]
+MBolr_ValMix = MBolr_ValMix_A
+
+UNIT 515 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MPuRecirc_A TTee10_PuRecirc TPuRecirc_Hp
+***
+0 spTIni spTIni
+EQUATIONS 2
+TPuRecirc = [515,1]
+MPuRecirc = MPuRecirc_A
+
+! Tee10
+UNIT 516 TYPE 929
 INPUTS 6
-MTee3_A
-MTee3_B
-MTee3_C
-TTee2_Tee3
-TpitStore_Tee3
-TpitStore_Tee32
+MTee10_A
+MTee10_B
+MTee10_C
+TTee10_PuRecirc
+TValHPSec_Tee10
+TTee11_Tee10
 ***
 0
 0
@@ -1361,91 +1441,134 @@ TpitStore_Tee32
 20.0
 20.0
 EQUATIONS 1
-TTee3 = [512,1]
-
-UNIT 513 TYPE 2221
-PARAMETERS 2
-mfrSolverAbsTol
-spTIni
-INPUTS 3
-MTee2_Tee3_A TTee2 TTee3
-***
-0 spTIni spTIni
-EQUATIONS 2
-TTee2_Tee3 = [513,1]
-MTee2_Tee3 = MTee2_Tee3_A
-
-UNIT 514 TYPE 2221
-PARAMETERS 2
-mfrSolverAbsTol
-spTIni
-INPUTS 3
-MHP_Tee6_A THpEvapH TTee6
-***
-0 spTIni spTIni
-EQUATIONS 2
-THP_Tee6 = [514,1]
-MHP_Tee6 = MHP_Tee6_A
-
-UNIT 515 TYPE 2221
-PARAMETERS 2
-mfrSolverAbsTol
-spTIni
-INPUTS 3
-MValHPSec_HP_A TValHPSec THpCondH
-***
-0 spTIni spTIni
-EQUATIONS 2
-TValHPSec_HP = [515,1]
-MValHPSec_HP = MValHPSec_HP_A
-
-UNIT 516 TYPE 2221
-PARAMETERS 2
-mfrSolverAbsTol
-spTIni
-INPUTS 3
-MTeeStrat_pitStore_A TTeeStrat TpitStoreHotH
-***
-0 spTIni spTIni
-EQUATIONS 2
-TTeeStrat_pitStore = [516,1]
-MTeeStrat_pitStore = MTeeStrat_pitStore_A
+TTee10 = [516,1]
 
 UNIT 517 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
 INPUTS 3
-MValStrat_pitStore_A TValStrat TpitStoreMediumH
+MValHPSec_Tee10_A TValHPSec TTee10
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TValStrat_pitStore = [517,1]
-MValStrat_pitStore = MValStrat_pitStore_A
+TValHPSec_Tee10 = [517,1]
+MValHPSec_Tee10 = MValHPSec_Tee10_A
 
 UNIT 518 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
 INPUTS 3
-MpitStore_Tee3_A TpitStoreMediumH TTee3
+MPuRecirc_Hp_A TPuRecirc THpCondH
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TpitStore_Tee3 = [518,1]
-MpitStore_Tee3 = MpitStore_Tee3_A
+TPuRecirc_Hp = [518,1]
+MPuRecirc_Hp = MPuRecirc_Hp_A
 
-UNIT 519 TYPE 2221
+! Tee11
+UNIT 519 TYPE 929
+INPUTS 6
+MTee11_A
+MTee11_B
+MTee11_C
+TTee11_Tee5
+THp_Tee11
+TTee11_Tee10
+***
+0
+0
+0
+20.0
+20.0
+20.0
+EQUATIONS 1
+TTee11 = [519,1]
+
+UNIT 520 TYPE 2221
 PARAMETERS 2
 mfrSolverAbsTol
 spTIni
 INPUTS 3
-MpitStore_Tee32_A TpitStoreHotH TTee3
+MHp_Tee11_A THpCondH TTee11
 ***
 0 spTIni spTIni
 EQUATIONS 2
-TpitStore_Tee32 = [519,1]
-MpitStore_Tee32 = MpitStore_Tee32_A
+THp_Tee11 = [520,1]
+MHp_Tee11 = MHp_Tee11_A
+
+UNIT 521 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MTee11_Tee10_A TTee11 TTee10
+***
+0 spTIni spTIni
+EQUATIONS 2
+TTee11_Tee10 = [521,1]
+MTee11_Tee10 = MTee11_Tee10_A
+
+UNIT 522 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MTee_ValHXSec_A TTee TValHXSec
+***
+0 spTIni spTIni
+EQUATIONS 2
+TTee_ValHXSec = [522,1]
+MTee_ValHXSec = MTee_ValHXSec_A
+
+UNIT 523 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MTee5_Bolr_A TTee5 TBolrH
+***
+0 spTIni spTIni
+EQUATIONS 2
+TTee5_Bolr = [523,1]
+MTee5_Bolr = MTee5_Bolr_A
+
+UNIT 524 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MTee11_Tee5_A TTee11 TTee5
+***
+0 spTIni spTIni
+EQUATIONS 2
+TTee11_Tee5 = [524,1]
+MTee11_Tee5 = MTee11_Tee5_A
+
+UNIT 525 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MTee10_PuRecirc_A TTee10 TPuRecirc
+***
+0 spTIni spTIni
+EQUATIONS 2
+TTee10_PuRecirc = [525,1]
+MTee10_PuRecirc = MTee10_PuRecirc_A
+
+UNIT 526 TYPE 2221
+PARAMETERS 2
+mfrSolverAbsTol
+spTIni
+INPUTS 3
+MTee7_ValHPSec_A TTee7 TValHPSec
+***
+0 spTIni spTIni
+EQUATIONS 2
+TTee7_ValHPSec = [526,1]
+MTee7_ValHPSec = MTee7_ValHPSec_A
 
 *** Single pipe losses
 EQUATIONS 1
@@ -1471,14 +1594,14 @@ dpToFFieldTot = SCnr_SCnr2SlFf
 dpPipeIntTot = SCnr_SCnr2ColdInt + SCnr_SCnr2HotInt
 dpSoilIntTot = SCnr_SCnr2SlInt
 dpImbalance = dpPipeConvectedTot - dpToFFieldTot  - dpPipeIntTot - dpSoilIntTot
-ASSIGN PTES_Mfr.prt 520
+ASSIGN PTES_Mfr.prt 527
 
-UNIT 520 TYPE 25! User defined Printer
+UNIT 527 TYPE 25! User defined Printer
 PARAMETERS 10
 dtSim! 1 Printing interval
 START! 2 Start time
 STOP! 3 Stop time
-520! 4 Logical unit
+527! 4 Logical unit
 0! 5 Units printing mode
 0! 6 Relative or absolute start time
 -1! 7 Overwrite or Append
@@ -1486,33 +1609,33 @@ STOP! 3 Stop time
 0! 9 Delimiter
 1! 10 Print labels
 
-INPUTS 52
-xFracValHPSec xFracValHXSec MVal3_Tee5 MTee5_Bolr MVal5_Tee7 MTee7_Val3 xFracValHXPri xFracValHPPri
-MVal2_Tee4 MTee4_Val4 MVal4_Tee6 MValHPPri_HP xFracValMix MSCnr_Tee MHP_Tee5 MTee_ValHXSec
-MTee2_Tee8 MTee6_Pump MPump_Tee2 xFracValStrat MTeeStrat_ValHXPri MTee9_ValStrat MValStrat_TeeStrat MPuCollSec_HxColl
-MTee8_PuCollSec MHxColl_Tee9 MHxColl_PuCollPri MPuCollPri_Coll MColl_HxColl MQSrc_HxQSrc MHxQSrc_QSrc MTee8_PuSrcSec
-MPuSrcSec_HxQSrc MHxQSrc_Tee9 MTee_ValMix MBolr_ValMix MValMix_SCnr MValHXPri_Hx MHx_Tee4 MHx_Tee7
-MValHXSec_Hx MSCnr2_QSnk MQSnk_SCnr2 MSCnr_SCnr2Cold MSCnr_SCnr2Hot MTee2_Tee3 MHP_Tee6 MValHPSec_HP
-MTeeStrat_pitStore MValStrat_pitStore MpitStore_Tee3 MpitStore_Tee32
+INPUTS 56
+xFracValHPSec xFracValHXSec MVal3_Tee5 MVal5_Tee7 xFracValHXPri xFracValHPPri MVal2_Tee4 MTee4_Val4
+MVal4_Tee6 MValHPPri_HP xFracValMix MSCnr_Tee MTee2_Tee8 MTee6_Pump MPump_Tee2 xFracValStrat
+MTeeStrat_ValHXPri MTee9_ValStrat MValStrat_TeeStrat MPuCollSec_HxColl MTee8_PuCollSec MHxColl_Tee9 MHxColl_PuCollPri MPuCollPri_Coll
+MColl_HxColl MQSrc_HxQSrc MHxQSrc_QSrc MTee8_PuSrcSec MPuSrcSec_HxQSrc MHxQSrc_Tee9 MTee_ValMix MValMix_SCnr
+MValHXPri_Hx MHx_Tee4 MHx_Tee7 MValHXSec_Hx MHP_Tee6 MTeeStrat_pitStore MValStrat_pitStore MpitStore_Tee3
+MpitStore_Tee32 MTee3_Tee2 MQSnk_SCnr2 MSCnr2_QSnk MSCnr_SCnr2Cold MSCnr_SCnr2Hot MBolr_ValMix MValHPSec_Tee10
+MPuRecirc_Hp MHp_Tee11 MTee11_Tee10 MTee_ValHXSec MTee5_Bolr MTee11_Tee5 MTee10_PuRecirc MTee7_ValHPSec
 
 ***
-xFracValHPSec xFracValHXSec MVal3_Tee5 MTee5_Bolr MVal5_Tee7 MTee7_Val3 xFracValHXPri xFracValHPPri
-MVal2_Tee4 MTee4_Val4 MVal4_Tee6 MValHPPri_HP xFracValMix MSCnr_Tee MHP_Tee5 MTee_ValHXSec
-MTee2_Tee8 MTee6_Pump MPump_Tee2 xFracValStrat MTeeStrat_ValHXPri MTee9_ValStrat MValStrat_TeeStrat MPuCollSec_HxColl
-MTee8_PuCollSec MHxColl_Tee9 MHxColl_PuCollPri MPuCollPri_Coll MColl_HxColl MQSrc_HxQSrc MHxQSrc_QSrc MTee8_PuSrcSec
-MPuSrcSec_HxQSrc MHxQSrc_Tee9 MTee_ValMix MBolr_ValMix MValMix_SCnr MValHXPri_Hx MHx_Tee4 MHx_Tee7
-MValHXSec_Hx MSCnr2_QSnk MQSnk_SCnr2 MSCnr_SCnr2Cold MSCnr_SCnr2Hot MTee2_Tee3 MHP_Tee6 MValHPSec_HP
-MTeeStrat_pitStore MValStrat_pitStore MpitStore_Tee3 MpitStore_Tee32
+xFracValHPSec xFracValHXSec MVal3_Tee5 MVal5_Tee7 xFracValHXPri xFracValHPPri MVal2_Tee4 MTee4_Val4
+MVal4_Tee6 MValHPPri_HP xFracValMix MSCnr_Tee MTee2_Tee8 MTee6_Pump MPump_Tee2 xFracValStrat
+MTeeStrat_ValHXPri MTee9_ValStrat MValStrat_TeeStrat MPuCollSec_HxColl MTee8_PuCollSec MHxColl_Tee9 MHxColl_PuCollPri MPuCollPri_Coll
+MColl_HxColl MQSrc_HxQSrc MHxQSrc_QSrc MTee8_PuSrcSec MPuSrcSec_HxQSrc MHxQSrc_Tee9 MTee_ValMix MValMix_SCnr
+MValHXPri_Hx MHx_Tee4 MHx_Tee7 MValHXSec_Hx MHP_Tee6 MTeeStrat_pitStore MValStrat_pitStore MpitStore_Tee3
+MpitStore_Tee32 MTee3_Tee2 MQSnk_SCnr2 MSCnr2_QSnk MSCnr_SCnr2Cold MSCnr_SCnr2Hot MBolr_ValMix MValHPSec_Tee10
+MPuRecirc_Hp MHp_Tee11 MTee11_Tee10 MTee_ValHXSec MTee5_Bolr MTee11_Tee5 MTee10_PuRecirc MTee7_ValHPSec
 
 
-ASSIGN PTES_T.prt 521
+ASSIGN PTES_T.prt 528
 
-UNIT 521 TYPE 25! User defined Printer
+UNIT 528 TYPE 25! User defined Printer
 PARAMETERS 10
 dtSim! 1 Printing interval
 START! 2 Start time
 STOP! 3 Stop time
-521! 4 Logical unit
+528! 4 Logical unit
 0! 5 Units printing mode
 0! 6 Relative or absolute start time
 -1! 7 Overwrite or Append
@@ -1520,20 +1643,22 @@ STOP! 3 Stop time
 0! 9 Delimiter
 1! 10 Print labels
 
-INPUTS 46
-TVal3_Tee5 TTee5_Bolr TVal5_Tee7 TTee7_Val3 TVal2_Tee4 TTee4_Val4 TVal4_Tee6 TValHPPri_HP
-TSCnr_Tee THP_Tee5 TTee_ValHXSec TTee2_Tee8 TTee6_Pump TPump_Tee2 TTeeStrat_ValHXPri TTee9_ValStrat
-TValStrat_TeeStrat TPuCollSec_HxColl TTee8_PuCollSec THxColl_Tee9 THxColl_PuCollPri TPuCollPri_Coll TColl_HxColl TQSrc_HxQSrc
-THxQSrc_QSrc TTee8_PuSrcSec TPuSrcSec_HxQSrc THxQSrc_Tee9 TTee_ValMix TBolr_ValMix TValMix_SCnr TValHXPri_Hx
-THx_Tee4 THx_Tee7 TValHXSec_Hx TSCnr2_QSnk TQSnk_SCnr2 TSCnr_SCnr2Cold TSCnr_SCnr2Hot TTee2_Tee3
-THP_Tee6 TValHPSec_HP TTeeStrat_pitStore TValStrat_pitStore TpitStore_Tee3 TpitStore_Tee32
+INPUTS 50
+TVal3_Tee5 TVal5_Tee7 TVal2_Tee4 TTee4_Val4 TVal4_Tee6 TValHPPri_HP TSCnr_Tee TTee2_Tee8
+TTee6_Pump TPump_Tee2 TTeeStrat_ValHXPri TTee9_ValStrat TValStrat_TeeStrat TPuCollSec_HxColl TTee8_PuCollSec THxColl_Tee9
+THxColl_PuCollPri TPuCollPri_Coll TColl_HxColl TQSrc_HxQSrc THxQSrc_QSrc TTee8_PuSrcSec TPuSrcSec_HxQSrc THxQSrc_Tee9
+TTee_ValMix TValMix_SCnr TValHXPri_Hx THx_Tee4 THx_Tee7 TValHXSec_Hx THP_Tee6 TTeeStrat_pitStore
+TValStrat_pitStore TpitStore_Tee3 TpitStore_Tee32 TTee3_Tee2 TQSnk_SCnr2 TSCnr2_QSnk TSCnr_SCnr2Cold TSCnr_SCnr2Hot
+TBolr_ValMix TValHPSec_Tee10 TPuRecirc_Hp THp_Tee11 TTee11_Tee10 TTee_ValHXSec TTee5_Bolr TTee11_Tee5
+TTee10_PuRecirc TTee7_ValHPSec
 
 ***
-TVal3_Tee5 TTee5_Bolr TVal5_Tee7 TTee7_Val3 TVal2_Tee4 TTee4_Val4 TVal4_Tee6 TValHPPri_HP
-TSCnr_Tee THP_Tee5 TTee_ValHXSec TTee2_Tee8 TTee6_Pump TPump_Tee2 TTeeStrat_ValHXPri TTee9_ValStrat
-TValStrat_TeeStrat TPuCollSec_HxColl TTee8_PuCollSec THxColl_Tee9 THxColl_PuCollPri TPuCollPri_Coll TColl_HxColl TQSrc_HxQSrc
-THxQSrc_QSrc TTee8_PuSrcSec TPuSrcSec_HxQSrc THxQSrc_Tee9 TTee_ValMix TBolr_ValMix TValMix_SCnr TValHXPri_Hx
-THx_Tee4 THx_Tee7 TValHXSec_Hx TSCnr2_QSnk TQSnk_SCnr2 TSCnr_SCnr2Cold TSCnr_SCnr2Hot TTee2_Tee3
-THP_Tee6 TValHPSec_HP TTeeStrat_pitStore TValStrat_pitStore TpitStore_Tee3 TpitStore_Tee32
+TVal3_Tee5 TVal5_Tee7 TVal2_Tee4 TTee4_Val4 TVal4_Tee6 TValHPPri_HP TSCnr_Tee TTee2_Tee8
+TTee6_Pump TPump_Tee2 TTeeStrat_ValHXPri TTee9_ValStrat TValStrat_TeeStrat TPuCollSec_HxColl TTee8_PuCollSec THxColl_Tee9
+THxColl_PuCollPri TPuCollPri_Coll TColl_HxColl TQSrc_HxQSrc THxQSrc_QSrc TTee8_PuSrcSec TPuSrcSec_HxQSrc THxQSrc_Tee9
+TTee_ValMix TValMix_SCnr TValHXPri_Hx THx_Tee4 THx_Tee7 TValHXSec_Hx THP_Tee6 TTeeStrat_pitStore
+TValStrat_pitStore TpitStore_Tee3 TpitStore_Tee32 TTee3_Tee2 TQSnk_SCnr2 TSCnr2_QSnk TSCnr_SCnr2Cold TSCnr_SCnr2Hot
+TBolr_ValMix TValHPSec_Tee10 TPuRecirc_Hp THp_Tee11 TTee11_Tee10 TTee_ValHXSec TTee5_Bolr TTee11_Tee5
+TTee10_PuRecirc TTee7_ValHPSec
 
 

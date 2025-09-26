@@ -26,7 +26,7 @@ xFracValHXSec = xFracValHXPri
 
 ** HP
 HpAct = 1
-ValHPPri = ValHPOut*GT(MTee7_Val3, HPMfrCondMin)*HpAct
+ValHPPri = ValHPOut*HpAct*GT(MSCnr_Tee, HPMfrCondMin)
 HPIsOn = ValHPPri
 xFracValHPPri = NOT(ValHPPri)
 xFracValHPSec = xFracValHPPri
@@ -35,11 +35,11 @@ xFracValHPSec = xFracValHPPri
 xFracValStrat = NOT(ValStratControlHot)
 
 ** Primary
-MfrPump = ValHPOut*MTee_ValHXSec*HPMfrEvapCondRatio + NOT(ValHPOut)*MTee_ValHXSec  !HPMfrHpEvapNom !1000.0
+MfrPump = HPIsOn*MTee10_PuRecirc*HPMfrEvapCondRatio + NOT(HPIsOn)*MTee7_ValHPSec  !HPMfrHpEvapNom !1000.0
 MfrDemand = MfrPump
 
 ** HP recirculation
-MfrPuRecirc = (GT(MfrQSnk,HPMfrCondMin)*MfrQSnk + LE(MfrQSnk,HPMfrCondMin)*HPMfrCondMin) * HPIsOn
+MfrPuRecirc = (GT(MTee7_ValHPSec,HPMfrCondMin)*MTee7_ValHPSec + LE(MTee7_ValHPSec,HPMfrCondMin)*HPMfrCondMin) * HPIsOn
 
 ***********************
 ** Pit storage modes **
@@ -67,4 +67,30 @@ T_set_ValMix
 35.0 21.0 800.0 T_set_ValMix
 EQUATIONS 1
 xFracValMix =  1.-[441,5]
+
+***********************************
+** Time step printer
+***********************************
+
+!CONSTANTS 1
+!unitStepPuRecirc = 33
+!
+!ASSIGN    temp\HP_RECIRC.Prt    unitStepPuRecirc
+!
+!UNIT 520 TYPE 25! User defined Printer
+!PARAMETERS 10
+!dtSim          ! 1 Printing interval
+!START          ! 2 Start time
+!STOP           ! 3 Stop time
+!unitStepPuRecirc   ! 4 Logical unit
+!0               ! 5 Units printing mode
+!0               ! 6 Relative or absolute start time
+!-1              ! 7 Overwrite or Append
+!-1              ! 8 Print header
+!0               ! 9 Delimiter
+!1               ! 10 Print labels
+!INPUTS #
+!MTee7_ValHPSec HPMfrCondMin HPIsOn MfrPuRecirc
+!**
+!MTee7_ValHPSec HPMfrCondMin HPIsOn MfrPuRecirc
 

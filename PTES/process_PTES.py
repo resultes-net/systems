@@ -4,6 +4,12 @@ import numpy as np
 import pandas as pd
 from datetime import datetime
 from pytrnsys_process import api
+def filter(sim: api.Simulation):
+    sim.monthly.index = pd.to_datetime(sim.monthly.index)  # convierte si hace falta
+    sim.monthly = sim.monthly[sim.monthly.index.year == 2025]
+
+    sim.hourly.index = pd.to_datetime(sim.hourly.index)
+    sim.hourly = sim.hourly[sim.hourly.index.year == 2025]
 
 def solar(sim: api.Simulation):
 
@@ -124,14 +130,14 @@ def hp(sim: api.Simulation):
     sim.scalar["HpQCond_kW_Tot"] = sim.hourly["HpQCond_kW"].sum()
     sim.scalar["HpPelComp_kW_Tot"] = sim.hourly["HpPelComp_kW"].sum()
     sim.scalar["HpCOP"] = sim.scalar["HpQCond_kW_Tot"] / sim.scalar["HpPelComp_kW_Tot"]
-    sim.step["HpControlFracCond_100"] = sim.step["HpControlFracCond"] * 100
+    # sim.step["HpControlFracCond_100"] = sim.step["HpControlFracCond"] * 100
 
     #### Control ####
-    fig, ax = api.line_plot(sim.step, ["HpControlTControlled", "HpControlTSet", "HpControlFracCond_100"])
-    _plt.ylim(0, 110)
-    _plt.grid()
-    # _plt.show()
-    api.export_plots_in_configured_formats(fig, sim.path, "hp-control", "hp")
+    # fig, ax = api.line_plot(sim.step, ["HpControlTControlled", "HpControlTSet", "HpControlFracCond_100"])
+    # _plt.ylim(0, 110)
+    # _plt.grid()
+    # # _plt.show()
+    # api.export_plots_in_configured_formats(fig, sim.path, "hp-control", "hp")
 
     fig, ax = api.energy_balance(
         sim.monthly,
@@ -279,9 +285,10 @@ def to_json(sim: api.Simulation):
 if __name__ == "__main__":
     path_to_sim = _pl.Path(r"C:\Daten\GIT\systems\PTES\results")
     api.global_settings.reader.force_reread_prt = False
-    api.global_settings.reader.read_step_files = True
+    api.global_settings.reader.read_step_files = False
 
     processing_steps = [
+                        filter,
                         solar,
                         hx,
                         ptes,
@@ -299,3 +306,8 @@ if __name__ == "__main__":
         path_to_sim,
         processing_steps,
     )
+
+    # simulation_data = api.process_whole_result_set_parallel(
+    #     path_to_sim,
+    #     [],
+    # )

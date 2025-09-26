@@ -7,7 +7,7 @@
 ***********************************
 CONSTANTS #
 dT = 20    ! [K]
-QUnscaled_MWh = 0.5 !90000070/1000
+QUnscaled_MWh = 1 !90000070/1000
 Q_MWh = QUnscaled_MWh
 scaling = Q_MWh/QUnscaled_MWh
 

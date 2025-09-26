@@ -27,14 +27,14 @@ def compare_plot(sims_data: api.SimulationsData):
         sims_data.scalar,
         "szVperDemand_m3_per_MWh",
         "FactorRenewable",
-        group_by_color="HpAct",
-        group_by_marker="szAperDemand_m2_per_MWh"
+        group_by_marker="HpAct",
+        group_by_color="szAperDemand_m2_per_MWh"
     )
 
     axes = fig.get_axes()
     legends = [c for c in axes[1].get_children() if isinstance(c, _mpl.legend.Legend)]
-    legends[0].set_title("HP")
-    legends[1].set_title("$A_{coll}/Q_{demand}~[m^2/MWh]$")
+    legends[0].set_title("$A_{coll}/Q_{demand}$"+"\n"+"$[m^2/MWh]$")
+    legends[1].set_title("HP")
 
 
     ax.grid(True)
@@ -47,8 +47,8 @@ def compare_plot(sims_data: api.SimulationsData):
         sims_data.scalar,
         "szVperDemand_m3_per_MWh",
         "Q_kW_m2",
-        group_by_color="HpAct",
-        group_by_marker="szAperDemand_m2_per_MWh"
+        group_by_marker="HpAct",
+        group_by_color="szAperDemand_m2_per_MWh"
     )
 
     ax.grid(True)
