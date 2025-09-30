@@ -39,7 +39,7 @@ M = P_kW / ((cp/3600)*dT)	!kg/h
 EQUATIONS 1
 profileSrcUnit = 104
 
-ASSIGN  "C:\Daten\GIT\systems\PTES\ddck\QSrc\src_profile_norm.csv" profileSrcUnit
+ASSIGN  "..\..\ddck\QSrc\src_profile_norm.csv" profileSrcUnit
 UNIT 41 TYPE 9      !Changed automatically
 PARAMETERS 14
 5     ! 1 Mode
