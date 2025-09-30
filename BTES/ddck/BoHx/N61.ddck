@@ -1,0 +1,28 @@
+******************************
+**BEGIN ghx_2x2_5m.ddck
+*******************************
+
+*****************************************
+** 2x2 ground heat exchanger G-Function loading ddck
+** Version : v1.0
+** Last Changes: Jeremias Schmidli
+** Date: 26.05.2020
+******************************************
+
+
+
+***********************************
+** g-function loading
+***********************************
+CONSTANTS 1
+NProbes = 61
+
+CONSTANTS 1
+unitGfunc = 84
+ASSIGN "C:\Daten\GIT\systems\BTES\ddck\BoHx\R40_N61_8m.txt" unitGfunc
+
+
+
+*******************************
+**END ghx_2x2_5m.ddck
+*******************************

@@ -1,33 +1,3 @@
-******************************
-**BEGIN ghx_2x2_5m.ddck
-*******************************
-
-*****************************************
-** 2x2 ground heat exchanger G-Function loading ddck
-** Version : v1.0
-** Last Changes: Jeremias Schmidli
-** Date: 26.05.2020
-******************************************
-
-
-
-***********************************
-** g-function loading
-***********************************
-
-CONSTANTS 1
-unitGfunc = 84
-
-!ASSIGN "C:\Daten\GIT\systems\BTES\ddck\BoHx\2x2_5m.txt" unitGfunc
-!ASSIGN "C:\Daten\GIT\systems\BTES\ddck\BoHx\R24_N18_8m.txt" unitGfunc
-ASSIGN "C:\Daten\GIT\systems\BTES\ddck\BoHx\R40_N61_8m.txt" unitGfunc
-!ASSIGN "C:\Daten\GIT\systems\BTES\ddck\BoHx\R56_N129_8m.txt" unitGfunc
-
-
-*******************************
-**END ghx_2x2_5m.ddck
-*******************************
-!#######################################################################################################################
 *******************************
 **BEGIN type951.ddck
 *******************************
@@ -116,9 +86,7 @@ QDemPre = PreOn * QDemPreBis
 CONSTANTS #
 DProbes = 0.032                         ! Inner diameter of probes, m
 LProbes = 200!lBoreholeTotal/NProbes 	! Length of probes, m
-!NProbes = 18
-NProbes = 61
-!NProbes = 129                           ! Number of probes
+!NProbes = 18 ! Defined in specific ddck
 SteadyStateBrineGshx = 1		! 1: steady state, 0: transient calculation of brine
 calcBTR = 4 					! 1: calculate R1 and R2 internally 2: R1 input; R2 calculated internally 3: Rb input; R1=f(Rb), R2 calculated internally  4: Ra, Rb input; R1=f(Ra), R2=f(Ra,Rb) calculated internally
 calcRand = 2                    ! 1: old Randaussen approach of EWS. If nBorehole>1 the MfrGHX/Nbore, 2: Lamarche-g-Functions, 3: read-in g-function
@@ -289,13 +257,15 @@ Q_kWReg = LT(Q_kW,0)* Q_kW     ! Changed automatically
 EQUATIONS #
 TGroundAve = (T13 + T23 + T33 + T43 + T53 + T63 + TGro3) / 7
 dR = RaGroOut/NRadial
-M1 = $PI*((1*dR)^2-(0*dR)^2)*LProbes*CpGround
-M2 = $PI*((2*dR)^2-(1*dR)^2)*LProbes*CpGround
-M3 = $PI*((3*dR)^2-(2*dR)^2)*LProbes*CpGround
-M4 = $PI*((4*dR)^2-(3*dR)^2)*LProbes*CpGround
-M5 = $PI*((5*dR)^2-(4*dR)^2)*LProbes*CpGround
-M6 = $PI*((6*dR)^2-(5*dR)^2)*LProbes*CpGround
+M1 = $PI*((1*dR)^2-(0*dR)^2)*LProbes*rhoGround
+M2 = $PI*((2*dR)^2-(1*dR)^2)*LProbes*rhoGround
+M3 = $PI*((3*dR)^2-(2*dR)^2)*LProbes*rhoGround
+M4 = $PI*((4*dR)^2-(3*dR)^2)*LProbes*rhoGround
+M5 = $PI*((5*dR)^2-(4*dR)^2)*LProbes*rhoGround
+M6 = $PI*((6*dR)^2-(5*dR)^2)*LProbes*rhoGround
 MTot = M1+M2+M3+M4+M5
+MTotBtes = MTot*NProbes
+VTotBtes = MTotBtes/rhoGround
 
 T1Avg = (T11+T12+T13+T14+T15)/5
 T2Avg = (T21+T22+T23+T24+T25)/5

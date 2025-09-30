@@ -25,21 +25,22 @@ def compare_plot(sims_data: api.SimulationsData):
     # RENEWABLE FACTOR
     fig, ax = api.scalar_compare_plot(
         sims_data.scalar,
-        "szVperDemand_m3_per_MWh",
+        "BoHxNProbes",
         "FactorRenewable",
-        group_by_marker="HpAct",
+        # group_by_color="HpAct",
         group_by_color="szAperDemand_m2_per_MWh"
     )
 
     axes = fig.get_axes()
-    legends = [c for c in axes[1].get_children() if isinstance(c, _mpl.legend.Legend)]
+    legends = [c for c in axes[0].get_children() if isinstance(c, _mpl.legend.Legend)]
     legends[0].set_title("$A_{coll}/Q_{demand}$"+"\n"+"$[m^2/MWh]$")
-    legends[1].set_title("HP")
+    # legends[1].set_title("$A_{coll}/Q_{demand}~[m^2/MWh]$")
 
 
     ax.grid(True)
-    ax.set_xlabel('$V_{PTES}/Q_{demand}~[m^3/MWh]$')
+    ax.set_xlabel('$n_{probes}~[-]$')
     ax.set_ylabel('$f_{renewable}~[-]$')
+    _plt.show()
     api.export_plots_in_configured_formats(fig.figure, sims_data.path_to_simulations, "factor", "../comparison")
 
     # SOLAR
@@ -47,8 +48,8 @@ def compare_plot(sims_data: api.SimulationsData):
         sims_data.scalar,
         "szVperDemand_m3_per_MWh",
         "Q_kW_m2",
-        group_by_marker="HpAct",
-        group_by_color="szAperDemand_m2_per_MWh"
+        group_by_color="HpAct",
+        group_by_marker="szAperDemand_m2_per_MWh"
     )
 
     ax.grid(True)
@@ -163,7 +164,7 @@ def compare_plot_own(sims_data: api.SimulationsData):
 
 if __name__ == "__main__":
 
-    path_to_sim = _pl.Path(r"C:\Daten\GIT\systems\PTES\results")
+    path_to_sim = _pl.Path(r"C:\Daten\GIT\systems\BTES\results")
     api.global_settings.reader.force_reread_prt = False
     # simulations_data = api.process_whole_result_set(path_to_sim, [])
     comparison_steps = [

@@ -101,6 +101,11 @@ def btes(sim: api.Simulation):
     sim.hourly["BoHxQChar_kW"] = abs(sim.hourly["BoHxQ_kW"]) * sim.hourly["ControlBorOnChar"]
     sim.hourly["BoHxQDischar_kW"] = abs(sim.hourly["BoHxQ_kW"]) * sim.hourly["ControlBorOnDischar"]
 
+    # ENERGY DENSITY
+    cp = sim.scalar["BoHxCpGround"]
+    rho = sim.scalar["BoHxrhoGround"]
+    sim.scalar["rhoQ"] = (max(sim.hourly["BoHxTAvg"]) - min(sim.hourly["BoHxTAvg"])) * rho * cp/3600
+
     sim.scalar["BoHxQChar_kW_Tot"] = sim.hourly["BoHxQChar_kW"].sum()
     sim.scalar["BoHxQDischar_kW_Tot"] = sim.hourly["BoHxQDischar_kW"].sum()
 
@@ -118,6 +123,12 @@ def btes(sim: api.Simulation):
     _plt.grid()
     # _plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "t-btes-hourly", "btes")
+
+    fig, ax = api.line_plot(sim.hourly, ["BoHxTAvg"])
+    ax.set_ylabel("Temperature (°C)")
+    _plt.grid()
+    # _plt.show()
+    api.export_plots_in_configured_formats(fig, sim.path, "t-avg-hourly", "btes")
 
     fig, ax = api.line_plot(sim.hourly, ["BoHxTRT"])
     ax.set_ylabel("Temperature (°C)")
@@ -244,12 +255,17 @@ def balance(sim: api.Simulation):
     sim.scalar["QImb"] = sim.scalar["QSources"] - sim.scalar["QStore"] - sim.scalar["QSinks"] - sim.scalar["QLosses"]
 
     #### Plots ####
+    names_legend = ['$Q_{Coll}$','$P_{Comp}$','$Q_{Boiler}$','$Q_{BTES,Accum}$',
+                    '$Q_{Demand}$','$Q_{TES,Accum}$','$Q_{TES,Losses}$','$Q_{District}$']
+
     fig, ax = api.energy_balance(
         sim.monthly,
         q_in_columns=["CollP_kW_calc", "HpPelComp_kW", "BolrPOut_kW", "BoHxQ_kW"],
         q_out_columns=["QSnkP_kW", "TesQAcum_Tes1", "TesQLoss_Tes1", "qSysOut_dpToFFieldTot"], #, "qSysOut_dpPipeIntTot", "qSysOut_dpSoilIntTot"],
-        xlabel=""
+        xlabel="",
+        cmap="Paired"
     )
+    _plt.legend(names_legend, bbox_to_anchor=(1.05, 1), loc='upper left')
     api.export_plots_in_configured_formats(fig, sim.path, "balance-monthly", "balance")
 
 
@@ -260,7 +276,7 @@ def kpi(sim: api.Simulation):
 
     #### Calculations ####
     sim.scalar["FactorRenewable"] = (sim.scalar["QSnkP_kW_Tot"] - sim.scalar["BolrPOut_kW_Tot"]) / sim.scalar["QSnkP_kW_Tot"]
-    5
+    sim.scalar["szVperDemand_m3_per_MWh"] = sim.scalar["VTotBtes"] / sim.scalar["QSnkP_kW_Tot"]
 
 def to_json(sim: api.Simulation):
     sim.scalar.to_json(sim.path + "\output.json", orient="records", indent=4)
