@@ -61,7 +61,8 @@ def compare_plot(sims_data: api.SimulationsData):
         sims_data.scalar,
         "szVperDemand_m3_per_MWh",
         "rhoQ",
-        group_by_color="HpAct",
+        group_by_marker="HpAct",
+        group_by_color="szAperDemand_m2_per_MWh"
     )
 
     ax.grid(True)
