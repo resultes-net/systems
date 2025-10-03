@@ -1,0 +1,256 @@
+*########################################################################################################################
+*************************************
+** BEGIN type1301.ddck
+*************************************
+
+CONSTANTS 23                ! for Parameters type1301
+NumTN = StNodes		    ! 1 Number of Tank Nodes (default 5)                    !parameter from Pit_Storage.ddck
+volT = StVolume		    ! 2 (m3) Volume of Tank (default 5000)                  !parameter from Pit_Storage.ddck
+heiT = StHeight		    ! 3 (m) Height of tank (default 2)                      !parameter from Pit_Storage.ddck
+radRat = Ratio  		! 4 Radius Ratio (default 2)                            !parameter from Pit_Storage.ddck
+depthTTpoSu = 0	    ! 5 (m) Depth to Tank Top Surface (default 1)
+InEx = 1		    ! 6 (m) Insulation Extension (default 1)
+rvToIn = 3		    ! 7 (h*m2*K/kJ) R-Value of Top Insulation (default 0) 3 hm2K/kJ = 10.8 m2K/W
+kSoil = 8.28		! 8 (kJ/(hr*m*K) Soil Thermal Conductivity (default 8.722) 8.28 kJ/hmK = 2.3 W/mK
+rhoSoil	= 2000	    ! 9 (kg/m3) Soil Density (default 3200)
+cSoil = 0.8		    ! 10 (kJ/m3K) Soil Specific Heat (default 0.84) 0.8 kJ/m3K = 1600 J/kgK  (with den = 2000 kg/m3)
+tmSu = 10	    	! 11 (�C) Mean Surface Temperature (default 10)
+AmpSuT = 5	        ! 12 (d�C) Amplitude of Surface Temperature (default 5)
+dayminSuT = 36	    ! 13 (day) Day of Minimum Surface Temperature (default 36)
+FaFiHTM	= 1	        ! 14 Far-Field Heat Transfer Mode (default 1)
+DeEaHTM	= 1	        ! 15 Deep Earth Heat Transfer Mode (default 1)
+SoSuHTM	= 0	        ! 16 Soil Surface Heat Transfer Mode (default 0)
+InSuHTM	= 0	        ! 17 Insulated Surface Heat Transfer Mode (default 0)
+FaFiD = 50		    ! 18 (m) Far-Field Distance (default 20)
+DeEaD = 50		    ! 19 (m) Deep Earth Distance (default 10)
+smallSoNo = 0.5 	! 20 (m) Size of the Smallest Soil Node (default 0.05)
+multSoNoSi = 2   	! 21 Multiplier for Soil Node Size (default 2)
+unitSoilFile = 1054	    ! 22 Logical Unit for Output File (default 30)
+NumSoilFile = 0 !$STOP / 365 	    ! 23 Number of Output Files (default 1) (every half month a file will be printed, STOP = end of simulation in hours and 365 is half of the amount of hours per month)
+
+ASSIGN temp\soil_temp.prt unitSoilFile
+
+EQUATIONS #        ! for Inputs type1301
+!tAmb =  TAmbient		! (�C) Ambient Temperature
+cocoSoSu = 25	! (kJ/(hr*m2*K) Convection Coefficient for Soil Surface
+tSky = 10		! (�C) Sky Temperature
+emSoSu = 0.9	! Emissivity of the Soil Surface
+abSoSu = 0.9	! Absorptance of the Soil Surface
+sRadSoSu = 0	! Incident Solar Radiation (Soil Surface)
+tAirAInSu = 20	! (�C) Air Temperature Above Insulated Surface
+cocoInSu = 25	! (kJ/(hr*m2*K) Convection Coefficient for Insulated Surface
+tLWRadInSu = 10	! (�C) Long Wave Radiation Temperature
+emInSu = 0.9	! Emissivity of the Insulated Surface
+abInSu = 0.9	! Absorptance of the Insulated Surface
+sRadInSu = 0	! (kJ/(hr*m2) Incident Solar Radiation (Insulated Surface)
+tAirAExTa = 20	! (�C) Air Temperature Above Exposed Tank
+cocoExTa = 25	! (kJ/(hr*m2*K) Convection Coefficient for Exposed Tank
+tLWRadExTa = 10	! (�C) Long Wave Radiation Temperature - Exposed Tank
+emExTaSu = 0.9	! Emissivity of the Exposed Tank Surface
+abExTanSu = 0.9	! Absorptance of Exposed Tank Surface
+sRadExTa = 0	! (kJ/(hr*m2) Incident Solar Radiation (Exposed Top)
+tSoSu = 10		! (�C) Soil Surface Temperature
+tInSu = 10		! (�C) Insulated Surface Temperature
+tTN1  = TTankN1     ! (�C) Temperature of Tank Node-1                 !parameter from Pit_Storage.ddck
+tTN2  = TTankN2     ! (�C) Temperature of Tank Node-2                 !parameter from Pit_Storage.ddck
+tTN3  = TTankN3     ! (�C) Temperature of Tank Node-3                 !parameter from Pit_Storage.ddck
+tTN4  = TTankN4     ! (�C) Temperature of Tank Node-4                 !parameter from Pit_Storage.ddck
+tTN5  = TTankN5     ! (�C) Temperature of Tank Node-5                 !parameter from Pit_Storage.ddck
+tTN6  = TTankN6     ! (�C) Temperature of Tank Node-6                 !parameter from Pit_Storage.ddck
+tTN7  = TTankN7     ! (�C) Temperature of Tank Node-7                 !parameter from Pit_Storage.ddck
+tTN8  = TTankN8     ! (�C) Temperature of Tank Node-8                 !parameter from Pit_Storage.ddck
+tTN9  = TTankN9     ! (�C) Temperature of Tank Node-9                 !parameter from Pit_Storage.ddck
+tTN10 = TTankN10    ! (�C) Temperature of Tank Node-10                !parameter from Pit_Storage.ddck
+tTN11 = TTankN11    ! (�C) Temperature of Tank Node-11                !parameter from Pit_Storage.ddck
+tTN12 = TTankN12    ! (�C) Temperature of Tank Node-12                !parameter from Pit_Storage.ddck
+tTN13 = TTankN13    ! (�C) Temperature of Tank Node-13                !parameter from Pit_Storage.ddck
+tTN14 = TTankN14    ! (�C) Temperature of Tank Node-14                !parameter from Pit_Storage.ddck
+tTN15 = TTankN15    ! (�C) Temperature of Tank Node-15                !parameter from Pit_Storage.ddck
+tTN16 = TTankN16    ! (�C) Temperature of Tank Node-16                !parameter from Pit_Storage.ddck
+tTN17 = TTankN17    ! (�C) Temperature of Tank Node-17                !parameter from Pit_Storage.ddck
+tTN18 = TTankN18    ! (�C) Temperature of Tank Node-18                !parameter from Pit_Storage.ddck
+tTN19 = TTankN19    ! (�C) Temperature of Tank Node-19                !parameter from Pit_Storage.ddck
+tTN20 = TTankN20    ! (�C) Temperature of Tank Node-20                !parameter from Pit_Storage.ddck
+uTTS = LoCoe		! (kJ/(hr*m2*K) Tank U-Value: Top Surface         !parameter from Pit_Storage.ddck
+uTEN1  = LoCoe	! (kJ/(hr*m2*K) Tank U-Value: Edges of Node-1         !parameter from Pit_Storage.ddck
+uTEN2  = LoCoe	! (kJ/(hr*m2*K) Tank U-Value: Edges of Node-2         !parameter from Pit_Storage.ddck
+uTEN3  = LoCoe	! (kJ/(hr*m2*K) Tank U-Value: Edges of Node-3         !parameter from Pit_Storage.ddck
+uTEN4  = LoCoe	! (kJ/(hr*m2*K) Tank U-Value: Edges of Node-4         !parameter from Pit_Storage.ddck
+uTEN5  = LoCoe	! (kJ/(hr*m2*K) Tank U-Value: Edges of Node-5         !parameter from Pit_Storage.ddck
+uTEN6  = LoCoe	! (kJ/(hr*m2*K) Tank U-Value: Edges of Node-6         !parameter from Pit_Storage.ddck
+uTEN7  = LoCoe	! (kJ/(hr*m2*K) Tank U-Value: Edges of Node-7         !parameter from Pit_Storage.ddck
+uTEN8  = LoCoe	! (kJ/(hr*m2*K) Tank U-Value: Edges of Node-8         !parameter from Pit_Storage.ddck
+uTEN9  = LoCoe	! (kJ/(hr*m2*K) Tank U-Value: Edges of Node-9         !parameter from Pit_Storage.ddck
+uTEN10 = LoCoe	! (kJ/(hr*m2*K) Tank U-Value: Edges of Node-10        !parameter from Pit_Storage.ddck
+uTEN11 = LoCoe	! (kJ/(hr*m2*K) Tank U-Value: Edges of Node-11        !parameter from Pit_Storage.ddck
+uTEN12 = LoCoe	! (kJ/(hr*m2*K) Tank U-Value: Edges of Node-12        !parameter from Pit_Storage.ddck
+uTEN13 = LoCoe	! (kJ/(hr*m2*K) Tank U-Value: Edges of Node-13        !parameter from Pit_Storage.ddck
+uTEN14 = LoCoe	! (kJ/(hr*m2*K) Tank U-Value: Edges of Node-14        !parameter from Pit_Storage.ddck
+uTEN15 = LoCoe	! (kJ/(hr*m2*K) Tank U-Value: Edges of Node-15        !parameter from Pit_Storage.ddck
+uTEN16 = LoCoe	! (kJ/(hr*m2*K) Tank U-Value: Edges of Node-16        !parameter from Pit_Storage.ddck
+uTEN17 = LoCoe	! (kJ/(hr*m2*K) Tank U-Value: Edges of Node-17        !parameter from Pit_Storage.ddck
+uTEN18 = LoCoe	! (kJ/(hr*m2*K) Tank U-Value: Edges of Node-18        !parameter from Pit_Storage.ddck
+uTEN19 = LoCoe	! (kJ/(hr*m2*K) Tank U-Value: Edges of Node-19        !parameter from Pit_Storage.ddck
+uTEN20 = LoCoe	! (kJ/(hr*m2*K) Tank U-Value: Edges of Node-20        !parameter from Pit_Storage.ddck
+uTBS = LoCoe	! (kJ/(hr*m2*K) Tank U-Value: Bottom Surface          !parameter from Pit_Storage.ddck
+
+
+UNIT 813 TYPE 1301	! truncated cone tank model v2a
+PARAMETERS 23
+NumTN		! 1 Number of Tank Nodes (default 5)
+volT		! 2 Volume of Tank (default 5000)
+heiT		! 3 Height of tank (default 2)
+radRat		! 4 Radius Ratio (default 2)
+depthTTpoSu	! 5 Depth to Tank Top Surface (default 1)
+InEx		! 6 Insulation Extension (default 1)
+rvToIn		! 7 R-Value of Top Insulation (default 0)
+kSoil		! 8 Soil Thermal Conductivity (default 8.722)
+rhoSoil		! 9 Soil Density (default 3200)
+cSoil		! 10 Soil Specific Heat (default 0.84)
+tmSu		! 11 Mean Surface Temperature (default 10)
+AmpSuT		! 12 Amplitude of Surface Temperature (default 5)
+dayminSuT	! 13 Day of Minimum Surface Temperature (default 36)
+FaFiHTM		! 14 Far-Field Heat Transfer Mode (default 1)
+DeEaHTM		! 15 Deep Earth Heat Transfer Mode (default 1)
+SoSuHTM		! 16 Soil Surface Heat Transfer Mode (default 0)
+InSuHTM		! 17 Insulated Surface Heat Transfer Mode (default 0)
+FaFiD		! 18 Far-Field Distance (default 20)
+DeEaD		! 19 Deep Earth Distance (default 10)
+smallSoNo	! 20 Size of the Smallest Soil Node (default 0.05)
+multSoNoSi	! 21 Multiplier for Soil Node Size (default 2)
+unitSoilFile! 22 Logical Unit for Output File (default 30)
+NumSoilFile	! 23 Number of Output Files (default 1)
+
+INPUTS #
+$tAmb		! Ambient Temperature
+cocoSoSu	! Convection Coefficient for Soil Surface
+tSky		! Sky Temperature
+emSoSu		! Emissivity of the Soil Surface
+abSoSu		! Absorptance of the Soil Surface
+sRadSoSu	! Incident Solar Radiation (Soil Surface)
+tAirAInSu	! Air Temperature Above Insulated Surface
+cocoInSu	! Convection Coefficient for Insulated Surface
+tLWRadInSu	! Long Wave Radiation Temperature
+emInSu		! Emissivity of the Insulated Surface
+abInSu		! Absorptance of the Insulated Surface
+sRadInSu	! Incident Solar Radiation (Insulated Surface)
+tAirAExTa	! Air Temperature Above Exposed Tank
+cocoExTa	! Convection Coefficient for Exposed Tank
+tLWRadExTa	! Long Wave Radiation Temperature - Exposed Tank
+emExTaSu	! Emissivity of the Exposed Tank Surface
+abExTanSu	! Absorptance of Exposed Tank Surface
+sRadExTa	! Incident Solar Radiation (Exposed Top)
+tSoSu		! Soil Surface Temperature
+tInSu		! Insulated Surface Temperature
+tTN1		! Temperature of Tank Node-1
+tTN2		! Temperature of Tank Node-2
+tTN3		! Temperature of Tank Node-3
+tTN4		! Temperature of Tank Node-4
+tTN5		! Temperature of Tank Node-5
+tTN6
+tTN7
+tTN8
+tTN9
+tTN10
+tTN11
+tTN12
+tTN13
+tTN14
+tTN15
+tTN16
+tTN17
+tTN18
+tTN19
+tTN20
+uTTS		! Tank U-Value: Top Surface
+uTEN1		! Tank U-Value: Edges of Node-1
+uTEN2		! Tank U-Value: Edges of Node-2
+uTEN3		! Tank U-Value: Edges of Node-3
+uTEN4		! Tank U-Value: Edges of Node-4
+uTEN5		! Tank U-Value: Edges of Node-5
+uTEN6
+uTEN7
+uTEN8
+uTEN9
+uTEN10
+uTEN11
+uTEN12
+uTEN13
+uTEN14
+uTEN15
+uTEN16
+uTEN17
+uTEN18
+uTEN19
+uTEN20
+uTBS		! Tank U-Value: Bottom Surface
+*** INITIAL INPUT VALUES
+20 25 10 0.9 0.9 0 20 25 10 0.9 0.9 0 20 25 10 0.9 0.9 0 10 10
+20 20 20 20 20 20 20 20 20 20   20 20 20 20 20 20 20 20 20 20
+3 3   3 3 3 3 3 3 3 3 3 3   3 3 3 3 3 3 3 3 3 3
+
+**Outputs of type
+EQUATIONS #
+EffLoTTop     = [813,1 ]         ! (C) Effective Loss Temperature: Tank Top
+EffLoTEdN1    = [813,2 ]         ! (C) Effective Loss Temperature: Edges of Node-1
+EffLoTEdN2    = [813,3 ]         ! (C) Effective Loss Temperature: Edges of Node-2
+EffLoTEdN3    = [813,4 ]         ! (C) Effective Loss Temperature: Edges of Node-3
+EffLoTEdN4    = [813,5 ]         ! (C) Effective Loss Temperature: Edges of Node-4
+EffLoTEdN5    = [813,6 ]         ! (C) Effective Loss Temperature: Edges of Node-5
+EffLoTEdN6    = [813,7 ]         ! (C) Effective Loss Temperature: Edges of Node-6
+EffLoTEdN7    = [813,8 ]         ! (C) Effective Loss Temperature: Edges of Node-7
+EffLoTEdN8    = [813,9 ]         ! (C) Effective Loss Temperature: Edges of Node-8
+EffLoTEdN9    = [813,10]         ! (C) Effective Loss Temperature: Edges of Node-9
+EffLoTEdN10   = [813,11]         ! (C) Effective Loss Temperature: Edges of Node-10
+EffLoTEdN11   = [813,12]         ! (C) Effective Loss Temperature: Edges of Node-11
+EffLoTEdN12   = [813,13]         ! (C) Effective Loss Temperature: Edges of Node-12
+EffLoTEdN13   = [813,14]         ! (C) Effective Loss Temperature: Edges of Node-13
+EffLoTEdN14   = [813,15]         ! (C) Effective Loss Temperature: Edges of Node-14
+EffLoTEdN15   = [813,16]         ! (C) Effective Loss Temperature: Edges of Node-15
+EffLoTEdN16   = [813,17]         ! (C) Effective Loss Temperature: Edges of Node-16
+EffLoTEdN17   = [813,18]         ! (C) Effective Loss Temperature: Edges of Node-17
+EffLoTEdN18   = [813,19]         ! (C) Effective Loss Temperature: Edges of Node-18
+EffLoTEdN19   = [813,20]         ! (C) Effective Loss Temperature: Edges of Node-19
+EffLoTEdN20   = [813,21]         ! (C) Effective Loss Temperature: Edges of Node-20
+EffLoTBot     = [813,22]         ! (C) Effective Loss Temperature: Tank Bottom
+HeTrTop       = [813,23]         ! (kJ/hr) Top Surface Tank Heat Transfer
+HeTrN1        = [813,24]         ! (kJ/hr) Edge Tank Heat Transfer for Node-1
+HeTrN2        = [813,25]         ! (kJ/hr) Edge Tank Heat Transfer for Node-2
+HeTrN3        = [813,26]         ! (kJ/hr) Edge Tank Heat Transfer for Node-3
+HeTrN4        = [813,27]         ! (kJ/hr) Edge Tank Heat Transfer for Node-4
+HeTrN5        = [813,28]         ! (kJ/hr) Edge Tank Heat Transfer for Node-5
+HeTrN6        = [813,29]         ! (kJ/hr) Edge Tank Heat Transfer for Node-6
+HeTrN7        = [813,30]         ! (kJ/hr) Edge Tank Heat Transfer for Node-7
+HeTrN8        = [813,31]         ! (kJ/hr) Edge Tank Heat Transfer for Node-8
+HeTrN9        = [813,32]         ! (kJ/hr) Edge Tank Heat Transfer for Node-9
+HeTrN10       = [813,33]         ! (kJ/hr) Edge Tank Heat Transfer for Node-10
+HeTrN11       = [813,34]         ! (kJ/hr) Edge Tank Heat Transfer for Node-11
+HeTrN12       = [813,35]         ! (kJ/hr) Edge Tank Heat Transfer for Node-12
+HeTrN13       = [813,36]         ! (kJ/hr) Edge Tank Heat Transfer for Node-13
+HeTrN14       = [813,37]         ! (kJ/hr) Edge Tank Heat Transfer for Node-14
+HeTrN15       = [813,38]         ! (kJ/hr) Edge Tank Heat Transfer for Node-15
+HeTrN16       = [813,39]         ! (kJ/hr) Edge Tank Heat Transfer for Node-16
+HeTrN17       = [813,40]         ! (kJ/hr) Edge Tank Heat Transfer for Node-17
+HeTrN18       = [813,41]         ! (kJ/hr) Edge Tank Heat Transfer for Node-18
+HeTrN19       = [813,42]         ! (kJ/hr) Edge Tank Heat Transfer for Node-19
+HeTrN20       = [813,43]         ! (kJ/hr) Edge Tank Heat Transfer for Node-20
+HeTrBot       = [813,44]         ! (kJ/hr) Bottom Surface Tank Heat Transfer
+TAvgSoil      = [813,45]         ! (C) Average Soil Surface Temperature
+TAvgInSu      = [813,46]         ! (C) Average Insulated Surface Temperature
+CoHeTrSoSu    = [813,47]         ! (kJ/hr) Convective Heat Transfer for Soil Surface
+LoWaRadExSoSu = [813,48]         ! (kJ/hr) Long Wave Radiation Exchange for Soil Surface
+HeTrSoSu      = [813,49]         ! (kJ/hr) Soil Surface Heat Transfer
+CoHeTrInSu    = [813,50]         ! (kJ/hr) Convective Heat Transfer for Insulated Surface
+LoWaRadExInSu = [813,51]         ! (kJ/hr) Long Wave Radiation Exchange for Insulated Surface
+HeTrInSu      = [813,52]         ! (kJ/hr) Insulated Surface Heat Transfer
+HeTrFaFi      = [813,53]         ! (kJ/hr) Far-Field Boundary Heat Transfer: Front
+HeTrDeEa      = [813,54]         ! (kJ/hr) Deep Earth Boundary Heat Transfer
+SoStRate      = [813,55]         ! (kJ/hr) Soil Storage Rate
+EnBalErr      = [813,56]         ! (%) Energy Balance Error (% based)
+TUndSoSu      = [813,57]         ! (C) Undisturbed Soil Surface Temperature
+TUndDeEa      = [813,58]         ! (C) Undisturbed Deep Earth Temperature
+
+
+**************************************
+**END type1301.dck
+**************************************

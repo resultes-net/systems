@@ -111,6 +111,7 @@ def ptes(sim: api.Simulation):
 
     fig, ax = api.line_plot(sim.hourly, ["pitStoreSoc"])
     ax.set_ylabel("SOC (-)")
+    ax.legend_.remove()
     _plt.grid()
     # _plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "soc-hourly", "ptes")
@@ -213,6 +214,7 @@ def sink(sim: api.Simulation):
     #### Plots ####
     fig, ax = api.line_plot(sim.hourly, ["QSnkP_kW"])
     ax.set_ylabel("Power (kW)")
+    ax.legend_.remove()
     _plt.grid()
     # _plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "sink-hourly", "sink")
@@ -257,16 +259,29 @@ def balance(sim: api.Simulation):
     sim.scalar["QImb"] = sim.scalar["QSources"] - sim.scalar["QStore"] - sim.scalar["QSinks"] - sim.scalar["QLosses"]
 
     #### Plots ####
+    # Unit changes
+    sim.monthly["CollP_kW_calc_MW"] = sim.monthly["CollP_kW_calc"] / 1000
+    sim.monthly["HpPelComp_MW"] = sim.monthly["HpPelComp_kW"] / 1000
+    sim.monthly["BolrPOut_MW"] = sim.monthly["BolrPOut_kW"] / 1000
+    sim.monthly["QSrcP_MW"] = sim.monthly["QSrcP_kW"] / 1000
+
+    sim.monthly["QSnkP_MW"] = sim.monthly["QSnkP_kW"] / 1000
+    sim.monthly["pitStoreQAccum_MW"] = sim.monthly["pitStoreQAccum_kW"] / 1000
+    sim.monthly["pitStoreQLosses_MW"] = sim.monthly["pitStoreQLosses_kW"] / 1000
+    sim.monthly["qSysOut_PipeLoss_MW"] = sim.monthly["qSysOut_PipeLoss"] / 1000
+    sim.monthly["QDistrict_MW"] = sim.monthly["QDistrict"] / 1000
+
     names_legend = ['$Q_{Coll}$','$P_{Comp}$','$Q_{Boiler}$','$Q_{Source}$',
                     '$Q_{Demand}$','$Q_{PTES,Accum}$','$Q_{PTES,Losses}$','$Q_{Pipes}$','$Q_{District}$','$Q_{Imb}$']
 
     fig, ax = api.energy_balance(
         sim.monthly,
-        q_in_columns=["CollP_kW_calc", "HpPelComp_kW", "BolrPOut_kW", "QSrcP_kW"],
-        q_out_columns=["QSnkP_kW", "pitStoreQAccum_kW", "pitStoreQLosses_kW", "qSysOut_PipeLoss", "QDistrict"],
+        q_in_columns=["CollP_kW_calc_MW", "HpPelComp_MW", "BolrPOut_MW", "QSrcP_MW"],
+        q_out_columns=["QSnkP_MW", "pitStoreQAccum_MW", "pitStoreQLosses_MW", "qSysOut_PipeLoss_MW", "QDistrict_MW"],
         xlabel="",
         cmap = "Paired"
     )
+    ax.set_ylabel("Energy (MWh)")
     _plt.legend(names_legend, bbox_to_anchor=(1.05, 1), loc='upper left')
     # _plt.show()
 
