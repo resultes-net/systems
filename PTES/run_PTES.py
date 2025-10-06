@@ -23,7 +23,7 @@ if __name__ == "__main__":
 
     runTool = runTrnsys.RunParallelTrnsys(pathBase, nameDeck)
 
-    runTool.readConfig(pathBase, "run_PTES.config")
+    runTool.readConfig(pathBase, "run_PTES_fast.config")
     runTool.getConfig()
     runTool.runConfig()
     runTool.runParallel()
