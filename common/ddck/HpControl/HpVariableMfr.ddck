@@ -65,24 +65,24 @@ THpOut          = [157,3]  ! Current value
 ** Time step printer
 ***********************************
 
-CONSTANTS 1
-unitStepHpCtrl = 33
-
-ASSIGN    temp\HP_CTRL_DT.Prt    unitStepHpCtrl
-
-UNIT 520 TYPE 25! User defined Printer
-PARAMETERS 10
-$dtSim          ! 1 Printing interval
-$START          ! 2 Start time
-$STOP           ! 3 Stop time
-unitStepHpCtrl   ! 4 Logical unit
-0               ! 5 Units printing mode
-0               ! 6 Relative or absolute start time
--1              ! 7 Overwrite or Append
--1              ! 8 Print header
-0               ! 9 Delimiter
-1               ! 10 Print labels
-INPUTS #
-TControlled TSet FracCond On
-TControlled TSet FracCond On
+!CONSTANTS 1
+!unitStepHpCtrl = 33
+!
+!ASSIGN    temp\HP_CTRL_DT.Prt    unitStepHpCtrl
+!
+!UNIT 520 TYPE 25! User defined Printer
+!PARAMETERS 10
+!$dtSim          ! 1 Printing interval
+!$START          ! 2 Start time
+!$STOP           ! 3 Stop time
+!unitStepHpCtrl   ! 4 Logical unit
+!0               ! 5 Units printing mode
+!0               ! 6 Relative or absolute start time
+!-1              ! 7 Overwrite or Append
+!-1              ! 8 Print header
+!0               ! 9 Delimiter
+!1               ! 10 Print labels
+!INPUTS #
+!TControlled TSet FracCond On
+!TControlled TSet FracCond On
 
