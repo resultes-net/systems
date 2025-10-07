@@ -298,7 +298,7 @@ def to_json(sim: api.Simulation):
     sim.scalar.to_json(sim.path + "\output.json", orient="records", indent=4)
     
 if __name__ == "__main__":
-    path_to_sim = _pl.Path(r"C:\Daten\GIT\systems\PTES\results")
+    path_to_sim = _pl.Path(r"C:\Daten\GIT\systems\PTES\results_sim_speed")
     api.global_settings.reader.force_reread_prt = False
     api.global_settings.reader.read_step_files = False
 
