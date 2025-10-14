@@ -67,7 +67,7 @@ MfrMax     = 10  * MfrNom                ! 13800
 ***********************************
 CONSTANTS 1
 unitReadIAM=26
-ASSIGN  PATH$\Coll\SolarCollectorIAM.txt  unitReadIAM
+ASSIGN  ..\..\..\common\ddck\Coll\SolarCollectorIAM.txt  unitReadIAM
 
 UNIT 17 TYPE 1357
 PARAMETERS #
