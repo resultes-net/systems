@@ -184,6 +184,6 @@ if __name__ == "__main__":
         print(f"ERROR: Usage: {_sys.argv[0]} <path-to-parameters-json-file>")
         _sys.exit(-1)
 
-    parameters_json_file_path = _sys.argv[1]
+    parameters_json_file_path = _pl.Path(_sys.argv[1])
 
     main(parameters_json_file_path)
