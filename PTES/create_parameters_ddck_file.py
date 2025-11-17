@@ -11,7 +11,7 @@ import resultes_pydantic_models.simulations.parameters.ptes as _pptes
 import resultes_pydantic_models.simulations.parameters.ptes.parameters.thermal_energy_storage as _pptess
 import sympy as _sym
 
-demand_MWh = _sym.Symbol("QSnkQ_MWh")
+demand_MWh = _sym.Symbol("$QSnkQ_MWh")
 
 collector_area_m2 = _sym.Symbol("$CollAcollAp")
 collector_area_m2_per_MWh = _sym.Symbol("AperDemand_m2_per_MWh")
