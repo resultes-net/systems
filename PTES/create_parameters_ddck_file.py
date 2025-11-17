@@ -24,6 +24,10 @@ equations = [
     _sym.Eq(pit_store_volume_m3, pit_store_volume_m3_per_MWh * demand_MWh),
 ]
 
+PARAMETERS_DDCK_FILE_PATH = (
+    _pl.Path(__file__).parent / "ddck" / "parameters" / "parameters.ddck"
+)
+
 
 @_dc.dataclass
 class _SpecifiedVariable:
@@ -172,9 +176,7 @@ def main(parameters_json_file_path: _pl.Path) -> None:
 *******************************
 """
 
-    parameters_ddck_file_path = _pl.Path("ddck") / "parameters" / "parameters.ddck"
-
-    parameters_ddck_file_path.write_text(parameters_ddck_contents)
+    PARAMETERS_DDCK_FILE_PATH.write_text(parameters_ddck_contents)
 
 
 if __name__ == "__main__":
