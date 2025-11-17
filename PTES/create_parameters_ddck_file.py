@@ -13,11 +13,11 @@ import sympy as _sym
 
 demand_MWh = _sym.Symbol("QSnkQ_MWh")
 
-collector_area_m2 = _sym.Symbol("CollAcollAp")
-collector_area_m2_per_MWh = _sym.Symbol("szAperDemand_m2_per_MWh")
+collector_area_m2 = _sym.Symbol("$CollAcollAp")
+collector_area_m2_per_MWh = _sym.Symbol("AperDemand_m2_per_MWh")
 
-pit_store_volume_m3 = _sym.Symbol("pitStoreStVolume")
-pit_store_volume_m3_per_MWh = _sym.Symbol("szVperDemand_m3_per_MWh")
+pit_store_volume_m3 = _sym.Symbol("$pitStoreStVolume")
+pit_store_volume_m3_per_MWh = _sym.Symbol("VperDemand_m3_per_MWh")
 
 equations = [
     _sym.Eq(collector_area_m2, collector_area_m2_per_MWh * demand_MWh),
@@ -36,9 +36,9 @@ class _SpecifiedVariable:
     variable_to_solve_for: _sym.Symbol
 
 
-def get_specified_variables_and_solved_equations(
+def get_specified_variables_and_solution(
     parameters: _pptes.PtesParameters,
-) -> tuple[_cabc.Sequence[_SpecifiedVariable], _cabc.Sequence[_sym.Eq]]:
+) -> tuple[_cabc.Sequence[_SpecifiedVariable], _cabc.Mapping[_sym.Symbol, _sym.Expr]]:
     collector_field_area_specified_variable = (
         _get_collector_field_area_specified_variable(parameters.collector_field)
     )
@@ -55,16 +55,14 @@ def get_specified_variables_and_solved_equations(
     solutions = _sym.solve(equations, variables_to_solve_for, dict=True)
 
     assert len(solutions) == 1
-    solution = solutions[0]
-
-    solved_equations = [_sym.Eq(k, v) for k, v in solution.items()]
+    solution = _tp.cast(_cabc.Mapping[_sym.Symbol, _sym.Expr], solutions[0])
 
     specified_variables = [
         collector_field_area_specified_variable,
         pit_store_volume_specified_variable,
     ]
 
-    return specified_variables, solved_equations
+    return specified_variables, solution
 
 
 def _get_collector_field_area_specified_variable(
@@ -103,12 +101,17 @@ def _get_pit_store_volume_specified_variable(
     _tp.assert_never(scaling)
 
 
-def _get_formatted_specified_variables_and_solved_equations(parameters):
-    specified_variables, solved_equations = (
-        get_specified_variables_and_solved_equations(parameters.values)
-    )
+def _get_formatted_specified_variables_and_solved_equations(
+    parameters: _params.Parameters,
+) -> str:
+    values = parameters.values
 
-    result = "EQUATIONS #\n"
+    if not isinstance(values, _pptes.PtesParameters):
+        raise ValueError("Not PTES parameters.", values)
+
+    specified_variables, solution = get_specified_variables_and_solution(values)
+
+    result = "CONSTANTS #\n"
 
     for specified_variable in specified_variables:
         formatted_equation = (
@@ -116,8 +119,8 @@ def _get_formatted_specified_variables_and_solved_equations(parameters):
         )
         result += formatted_equation
 
-    for solved_equation in solved_equations:
-        formatted_equation = f"{solved_equation.lhs}={solved_equation.rhs}\n"
+    for variable, expression in solution.items():
+        formatted_equation = f"{variable}={expression}\n"
         result += formatted_equation
 
     return result
@@ -160,7 +163,7 @@ def main(parameters_json_file_path: _pl.Path) -> None:
 
     parameters = _params.Parameters(**data)
 
-    equations_block = _get_formatted_specified_variables_and_solved_equations(
+    constants_block = _get_formatted_specified_variables_and_solved_equations(
         parameters
     )
 
@@ -169,7 +172,7 @@ def main(parameters_json_file_path: _pl.Path) -> None:
 **BEGIN parameters.ddck 
 *******************************
 
-{equations_block}
+{constants_block}
 
 *******************************
 **END parameters.ddck

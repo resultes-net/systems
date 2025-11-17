@@ -50,7 +50,6 @@ IT_kJhm2  = $IT_surfUser_1
 IT_Wm2    = IT_kJhm2/3.6
 IT_kWm2   = IT_kJhm2/3600	             ! Incident total radiation on collector plane, kW/m2
 IT_kW     = IT_kWm2 * ACollAp
-ACollAp   = AMod * NbModTot                 ! 1.84*250 = 460m²
 
 CONSTANTS #
 !Inputs
