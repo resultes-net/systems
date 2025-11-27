@@ -94,9 +94,11 @@ UpRad = LoRad + dR
 Ratio = UpRad/LoRad
 
 ** standardization of parameters for every node / layer
-CONSTANTS 3
+CONSTANTS #
 IniT        = 90       ! (C) initial temperature of all the nodes
-LoCoe       = 3        ! (kJ/hr.m^2.K) loss coefficient for all the nodes + top and bottom
+ToLoCoe     = 0.36     ! (kJ/hr.m^2.K) loss coefficient for top
+LoCoe       = 324      ! (kJ/hr.m^2.K) loss coefficient for all the nodes + bottom
+BoLoCoe     = 324      ! (kJ/hr.m^2.K) loss coefficient for bottom
 FlueOLCoe   = 0        ! (kJ/hr.m^2.K) flue overall loss coefficient for all the nodes
 
 ******************************************************************************************
@@ -167,7 +169,7 @@ IniTN47      = IniT         ! 19 (C) Initial temperature of node-47
 IniTN48      = IniT         ! 19 (C) Initial temperature of node-48
 IniTN49      = IniT         ! 19 (C) Initial temperature of node-49
 IniTN50      = IniT         ! 19 (C) Initial temperature of node-50
-ToLoCoe      = 1            ! 20 (kJ/hr.m^2.K) Top Loss Coefficient
+!ToLoCoe      = 1            ! 20 (kJ/hr.m^2.K) Top Loss Coefficient
 EdLoCoeN1    = LoCoe        ! 21 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-1
 EdLoCoeN2    = LoCoe        ! 22 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-2
 EdLoCoeN3    = LoCoe        ! 23 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-3
@@ -218,7 +220,7 @@ EdLoCoeN47   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-47
 EdLoCoeN48   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-48
 EdLoCoeN49   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-49
 EdLoCoeN50   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-50
-BoLoCoe      = LoCoe        ! 26 (kJ/hr.m^2.K) Bottom Loss Coefficient
+!BoLoCoe      = LoCoe        ! 26 (kJ/hr.m^2.K) Bottom Loss Coefficient
 AdTherCond   = 0            ! 27 (kJ/hr.m.K) Additional Thermal Conductivity
 ! connection 1: node 1, connection 2: node 17, connection 3: node 33, connection 4: node 50
 ! port pair: PP43 is a massflow from con4 to con3, PP34 is a massflow from con3 to con4

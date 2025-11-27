@@ -4,6 +4,8 @@ import numpy as np
 import pandas as pd
 from datetime import datetime
 from pytrnsys_process import api
+
+
 def filter(sim: api.Simulation):
     sim.monthly.index = pd.to_datetime(sim.monthly.index)  # convierte si hace falta
     sim.monthly = sim.monthly[sim.monthly.index.year == 2025]
@@ -288,6 +290,51 @@ def balance(sim: api.Simulation):
     # _plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
     api.export_plots_in_configured_formats(fig, sim.path, "balance-monthly", "balance")
 
+def q_vs_t(sim: api.Simulation):
+    #### Q vs T ####
+    names_legend = [
+        '$Q_{coll}(T_{in})$',
+        '$Q_{coll}(T_{out})$',
+        '$Q_{Hx}(T_{in})$',
+        '$Q_{Hx}(T_{out})$',
+        '$Q_{evap}(T_{in})$',
+        '$Q_{evap}(T_{out})$',
+        '$Q_{dem}(T_{in})$',
+        '$Q_{dem}(T_{out})$',
+    ]
+    plot_variables = [
+        ["CollP_kW_calc", "CollTIn"],
+        ["CollP_kW_calc", "CollTOut"],
+        ["HxQ_kW", "HxTSide1In"],
+        ["HxQ_kW", "HxTSide1Out"],
+        ["HpQEvap_kW", "HpTEvapIn"],
+        ["HpQEvap_kW", "HpTEvapOut"],
+        ["QSnkP_kW", "QSnkTIn"],
+        ["QSnkP_kW", "QSnkTOut"],
+    ]
+
+    dataframes = pd.DataFrame() #[]
+
+    _plt.figure()
+
+    for q, t in plot_variables:
+        a = abs(sim.hourly[q])
+        b = sim.hourly[t]
+        df = pd.DataFrame({q: a, t: b})
+
+        df = df.sort_values(by=t)
+        df[q] = np.cumsum(df[q])
+        # dataframes = dataframes + a + b
+        # dataframes.append(df)
+
+        fig = _plt.plot(df[t], df[q], label=q + "____" + t)  # , linestyle='-', color='blue', label='Q_cum')
+
+    _plt.xlabel('Temperature [°C]')
+    _plt.ylabel('Cumulative energy [kWh]')
+    _plt.grid()
+    _plt.legend(names_legend)
+    api.export_plots_in_configured_formats(fig[0].figure, sim.path, "q_t", "q_vs_t")
+
 
 def kpi(sim: api.Simulation):
 
@@ -298,8 +345,8 @@ def to_json(sim: api.Simulation):
     sim.scalar.to_json(sim.path + "\output.json", orient="records", indent=4)
     
 if __name__ == "__main__":
-    path_to_sim = _pl.Path(r"C:\Daten\GIT\systems\PTES\results_sim_speed")
-    api.global_settings.reader.force_reread_prt = False
+    path_to_sim = _pl.Path(r"C:\Daten\GIT\systems\PTES\results_basecase")
+    api.global_settings.reader.force_reread_prt = True
     api.global_settings.reader.read_step_files = False
 
     processing_steps = [
@@ -313,6 +360,7 @@ if __name__ == "__main__":
                         sink,
                         district,
                         balance,
+                        q_vs_t,
                         kpi,
                         to_json,
                         ]
