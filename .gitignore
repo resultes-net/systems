@@ -5,3 +5,4 @@ debugParallelRun.dat
 /*/archive
 /*/comparison
 /PTES/results_sim_speed/
+/**/__pycache__/

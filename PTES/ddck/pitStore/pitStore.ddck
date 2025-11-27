@@ -77,8 +77,7 @@ MfrInPP31      = M31        ! 6  (kg/hr) Inlet Flowrate for Port-31
 
 
 ** storage definition (for type 1301 and 1535)
-CONSTANTS 4
-StVolume = 30000            !(m3) volume of storage
+CONSTANTS #
 StHeight = 30               !(m) height of storage
 SlAng = 60                  !(�) angle between the top surface and the side wall
 StNodes = 50

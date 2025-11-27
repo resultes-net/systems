@@ -18,7 +18,7 @@ scaling = Q_MWh/QUnscaled_MWh
 EQUATIONS #
 profileSnkUnit = 50
 
-ASSIGN  "C:\Daten\GIT\systems\common\ddck\QSnk\profile_norm.csv" profileSnkUnit
+ASSIGN  "..\..\ddck\QSnk\profile_norm.csv" profileSnkUnit
 UNIT 33 TYPE 9      !Changed automatically
 Parameters #
 5               ! 1 Mode
