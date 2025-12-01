@@ -290,7 +290,12 @@ def balance(sim: api.Simulation):
 
     fig, ax = api.energy_balance(
         sim.monthly,
-        q_in_columns=["CollP_kW_calc_MW", "HpPelComp_MW", "BolrPOut_MW", "QSrcP_MW"],
+        q_in_columns=[
+            "CollP_kW_calc_MW",
+            "HpPelComp_MW",
+            "BolrPOut_MW",
+            "QSrcP_MW"
+        ],
         q_out_columns=[
             "QSnkP_MW",
             "pitStoreQAccum_MW",
