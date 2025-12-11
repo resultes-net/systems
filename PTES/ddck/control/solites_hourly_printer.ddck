@@ -1,0 +1,85 @@
+**************************************
+**BEGIN solites_hourly_printer.ddck
+**************************************
+
+***********************************
+** Hourly printer
+***********************************
+CONSTANTS 1
+unitHourlySolites = 33
+
+ASSIGN    temp\SOLITES_HR.Prt    unitHourlySolites
+
+UNIT 34 TYPE 46		! Printegrator Monthly Values for System
+PARAMETERS #
+unitHourlySolites	! 1: Logical unit number, -
+-1            		! 2: Logical unit for monthly summaries, -
+1             		! 3: Relative or absolute start time. 0: print at time intervals relative to the simulation start time. 1: print at absolute time intervals. No effect for monthly integrations
+1             		! 4: Printing & integrating interval, h. -1 for monthly integration
+29             		! 5: Number of inputs to avoid integration, -
+
+1             		! 6: Output number to avoid integration
+2             		! 7: Output number to avoid integration
+3             		! 8: Output number to avoid integration
+4             		! 9: Output number to avoid integration
+5             		! 9: Output number to avoid integration
+6             		! 9: Output number to avoid integration
+7             		! 9: Output number to avoid integration
+8             		! 10: Output number to avoid integration
+9             		! 11: Output number to avoid integration
+10             		! 12: Output number to avoid integration
+11             		! 12: Output number to avoid integration
+
+16             		! 13: Output number to avoid integration
+17             		! 14: Output number to avoid integration
+
+19             		! 9: Output number to avoid integration
+20             		! 10: Output number to avoid integration
+22             		! 11: Output number to avoid integration
+23             		! 12: Output number to avoid integration
+25             		! 13: Output number to avoid integration
+26             		! 14: Output number to avoid integration
+
+28             		! 11: Output number to avoid integration
+29             		! 12: Output number to avoid integration
+31             		! 13: Output number to avoid integration
+32             		! 14: Output number to avoid integration
+34             		! 13: Output number to avoid integration
+35             		! 14: Output number to avoid integration
+
+37             		! 13: Output number to avoid integration
+38             		! 14: Output number to avoid integration
+
+40             		! 13: Output number to avoid integration
+41             		! 14: Output number to avoid integration
+
+INPUTS #
+pitStoreTTankN1 pitStoreTTankN5 pitStoreTTankN10 pitStoreTTankN15 pitStoreTTankN20 pitStoreTTankN25 pitStoreTTankN30 pitStoreTTankN35 pitStoreTTankN40 pitStoreTTankN45 pitStoreTTankN50   ! 1-11
+pitStoreQLossesTo_kW pitStoreQLossesEd_kW pitStoreQLossesBo_kW  ! 12-14
+HxCollQSide2_kW HxCollTSide2In HxCollTSide2Out! 15-17
+pitStoreQ13_kW pitStoreT13 pitStoreTTherStat3 ! 18-20
+pitStoreQ23_kW pitStoreT23 pitStoreTTherStat2 ! 21-23
+pitStoreQ31_kW pitStoreT31 pitStoreTTherStat1 ! 24-26
+HxQSide2_kW HxTSide2In HxTSide2Out            ! 27-29
+HpQEvap_kW HpTEvapIn HpTEvapOut               ! 30-32
+HpQCond_kW HpTCondIn HpTCondOut               ! 33-35
+BolrPOut_kW BolrTIn BolrTOut                  ! 36-38
+QSnkP_kW QSnkTIn QSnkTOut                     ! 39-41
+***
+pitStoreTTankN1 pitStoreTTankN5 pitStoreTTankN10 pitStoreTTankN15 pitStoreTTankN20 pitStoreTTankN25 pitStoreTTankN30 pitStoreTTankN35 pitStoreTTankN40 pitStoreTTankN45 pitStoreTTankN50   ! 1-11
+pitStoreQLossesTo_kW pitStoreQLossesEd_kW pitStoreQLossesBo_kW  ! 12-14
+HxCollQSide2_kW HxCollTSide2In HxCollTSide2Out! 15-17
+pitStoreQ13_kW pitStoreT13 pitStoreTTherStat3 ! 18-20
+pitStoreQ23_kW pitStoreT23 pitStoreTTherStat2 ! 21-23
+pitStoreQ31_kW pitStoreT31 pitStoreTTherStat1 ! 24-26
+HxQSide2_kW HxTSide2In HxTSide2Out            ! 27-29
+HpQEvap_kW HpTEvapIn HpTEvapOut               ! 30-32
+HpQCond_kW HpTCondIn HpTCondOut               ! 33-35
+BolrPOut_kW BolrTIn BolrTOut                  ! 36-38
+QSnkP_kW QSnkTIn QSnkTOut                     ! 39-41
+
+
+
+**************************************
+**END solites_hourly_printer.ddck
+**************************************
