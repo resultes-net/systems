@@ -5,6 +5,7 @@ import pathlib as _pl
 import sys as _sys
 import typing as _tp
 
+import pydantic as _pyd
 import resultes_pydantic_models.simulations.parameters as _params
 import resultes_pydantic_models.simulations.parameters.common.collector_field as _pcoll
 import resultes_pydantic_models.simulations.parameters.ptes as _pptes
@@ -127,9 +128,10 @@ def _get_formatted_specified_variables_and_solved_equations(
 
 
 def test_get_solved_equations() -> None:
-    data = {
+    data: _pyd.JsonValue = {
         "values": {
             "type": "ptes",
+            "time": {"start": 5760, "stop": 17280, "dt_sim": 0.5},
             "demand": {"profile": {"profile_type": "predefined", "name": "default"}},
             "collector_field": {
                 "area": {"scaling": "relative_to_demand_m2_per_MWh", "value": 4.0},
@@ -150,18 +152,17 @@ def test_get_solved_equations() -> None:
         }
     }
 
-    parameters = _params.Parameters(**data)
-
-    result = _get_formatted_specified_variables_and_solved_equations(parameters)
+    result = _create_parameters_ddck_contents(data)
 
     print(result)
 
 
-def main(parameters_json_file_path: _pl.Path) -> None:
-    with parameters_json_file_path.open("r") as file:
-        data = _json.load(file)
-
+def _create_parameters_ddck_contents(data: _pyd.JsonValue) -> str:
     parameters = _params.Parameters(**data)
+
+    values = parameters.values
+    assert isinstance(values, _pptes.PtesParameters)
+    time = values.time
 
     constants_block = _get_formatted_specified_variables_and_solved_equations(
         parameters
@@ -171,13 +172,25 @@ def main(parameters_json_file_path: _pl.Path) -> None:
 *******************************
 **BEGIN parameters.ddck 
 *******************************
+CONSTANTS #
+START = {time.start}
+STOP = {time.stop}
+dtSim = {time.dt_sim}
 
 {constants_block}
-
 *******************************
 **END parameters.ddck
 *******************************
 """
+
+    return parameters_ddck_contents
+
+
+def main(parameters_json_file_path: _pl.Path) -> None:
+    with parameters_json_file_path.open("r") as file:
+        data = _json.load(file)
+
+    parameters_ddck_contents = _create_parameters_ddck_contents(data)
 
     PARAMETERS_DDCK_FILE_PATH.write_text(parameters_ddck_contents)
 
