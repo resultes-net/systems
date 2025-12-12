@@ -790,7 +790,11 @@ Q31_kW = Q31/3600
 QLossesTo = [319,	12]     ! 19 (kJ/hr) Top Losses
 QLossesEd = [319,	13]     ! 20 (kJ/hr) Edge Losses
 QLossesBo = [319,	14]     ! 21 (kJ/hr) Bottom Losses
-QLosses   =     [319,	15]     ! 22 (kJ/hr) Total Tank Losses
+QLosses   = [319,	15]     ! 22 (kJ/hr) Total Tank Losses
+
+QLossesTo_kW = QLossesTo/3600
+QLossesEd_kW = QLossesEd/3600
+QLossesBo_kW = QLossesBo/3600
 QLosses_kW = QLosses/3600
 
 QLossesGas =   [319,	16]     ! 23 (kJ/hr) Gas Flue Losses
@@ -940,7 +944,7 @@ unitHourlyPit		! 1: Logical unit number, -
 -1            		! 2: Logical unit for monthly summaries, -
 1             		! 3: Relative or absolute start time. 0: print at time intervals relative to the simulation start time. 1: print at absolute time intervals. No effect for monthly integrations
 1             		! 4: Printing & integrating interval, h. -1 for monthly integration
-7             		! 5: Number of inputs to avoid integration, -
+17             		! 5: Number of inputs to avoid integration, -
 1             		! 6: Output number to avoid integration
 2             		! 7: Output number to avoid integration
 3             		! 8: Output number to avoid integration
@@ -948,12 +952,24 @@ unitHourlyPit		! 1: Logical unit number, -
 8             		! 10: Output number to avoid integration
 9             		! 11: Output number to avoid integration
 10             		! 12: Output number to avoid integration
+11             		! 13: Output number to avoid integration
+12             		! 14: Output number to avoid integration
+13             		! 15: Output number to avoid integration
+14             		! 16: Output number to avoid integration
+15             		! 17: Output number to avoid integration
+16             		! 18: Output number to avoid integration
+17             		! 19: Output number to avoid integration
+18             		! 20: Output number to avoid integration
+19             		! 21: Output number to avoid integration
+20             		! 22: Output number to avoid integration
 INPUTS #
-T13 T31 T23 TAvgTank M13 M31 M23 TTherStat1 TTherStat2 TTherStat3
-QLosses_kW Q13_kW Q23_kW Q31_kW QDis_kW QAccum_kW
+T13 T31 T23 TAvgTank M13 M31 M23 TTherStat1 TTherStat2 TTherStat3                           ! 1-10
+TTankN1 TTankN5 TTankN10 TTankN15 TTankN20 TTankN30 TTankN35 TTankN40 TTankN45 TTankN50     ! 11-20
+QLossesTo_kW QLossesEd_kW QLossesBo_kW QLosses_kW Q13_kW Q23_kW Q31_kW QDis_kW QAccum_kW    ! 21-29
 **
 T13 T31 T23 TAvgTank M13 M31 M23 TTherStat1 TTherStat2 TTherStat3
-QLosses_kW Q13_kW Q23_kW Q31_kW QDis_kW QAccum_kW
+TTankN1 TTankN5 TTankN10 TTankN15 TTankN20 TTankN30 TTankN35 TTankN40 TTankN45 TTankN50
+QLossesTo_kW QLossesEd_kW QLossesBo_kW QLosses_kW Q13_kW Q23_kW Q31_kW QDis_kW QAccum_kW
 
 ***********************************
 ** Monthly printer
