@@ -1,0 +1,37 @@
+**************************************
+**BEGIN solites_monthly_printer.ddck
+**************************************
+
+***********************************
+** Monthly printer
+***********************************
+EQUATIONS #
+CollP_kW_calc_MW = CollP_kW_calc/1000
+pitStoreQCharge_MW = (ABS(pitStoreQ13_kW) + ABS(pitStoreQ23_kW))/1000
+pitStoreQDischarge_MW = ABS(pitStoreQ31_kW)/1000
+pitStoreQLosses_MW = pitStoreQLosses_kW/1000
+HpPelComp_MW = HpPelComp_kW/1000
+BolrPOut_MW = BolrPOut_kW/1000
+QSnkP_MW = QSnkP_kW/1000
+CONSTANTS 1
+unitMonthlySolites = 33
+
+ASSIGN    temp\SOLITES_MO.Prt    unitMonthlySolites
+
+UNIT 34 TYPE 46		! Printegrator Monthly Values for System
+PARAMETERS #
+unitMonthlySolites	! 1: Logical unit number, -
+-1            		! 2: Logical unit for monthly summaries, -
+1             		! 3: Relative or absolute start time. 0: print at time intervals relative to the simulation start time. 1: print at absolute time intervals. No effect for monthly integrations
+-1             		! 4: Printing & integrating interval, h. -1 for monthly integration
+0             		! 5: Number of inputs to avoid integration, -
+INPUTS #
+CollP_kW_calc_MW pitStoreQCharge_MW pitStoreQDischarge_MW pitStoreQLosses_MW HpPelComp_MW BolrPOut_MW QSnkP_MW
+***
+SolitesP_kW_calc_MW SolitesQCharge_MW SolitesQDischarge_MW SolitesQLosses_MW SolitesPelComp_MW SolitesPOut_MW SolitesP_MW
+
+
+
+**************************************
+**END solites_monthly_printer.ddck
+**************************************
