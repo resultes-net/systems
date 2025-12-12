@@ -173,9 +173,9 @@ def _create_parameters_ddck_contents(data: _pyd.JsonValue) -> str:
 **BEGIN parameters.ddck 
 *******************************
 CONSTANTS #
-START = {time.start}
-STOP = {time.stop}
-dtSim = {time.dt_sim}
+$START = {time.start}
+$STOP = {time.stop}
+$dtSim = {time.dt_sim}
 
 {constants_block}
 *******************************
