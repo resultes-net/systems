@@ -26,7 +26,7 @@ Ghi = $IT_H
 
 EQUATIONS #
 PuPriOn = PuPriRad*PuPriTHigh  ! Activation of primary loop pump: minimum radiation and collector outlet not too high
-PuSecOn = PuPriOn*PuColSecTemp*PuColSecTes      ! Activation of secondary loop pump: primary loop pump and temperature difference
+PuSecOn = PuPriOn*PuColSecTemp*NOT(Stag) !PuColSecTes      ! Activation of secondary loop pump: primary loop pump and temperature difference
 
 ***********************************
 ** Primary loop pump
