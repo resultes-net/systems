@@ -21,24 +21,26 @@ TStag = $TTesTop
 ***********************************
 UNIT 1 TYPE 150 ! Recall
 PARAMETERS #
-2
+3
+1 0
 1 0
 1 0
 INPUTS #
-Stag StagDays
+Stag StagDays TStag
 *
-0 0
+0 0 0
 
 EQUATIONS #
 StagRec = [1,1]
 StagDaysRec = [1,2]
+TStagRec = [1,3]
 
 ***********************************
 ** Control logic
 ***********************************
 
 EQUATIONS #
-Stag = NOT(StagRec)*GT(TStag,TTesMax)*GT($IT_H, 0) + StagRec*GT($IT_H, 0)
+Stag = NOT(StagRec)*GT(TStagRec,TTesMax)*GT($IT_H, 0) + StagRec*GT($IT_H, 0)
 StagDays = GT(Stag,StagRec)*(StagDaysRec+1) + LE(Stag,StagRec)*StagDaysRec
 
 ***********************************
