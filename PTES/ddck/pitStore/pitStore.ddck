@@ -84,14 +84,20 @@ SlAng = 60                  !(�) angle between the top surface and the side wa
 StNodes = 50
 
 ** calculating the radius ratio needed by this type through the slope angle
-CONSTANTS 7
+CONSTANTS #
 h = StHeight                ! calculation variable
 V = StVolume                ! calculation variable
-alpha = SlAng               ! calculation variable
-dR = StHeight / tan(SlAng)  !(m) Difference between upper radius and lower radius
-LoRad = -(h^2*$PI^(1/2) - (-(h*($PI*h^3 - 12*V*tan(alpha)^2))/3)^(1/2))/(2*h*$PI^(1/2)*tan(alpha))     !equation solved with matlab to find the lower/bottom radius of the pit storage
+alpha = SlAng*$PI/180               ! calculation variable
+dR = StHeight * tan(alpha)  !(m) Difference between upper radius and lower radius
+!LoRad = -(h^2*$PI^(1/2) - (-(h*($PI*h^3 - 12*V*tan(alpha)^2))/3)^(1/2))/(2*h*$PI^(1/2)*tan(alpha))     !equation solved with matlab to find the lower/bottom radius of the pit storage
+LoRad = (-3*dR + (36*V / ($PI * h) - 3*dR^2)^0.5) / 6
 UpRad = LoRad + dR
+VCalc = $PI*h/3*(LoRad^2+LoRad*UpRad+UpRad^2)
 Ratio = UpRad/LoRad
+h0 = LoRad / tan(alpha)
+hEq = (h0^3+1.5*V/($PI*(tan(alpha))^2))^(1/3)-h0
+nInter = StNodes - hEq*(StNodes-1)/h
+
 
 ** standardization of parameters for every node / layer
 CONSTANTS #
@@ -944,7 +950,7 @@ unitHourlyPit		! 1: Logical unit number, -
 -1            		! 2: Logical unit for monthly summaries, -
 1             		! 3: Relative or absolute start time. 0: print at time intervals relative to the simulation start time. 1: print at absolute time intervals. No effect for monthly integrations
 1             		! 4: Printing & integrating interval, h. -1 for monthly integration
-17             		! 5: Number of inputs to avoid integration, -
+18             		! 5: Number of inputs to avoid integration, -
 1             		! 6: Output number to avoid integration
 2             		! 7: Output number to avoid integration
 3             		! 8: Output number to avoid integration
@@ -962,14 +968,15 @@ unitHourlyPit		! 1: Logical unit number, -
 18             		! 20: Output number to avoid integration
 19             		! 21: Output number to avoid integration
 20             		! 22: Output number to avoid integration
+21             		! 23: Output number to avoid integration
 INPUTS #
-T13 T31 T23 TAvgTank M13 M31 M23 TTherStat1 TTherStat2 TTherStat3                           ! 1-10
-TTankN1 TTankN5 TTankN10 TTankN15 TTankN20 TTankN30 TTankN35 TTankN40 TTankN45 TTankN50     ! 11-20
-QLossesTo_kW QLossesEd_kW QLossesBo_kW QLosses_kW Q13_kW Q23_kW Q31_kW QDis_kW QAccum_kW    ! 21-29
+T13 T31 T23 TAvgTank M13 M31 M23 TTherStat1 TTherStat2 TTherStat3                                       ! 1-10
+TTankN1 TTankN5 TTankN10 TTankN15 TTankN20 TTankN25 TTankN30 TTankN35 TTankN40 TTankN45 TTankN50        ! 11-21
+QLossesTo_kW QLossesEd_kW QLossesBo_kW QLosses_kW Q13_kW Q23_kW Q31_kW QDis_kW QAccum_kW                ! 22-30
 **
-T13 T31 T23 TAvgTank M13 M31 M23 TTherStat1 TTherStat2 TTherStat3
-TTankN1 TTankN5 TTankN10 TTankN15 TTankN20 TTankN30 TTankN35 TTankN40 TTankN45 TTankN50
-QLossesTo_kW QLossesEd_kW QLossesBo_kW QLosses_kW Q13_kW Q23_kW Q31_kW QDis_kW QAccum_kW
+T13 T31 T23 TAvgTank M13 M31 M23 TTherStat1 TTherStat2 TTherStat3                                       ! 1-10
+TTankN1 TTankN5 TTankN10 TTankN15 TTankN20 TTankN25 TTankN30 TTankN35 TTankN40 TTankN45 TTankN50        ! 11-21
+QLossesTo_kW QLossesEd_kW QLossesBo_kW QLosses_kW Q13_kW Q23_kW Q31_kW QDis_kW QAccum_kW                ! 22-30
 
 ***********************************
 ** Monthly printer
