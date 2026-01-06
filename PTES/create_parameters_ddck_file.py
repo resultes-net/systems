@@ -148,7 +148,14 @@ def test_get_solved_equations() -> None:
                     "value": 15.0,
                 },
             },
-            "storage": {"volume": {"scaling": "absolute_m3", "value": 400}},
+            "storage": {
+                "volume": {"scaling": "absolute_m3", "value": 400},
+                "ports_relative_heights_1": {
+                    "top": 0.80,
+                    "middle": 0.70,
+                    "bottom": 0.05,
+                },
+            },
         }
     }
 
@@ -164,8 +171,10 @@ def _create_parameters_ddck_contents(data: _pyd.JsonValue) -> str:
     assert isinstance(values, _pptes.PtesParameters)
     time = values.time
 
-    constants_block = _get_formatted_specified_variables_and_solved_equations(
-        parameters
+    port_heights = values.storage.ports_relative_heights_1
+
+    formatted_specified_and_solved_variables_block = (
+        _get_formatted_specified_variables_and_solved_equations(parameters)
     )
 
     parameters_ddck_contents = f"""\
@@ -177,7 +186,13 @@ $START = {time.start}
 $STOP = {time.stop}
 $dtSim = {time.dt_sim}
 
-{constants_block}
+$psPtesPortsHeightRelTop = {port_heights.top}
+$psPtesPortsHeightRelMiddle = {port_heights.middle}
+$psPtesPortsHeightRelBottom = {port_heights.bottom}
+
+{formatted_specified_and_solved_variables_block}
+
+
 *******************************
 **END parameters.ddck
 *******************************

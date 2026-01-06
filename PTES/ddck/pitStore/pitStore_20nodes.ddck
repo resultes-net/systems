@@ -162,6 +162,10 @@ AdTherCond   = 0            ! 27 (kJ/hr.m.K) Additional Thermal Conductivity
 ! connection 1: node 1, connection 2: node 17, connection 3: node 33, connection 4: node 50
 ! port pair: PP43 is a massflow from con4 to con3, PP34 is a massflow from con3 to con4
 
+TopNode = INT(StNodes*(1-$psPtesPortsHeightRelTop)+0.5)
+MiddleNode = INT(StNodes*(1-$psPtesPortsHeightRelMiddle)+0.5)
+BottomNode = INT(StNodes*(1-$psPtesPortsHeightRelBottom)+0.5)
+
 PP13InM        = 1            ! 28 (-) Port Pair 12 Inlet Mode
 PP13EnN        = 1            ! 29 (-) Port Pair 12 Entry Node
 PP13ExN        = 20           ! 30 (-) Port Pair 12 Exit Node
@@ -171,7 +175,7 @@ PP23EnN        = 10           ! 32 (-) Port Pair 13 Entry Node
 PP23ExN        = 20           ! 33 (-) Port Pair 13 Exit Node
 
 PP31InM        = 1            ! 31 (-) Port Pair 14 Inlet Mode
-PP31EnN        = 10           ! 32 (-) Port Pair 14 Entry Node
+PP31EnN        = 20           ! 32 (-) Port Pair 14 Entry Node
 PP31ExN        = 1            ! 33 (-) Port Pair 14 Exit Node
 
 
