@@ -2,6 +2,12 @@
 **BEGIN Stagnation.ddck
 **************************************************
 
+*****************************************
+** Contact person : Mikel Arenas
+** Creation date  : 18.12.2025
+** Last changes   :
+*****************************************
+
 ***************************************************************************
 ** This controller rules the stagnation of the solar thermal system:
 **      1. When the system is not in stagnation mode, the stagnation mode is activated
