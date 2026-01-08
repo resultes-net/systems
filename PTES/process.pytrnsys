@@ -9,10 +9,10 @@ from pytrnsys_process import api
 
 def filter(sim: api.Simulation):
     sim.monthly.index = pd.to_datetime(sim.monthly.index)
-    sim.monthly = sim.monthly[sim.monthly.index.year == 2025]
+    sim.monthly = sim.monthly[sim.monthly.index.year == 2026]
 
     sim.hourly.index = pd.to_datetime(sim.hourly.index)
-    sim.hourly = sim.hourly[sim.hourly.index.year == 2025]
+    sim.hourly = sim.hourly[sim.hourly.index.year == 2026]
 
 
 def solar(sim: api.Simulation):
@@ -27,10 +27,15 @@ def solar(sim: api.Simulation):
     sim.scalar["IT_kW_m2"] = sim.scalar["CollIT_kW_Tot"] / sim.scalar["CollAcollAp"]
     sim.scalar["qSysOut_PipeLoss_Tot"] = sim.hourly["qSysOut_PipeLoss"].sum()
 
+    # Q_vs_T preparation
     df = pd.DataFrame({"T": sim.hourly["CollTOut"], "Q": sim.hourly["CollP_kW_calc"] / 1000})
 
     df = df.sort_values(by="T")
     df["Q_cum"] = np.cumsum(df["Q"])
+
+    # Stagnation
+    sim.hourly["SolarControlStagDays"] = sim.hourly["SolarControlStagDays"] - sim.hourly["SolarControlStagDays"].iloc[1]
+    sim.scalar["SolarControlStagDays"] = sim.hourly["SolarControlStagDays"].iloc[-1]
 
     #### Plots ####
     fig, ax = api.line_plot(sim.hourly, ["CollP_kW"])
@@ -51,6 +56,12 @@ def solar(sim: api.Simulation):
     plt.grid()
     # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "temp-hourly", "solar")
+
+    fig, ax = api.line_plot(sim.hourly, ["SolarControlStag"])
+    ax.set_ylabel("Stagnation ON (-)")
+    plt.grid()
+    # plt.show()
+    api.export_plots_in_configured_formats(fig, sim.path, "stagnation-hourly", "solar")
 
     plt.figure()
     fig = plt.plot(
@@ -123,6 +134,14 @@ def ptes(sim: api.Simulation):
     plt.grid()
     # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "t-ptes-hourly", "ptes")
+
+    fig, ax = api.line_plot(
+        sim.hourly, ["pitStoreTTankN1", "pitStoreTTankN5", "pitStoreTTankN10", "pitStoreTTankN15", "pitStoreTTankN20", "pitStoreTTankN30", "pitStoreTTankN35", "pitStoreTTankN40", "pitStoreTTankN45", "pitStoreTTankN50"]
+    )
+    ax.set_ylabel("Temperature (°C)")
+    plt.grid()
+    # plt.show()
+    api.export_plots_in_configured_formats(fig, sim.path, "t-nodes-ptes-hourly", "ptes")
 
     fig, ax = api.line_plot(sim.hourly, ["pitStoreSoc"])
     ax.set_ylabel("SOC (-)")
