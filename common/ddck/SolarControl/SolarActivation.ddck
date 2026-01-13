@@ -2,6 +2,12 @@
 **Solar controller
 **************************************************
 
+*****************************************
+** Contact person : Mikel Arenas
+** Creation date  : 18.12.2025
+** Last changes   :
+*****************************************
+
 ***************************************************************************
 ** This controller rules the activation of the primary and secondary loop pump
 ** of the solar collectors:
@@ -26,7 +32,8 @@ Ghi = $IT_H
 
 EQUATIONS #
 PuPriOn = PuPriRad*PuPriTHigh  ! Activation of primary loop pump: minimum radiation and collector outlet not too high
-PuSecOn = PuPriOn*PuColSecTemp*PuColSecTes      ! Activation of secondary loop pump: primary loop pump and temperature difference
+PuSecOn = PuPriOn*PuColSecTemp*NOT(Stag) !PuColSecTes      ! Activation of secondary loop pump: primary loop pump and temperature difference
+!PuSecOn = PuPriOn*PuColSecTemp*PuColSecTes
 
 ***********************************
 ** Primary loop pump
@@ -92,7 +99,7 @@ DtOff           ! 6 Lower dead band dT
 EQUATIONS #
 PuColSecTemp = [55,1] ! Temperature difference
 
-** Maximum tes temperature
+** Maximum tes temperature (not used anymore. See Stagnation.ddck)
 CONSTANTS #
 TTesMax = 95 !$TSetDem + 15       ! Upper dead band collector pump ON
 TTesMin = 90 !$TSetDem + 10     ! Upper dead band collector pump OFF

@@ -5,6 +5,7 @@
 ** Solar control
 EQUATIONS #
 TNetReturn = TTee6_Pump
+TTesTop = pitStoreTTherStat1
 TTesBottom = pitStoreTTherStat3
 SolarControlTTes = pitStoreTTherStat1
 
