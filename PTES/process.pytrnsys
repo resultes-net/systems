@@ -495,7 +495,7 @@ def kpi(sim: api.Simulation):
         sim.scalar["BolrPOut_kW_Tot"]/1000,             # 29
         sim.scalar["QSnkP_kW_Tot"]/1000,                # 30
         sim.scalar["zero"],                             # 31
-        sim.scalar["zero"],                             # 32
+        sim.scalar["SolarControlStagDays"],             # 32
         sim.scalar["HpCOP"],                            # 33
         sim.scalar["pitStoreEff"],                      # 34
         sim.scalar["pitStoreNCycles"],                  # 35
