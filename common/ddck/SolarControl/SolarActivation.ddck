@@ -92,24 +92,6 @@ DtOff           ! 6 Lower dead band dT
 EQUATIONS #
 PuColSecTemp = [55,1] ! Temperature difference
 
-UNIT 56 TYPE 2
-PARAMETERS 2
-5               ! 1 No. of oscillations
-999         ! 2 High limit cut-out
-INPUTS 6
-TTes           ! 1 Upper input temperature Th
-$zero               ! 2 Lower input temperature Tl
-TMon            ! 3 Monitoring temperature Tin
-NotPuColSecTes    ! 4 70,1 Input control function
-!puColOnPri      ! 4 70,1 Input control function
-TTesMax         ! 5 Upper dead band dT
-TTesMin         ! 6 Lower dead band dT
-0.0 20.0 0.0 0 TTesMax TTesMin
-
-EQUATIONS #
-NotPuColSecTes = [56,1]
-PuColSecTes = NOT([56,1]) ! Temperature difference
-
 
 *************************************
 ********** Online Plotter ***********

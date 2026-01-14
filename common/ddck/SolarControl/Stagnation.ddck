@@ -45,6 +45,10 @@ TStagRec = [1,3]
 ** Control logic
 ***********************************
 
+** Maximum TES temperature
+CONSTANTS #
+TTesMax = 95
+
 EQUATIONS #
 Stag = NOT(StagRec)*GT(TStagRec,TTesMax)*GT($IT_H, 0) + StagRec*GT($IT_H, 0)
 StagDays = GT(Stag,StagRec)*(StagDaysRec+1) + LE(Stag,StagRec)*StagDaysRec
