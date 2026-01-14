@@ -10,10 +10,13 @@ from pytrnsys_process import api
 
 def filter(sim: api.Simulation):
     sim.monthly.index = pd.to_datetime(sim.monthly.index)
-    sim.monthly = sim.monthly[sim.monthly.index.year == 2026]
+
+    last_year = sim.monthly.index.year[-1]
+
+    sim.monthly = sim.monthly[sim.monthly.index.year == last_year]
 
     sim.hourly.index = pd.to_datetime(sim.hourly.index)
-    sim.hourly = sim.hourly[sim.hourly.index.year == 2026]
+    sim.hourly = sim.hourly[sim.hourly.index.year == last_year]
 
 
 def solar(sim: api.Simulation):
@@ -133,7 +136,6 @@ def ptes(sim: api.Simulation):
     sim.hourly["pitStoreSoc"] = (sim.hourly["pitStoreTAvgTank"] - 0) / (95 - 0)
 
     ## Energy density calculation
-    m = sim.scalar["pitStoreV"] * sim.scalar["pitStoreFlDen"]
     cp = sim.scalar["pitStoreFlSpeHeat"]
     rho = sim.scalar["pitStoreFlDen"]
     sim.scalar["rhoQ"] = (
@@ -234,8 +236,14 @@ def get_tes_temp_sensors_to_plot(hourly_dataframe: pd.DataFrame) -> cabc.Sequenc
         s for i in range(100) if (s := f"pitStoreTTankN{i}") in hourly_dataframe.columns
     ]
     n_temp_sensors = len(temp_sensors)
+
+    if n_temp_sensors <= n_plots:
+        return temp_sensors
+    
     step = round(n_temp_sensors / n_plots)
+
     temp_sensors_to_plot = temp_sensors[:step:]
+
     return temp_sensors_to_plot
 
 
