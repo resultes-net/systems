@@ -97,7 +97,7 @@ Eff         = [1, 6] ! Effectiveness [-] ([-Inf,+Inf])
 EQUATIONS #
 TDeltaA = MAX(TSide1In-TSide2Out, 1e-10)
 TDeltaB = MAX(TSide1Out-TSide2In, 1e-10)
-LMTD = MAX((TDeltaA-TDeltaB)/MAX((LOG(TDeltaA)-LOG(TDeltaB)), 1e-10),0)
+LMTD = AND(GT(MSide1,0),GT(MSide2,0)) * MAX((TDeltaA-TDeltaB)/MAX((LOG(TDeltaA)-LOG(TDeltaB)), 1e-10),0)
 
 QSide1_kW = MSide1 * CpSide1 * (TSide1Out-TSide1In)/3600
 QSide2_kW = MSide2 * CpSide2 * (TSide2Out-TSide2In)/3600
