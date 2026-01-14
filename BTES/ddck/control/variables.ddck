@@ -5,6 +5,7 @@
 ** Solar control
 EQUATIONS #
 TNetReturn = -999
+TTesTop = TesT9_Tes1
 TTesBottom = TesT2_Tes1
 SolarControlTTes = TesT9_Tes1
 

@@ -1,23 +1,31 @@
+# pylint: skip-file
+# type: ignore
+
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Sep 30 10:06:47 2016
+
+@author: dcarbone, mbattagl
+"""
+
 import os
 
 from pytrnsys.rsim import runParallelTrnsys as runTrnsys
 from pytrnsys.utils import log as log
 
 if __name__ == "__main__":
-    config_file_name = "run_PTES.config"
-
     logger = log.getOrCreateCustomLogger("root", "INFO")
 
-    logger.info("Running config file %s...", config_file_name)
+    logger.info("Running config file %s...", "run_only_reader")
 
-    nameDeck = "PTES"
+    nameDeck = "run_only_reader"
     pathBase = os.getcwd()
 
     runTool = runTrnsys.RunParallelTrnsys(pathBase, nameDeck)
 
-    runTool.readConfig(pathBase, config_file_name)
+    runTool.readConfig(pathBase, "run_only_reader.config")
     runTool.getConfig()
     runTool.runConfig()
     runTool.runParallel()
 
-    logger.info("...DONE (%s).", config_file_name)
+    logger.info("...DONE (%s).", "run_only_reader")

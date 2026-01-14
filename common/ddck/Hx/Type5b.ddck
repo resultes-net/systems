@@ -53,8 +53,10 @@ EQUATIONS #
 ***********************************
 EQUATIONS #
 Mode = 2.0
-UA_kW_K = 200
-UA = UA_kW_K*3600
+QNom = 1000 ! [kW]
+LMTDNom = 5 ! [K]
+UA_kW_K = QNom / LMTDNom ! [kW/K]
+UA = UA_kW_K*3600 ! [kJ/hr.K]
 
 ***********************************
 ** Begin TYPE
