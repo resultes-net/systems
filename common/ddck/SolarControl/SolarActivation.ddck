@@ -26,14 +26,15 @@ TLow = MAX($TNetReturn, $TTesBottom)
 TMon = $CollTOut
 Ghi = $IT_H
 
+
 ***********************************
 ** Outputs to other ddcks
 ***********************************
 
 EQUATIONS #
 PuPriOn = PuPriRad*PuPriTHigh  ! Activation of primary loop pump: minimum radiation and collector outlet not too high
-PuSecOn = PuPriOn*PuColSecTemp*NOT(Stag) !PuColSecTes      ! Activation of secondary loop pump: primary loop pump and temperature difference
-!PuSecOn = PuPriOn*PuColSecTemp*PuColSecTes
+PuSecOn = PuPriOn*PuColSecTemp*NOT(Stag) ! Activation of secondary loop pump: primary loop pump and temperature difference
+
 
 ***********************************
 ** Primary loop pump
@@ -44,13 +45,6 @@ TCollMax = 150 !Outlet temperature in which the collector stops
 TCollMin = 130 !Temperature in which the collector starts again
 GhiMin = 100
 PuPriRad = GT(Ghi, GhiMin)             ! Minimum radiation
-!PuPriTHigh = GT(TMon, TCollMax)         ! Collector outlet not to high
-
-** Maximum collector temperature
-!CONSTANTS #
-!TTesMax = $TSetDem + 20       ! Upper dead band collector pump ON
-!TTesMin = $TSetDem + 10     ! Upper dead band collector pump OFF
-!TMonMax = 999   ! Maximum monitored temperature
 
 UNIT 60 TYPE 2
 PARAMETERS 2
@@ -69,7 +63,6 @@ TCollMin         ! 6 Lower dead band dT
 EQUATIONS #
 NotPuPriTHigh = [60,1]
 PuPriTHigh = NOT([60,1]) ! Temperature difference
-
 
 
 ***********************************
@@ -99,12 +92,6 @@ DtOff           ! 6 Lower dead band dT
 EQUATIONS #
 PuColSecTemp = [55,1] ! Temperature difference
 
-** Maximum tes temperature (not used anymore. See Stagnation.ddck)
-CONSTANTS #
-TTesMax = 95 !$TSetDem + 15       ! Upper dead band collector pump ON
-TTesMin = 90 !$TSetDem + 10     ! Upper dead band collector pump OFF
-!TMonMax = 999   ! Maximum monitored temperature
-
 UNIT 56 TYPE 2
 PARAMETERS 2
 5               ! 1 No. of oscillations
@@ -122,6 +109,7 @@ TTesMin         ! 6 Lower dead band dT
 EQUATIONS #
 NotPuColSecTes = [56,1]
 PuColSecTes = NOT([56,1]) ! Temperature difference
+
 
 *************************************
 ********** Online Plotter ***********

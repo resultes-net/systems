@@ -83,19 +83,26 @@ SlAng = 60                  !(�) angle between the top surface and the side wa
 StNodes = 20
 
 ** calculating the radius ratio needed by this type through the slope angle
-CONSTANTS 7
+CONSTANTS #
 h = StHeight                ! calculation variable
 V = StVolume                ! calculation variable
-alpha = SlAng               ! calculation variable
-dR = StHeight / tan(SlAng)  !(m) Difference between upper radius and lower radius
-LoRad = -(h^2*$PI^(1/2) - (-(h*($PI*h^3 - 12*V*tan(alpha)^2))/3)^(1/2))/(2*h*$PI^(1/2)*tan(alpha))     !equation solved with matlab to find the lower/bottom radius of the pit storage
+alpha = SlAng*$PI/180               ! calculation variable
+dR = StHeight * tan(alpha)  !(m) Difference between upper radius and lower radius
+LoRad = (-3*dR + (36*V / ($PI * h) - 3*dR^2)^0.5) / 6
 UpRad = LoRad + dR
+VCalc = $PI*h/3*(LoRad^2+LoRad*UpRad+UpRad^2)
 Ratio = UpRad/LoRad
+h0 = LoRad / tan(alpha)
+hEq = (h0^3+1.5*V/($PI*(tan(alpha))^2))^(1/3)-h0
+nInter = StNodes - hEq*(StNodes-1)/h
+
 
 ** standardization of parameters for every node / layer
-CONSTANTS 3
+CONSTANTS #
 IniT        = 90       ! (C) initial temperature of all the nodes
-LoCoe       = 3        ! (kJ/hr.m^2.K) loss coefficient for all the nodes + top and bottom
+ToLoCoe     = 0.36     ! (kJ/hr.m^2.K) loss coefficient for top
+LoCoe       = 324      ! (kJ/hr.m^2.K) loss coefficient for all the nodes + bottom
+BoLoCoe     = 324      ! (kJ/hr.m^2.K) loss coefficient for bottom
 FlueOLCoe   = 0        ! (kJ/hr.m^2.K) flue overall loss coefficient for all the nodes
 
 ******************************************************************************************
@@ -136,7 +143,6 @@ IniTN17      = IniT         ! 19 (C) Initial temperature of node-17
 IniTN18      = IniT         ! 19 (C) Initial temperature of node-18
 IniTN19      = IniT         ! 19 (C) Initial temperature of node-19
 IniTN20      = IniT         ! 19 (C) Initial temperature of node-20
-ToLoCoe      = 1            ! 20 (kJ/hr.m^2.K) Top Loss Coefficient
 EdLoCoeN1    = LoCoe        ! 21 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-1
 EdLoCoeN2    = LoCoe        ! 22 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-2
 EdLoCoeN3    = LoCoe        ! 23 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-3
@@ -157,7 +163,6 @@ EdLoCoeN17   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-17
 EdLoCoeN18   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-18
 EdLoCoeN19   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-19
 EdLoCoeN20   = LoCoe        ! 25 (kJ/hr.m^2.K) Edge Loss Coefficient for Node-20
-BoLoCoe      = LoCoe        ! 26 (kJ/hr.m^2.K) Bottom Loss Coefficient
 AdTherCond   = 0            ! 27 (kJ/hr.m.K) Additional Thermal Conductivity
 ! connection 1: node 1, connection 2: node 17, connection 3: node 33, connection 4: node 50
 ! port pair: PP43 is a massflow from con4 to con3, PP34 is a massflow from con3 to con4
@@ -461,7 +466,11 @@ Q31_kW = Q31/3600
 QLossesTo = [319,	12]     ! 19 (kJ/hr) Top Losses
 QLossesEd = [319,	13]     ! 20 (kJ/hr) Edge Losses
 QLossesBo = [319,	14]     ! 21 (kJ/hr) Bottom Losses
-QLosses   =     [319,	15]     ! 22 (kJ/hr) Total Tank Losses
+QLosses   = [319,	15]     ! 22 (kJ/hr) Total Tank Losses
+
+QLossesTo_kW = QLossesTo/3600
+QLossesEd_kW = QLossesEd/3600
+QLossesBo_kW = QLossesBo/3600
 QLosses_kW = QLosses/3600
 
 QLossesGas =   [319,	16]     ! 23 (kJ/hr) Gas Flue Losses
@@ -551,7 +560,7 @@ unitHourlyPit		! 1: Logical unit number, -
 -1            		! 2: Logical unit for monthly summaries, -
 1             		! 3: Relative or absolute start time. 0: print at time intervals relative to the simulation start time. 1: print at absolute time intervals. No effect for monthly integrations
 1             		! 4: Printing & integrating interval, h. -1 for monthly integration
-7             		! 5: Number of inputs to avoid integration, -
+12             		! 5: Number of inputs to avoid integration, -
 1             		! 6: Output number to avoid integration
 2             		! 7: Output number to avoid integration
 3             		! 8: Output number to avoid integration
@@ -559,12 +568,19 @@ unitHourlyPit		! 1: Logical unit number, -
 8             		! 10: Output number to avoid integration
 9             		! 11: Output number to avoid integration
 10             		! 12: Output number to avoid integration
+11
+12
+13
+14
+15
 INPUTS #
 T13 T31 T23 TAvgTank M13 M31 M23 TTherStat1 TTherStat2 TTherStat3
-QLosses_kW Q13_kW Q23_kW Q31_kW QDis_kW QAccum_kW
+TTankN1 TTankN5 TTankN10 TTankN15 TTankN20
+QLossesTo_kW QLossesEd_kW QLossesBo_kW QLosses_kW Q13_kW Q23_kW Q31_kW QDis_kW QAccum_kW                ! 22-30
 **
 T13 T31 T23 TAvgTank M13 M31 M23 TTherStat1 TTherStat2 TTherStat3
-QLosses_kW Q13_kW Q23_kW Q31_kW QDis_kW QAccum_kW
+TTankN1 TTankN5 TTankN10 TTankN15 TTankN20
+QLossesTo_kW QLossesEd_kW QLossesBo_kW QLosses_kW Q13_kW Q23_kW Q31_kW QDis_kW QAccum_kW                ! 22-30
 
 ***********************************
 ** Monthly printer
