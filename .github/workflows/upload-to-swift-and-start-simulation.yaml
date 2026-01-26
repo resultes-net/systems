@@ -20,7 +20,8 @@ jobs:
 
       - name: Create OpenStack config file
         run: |
-          echo "${{ secrets.OPENRC_PS1 }}" > config\openrc.ps1
+          echo '${{ secrets.OPENRC_PS1_HEX }}' > config\openrc.ps1.hex
+          certutil -decodehex .\config\openrc.ps1.hex > .\config\openrc.ps1
 
       - name: Zip directory contents
         run: |
