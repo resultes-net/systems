@@ -47,6 +47,10 @@ jobs:
           $access_token=$(curl -F grant_type=password -F username=ci -F password=${{ secrets.RESULTES_NET_CI_USER_PASSWORD}} https://dev.resultes.net/api/token | .\jq.exe -r '.["access_token"]')
           echo "Authorization: Bearer $access_token" > headers.txt
 
+      - name: Create parameters JSON file
+        run: |
+          (cat .\data\ptes.json.template) -replace '<PROJECT_NAME>',"${{ github.sha }}".Substring(0,7) > .\data\ptes.json
+
       - name: Create new PTES simulation
         run: |
           curl --json '@data\ptes.json' -H '@headers.txt' --fail-with-body https://dev.resultes.net/api/simulations
