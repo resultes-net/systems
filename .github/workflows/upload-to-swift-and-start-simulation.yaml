@@ -30,7 +30,7 @@ jobs:
       - name: Create venv
         run: |
           py -3.13 -m venv venv
-          .\venv\Scripts\python.exe -m pip --upgrade install pip uv wheel
+          .\venv\Scripts\python.exe -m pip install --upgrade pip uv wheel
           .\venv\Scripts\python.exe -m uv pip install -r requirements.txt
 
       - name: Upload zip file to swift
