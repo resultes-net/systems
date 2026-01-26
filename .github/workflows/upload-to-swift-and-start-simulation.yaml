@@ -49,4 +49,4 @@ jobs:
 
       - name: Create new PTES simulation
         run: |
-          curl --json '@data\ptes.json' -H @headers.txt --fail-with-body https://dev.resultes.net/api/simulations
+          curl --json '@data\ptes.json' -H '@headers.txt' --fail-with-body https://dev.resultes.net/api/simulations
