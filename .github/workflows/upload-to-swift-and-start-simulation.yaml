@@ -45,7 +45,8 @@ jobs:
         id: log-in
         run: |
           $access_token=$(curl -F grant_type=password -F username=ci -F password=${{ secrets.RESULTES_NET_CI_USER_PASSWORD}} https://dev.resultes.net/api/token | .\jq.exe '.["access_token"]')
-          echo "access_token=$access_token" >> "$GITHUB_OUTPUT"
+          echo "::add-mask::$access_token"
+          echo "access_token=$access_token" >> "$env:GITHUB_OUTPUT"
 
       - name: Create new PTES simulation
         run: |
