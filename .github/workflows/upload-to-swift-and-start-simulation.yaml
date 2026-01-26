@@ -39,7 +39,7 @@ jobs:
 
       - name: Get `jq`
         run: |
-          curl https://github.com/jqlang/jq/releases/download/jq-1.8.1/jq-windows-amd64.exe --output jq.exe
+          curl -L --output jq.exe https://github.com/jqlang/jq/releases/download/jq-1.8.1/jq-windows-amd64.exe
 
       - name: Log into resultes.net
         id: log-in
