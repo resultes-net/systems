@@ -1,0 +1,5 @@
+requests
+python-openstackclient
+
+uv
+pip-compile-multi

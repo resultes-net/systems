@@ -1,0 +1,51 @@
+name: Upload system to Swift and start PTES simulation
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-2025
+
+    defaults:
+      run:
+        working-directory: ci
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Create OpenStack config file
+        run: |
+          echo "${{ secrets.OPENRC_PS1 }}" > config\openrc.ps1
+
+      - name: Zip directory contents
+        run: |
+          Get-ChildItem .. -Exclude ci,.* | Compress-Archive -DestinationPath systems-${{ github.ref_name }}.zip
+
+      - name: Create venv
+        run: |
+          py -3.13 -m venv venv
+          .\venv\Scripts\python.exe -m pip --upgrade install pip uv wheel
+          .\venv\Scripts\python.exe -m uv pip install -r requirements.txt
+
+      - name: Upload zip file to swift
+        run: |
+          .\scripts\openstack object set resultes-static pytrnsys-systems/systems-${{ github.ref_name }}.zip
+
+      - name: Get `jq`
+        run: |
+          curl https://github.com/jqlang/jq/releases/download/jq-1.8.1/jq-windows-amd64.exe --output jq.exe
+
+      - name: Log into resultes.net
+        id: log-in
+        run: |
+          access_token=$(curl -F grant_type=password -F username=ci -F password=${{ secrets.RESULTES_NET_CI_USER_PASSWORD}} https://dev.resultes.net/api/token | .\jq.exe '.["access_token"]')
+          echo "access_token=$access_token" >> "$GITHUB_OUTPUT"
+
+      - name: Create new PTES simulation
+        run: |
+          curl --json '@data\ptes.json' -H "Authorization: Bearer ${{ steps.log-in.outputs.access_token }}" --fail-with-body https://dev.resultes.net/api/simulations
