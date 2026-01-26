@@ -44,7 +44,7 @@ jobs:
       - name: Log into resultes.net
         id: log-in
         run: |
-          $access_token=$(curl -F grant_type=password -F username=ci -F password=${{ secrets.RESULTES_NET_CI_USER_PASSWORD}} https://dev.resultes.net/api/token | .\jq.exe '.["access_token"]')
+          $access_token=$(curl -F grant_type=password -F username=ci -F password=${{ secrets.RESULTES_NET_CI_USER_PASSWORD}} https://dev.resultes.net/api/token | .\jq.exe -r '.["access_token"]')
           echo "Authorization: Bearer $access_token" > headers.txt
 
       - name: Create new PTES simulation
