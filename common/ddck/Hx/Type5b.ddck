@@ -95,9 +95,20 @@ Eff         = [1, 6] ! Effectiveness [-] ([-Inf,+Inf])
 ** Calculations
 ***********************************
 EQUATIONS #
-TDeltaA = MAX(TSide1In-TSide2Out, 1e-10)
-TDeltaB = MAX(TSide1Out-TSide2In, 1e-10)
-LMTD = AND(GT(MSide1,0),GT(MSide2,0)) * MAX((TDeltaA-TDeltaB)/MAX((LOG(TDeltaA)-LOG(TDeltaB)), 1e-10),0)
+checkM = NEWARN(AND(GE(MSide1,0),GE(MSide2,0)), 1, 2)
+on = GT(MSide1,0)*GT(MSide2,0)
+checkTDeltaA = NEWARN(on*GT(TSide1In-TSide2Out,0) + NOT(on), 1, 2)
+checkTDeltaB = NEWARN(on*GT(TSide1Out-TSide2In,0) + NOT(on), 1, 2)
+
+ignoreValue = 999999
+
+TDeltaA = on*(TSide1In-TSide2Out) + NOT(on)*ignoreValue
+TDeltaB = on*(TSide1Out-TSide2In) + NOT(on)*ignoreValue
+EqTDelta = EQL(TDeltaA, TDeltaB)
+
+LogTDeltaDelta = NOT(EqTDelta)*(LOG(TDeltaA) - LOG(TDeltaB)) + NOT(EqTDelta)*ignoreValue
+
+LMTD = on*(TDeltaA-TDeltaB)/LogTDeltaDelta
 
 QSide1_kW = MSide1 * CpSide1 * (TSide1Out-TSide1In)/3600
 QSide2_kW = MSide2 * CpSide2 * (TSide2Out-TSide2In)/3600
