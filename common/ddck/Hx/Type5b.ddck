@@ -104,9 +104,9 @@ ignoreValue = 999999
 
 TDeltaA = on*(TSide1In-TSide2Out) + NOT(on)*ignoreValue
 TDeltaB = on*(TSide1Out-TSide2In) + NOT(on)*ignoreValue
-EqTDelta = EQL(TDeltaA, TDeltaB)
+EqTDelta = LT(ABS(TDeltaA-TDeltaB), 1e-3)
 
-LogTDeltaDelta = NOT(EqTDelta)*(LOG(TDeltaA) - LOG(TDeltaB)) + NOT(EqTDelta)*ignoreValue
+LogTDeltaDelta = NOT(EqTDelta)*(LOG(TDeltaA) - LOG(TDeltaB)) + EqTDelta*ignoreValue
 
 LMTD = on*(TDeltaA-TDeltaB)/LogTDeltaDelta
 
