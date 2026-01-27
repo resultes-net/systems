@@ -25,9 +25,9 @@ unitWeatherData=38
 unitWeatherData2=39
 unitWeatherData3=40
 
-ASSIGN PATH$\weather\CH-Zuerich-Kloten-66700.tm2 unitWeatherData
-ASSIGN PATH$\weather\CH-Zuerich-Kloten-66700.tm2 unitWeatherData2
-ASSIGN PATH$\weather\CH-Zuerich-Kloten-66700.tm2 unitWeatherData3
+ASSIGN ..\..\ddck\weather\CH-Zuerich-Kloten-66700.tm2 unitWeatherData
+ASSIGN ..\..\ddck\weather\CH-Zuerich-Kloten-66700.tm2 unitWeatherData2
+ASSIGN ..\..\ddck\weather\CH-Zuerich-Kloten-66700.tm2 unitWeatherData3
 
 
 *******************************
