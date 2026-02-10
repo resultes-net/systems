@@ -96,9 +96,7 @@ Eff         = [1, 6] ! Effectiveness [-] ([-Inf,+Inf])
 ***********************************
 EQUATIONS #
 checkM = NEWARN(AND(GE(MSide1,0),GE(MSide2,0)), 1, 2)
-on = GT(MSide1,0)*GT(MSide2,0)
-checkTDeltaA = NEWARN(on*GT(TSide1In-TSide2Out,0) + NOT(on), 1, 2)
-checkTDeltaB = NEWARN(on*GT(TSide1Out-TSide2In,0) + NOT(on), 1, 2)
+on = GT(MSide1,0)*GT(MSide2,0)*GT(TSide1In,TSide2Out)*GT(TSide1Out,TSide2In)
 
 ignoreValue = 999999
 
