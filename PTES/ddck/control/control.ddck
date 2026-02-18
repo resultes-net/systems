@@ -39,7 +39,7 @@ MfrPump = HPIsOn*HpMfrEvap + NOT(HPIsOn)*MTee7_ValHPSec
 MfrDemand = MfrPump
 
 ** HP recirculation
-MfrPuRecirc = (GT(MTee7_ValHPSec,HPMfrCondMin)*MTee7_ValHPSec + LE(MTee7_ValHPSec,HPMfrCondMin)*HPMfrCondMin) * HPIsOn
+MfrPuRecirc = MValHPSec_Tee10*ValHPPri !(GT(MTee7_ValHPSec,HPMfrCondMin)*MTee7_ValHPSec + LE(MTee7_ValHPSec,HPMfrCondMin)*HPMfrCondMin) * HPIsOn
 
 ***********************
 ** Pit storage modes **
