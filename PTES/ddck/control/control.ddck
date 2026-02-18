@@ -35,7 +35,7 @@ xFracValHPSec = xFracValHPPri
 xFracValStrat = NOT(ValStratControlHot)
 
 ** Primary
-MfrPump = HPIsOn*MTee10_PuRecirc*HPMfrEvapCondRatio + NOT(HPIsOn)*MTee7_ValHPSec  !HPMfrHpEvapNom !1000.0
+MfrPump = HPIsOn*HpMfrEvap + NOT(HPIsOn)*MTee7_ValHPSec
 MfrDemand = MfrPump
 
 ** HP recirculation
