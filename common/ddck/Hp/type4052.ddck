@@ -49,8 +49,15 @@ On = 1
 *************************************
 
 **************************************************************************
-** BEGIN TYPE 4051
+** BEGIN TYPE 4052
 **************************************************************************
+CONSTANTS #
+sizeNom = 12.5
+MfrCondRef = 3000
+MfrEvapRef = 2800
+SizeRatio = QLoadMax_kW/sizeNom
+MfrEvapNom = SizeRatio*MfrEvapRef
+MfrCondNom = SizeRatio*MfrCondRef		! adapt cond to corrected evap MfrEvapNom*ratioCondEvap
 
 CONSTANTS #
 Eta  = 0.6 !0.45
