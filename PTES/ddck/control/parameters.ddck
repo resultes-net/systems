@@ -1,0 +1,16 @@
+***************************************************
+**BEGIN parameters.ddck
+**************************************************
+
+EQUATIONS #
+START = 0
+STOP = 8760
+dtSim = 1
+
+CollAcollAp = 1000
+
+pitStoreStVolume = 1000
+
+psPtesPortsHeightRelTop = 0.95
+psPtesPortsHeightRelMiddle = 0.7
+psPtesPortsHeightRelBottom = 0.1
