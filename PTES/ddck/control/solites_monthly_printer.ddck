@@ -7,12 +7,17 @@
 ***********************************
 EQUATIONS #
 CollP_kW_calc_MW = CollP_kW_calc/1000
+CollPDirect_MW = CollP_kW_calc_MW - pitStoreQCharge_MW
 pitStoreQCharge_MW = (ABS(pitStoreQ13_kW) + ABS(pitStoreQ23_kW))/1000
 pitStoreQDischarge_MW = ABS(pitStoreQ31_kW)/1000
 pitStoreQLosses_MW = pitStoreQLosses_kW/1000
+pitStoreQAccum_MW = pitStoreQAccum_kW/1000
 HpPelComp_MW = HpPelComp_kW/1000
 BolrPOut_MW = BolrPOut_kW/1000
 QSnkP_MW = QSnkP_kW/1000
+QDistrict_kW = qSysOut_dpToFFieldTot + qSysOut_dpPipeIntTot + qSysOut_dpSoilIntTot
+QDemand_kW = QSnkP_kW + QDistrict_kW
+QDemand_MW = QDemand_kW/1000
 CONSTANTS 1
 unitMonthlySolites = 33
 
@@ -26,9 +31,9 @@ unitMonthlySolites	! 1: Logical unit number, -
 -1             		! 4: Printing & integrating interval, h. -1 for monthly integration
 0             		! 5: Number of inputs to avoid integration, -
 INPUTS #
-CollP_kW_calc_MW pitStoreQCharge_MW pitStoreQDischarge_MW pitStoreQLosses_MW HpPelComp_MW BolrPOut_MW QSnkP_MW
+CollP_kW_calc_MW CollPDirect_MW pitStoreQCharge_MW pitStoreQDischarge_MW pitStoreQLosses_MW pitStoreQAccum_MW HpPelComp_MW BolrPOut_MW QDemand_MW
 ***
-SolitesP_kW_calc_MW SolitesQCharge_MW SolitesQDischarge_MW SolitesQLosses_MW SolitesPelComp_MW SolitesPOut_MW SolitesP_MW
+SolitesP_kW_calc_MW SolitesPDirect_MW SolitesQCharge_MW SolitesQDischarge_MW SolitesQLosses_MW pitStoreQAccum_MW SolitesPelComp_MW SolitesPOut_MW SolitesP_MW
 
 
 
