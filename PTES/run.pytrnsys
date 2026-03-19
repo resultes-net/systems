@@ -4,7 +4,7 @@ from pytrnsys.rsim import runParallelTrnsys as runTrnsys
 from pytrnsys.utils import log as log
 
 if __name__ == "__main__":
-    config_file_name = "run_PTES_fast.config"
+    config_file_name = "run_PTES.config"
 
     logger = log.getOrCreateCustomLogger("root", "INFO")
 

@@ -13,7 +13,7 @@ InEx = 1		    ! 6 (m) Insulation Extension (default 1)
 rvToIn = 3		    ! 7 (h*m2*K/kJ) R-Value of Top Insulation (default 0) 3 hm2K/kJ = 10.8 m2K/W
 kSoil = 8.28		! 8 (kJ/(hr*m*K) Soil Thermal Conductivity (default 8.722) 8.28 kJ/hmK = 2.3 W/mK
 rhoSoil	= 2000	    ! 9 (kg/m3) Soil Density (default 3200)
-cSoil = 0.8		    ! 10 (kJ/m3K) Soil Specific Heat (default 0.84) 0.8 kJ/m3K = 1600 J/kgK  (with den = 2000 kg/m3)
+cSoil = 0.8		    ! 10 (kJ/kg*K) Soil Specific Heat (default 0.84) 0.8 kJ/kgK = 1600 J/kgK  (with den = 2000 kg/m3)
 tmSu = 10	    	! 11 (�C) Mean Surface Temperature (default 10)
 AmpSuT = 5	        ! 12 (d�C) Amplitude of Surface Temperature (default 5)
 dayminSuT = 36	    ! 13 (day) Day of Minimum Surface Temperature (default 36)
