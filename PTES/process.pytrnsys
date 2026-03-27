@@ -154,6 +154,15 @@ def ptes(sim: api.Simulation):
     # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "t-ptes-hourly", "ptes")
 
+    fig, ax = api.line_plot(
+        sim.hourly, ["pitStoreHeTrTop_kW", "pitStoreQLossesTo_kW"]
+    )
+    ax.set_ylabel("Power (kW)")
+    plt.grid()
+    # plt.ylim(0, 10)
+    # plt.show()
+    api.export_plots_in_configured_formats(fig, sim.path, "top-losses-hourly", "ptes")
+
     tes_temp_sensors_to_plot = get_tes_temp_sensors_to_plot(sim.hourly)
 
     fig, ax = api.line_plot(
@@ -263,6 +272,13 @@ def hp(sim: api.Simulation):
         xlabel="",
     )
     api.export_plots_in_configured_formats(fig, sim.path, "balance-monthly", "hp")
+
+    #### Plots ####
+    fig, ax = api.line_plot(sim.hourly, ["HpQCond_kW"])
+    ax.set_ylabel("Power (kW)")
+    plt.grid()
+    # plt.show()
+    api.export_plots_in_configured_formats(fig, sim.path, "qcond-hourly", "hp")
 
     #### Q vs T ####
     plot_variables = [
