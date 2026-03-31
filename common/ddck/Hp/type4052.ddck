@@ -72,8 +72,8 @@ Mode = 2 ! 1: cooling, 2: heating
 MfrCondMin = 300
 
 EQUATIONS #
-DTEvapInt = 0 !DT between fluid and refrigerant
-DTCondInt = 0 !DT between fluid and refrigerant
+DTEvapInt = 8 !DT between fluid and refrigerant
+DTCondInt = 8 !DT between fluid and refrigerant
 
 UNIT 162 TYPE 4052	! Lorenz Heat Pump Model
 PARAMETERS #
