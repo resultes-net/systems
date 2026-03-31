@@ -54,17 +54,17 @@ unitHourlySolites	! 1: Logical unit number, -
 41             		! 14: Output number to avoid integration
 
 INPUTS #
-pitStoreTTankN1 pitStoreTTankN5 pitStoreTTankN10 pitStoreTTankN15 pitStoreTTankN20 pitStoreTTankN25 pitStoreTTankN30 pitStoreTTankN35 pitStoreTTankN40 pitStoreTTankN45 pitStoreTTankN50   ! 1-11
-pitStoreQLossesTo_kW pitStoreQLossesEd_kW pitStoreQLossesBo_kW  ! 12-14
-HxCollQSide2_kW HxCollTSide2In HxCollTSide2Out! 15-17
-pitStoreQ13_kW pitStoreT13 pitStoreTTherStat3 ! 18-20
-pitStoreQ23_kW pitStoreT23 pitStoreTTherStat2 ! 21-23
-pitStoreQ31_kW pitStoreT31 pitStoreTTherStat1 ! 24-26
-HxQSide2_kW HxTSide2In HxTSide2Out            ! 27-29
-HpQEvap_kW HpTEvapIn HpTEvapOut               ! 30-32
-HpQCond_kW HpTCondIn HpTCondOut               ! 33-35
-BolrPOut_kW BolrTIn BolrTOut                  ! 36-38
-QSnkP_kW QSnkTIn QSnkTOut                     ! 39-41
+$pitStoreTTankN1 $pitStoreTTankN5 $pitStoreTTankN10 $pitStoreTTankN15 $pitStoreTTankN20 $pitStoreTTankN25 $pitStoreTTankN30 $pitStoreTTankN35 $pitStoreTTankN40 $pitStoreTTankN45 $pitStoreTTankN50   ! 1-11
+$pitStoreQLossesTo_kW $pitStoreQLossesEd_kW $pitStoreQLossesBo_kW  ! 12-14
+$HxCollQSide2_kW $HxCollTSide2In $HxCollTSide2Out! 15-17
+$pitStoreQ13_kW $pitStoreT13 $pitStoreTTherStat3 ! 18-20
+$pitStoreQ23_kW $pitStoreT23 $pitStoreTTherStat2 ! 21-23
+$pitStoreQ31_kW $pitStoreT31 $pitStoreTTherStat1 ! 24-26
+$HxQSide2_kW $HxTSide2In $HxTSide2Out            ! 27-29
+$HpQEvap_kW $HpTEvapIn $HpTEvapOut               ! 30-32
+$HpQCond_kW $HpTCondIn $HpTCondOut               ! 33-35
+$BolrPOut_kW $BolrTIn $BolrTOut                  ! 36-38
+$QSnkP_kW $QSnkTIn $QSnkTOut                     ! 39-41
 ***
 pitStoreTTankN1 pitStoreTTankN5 pitStoreTTankN10 pitStoreTTankN15 pitStoreTTankN20 pitStoreTTankN25 pitStoreTTankN30 pitStoreTTankN35 pitStoreTTankN40 pitStoreTTankN45 pitStoreTTankN50   ! 1-11
 pitStoreQLossesTo_kW pitStoreQLossesEd_kW pitStoreQLossesBo_kW  ! 12-14
