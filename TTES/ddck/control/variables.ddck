@@ -5,39 +5,19 @@
 ** Solar control
 EQUATIONS #
 TNetReturn = TValByPass_Tee2
-!TTesTop = pitStoreTTherStat1
-!TTesBottom = pitStoreTTherStat3
-!SolarControlTTes = pitStoreTTherStat1
-
 TTesTop = T10_Tes1
 TTesBottom = T1_Tes1
 SolarControlTTes = T10_Tes1
 
 ** Stratification valve control.
 EQUATIONS #
-!ValStratControlTHigh = TTee9_ValStrat
-!ValStratControlTLow = pitStoreTTankN1
-!ValStratControlTMon = pitStoreTTankN1
-
 ValStratControlTHigh = TTeeQSrcAddSup_ValStrat
 ValStratControlTLow = T10_Tes1
 ValStratControlTMon = T10_Tes1
 
-!ValStratControlTWarmPos = pitStoreTTankN2
-!ValStratControlTHotPos = pitStoreTTankN1
-!ValStratControlTIn = TTee9_ValStrat
-
 ValStratControlTWarmPos = T9_Tes1
 ValStratControlTHotPos = T10_Tes1
 ValStratControlTIn = TTeeQSrcAddSup_ValStrat
-
-
-
-** Capacity control for HP
-!EQUATIONS #
-!HpControlTControlled = HPTCondOut
-!HpControlTSet = TSetDem
-!HpControlOn = HPIsOn
 
 
 
