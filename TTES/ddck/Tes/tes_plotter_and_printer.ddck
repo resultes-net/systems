@@ -18,9 +18,13 @@ unitPrinter		! 1: Logical unit number, -
 1             		! 4: Printing & integrating interval, h. -1 for monthly integration
 0             		! 5: Number of inputs to avoid integration, -
 INPUTS #
-T1_Tes1 T2_Tes1 T3_Tes1 T4_Tes1 T5_Tes1 T6_Tes1 T7_Tes1 T8_Tes1 T9_Tes1 T10_Tes1 TAvg_Tes1 Tdp1In_Tes1 Tdp1InRev_Tes1 TTesDpL99_4 MTesDpL99_4_A
+T1_Tes1 T2_Tes1 T3_Tes1 T4_Tes1 T5_Tes1 T6_Tes1 T7_Tes1 T8_Tes1 T9_Tes1 T10_Tes1 ! 1-10
+TAvg_Tes1 Tdp1In_Tes1 Tdp1InRev_Tes1 TTesDpL99_4 MTesDpL99_4_A ! 10-15
+QLoss_Tes1 Qdp1_Tes1 Qdp2_Tes1 QAcum_Tes1 ! 16-19
 **  
-T1_Tes1 T2_Tes1 T3_Tes1 T4_Tes1 T5_Tes1 T6_Tes1 T7_Tes1 T8_Tes1 T9_Tes1 T10_Tes1 TAvg_Tes1 Tdp1In_Tes1 Tdp1InRev_Tes1 TTesDpL99_4 MTesDpL99_4_A
+T1_Tes1 T2_Tes1 T3_Tes1 T4_Tes1 T5_Tes1 T6_Tes1 T7_Tes1 T8_Tes1 T9_Tes1 T10_Tes1 ! 1-10
+TAvg_Tes1 Tdp1In_Tes1 Tdp1InRev_Tes1 TTesDpL99_4 MTesDpL99_4_A ! 10-15
+QLoss_Tes1 Qdp1_Tes1 Qdp2_Tes1 QAcum_Tes1 ! 16-19
 
 CONSTANTS #
 MMin = -CollMfrMax
