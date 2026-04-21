@@ -4,7 +4,7 @@
 
 ** Solar control
 EQUATIONS #
-TNetReturn = TValByPass_Tee2
+TNetReturn = TTeeMix_ValByPass!TValByPass_Tee2
 TTesTop = T10_Tes1
 TTesBottom = T1_Tes1
 SolarControlTTes = T10_Tes1
