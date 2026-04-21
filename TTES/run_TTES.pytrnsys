@@ -34,6 +34,6 @@ if __name__ == "__main__":
         containingDirPath = pl.Path(__file__).parent
 
         _run_config_file(
-            pl.Path("run.config"),
+            pl.Path("run_TTES.config"),
             configFileNumber=0,
         )
