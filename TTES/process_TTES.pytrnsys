@@ -205,19 +205,19 @@ def ttes(sim: api.Simulation):
     #### Q vs T ####
     names_legend = [
         "$Q_{charging,top}(T_{in})$",
-        "$Q_{charging,middle}(T_{in})$",
         "$Q_{discharging}(T_{in})$",
+        "$Q_{charging,middle}(T_{in})$",
         "$Q_{charging,top}(T_{out})$",
-        "$Q_{charging,middle}(T_{out})$",
         "$Q_{discharging}(T_{out})$",
+        "$Q_{charging,middle}(T_{out})$",
     ]
     plot_variables = [
         ["Qdp1_Tes1_Pos", "Tdp1In_Tes1"],
         ["Qdp1_Tes1_Neg", "Tdp1InRev_Tes1"],
-        ["Qdp1_Tes1", "Tdp2In_Tes1"],
+        ["Qdp2_Tes1", "Tdp2In_Tes1"],
         ["Qdp1_Tes1_Pos", "TTesDpL99_4"],
         ["Qdp1_Tes1_Neg", "TTesDpL99_4"],
-        ["Qdp1_Tes1", "TTesDpL50_1"],
+        ["Qdp2_Tes1", "TTesDpL50_1"],
     ]
 
     dataframes = pd.DataFrame()  # []
@@ -492,20 +492,12 @@ def q_vs_t(sim: api.Simulation):
     names_legend = [
         "$Q_{coll}(T_{in})$",
         "$Q_{coll}(T_{out})$",
-        "$Q_{Hx}(T_{in})$",
-        "$Q_{Hx}(T_{out})$",
-        "$Q_{evap}(T_{in})$",
-        "$Q_{evap}(T_{out})$",
         "$Q_{dem}(T_{in})$",
         "$Q_{dem}(T_{out})$",
     ]
     plot_variables = [
         ["CollP_kW_calc", "CollTIn"],
         ["CollP_kW_calc", "CollTOut"],
-        ["HxQ_kW", "HxTSide1In"],
-        ["HxQ_kW", "HxTSide1Out"],
-        ["HpQEvap_kW", "HpTEvapIn"],
-        ["HpQEvap_kW", "HpTEvapOut"],
         ["QSnkP_kW", "QSnkTIn"],
         ["QSnkP_kW", "QSnkTOut"],
     ]
