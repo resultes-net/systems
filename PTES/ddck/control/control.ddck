@@ -32,6 +32,7 @@ xFracValHPPri = NOT(ValHPPri)
 xFracValHPSec = xFracValHPPri
 
 ** Stratification
+!xFracValStrat = NOT(GT(ValStratControlHot+DirectSolarOut,0))
 xFracValStrat = NOT(ValStratControlHot)
 
 ** Primary
