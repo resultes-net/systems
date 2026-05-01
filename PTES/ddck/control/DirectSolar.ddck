@@ -11,7 +11,7 @@
 
 EQUATIONS #
 myTHigh = $TTee9_ValStrat !$TTeeStrat_ValHXPri
-myTLow = 85 !TSetDem + HxLMTDNom
+myTLow = TSetDem + HxLMTDNom
 
 dtOn = 0    ! Upper dead band coll. pump ON, JS: was 10 before, yield is higher with 7, to be improved
 dtOff = -5   ! Lower dead band coll. pump OFF
