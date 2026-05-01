@@ -80,19 +80,19 @@ MfrInPP31      = M31        ! 6  (kg/hr) Inlet Flowrate for Port-31
 CONSTANTS #
 StVolume = 30000            !(m3) volume of storage
 StHeight = 30               !(m) height of storage
-SlAng = 60                  !(�) angle between the top surface and the side wall
+SlAng = 27                  !(°) angle between the horizontal and the side wall
 StNodes = 50
 
 ** calculating the radius ratio needed by this type through the slope angle
 CONSTANTS #
 h = StHeight                ! calculation variable
 V = StVolume                ! calculation variable
-alpha = SlAng*$PI/180               ! calculation variable
-!dR = StHeight * tan(alpha)  !(m) Difference between upper radius and lower radius
-!LoRad = (-3*dR + (36*V / ($PI * h) - 3*dR^2)^0.5) / 6
-!UpRad = LoRad + dR
-!VCalc = $PI*h/3*(LoRad^2+LoRad*UpRad+UpRad^2)
-Ratio = 2.1 !UpRad/LoRad ! TRNSYS struggles with this equations
+alpha = SlAng              ! calculation variable
+dR = StHeight/TAN(alpha)  !(m) Difference between upper radius and lower radius
+LoRad = (-3*dR + (36*V / ($PI * h) - 3*dR^2)^0.5) / 6
+UpRad = LoRad + dR
+VCalc = $PI*h/3*(LoRad^2+LoRad*UpRad+UpRad^2)
+Ratio = UpRad/LoRad ! 2.1 TRNSYS struggles with this equations
 !h0 = LoRad / tan(alpha)
 !hEq = (h0^3+1.5*V/($PI*(tan(alpha))^2))^(1/3)-h0
 !nInter = StNodes - hEq*(StNodes-1)/h
