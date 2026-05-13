@@ -2,12 +2,14 @@ import collections.abc as _cabc
 import dataclasses as _dc
 import json as _json
 import pathlib as _pl
+import shutil as _su
 import sys as _sys
 import typing as _tp
 
 import pydantic as _pyd
 import resultes_pydantic_models.simulations.parameters as _params
 import resultes_pydantic_models.simulations.parameters.common.collector_field as _pcoll
+import resultes_pydantic_models.simulations.parameters.common.demand as _demand
 import resultes_pydantic_models.simulations.parameters.ptes as _pptes
 import resultes_pydantic_models.simulations.parameters.ptes.parameters.thermal_energy_storage as _pptess
 import sympy as _sym
@@ -25,9 +27,15 @@ equations = [
     _sym.Eq(pit_store_volume_m3, pit_store_volume_m3_per_MWh * demand_MWh),
 ]
 
-PARAMETERS_DDCK_FILE_PATH = (
-    _pl.Path(__file__).parent / "ddck" / "parameters" / "parameters.ddck"
+PARAMETERS_DDCK_DIR_PATH = _pl.Path(__file__).parent / "ddck" / "parameters"
+
+PARAMETERS_DDCK_FILE_PATH = PARAMETERS_DDCK_DIR_PATH / "parameters.ddck"
+
+PREDEFINED_DEMAND_PROFILE_FILE_PATH = (
+    _pl.Path(__file__).parents[1] / "common" / "ddck" / "QSnk" / "profile_norm.csv"
 )
+
+DEMAND_PROFILE_FILE_PATH = PARAMETERS_DDCK_DIR_PATH / "demand.ddck"
 
 
 @_dc.dataclass
@@ -103,14 +111,9 @@ def _get_pit_store_volume_specified_variable(
 
 
 def _get_formatted_specified_variables_and_solved_equations(
-    parameters: _params.Parameters,
+    parameters: _pptes.PtesParameters,
 ) -> str:
-    values = parameters.values
-
-    if not isinstance(values, _pptes.PtesParameters):
-        raise ValueError("Not PTES parameters.", values)
-
-    specified_variables, solution = get_specified_variables_and_solution(values)
+    specified_variables, solution = get_specified_variables_and_solution(parameters)
 
     result = "CONSTANTS #\n"
 
@@ -164,14 +167,10 @@ def test_get_solved_equations() -> None:
     print(result)
 
 
-def _create_parameters_ddck_contents(data: _pyd.JsonValue) -> str:
-    parameters = _params.Parameters(**data)
+def _create_parameters_ddck_contents(parameters: _pptes.PtesParameters) -> str:
+    time = parameters.time
 
-    values = parameters.values
-    assert isinstance(values, _pptes.PtesParameters)
-    time = values.time
-
-    port_heights = values.storage.ports_relative_heights_1
+    port_heights = parameters.storage.ports_relative_heights_1
 
     formatted_specified_and_solved_variables_block = (
         _get_formatted_specified_variables_and_solved_equations(parameters)
@@ -205,9 +204,29 @@ def main(parameters_json_file_path: _pl.Path) -> None:
     with parameters_json_file_path.open("r") as file:
         data = _json.load(file)
 
-    parameters_ddck_contents = _create_parameters_ddck_contents(data)
+    parameters = _params.Parameters(**data)
+    values = parameters.values
+    assert isinstance(values, _pptes.PtesParameters)
 
+    parameters_ddck_contents = _create_parameters_ddck_contents(values)
     PARAMETERS_DDCK_FILE_PATH.write_text(parameters_ddck_contents)
+
+    _write_demand_profile(values.demand.profile)
+
+
+def _write_demand_profile(
+    profile: _demand.PreDefinedProfile | _demand.UserProvidedProfile,
+) -> None:
+    if profile.profile_type == "predefined":
+        _su.copy(PREDEFINED_DEMAND_PROFILE_FILE_PATH, DEMAND_PROFILE_FILE_PATH)
+    elif profile.profile_type == "user-provided":
+        demand_profile_contents = "\n".join(
+            str(p) for p in profile.hourly_heat_demand_kW
+        )
+
+        DEMAND_PROFILE_FILE_PATH.write_text(demand_profile_contents)
+    else:
+        _tp.assert_never(profile.profile_type)
 
 
 if __name__ == "__main__":
