@@ -220,10 +220,10 @@ def _write_demand_profile(
     if profile.profile_type == "predefined":
         _su.copy(PREDEFINED_DEMAND_PROFILE_FILE_PATH, DEMAND_PROFILE_FILE_PATH)
     elif profile.profile_type == "user-provided":
-        header = "Hourly heat demand [kW]\n"
+        header = "Hourly heat demand [MW]\n"
 
         formatted_hourly_heat_demands = "\n".join(
-            str(p) for p in profile.hourly_heat_demand_kW
+            str(p) for p in profile.hourly_heat_demand_MW
         )
 
         demand_profile_contents = header + formatted_hourly_heat_demands
