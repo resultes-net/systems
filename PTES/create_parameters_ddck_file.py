@@ -35,7 +35,7 @@ PREDEFINED_DEMAND_PROFILE_FILE_PATH = (
     _pl.Path(__file__).parents[1] / "common" / "ddck" / "QSnk" / "profile_norm.csv"
 )
 
-DEMAND_PROFILE_FILE_PATH = PARAMETERS_DDCK_DIR_PATH / "demand.ddck"
+DEMAND_PROFILE_FILE_PATH = PARAMETERS_DDCK_DIR_PATH / "demand.csv"
 
 
 @_dc.dataclass
