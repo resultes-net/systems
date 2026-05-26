@@ -302,7 +302,7 @@ PARAMETERS 12
 100     ! 4 Left axis maximum -
 0     ! 5 Right axis minimum 
 100     ! 6 Right axis maximum 
-nPlotsPerSim     ! 7 Number of plots per simulation 
+$nPlotsPerSim     ! 7 Number of plots per simulation
 12     ! 8 X-axis gridpoints
 1     ! 9 Shut off Online w/o removing 
 -1     ! 10 Logical unit for output file 
