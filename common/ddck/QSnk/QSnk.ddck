@@ -7,9 +7,6 @@
 ***********************************
 CONSTANTS #
 dT = 20    ! [K]
-QUnscaled_MWh = 1 !90000070/1000
-Q_MWh = QUnscaled_MWh
-scaling = Q_MWh/QUnscaled_MWh
 
 ******************************************************************************************
 ** READER
@@ -30,7 +27,7 @@ profileSnkUnit  ! 7 Logical unit for input file
 -1              ! 8 Free format mode
 
 EQUATIONS #
-P_kW = scaling*MAX([33,1],0) !Power of sink read from profile
+P_kW = MAX([33,1],0)*1000 !Power of sink read from profile
 PReal_kW = cp*$MSCnr2_QSnk*($TSCnr2_QSnk - $TQSnk_SCnr2)/3600
 @energy(out, heat, :) = P_kW
 
