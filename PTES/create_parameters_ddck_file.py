@@ -132,43 +132,51 @@ def _get_formatted_specified_variables_and_solved_equations(
 
 def test_get_solved_equations() -> None:
     data: _pyd.JsonValue = {
-        "values": {
-            "type": "ptes",
-            "time": {"start": 5760, "stop": 17280, "dt_sim": 0.5},
-            "demand": {"profile": {"profile_type": "predefined", "name": "default"}},
-            "collector_field": {
-                "area": {"scaling": "relative_to_demand_m2_per_MWh", "value": 4.0},
-                "inclination_deg": 45.0,
-                "orientation_east_west_deg": 0.0,
-                "type": "flat-plate",
-                "performance_coefficients": {
-                    "a0": 0.857,
-                    "a1_kW_per_m2_per_K": 0.00416,
-                    "a2_kW_per_m2_per_K2": 8.9e-06,
-                },
-                "nominal_massflow": {
-                    "scaling": "relative_to_collector_area_kg_per_h_m2",
-                    "value": 15.0,
-                },
+        "type": "ptes",
+        "time": {"start": 5760, "stop": 17280, "dt_sim": 0.5},
+        "demand": {"profile": {"profile_type": "predefined", "name": "default"}},
+        "collector_field": {
+            "area": {"scaling": "relative_to_demand_m2_per_MWh", "value": 4.0},
+            "inclination_deg": 45.0,
+            "orientation_east_west_deg": 0.0,
+            "type": "flat-plate",
+            "performance_coefficients": {
+                "a0": 0.857,
+                "a1_kW_per_m2_per_K": 0.00416,
+                "a2_kW_per_m2_per_K2": 8.9e-06,
             },
-            "storage": {
-                "volume": {"scaling": "absolute_m3", "value": 400},
-                "ports_relative_heights_1": {
-                    "top": 0.80,
-                    "middle": 0.70,
-                    "bottom": 0.05,
-                },
+            "nominal_massflow": {
+                "scaling": "relative_to_collector_area_kg_per_h_m2",
+                "value": 15.0,
             },
-        }
+        },
+        "storage": {
+            "volume": {"scaling": "absolute_m3", "value": 400},
+            "ports_relative_heights_1": {
+                "top": 0.80,
+                "middle": 0.70,
+                "bottom": 0.05,
+            },
+        },
     }
 
-    result = _create_parameters_ddck_contents(data)
+    parameters = _pptes.PtesParameters(**data)
+
+    result = _create_parameters_ddck_contents(parameters)
 
     print(result)
 
 
 def _create_parameters_ddck_contents(parameters: _pptes.PtesParameters) -> str:
     time = parameters.time
+
+    profile = parameters.demand.profile
+
+    yearlyHeatDemandMWh = (
+        sum(profile.hourly_heat_demand_MW)
+        if profile.profile_type == "user-provided"
+        else 30e3
+    )
 
     port_heights = parameters.storage.ports_relative_heights_1
 
@@ -184,6 +192,10 @@ CONSTANTS #
 $START = {time.start}
 $STOP = {time.stop}
 $dtSim = {time.dt_sim}
+
+$QSnkQ_MWh = {yearlyHeatDemandMWh}
+
+$HPsizeUsed = $QSnkQ_MWh/10
 
 $psPtesPortsHeightRelTop = {port_heights.top}
 $psPtesPortsHeightRelMiddle = {port_heights.middle}
