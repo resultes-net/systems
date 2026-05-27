@@ -134,7 +134,11 @@ def test_get_solved_equations() -> None:
     data: _pyd.JsonValue = {
         "type": "ptes",
         "time": {"start": 5760, "stop": 17280, "dt_sim": 0.5},
-        "demand": {"profile": {"profile_type": "predefined", "name": "default"}},
+        "demand": {
+            "name": "synthetic",
+            "scaling_factor": 2,
+            "hourly_heat_demand_MW": [3 if i % 2 == 0 else 5 for i in range(365 * 24)],
+        },
         "collector_field": {
             "area": {"scaling": "relative_to_demand_m2_per_MWh", "value": 4.0},
             "inclination_deg": 45.0,
@@ -170,13 +174,9 @@ def test_get_solved_equations() -> None:
 def _create_parameters_ddck_contents(parameters: _pptes.PtesParameters) -> str:
     time = parameters.time
 
-    profile = parameters.demand.profile
+    demand = parameters.demand
 
-    yearlyHeatDemandMWh = (
-        sum(profile.hourly_heat_demand_MW)
-        if profile.profile_type == "user-provided"
-        else 30e3
-    )
+    unscaledYearlyHeatDemandMWh = sum(demand.hourly_heat_demand_MW)
 
     port_heights = parameters.storage.ports_relative_heights_1
 
@@ -193,7 +193,9 @@ $START = {time.start}
 $STOP = {time.stop}
 $dtSim = {time.dt_sim}
 
-$QSnkQ_MWh = {yearlyHeatDemandMWh}
+$QSnkScalingFactor = {demand.scaling_factor:.2}
+$QSnkQUnscaled_MWh = {unscaledYearlyHeatDemandMWh}
+$QSnkQ_MWh = $QSnkScalingFactor*$QSnkQUnscaled_MWh
 
 $HPsizeUsed = $QSnkQ_MWh/10
 
@@ -223,26 +225,19 @@ def main(parameters_json_file_path: _pl.Path) -> None:
     parameters_ddck_contents = _create_parameters_ddck_contents(values)
     PARAMETERS_DDCK_FILE_PATH.write_text(parameters_ddck_contents)
 
-    _write_demand_profile(values.demand.profile)
+    _write_demand_profile(values.demand)
 
 
-def _write_demand_profile(
-    profile: _demand.PreDefinedProfile | _demand.UserProvidedProfile,
-) -> None:
-    if profile.profile_type == "predefined":
-        _su.copy(PREDEFINED_DEMAND_PROFILE_FILE_PATH, DEMAND_PROFILE_FILE_PATH)
-    elif profile.profile_type == "user-provided":
-        header = "Hourly heat demand [MW]\n"
+def _write_demand_profile(demand: _demand.Demand) -> None:
+    header = "Hourly heat demand [MW]\n"
 
-        formatted_hourly_heat_demands = "\n".join(
-            str(p) for p in profile.hourly_heat_demand_MW
-        )
+    formatted_scaled_hourly_heat_demands = "\n".join(
+        f"{demand.scaling_factor*p:.3}" for p in demand.hourly_heat_demand_MW
+    )
 
-        demand_profile_contents = header + formatted_hourly_heat_demands
+    demand_profile_contents = header + formatted_scaled_hourly_heat_demands
 
-        DEMAND_PROFILE_FILE_PATH.write_text(demand_profile_contents)
-    else:
-        _tp.assert_never(profile.profile_type)
+    DEMAND_PROFILE_FILE_PATH.write_text(demand_profile_contents)
 
 
 if __name__ == "__main__":
