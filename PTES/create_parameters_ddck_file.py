@@ -225,17 +225,15 @@ def main(parameters_json_file_path: _pl.Path) -> None:
     parameters_ddck_contents = _create_parameters_ddck_contents(values)
     PARAMETERS_DDCK_FILE_PATH.write_text(parameters_ddck_contents)
 
-    _write_demand_profile(values.demand)
+    _write_demand_profile(values.demand.hourly_heat_demand_MW)
 
 
-def _write_demand_profile(demand: _demand.Demand) -> None:
+def _write_demand_profile(hourly_heat_demand_MW: _cabc.Sequence[float]) -> None:
     header = "Hourly heat demand [MW]\n"
 
-    formatted_scaled_hourly_heat_demands = "\n".join(
-        f"{demand.scaling_factor*p:.3}" for p in demand.hourly_heat_demand_MW
-    )
+    formatted_hourly_heat_demands = "\n".join(str(p) for p in hourly_heat_demand_MW)
 
-    demand_profile_contents = header + formatted_scaled_hourly_heat_demands
+    demand_profile_contents = header + formatted_hourly_heat_demands
 
     DEMAND_PROFILE_FILE_PATH.write_text(demand_profile_contents)
 
