@@ -52,14 +52,19 @@ EQUATIONS 1
 ***********************************
 ** Begin CONSTANTS
 ***********************************
-PARAMETERS #
+CONSTANTS #
+DirFlow = 1 ! 3: Flow Direction Indicator [-] ([-1,1])
+TTop = 20 ! 4: Temperature on Top of Storage [C] ([-Inf,+Inf])
+
+CONSTANTS #
 V = 4000.0 ! 1: Storage Volume [m^3] ([0.0,+Inf])
 Z = 100.0 ! 2: Borehole Depth [m] ([0.0,+Inf])
 ZHeader = 1.0 ! 3: Header Depth [m] ([0.0,+Inf])
-NBor = 2.0 ! 4: Number of Boreholes [-] ([1,+Inf])
+NBor = 100.0 ! 4: Number of Boreholes [-] ([1,+Inf])
 RBor = 0.1016 ! 5: Borehole Radius [m] ([0.0,+Inf])
 NIn = 1.0 ! 6: Number of Fluid Inlets [-] ([1,+Inf])
 NRadReg = 1.0 ! 7: Number of Radial Regions [-] ([1,+Inf])
+InRad = 0.0 ! 8: Inlet to Radial Region [-] ([0,+Inf])
 NVerReg = 10.0 ! 9: Number of Vertical Regions [-] ([1,+Inf])
 Lambda = 4.68 ! 10: Storage Thermal Conductivity [kJ/hr.m.K] ([0.0,+Inf])
 CpBor = 2016.0 ! 11: Storage Heat Capacity [kJ/m^3/K] ([-Inf,+Inf])
@@ -76,9 +81,7 @@ TRef = 30.0 ! 21: Reference Temperature [C] ([-Inf,+Inf])
 HeatTransferMode = -1.0 ! 22: Pipe-to-Pipe Heat Transfer [-] ([-1,0])
     ! 0 = Do not account for heat transfer between the u-tube pipes,
     ! -1 = Account for the heat transfer between the u-tube pipes
-Cp ! 23: Fluid Specific Heat [kJ/kg.K] ([0.0,+Inf])
-Rho ! 24: Fluid Density [kg/m^3] ([0.0,+Inf])
-InsMode ! 25: Insulation Indicator [-] ([0,2]).
+InsMode = 0 ! 25: Insulation Indicator [-] ([0,2]).
     ! 0 = No insulation,
     ! 1 = Insulation on the upper side of the cylindrical storage volume.  The upper user-specified fraction of the storage height (next parameter) is covered with thermal insulation,
     ! 2 = Insulation on the top of the storage volume that extends a user-specified fraction of the storage height (next parameter) beyond the boundary of the storage volume
@@ -95,7 +98,7 @@ TMinPre = 10.0 ! 35: Minimum Preheat Temperature [C] ([-Inf,+Inf])
 DelayPre = 90.0 ! 36: Preheat Phase Delay [day] ([0,365])
 TAirAvePre = 20.0 ! 37: Average Air Temperature - Preheat Years [C] ([-Inf,+Inf])
 DeltaTAirPre = 15.0 ! 38: Amplitude of Air Temperature - Preheat Years [deltaC] ([0.0,+Inf])
-DeltaTAirPre = 240.0 ! 39: Air Temperature Phase Delay - Preheat Years [day] ([-365,+365])
+DelayTAirPre = 240.0 ! 39: Air Temperature Phase Delay - Preheat Years [day] ([-365,+365])
 NGrLayer = 1.0 ! 40: Number of Ground Layers [-] ([1,10])
 LambdaLayer = 4.68 ! 41: Thermal Conductivity of Layer  [kJ/hr.m.K] ([0.0,+Inf])
 CpLayer = 2016.0 ! 42: Heat Capacity of Layer  [kJ/m^3/K] ([0.0,+Inf])
@@ -105,8 +108,12 @@ DLayer = 1000.0 ! 43: Thickness of Layer [m] ([0.0,+Inf])
 ***********************************
 ** Begin TYPE
 ***********************************
-UNIT 1 TYPE 548
-PARAMETERS 43
+UNIT 1 TYPE 548 Type548a_v2a
+*$UNIT_NAME Type548a_v2a
+*$MODEL .\GHP Library (TESS)\Ground Heat Exchangers\Vertical\U-Tube\Standard\Type548a_v2a.tmf
+*$POSITION 881 307
+*$LAYER Main #
+PARAMETERS #
 V                   ! 1: Storage Volume [m^3] ([0.0,+Inf])
 Z                   ! 2: Borehole Depth [m] ([0.0,+Inf])
 ZHeader             ! 3: Header Depth [m] ([0.0,+Inf])
@@ -114,6 +121,7 @@ NBor                ! 4: Number of Boreholes [-] ([1,+Inf])
 RBor                ! 5: Borehole Radius [m] ([0.0,+Inf])
 NIn                 ! 6: Number of Fluid Inlets [-] ([1,+Inf])
 NRadReg             ! 7: Number of Radial Regions [-] ([1,+Inf])
+InRad               ! 8: Inlet to Radial Region [-] ([0,+Inf])
 NVerReg             ! 9: Number of Vertical Regions [-] ([1,+Inf])
 Lambda              ! 10: Storage Thermal Conductivity [kJ/hr.m.K] ([0.0,+Inf])
 CpBor               ! 11: Storage Heat Capacity [kJ/m^3/K] ([-Inf,+Inf])
@@ -168,7 +176,7 @@ $TAmb ! 5: Air Temperature [C] ([-Inf,+Inf])
 20.0 ! 4: Temperature on Top of Storage  initial value
 20.0 ! 5: Air Temperature  initial value
 
-EQUATIONS 1 ! 10
+EQUATIONS # ! 10
 TOut = [1, 1] ! Outlet Temperature [C] ([-Inf,+Inf])
 MOut = [1, 2] ! Outlet Flowrate (Total) [kg/hr] ([0.0,+Inf])
 TAve = [1, 3] ! Average Storage Temperature [C] ([-Inf,+Inf])
