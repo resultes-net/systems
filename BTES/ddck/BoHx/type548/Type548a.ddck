@@ -1,5 +1,5 @@
 *******************************
-** BEGIN Type548a_v2a.ddck
+** BEGIN Type548a.ddck
 *******************************
 
 ************************************************************************************************************************
@@ -177,18 +177,22 @@ $TAmb ! 5: Air Temperature [C] ([-Inf,+Inf])
 20.0 ! 5: Air Temperature  initial value
 
 EQUATIONS # ! 10
-TOut = [1, 1] ! Outlet Temperature [C] ([-Inf,+Inf])
-MOut = [1, 2] ! Outlet Flowrate (Total) [kg/hr] ([0.0,+Inf])
-TAve = [1, 3] ! Average Storage Temperature [C] ([-Inf,+Inf])
-QAve = [1, 4] ! Average Heat Transfer Rate [kJ/hr] ([-Inf,+Inf])
-QLossTop = [1, 5] ! Heat Loss Through Top of Storage [kJ/hr] ([-Inf,+Inf])
-QLossSide = [1, 6] ! Heat Loss Through Side of Storage [kJ/hr] ([-Inf,+Inf])
-QLossBot = [1, 7] ! Heat Loss Through Bottom of Storage [kJ/hr] ([-Inf,+Inf])
-QAccum = [1, 8] ! Internal Energy Variation [kJ/hr] ([-Inf,+Inf])
-TAveField = [1, 9] ! Average Field Temperature Over All Radial Rings [C] ([-Inf,+Inf])
+TOut = [1, 1]           ! Outlet Temperature [C] ([-Inf,+Inf])
+MOut = [1, 2]           ! Outlet Flowrate (Total) [kg/hr] ([0.0,+Inf])
+TAve = [1, 3]           ! Average Storage Temperature [C] ([-Inf,+Inf])
+QAve = [1, 4]           ! Average Heat Transfer Rate [kJ/hr] ([-Inf,+Inf])
+QLossTop = [1, 5]       ! Heat Loss Through Top of Storage [kJ/hr] ([-Inf,+Inf])
+QLossSide = [1, 6]      ! Heat Loss Through Side of Storage [kJ/hr] ([-Inf,+Inf])
+QLossBot = [1, 7]       ! Heat Loss Through Bottom of Storage [kJ/hr] ([-Inf,+Inf])
+QAccum = [1, 8]         ! Internal Energy Variation [kJ/hr] ([-Inf,+Inf])
+TAveField = [1, 9]      ! Average Field Temperature Over All Radial Rings [C] ([-Inf,+Inf])
 TAveFieldRing = [1, 10] ! Average Field Temperature In Radial Ring [C] ([-Inf,+Inf])
 
-
+QAve_kW = QAve/3600
+QLossTop_kW = QLossTop/3600
+QLossSide_kW = QLossSide/3600
+QLossBot_kW = QLossBot/3600
+QAccum_kW = QAccum/3600
 ***********************************
 ** Monthly printer
 ***********************************
@@ -202,4 +206,32 @@ TAveFieldRing = [1, 10] ! Average Field Temperature In Radial Ring [C] ([-Inf,+I
 ***********************************
 ** Online Plotter
 ***********************************
+UNIT 86 TYPE 65		! Onlint Plotter Ground Heat Exchanger
+**
+PARAMETERS 12
+#   		! 1: Nb. of left-axis variables
+#     		! 2: Nb. of right-axis variables
+-20     	! 3: Left axis minimum
+100    		! 4: Left axis maximum
+-1000 		! 5: Right axis minimum
+1000		! 6: Right axis maximum
+$NPlotsPerSim     		! 7: Number of plots per simulation
+12     		! 8: X-axis gridpoints
+1     		! 9: Shut off Online w/o removing
+-1     		! 10: Logical unit for output file
+0     		! 11: Output file units
+0     		! 12: Output file delimiter
+INPUTS #
+TIn Tout TAve TAveField TAveFieldRing | QAve_kW QLossTop_kW  QLossSide_kW QLossBot_kW  QAccum_kW
+****
+TIn Tout TAve TAveField TAveFieldRing | QAve_kW QLossTop_kW  QLossSide_kW QLossBot_kW  QAccum_kW
+LABELS  3
+Temperatures
+MassFlow
+GHX
 
+
+
+*******************************
+**END Type548a.ddck
+*******************************
