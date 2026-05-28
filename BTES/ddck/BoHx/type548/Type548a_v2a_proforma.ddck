@@ -1,0 +1,338 @@
+*******************************
+** BEGIN Type548a_v2a.ddck
+*******************************
+
+************************************************************************************************************************
+** Description: 
+** Vertical U-Tube Ground Heat Exchanger
+************************************************************************************************************************
+
+************************************************************************************************************************
+** Details: 
+** Refer to the document: " .\Tess Models\Documentation\GHPLibraryMathematicalReference.pdf" for a complete technical
+** description of this component. This subroutine models a vertical heat exchanger that interacts thermally with the
+** ground. This ground heat exchanger model is most commonly used in ground source heat pump applications. This
+** subroutine models either a U-tube ground heat exchanger or a concentric tube ground heat exchanger. A heat carrier
+** fluid is circulated through the ground heat exchanger and either rejects heat to, or absorbs heat from, the ground
+** depending on the temperatures of the heat carrier fluid and the ground. In typical U-tube ground heat exchanger
+** applications, a vertical borehole is drilled into the ground. A U-tube heat exchanger is then pushed into the
+** borehole. The top of the ground heat exchanger is typically several feet below the surface of the ground. Finally,
+** the borehole is filled with a fill material; either virgin soil or a grout of some type. In typical concentric tube
+** heat exchanger applications, the borehole is just slightly larger than the outer pipe of the ground heat exchanger,
+** but the same process applies. The borehole is drilled into the ground, and the heat exchanger is pushed into the
+** borehole. The program assumes that the boreholes are placed uniformly within a cylindrical storage volume of ground.
+** There is convective heat transfer within the pipes, and conductive heat transfer to the storage volume. The
+** temperature in the ground is calculated from three parts; a global temperature, a local solution, and a steady-flux
+** solution. The global and local problems are solved with the use of an explicit finite difference method. The steady
+** flux solution is obtained analytically. The temperature is then calculated using superposition methods.
+************************************************************************************************************************
+
+***********************************
+** inputs from hydraulic solver
+***********************************
+EQUATIONS 4
+Cp = @cp(In)
+Rho = @rho(In)
+TIn = @temp(In)
+M = @mfr(In)
+
+***********************************
+** outputs to hydraulic solver
+***********************************
+EQUATIONS 1
+@temp(Out) = TOut
+
+***********************************
+** outputs to other ddck
+***********************************
+
+
+******************************************************************************************
+** outputs to energy balance in kWh and ABSOLUTE value
+******************************************************************************************
+
+
+***********************************
+** Dependencies with other ddck
+***********************************
+
+
+***********************************
+** Begin CONSTANTS
+***********************************
+
+
+***********************************
+** Begin TYPE
+***********************************
+UNIT 1 TYPE 548
+PARAMETERS 43
+** The volume of the cylindrical region containing the boreholes. The boreholes will be placed uniformly within the
+** storage volume.The properties of the ground within the storage volume are considered uniform, while the properties of
+** the ground outside the storage volume may be described for several vertical layers. If the spacing between boreholes
+** is known, the storage volume can be calculated from the relationship: Storage Volume = Pi * Number of Boreholes *
+** Borehole Depth * (0.525 * Borehole Spacing)^2
+4000.0 ! 1: Storage Volume [m^3] ([0.0,+Inf])
+
+** The depth of one borehole (from the surface). This depth is also considered the height of the storage volume for
+** determining the cross-sectional storage area. This value is also the length of one of the u-tube heat exchangers from
+** the ground surface to the bottom of the u-tube bend.
+100.0 ! 2: Borehole Depth [m] ([0.0,+Inf])
+
+** The depth below the surface of the top of the u-tube ground heat exchangers.This value is also typically the depth
+** below the surface of the horizontal header pipe which feeds the ground heat exchangers.
+1.0 ! 3: Header Depth [m] ([0.0,+Inf])
+
+** The total number of boreholes within the storage volume. If each borehole contains one u-tube ground heat exchanger
+** (which is the most common application in the U.S.) then this value is also the number of u-tube ground heat
+** exchangers.
+2.0 ! 4: Number of Boreholes [-] ([1,+Inf])
+
+** The radius of one of the identical boreholes (the holes that were drilled for the heat exchangers).
+0.1016 ! 5: Borehole Radius [m] ([0.0,+Inf])
+
+** The number of unique fluid inlets to the storage. For each inlet, the user must specify the inlet temperature, flow
+** rate, and a direction indicator. For example, if there are 6 radial regions and the outlet of each radial region is
+** the inlet to the next radial region (1-->2-->3-->4-->5-->6) then there would be one inlet. If instead the flow
+** pattern went 1-->3-->5 and another circuit went 2-->4-->6 then there would be two inlets.
+1.0 ! 6: Number of Fluid Inlets [-] ([1,+Inf])
+
+** The number of radial subregions that the storage volume will be divided into for the calculation of the local
+** solution. The number of radial subregions must be greater than, or equal to, the number of fluid inlets.
+1.0 ! 7: Number of Radial Regions [-] ([1,+Inf])
+
+** These parameters indicate the flow pattern through the radial regions. A value of 0 indicates that the inlet
+** temperature and flow rate will be provided to that region as inputs to the model. A positive integer indicates that
+** the temperature and flow for this radial region will come from the specified radial region. Radial regions can only
+** feed to, and receive flow from, one other radial region. Radial regions are numbered from the center (1) to the
+** outermost ring (N_Regions, Parameter 7). For example, to connect regions 1, 2, and 3 (from innermost to outermost) in
+** series, specify '0' as the inlet for region 1, '1' as the inlet for region 2, and '2' as the inlet for region 3. This
+** could also be accomplished by specifying '0' as the inlet for all regions (3 unique inlets) and connecting the model
+** to itself by connecting fluid 1 outputs to fluid 2 inputs and fluid 2 outputs to fluid 3 inputs (this method is
+** offered as a sanity check rather than as best practice for general use).
+0.0 ! 8: Inlet to Radial Region [-] ([0,+Inf])
+
+** The number of vertical subregions of the storage volume. The number of vertical subregions times the number of radial
+** subregions must be less than 121 or an error will be generated.
+10.0 ! 9: Number of Vertical Regions [-] ([1,+Inf])
+
+** The thermal conductivity of the ground within the storage volume. The properties of the ground are assumed uniform
+** within the storage volume but can be specified later for ground layers beyond the storage volume boundary.
+4.68 ! 10: Storage Thermal Conductivity [kJ/hr.m.K] ([0.0,+Inf])
+
+** The heat capacity (density*specific heat) of the ground comprising the storage volume. The properties of the soil
+** within the storage volume are considered uniform. The properties of the soil past the boundary of the storage volume
+** can be specified for vertical layers later in the parameter description.
+2016.0 ! 11: Storage Heat Capacity [kJ/m^3/K] ([-Inf,+Inf])
+
+** The negative of the number of u-tube ground heat exchangers per borehole. For geothermal heat pump applications in
+** the U.S., this value is typically 1.
+-1.0 ! 12: Negative of U-Tubes/Bore [-] ([-10,-1])
+
+** The outer radius of the pipe comprising the u-tube ground heat exchanger.
+0.01664 ! 13: Outer Radius of U-Tube Pipe [m] ([0.0,+Inf])
+
+** The inner radius of the pipe comprising the u-tube ground heat exchanger.
+0.01372 ! 14: Inner Radius of U-Tube Pipe [m] ([0.0,+Inf])
+
+** One half of the horizontal distance from the center of the downward flowing u-tube pipe to the center of the upward
+** flowing u-tube pipe (same borehole).This value is also called the half shank spacing.
+0.0254 ! 15: Center-to-Center Half Distance [m] ([0.0,+Inf])
+
+** The thermal conductivity of the material used to fill the borehole after the u-tube ground heat exchanger has been
+** installed.
+4.68 ! 16: Fill Thermal Conductivity [kJ/hr.m.K] ([0.0,+Inf])
+
+** The thermal conductivity of the material comprising the u-tube ground heat exchanger pipes.
+1.5122 ! 17: Pipe Thermal Conductivity [kJ/hr.m.K] ([0.0,+Inf])
+
+** The thermal conductivity of the material in the gap between the u-tube pipes and the fill material. The gaps are
+** usually air or water depending on the water table and other factors.
+5.04 ! 18: Gap Thermal Conductivity [kJ/hr.m.K] ([0.0,+Inf])
+
+** The thickness of the gap between the u-tube pipes and the fill material.
+0.0 ! 19: Gap Thickness [m] ([0.0,+Inf])
+
+** The reference fluid flowrate per borehole for the calculation of the fluid to ground thermal resistance (borehole
+** thermal resistance). This parameter is very important and should correspond to the expected borehole flow rate during
+** operation.
+613.04 ! 20: Reference Borehole Flowrate [kg/hr] ([0.0,+Inf])
+
+** The reference fluid temperature for the calculation of the fluid to ground thermal resistance.
+30.0 ! 21: Reference Temperature [C] ([-Inf,+Inf])
+
+** This parameter indicates to the general ground heat exchanger model whether the heat transfer between the upward and
+** downward flowing fluid in the u-tube ground heat exchanger should be included: (0 = Do not account for heat transfer
+** between the u-tube pipes, -1 = Account for the heat transfer between the u-tube pipes).
+-1.0 ! 22: Pipe-to-Pipe Heat Transfer [-] ([-1,0])
+
+** The specific heat of the fluid flowing through the ground heat exchanger pipes.
+Cp ! 23: Fluid Specific Heat [kJ/kg.K] ([0.0,+Inf])
+
+** The density of the fluid flowing through the ground heat exchanger pipes.
+Rho ! 24: Fluid Density [kg/m^3] ([0.0,+Inf])
+
+** An indicator for the placement of thermal insulation on the boundaries of the storage volume: (0 = No insulation, 1 =
+** Insulation on the upper side of the cylindrical storage volume. The upper user-specified fraction of the storage
+** height (next parameter) is covered with thermal insulation, 2 = Insulation on the top of the storage volume that
+** extends a user-specified fraction of the storage height (next parameter) beyond the boundary of the storage volume).
+0.0 ! 25: Insulation Indicator [-] ([0,2])
+
+** The fraction of the height of the storage volume that is insulated (if previous parameter=1) or the fraction of the
+** height of the storage volume that the insulation on top of the storage extends beyond the boundary of the storage
+** volume (if previous parameter=2).
+0.5 ! 26: Insulation Height Fraction [-] ([0.0,1.0])
+
+** The thickness of the insulation on the top and sides of the storage volume (if specified).
+0.0254 ! 27: Insulation Thickness [m] ([0.0,+Inf])
+
+** The thermal conductivity of the insulation on the top and sides of the storage volume (if specified).
+1.0 ! 28: Insulation Thermal Conductivity [kJ/hr.m.K] ([0.0,+Inf])
+
+** The length in years of the simulation to be performed. This value should include the number of years of preheating
+** used to heat up the surrounding ground. This parameter is used to determine the mesh extension for the finite
+** difference calculations.
+1.0 ! 29: Number of Simulation Years [-] ([1,100])
+
+** The maximum temperature of the fluid entering the ground heat exchangers.
+100.0 ! 30: Maximum Storage Temperature [C] ([-Inf,+Inf])
+
+** The initial surface temperature of the storage volume.
+20.0 ! 31: Initial Surface Temperature of Storage Volume [C] ([-Inf,+Inf])
+
+** The initial thermal gradient in the ground inside the storage volume.
+0.0 ! 32: Initial Thermal Gradient of Storage Volume [any] ([-Inf,+Inf])
+
+** The number of preheating years run before the simulation begins (0 = no preheating). During preheating, a sinusoidal
+** yearly variation of the average storage volume temperature is used to heat up the ground surrounding the storage
+** volume.
+0.0 ! 33: Number of Preheating Years [-] ([0,+Inf])
+
+** The maximum temperature (average) of the storage volume ground for preheating calculations. This temperature is used
+** in a sinusoidal calculation to preheat the soil surrounding the storage volume. This parameter is also used in the
+** calculation to set the initial temperature of the storage volume ground at the beginning of the simulation. See the
+** description of the phase delay parameter for more information on the initial storage temperature.
+30.0 ! 34: Maximum Preheat Temperature [C] ([-Inf,+Inf])
+
+** The minimum temperature (average) of the storage volume ground for preheating calculations. This temperature is used
+** in a sinusoidal calculation to preheat the ground surrounding the storage volume. This parameter is also used in the
+** calculation to determine the initial temperature of the storage volume ground. Refer to the description of the
+** preheating phase delay for more information on the initial storage volume temperature.
+10.0 ! 35: Minimum Preheat Temperature [C] ([-Inf,+Inf])
+
+** The phase delay in the preheating sinusoidal temperature curve. This phase delay is simply 90 minus the day of
+** maximum storage temperature, or 270 minus the day of minimum storage temperature. For preheating, the storage
+** temperature equation is: Tstore = (Tmax,ph+Tmin,ph)/2 + (Tmax,ph-Tmin,ph)/2 * sin(w(t+theta)) where: Tstore = storage
+** temperature, Tmax,ph = maximum storage temperature for preheating, Tmin,ph = minimum storage temperature for
+** preheating, theta = this parameter, t=simulation time in days. The storage temperature at the beginning of the
+** simulation is found from the above equation with t=0.
+90.0 ! 36: Preheat Phase Delay [day] ([0,365])
+
+** The yearly average air temperature for preheating calculations. The average air temperature is used to calculate the
+** air temperature as a function of time. The air temperature (and storage temperature) variation throughout the preheat
+** years are used to calculate the temperature of the ground past the storage volume boundary at the beginning of the
+** simulation.
+20.0 ! 37: Average Air Temperature - Preheat Years [C] ([-Inf,+Inf])
+
+** The amplitude of the air temperature over the year. This parameter is used to calculate the air temperature as a
+** function of time. The air temperature and the average storage temperature (both as a function of time) are used to
+** calculate the temperature of the ground outside the storage volume boundary at the beginning of the simulation.
+15.0 ! 38: Amplitude of Air Temperature - Preheat Years [deltaC] ([0.0,+Inf])
+
+** The phase delay in air temperature for the preheating calculations. The delay can be simply calculated as the 90
+** minus the day of the maximum air temperature or 270 minus the day of minimum air temperature. The air temperature as
+** a function of time is then: Air Temperature = Average Air Temperature + Amplitude*sin(w(t+delay)) where: t = time in
+** days, delay = phase delay (days), w = conversion constant
+240.0 ! 39: Air Temperature Phase Delay - Preheat Years [day] ([-365,+365])
+
+** The number of unique vertical soil layers that comprise the ground outside the boundary of the storage volume (the
+** storage volume soil is assumed uniform). For each layer, the user must specify the thermal conductivity, heat
+** capacity, and layer thickness.
+1.0 ! 40: Number of Ground Layers [-] ([1,10])
+
+** The thermal conductivity of the specified vertical layer at the outside boundary of the storage volume.
+4.68 ! 41: Thermal Conductivity of Layer  [kJ/hr.m.K] ([0.0,+Inf])
+
+** The volumetric heat capacitance of the specified vertical soil layer at the outside boundary of the storage volume.
+2016.0 ! 42: Heat Capacity of Layer  [kJ/m^3/K] ([0.0,+Inf])
+
+** The thickness of the specified vertical soil layer at the outside boundary of the storage volume.
+1000.0 ! 43: Thickness of Layer [m] ([0.0,+Inf])
+
+INPUTS 5
+** The temperature of the fluid entering the ground heat exchanger(s) in this radial subregion. Radial subregion 1 =
+** center of the field Radial subregion N_Regions (Parameter 7) = outermost ring of the field
+TIn ! 1: Inlet Fluid Temperature [C] ([-Inf,+Inf])
+
+** The flowrate of fluid (total, not per borehole) entering the ground heat exchanger(s).
+M ! 2: Inlet Flowrate (Total) [kg/hr] ([0.0,+Inf])
+
+** This input determines how the fluid is circulated through the boreholes: (1 = Circulate in the pattern specified in
+** the parameter list, -1 = Circulate in the opposite direction of that specified in the parameter list). This input
+** should only be used when multiple boreholes are connected in series and when the flow direction through the boreholes
+** changes depending on operation. For most geothermal applications this input should be set to a constant value of 1.
+** If however, a radial stratification of the ground is desired (such as heat storage), the fluid should circulate from
+** the center to the border in heat injection (=1) and from the border to the center during heat abstraction (=-1).
+0,0 ! 3: Flow Direction Indicator [-] ([-1,1])
+
+** The temperature of the air directly above the storage volume. In most cases this is the ambient temperature. In some
+** cases (like the storage volume being located beneath an asphalt parking lot) this temperature must be calculated and
+** passed to this model.
+0,0 ! 4: Temperature on Top of Storage [C] ([-Inf,+Inf])
+
+** The ambient temperature.
+0,0 ! 5: Air Temperature [C] ([-Inf,+Inf])
+
+** initial values
+20.0 ! 1: Inlet Fluid Temperature  initial value
+0.0 ! 2: Inlet Flowrate (Total)  initial value
+1.0 ! 3: Flow Direction Indicator  initial value
+20.0 ! 4: Temperature on Top of Storage  initial value
+20.0 ! 5: Air Temperature  initial value
+
+EQUATIONS 1 ! 10
+** The outlet fluid temperature from the ground heat exchanger(s) associated with this fluid stream.
+TOut = [1, 1] ! Outlet Temperature [C] ([-Inf,+Inf])
+
+** The flowrate of fluid leaving the ground heat exchanger(s) (total, not per borehole) on this fluid stream.
+! XXX = [1, 2] ! Outlet Flowrate (Total) [kg/hr] ([0.0,+Inf])
+
+** The average temperature of the ground in the storage volume.
+! XXX = [1, 3] ! Average Storage Temperature [C] ([-Inf,+Inf])
+
+** The rate at which heat is added to the storage volume ground from the fluid.
+! XXX = [1, 4] ! Average Heat Transfer Rate [kJ/hr] ([-Inf,+Inf])
+
+** The rate at which heat is lost to the ambient through the top of the storage volume.
+! XXX = [1, 5] ! Heat Loss Through Top of Storage [kJ/hr] ([-Inf,+Inf])
+
+** The rate at which heat is lost from the sides of the storage volume to the surrounding ground.
+! XXX = [1, 6] ! Heat Loss Through Side of Storage [kJ/hr] ([-Inf,+Inf])
+
+** The rate at which heat is lost from the bottom of the storage volume to the ground layer beneath the storage.
+! XXX = [1, 7] ! Heat Loss Through Bottom of Storage [kJ/hr] ([-Inf,+Inf])
+
+** Storage internal energy variation during the last timestep.
+! XXX = [1, 8] ! Internal Energy Variation [kJ/hr] ([-Inf,+Inf])
+
+** The average temperature of the soil near the boreholes across the entire field.
+! XXX = [1, 9] ! Average Field Temperature Over All Radial Rings [C] ([-Inf,+Inf])
+
+** The average field temperature in radial ring N. 1 = center of the field N_Regions (Parameter 7) = edge of the field
+! XXX = [1, 10] ! Average Field Temperature In Radial Ring [C] ([-Inf,+Inf])
+
+
+***********************************
+** Monthly printer
+***********************************
+
+
+***********************************
+** Hourly printer
+***********************************
+
+
+***********************************
+** Online Plotter
+***********************************
+
