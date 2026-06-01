@@ -170,6 +170,7 @@ QAve_kW = QAve/3600
 QLossTop_kW = QLossTop/3600
 QLossSide_kW = QLossSide/3600
 QLossBot_kW = QLossBot/3600
+QLoss_kW = QLossTop_kW + QLossSide_kW + QLossBot_kW
 QAccum_kW = QAccum/3600
 
 ***********************************
@@ -188,9 +189,9 @@ unitPrinterMo		! 1: Logical unit number, -
 -1     				! 4: Printing & integrating interval, h. -1 for monthly integration
 0     				! 5: Number of inputs to avoid integration, -
 INPUTS #
-QCalc_kW QAve_kW QLossTop_kW  QLossSide_kW QLossBot_kW  QAccum_kW
+QCalc_kW QAve_kW QLossTop_kW  QLossSide_kW QLossBot_kW QLoss_kW QAccum_kW
 **
-QCalc_kW QAve_kW QLossTop_kW  QLossSide_kW QLossBot_kW  QAccum_kW
+QCalc_kW QAve_kW QLossTop_kW  QLossSide_kW QLossBot_kW QLoss_kW QAccum_kW
 
 ***********************************
 ** Hourly printer
@@ -215,10 +216,10 @@ unitPrintHo		! 1: Logical unit number, -
 
 INPUTS #
 TIn Tout TAve TAveField TAveFieldRing !1-5
-QCalc_kW QAve_kW QLossTop_kW  QLossSide_kW QLossBot_kW  QAccum_kW !6-10
+QCalc_kW QAve_kW QLossTop_kW  QLossSide_kW QLossBot_kW QLoss_kW QAccum_kW !6-10
 **
 TIn Tout TAve TAveField TAveFieldRing !1-5
-QCalc_kW QAve_kW QLossTop_kW  QLossSide_kW QLossBot_kW  QAccum_kW !6-10
+QCalc_kW QAve_kW QLossTop_kW  QLossSide_kW QLossBot_kW QLoss_kW QAccum_kW !6-10
 
 
 ***********************************

@@ -1,5 +1,5 @@
 import pathlib as _pl
-import matplotlib.pyplot as _plt
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from datetime import datetime
@@ -11,54 +11,77 @@ dir_project = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 dir_common = carpeta_a_path = os.path.join(dir_project, 'common')
 sys.path.append(dir_common)
 
+def filter(sim: api.Simulation):
+    sim.monthly.index = pd.to_datetime(sim.monthly.index)
+
+    last_year = sim.monthly.index.year[-1]
+
+    sim.monthly = sim.monthly[sim.monthly.index.year == last_year]
+
+    sim.hourly.index = pd.to_datetime(sim.hourly.index)
+    sim.hourly = sim.hourly[sim.hourly.index.year == last_year]
 
 def solar(sim: api.Simulation):
 
     #### Calculations ####
     sim.monthly["CollP_MW"] = sim.monthly["CollP_kW"] / 1000
 
-    sim.scalar["CollP_kW_Tot"] = sim.hourly["CollP_kW"].sum()
+    sim.scalar["CollP_kW_calc_Tot"] = sim.hourly["CollP_kW_calc"].sum()
+    sim.scalar["CollIT_kW_Tot"] = sim.hourly["CollIT_kW"].sum()
+
+    sim.scalar["Q_kW_m2"] = sim.scalar["CollP_kW_calc_Tot"] / sim.scalar["CollAcollAp"]
+    sim.scalar["IT_kW_m2"] = sim.scalar["CollIT_kW_Tot"] / sim.scalar["CollAcollAp"]
     sim.scalar["qSysOut_PipeLoss_Tot"] = sim.hourly["qSysOut_PipeLoss"].sum()
 
-    # sim.scalar["HxCollHpPhxload_kW_Tot"] = sim.hourly["HxCollHpPhxload_kW"].sum()
-    # sim.scalar["HxCollDemandPhxload_kW_Tot"] = sim.hourly["HxCollDemandPhxload_kW"].sum()
-
-
-    df = pd.DataFrame({
-        'T': sim.hourly["CollTOut"],
-        'Q':  sim.hourly["CollP_kW"] / 1000
-    })
+    # Q_vs_T preparation
+    df = pd.DataFrame(
+        {"T": sim.hourly["CollTOut"], "Q": sim.hourly["CollP_kW_calc"] / 1000}
+    )
 
     df = df.sort_values(by="T")
     df["Q_cum"] = np.cumsum(df["Q"])
 
+    # Stagnation
+    sim.hourly["SolarControlStagDays"] = (
+        sim.hourly["SolarControlStagDays"] - sim.hourly["SolarControlStagDays"].iloc[1]
+    )
+    sim.scalar["SolarControlStagDays"] = sim.hourly["SolarControlStagDays"].iloc[-1]
 
     #### Plots ####
     fig, ax = api.line_plot(sim.hourly, ["CollP_kW"])
     ax.set_ylabel("Power (kW)")
-    _plt.grid()
-    # _plt.show()
+    plt.grid()
+    # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "solar-hourly", "solar")
 
     fig, ax = api.bar_chart(sim.monthly, ["CollP_kW"])
     ax.set_ylabel("Power (kW)")
     ax.legend()
     ax.legend_ = None
-    # _plt.show()
+    # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "solar-monthly", "solar")
 
     fig, ax = api.line_plot(sim.hourly, ["CollTIn", "CollTOut"])
     ax.set_ylabel("Temperature (°C)")
-    _plt.grid()
-    # _plt.show()
+    plt.grid()
+    # plt.show()
+    api.export_plots_in_configured_formats(fig, sim.path, "temp-hourly", "solar")
 
-    _plt.figure()
-    fig = _plt.plot(df["T"], df["Q_cum"]) #, linestyle='-', color='blue', label='Q_cum')
-    _plt.xlabel('$T_{coll,out}$ [°C]')
-    _plt.ylabel('$Q_{coll,cum}$ [MWh]')
-    _plt.tight_layout()
-    _plt.grid()
-    # _plt.show()
+    fig, ax = api.line_plot(sim.hourly, ["SolarControlStag"])
+    ax.set_ylabel("Stagnation ON (-)")
+    plt.grid()
+    # plt.show()
+    api.export_plots_in_configured_formats(fig, sim.path, "stagnation-hourly", "solar")
+
+    plt.figure()
+    fig = plt.plot(
+        df["T"], df["Q_cum"]
+    )  # , linestyle='-', color='blue', label='Q_cum')
+    plt.xlabel("$T_{coll,out}$ [°C]")
+    plt.ylabel("$Q_{coll,cum}$ [MWh]")
+    plt.tight_layout()
+    plt.grid()
+    # plt.show()
     api.export_plots_in_configured_formats(fig[0].figure, sim.path, "q_t", "solar")
 
 def tes(sim: api.Simulation):
@@ -82,64 +105,88 @@ def tes(sim: api.Simulation):
                                          "TesT5_Tes1", "TesT6_Tes1", "TesT7_Tes1", "TesT8_Tes1",
                                          "TesT9_Tes1", "TesT10_Tes1"])
     ax.set_ylabel("Temperature (°C)")
-    _plt.grid()
-    # _plt.show()
+    plt.grid()
+    # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "tes-temps", "tes")
 
-    _plt.figure()
-    fig = _plt.plot(df["T"], df["Q_cum"]) #, linestyle='-', color='blue', label='Q_cum')
-    _plt.xlabel('$T_{dem}$ [°C]')
-    _plt.ylabel('$Q_{coll}$ [MWh]')
-    _plt.tight_layout()
-    _plt.grid()
-    # _plt.show()
+    plt.figure()
+    fig = plt.plot(df["T"], df["Q_cum"]) #, linestyle='-', color='blue', label='Q_cum')
+    plt.xlabel('$T_{dem}$ [°C]')
+    plt.ylabel('$Q_{coll}$ [MWh]')
+    plt.tight_layout()
+    plt.grid()
+    # plt.show()
     api.export_plots_in_configured_formats(fig[0].figure, sim.path, "q_t", "tes")
 
 def btes(sim: api.Simulation):
 
     #### Calculations ####
+    sim.scalar["BoHxQLoss_kW_Tot"] = sim.hourly["BoHxQLoss_kW"].sum()
+    sim.scalar["BoHxQLossTop_kW_Tot"] = sim.hourly["BoHxQLossTop_kW"].sum()
+    sim.scalar["BoHxQLossSide_kW_Tot"] = sim.hourly["BoHxQLossSide_kW"].sum()
+    sim.scalar["BoHxQLossBot_kW_Tot"] = sim.hourly["BoHxQLossBot_kW"].sum()
     sim.hourly["BoHxQChar_kW"] = abs(sim.hourly["BoHxQAve_kW"]) * sim.hourly["ControlBorOnChar"]
     sim.hourly["BoHxQDischar_kW"] = abs(sim.hourly["BoHxQAve_kW"]) * sim.hourly["ControlBorOnDischar"]
+    sim.scalar["BoHxQAccum_kW_Tot"] = sim.hourly["BoHxQAccum_kW"].sum()
 
-    # ENERGY DENSITY
-    # cp = sim.scalar["BoHxCpBor"]
-    # rho = sim.scalar["BoHxrhoGround"]
-    # sim.scalar["rhoQ"] = (max(sim.hourly["BoHxTAvg"]) - min(sim.hourly["BoHxTAvg"])) * rho * cp/3600
+
 
     sim.scalar["BoHxQChar_kW_Tot"] = sim.hourly["BoHxQChar_kW"].sum()
     sim.scalar["BoHxQDischar_kW_Tot"] = sim.hourly["BoHxQDischar_kW"].sum()
 
-
-    # sim.scalar["pitStoreQLosses_kW_Tot"] = sim.hourly["pitStoreQLosses_kW"].sum()
     sim.scalar["BoHxQAve_kW_Tot"] = sim.hourly["BoHxQAve_kW"].sum()
-    # sim.scalar["pitStoreQ23_kW_Tot"] = sim.hourly["pitStoreQ23_kW"].sum()
-    # sim.scalar["pitStoreQ31_kW_Tot"] = sim.hourly["pitStoreQ31_kW"].sum()
-    # sim.scalar["pitStoreQAccum_kW_Tot"] = sim.hourly["pitStoreQAccum_kW"].sum()
+
+
+    sim.scalar["BoHxQMax"] = (
+        sim.scalar["BoHxV"]
+        * sim.scalar["BoHxCpLayer"]
+        * (sim.scalar["SolarControlTTesMax"] - 0)
+        / 3600
+    )
+    sim.scalar["BoHxNCycles"] = (
+        sim.scalar["BoHxQChar_kW_Tot"] / sim.scalar["BoHxQMax"]
+    )
+
+    sim.scalar["BoHxEff"] = abs(
+        sim.scalar["BoHxQDischar_kW_Tot"] / sim.scalar["BoHxQChar_kW_Tot"]
+    )
+
+    sim.hourly["BoHxSoc"] = (sim.hourly["BoHxTAve"] - 0) / (95 - 0)
+
+    ## Energy density calculation
+    cp = sim.scalar["BoHxCpLayer"]
+    sim.scalar["rhoQ"] = (
+        (max(sim.hourly["BoHxTAve"]) - min(sim.hourly["BoHxTAve"]))
+        * cp
+        / 3600
+    )
+
+
 
     #### Plots ####
     # fig, ax = api.line_plot(sim.hourly, ["BoHxT13", "BoHxT23", "BoHxT33",
     #                                      "BoHxT43", "BoHxT53", "BoHxT63", "BoHxTGro3"])
     # ax.set_ylabel("Temperature (°C)")
-    # _plt.grid()
-    # # _plt.show()
+    # plt.grid()
+    # # plt.show()
     # api.export_plots_in_configured_formats(fig, sim.path, "t-btes-hourly", "btes")
 
     fig, ax = api.line_plot(sim.hourly, ["BoHxTAve"])
     ax.set_ylabel("Temperature (°C)")
-    _plt.grid()
-    # _plt.show()
+    plt.grid()
+    # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "t-avg-hourly", "btes")
 
     # fig, ax = api.line_plot(sim.hourly, ["BoHxTRT"])
     # ax.set_ylabel("Temperature (°C)")
-    # _plt.grid()
-    # # _plt.show()
+    # plt.grid()
+    # # plt.show()
     # api.export_plots_in_configured_formats(fig, sim.path, "trt-hourly", "btes")
 
     fig, ax = api.line_plot(sim.hourly, ["BoHxQAve_kW"])
     ax.set_ylabel("Heat (kW)")
-    _plt.grid()
-    # _plt.show()
+    plt.grid()
+    # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "q-hourly", "btes")
 
 def hp(sim: api.Simulation):
@@ -159,7 +206,7 @@ def hp(sim: api.Simulation):
 
     dataframes = []
 
-    _plt.figure()
+    plt.figure()
 
     for q, t in plot_variables:
         a = sim.hourly[q]
@@ -170,23 +217,23 @@ def hp(sim: api.Simulation):
         df[q] = np.cumsum(df[q])
         dataframes.append(df)
 
-        fig = _plt.plot(df[t], df[q], label=q+"____"+t)  # , linestyle='-', color='blue', label='Q_cum')
+        fig = plt.plot(df[t], df[q], label=q+"____"+t)  # , linestyle='-', color='blue', label='Q_cum')
 
-    #     _plt.ion()
+    #     plt.ion()
     #
     #
-    # _plt.ioff()  # Desactivar modo interactivo
-    _plt.xlabel('Temperature [°C]')
-    _plt.ylabel('Cumulative energy [kWh]')
-    _plt.grid()
-    _plt.legend()
-    # _plt.show()
+    # plt.ioff()  # Desactivar modo interactivo
+    plt.xlabel('Temperature [°C]')
+    plt.ylabel('Cumulative energy [kWh]')
+    plt.grid()
+    plt.legend()
+    # plt.show()
     api.export_plots_in_configured_formats(fig[0].figure, sim.path, "q_t", "hp")
 
     # fig, ax = api.line_plot(sim.hourly, ["HpmyIsOn"])
     # ax.set_ylabel("HP activation (-)")
-    # _plt.grid()
-    # # _plt.show()
+    # plt.grid()
+    # # plt.show()
     # api.export_plots_in_configured_formats(fig, sim.path, "act-hourly", "hp")
 
 def hx(sim: api.Simulation):
@@ -194,20 +241,20 @@ def hx(sim: api.Simulation):
     #### Plots ####
     fig, ax = api.line_plot(sim.hourly, ["HxQ_kW"])
     ax.set_ylabel("Heat (kW)")
-    _plt.grid()
-    # _plt.show()
+    plt.grid()
+    # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "q-hourly", "hx")
 
     fig, ax = api.line_plot(sim.hourly, ["HxEff"])
     ax.set_ylabel("Efficiency (-)")
-    _plt.grid()
-    # _plt.show()
+    plt.grid()
+    # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "efficiency-hourly", "hx")
 
     fig, ax = api.line_plot(sim.hourly, ["HxLMTD"])
     ax.set_ylabel("LMTD (K)")
-    _plt.grid()
-    # _plt.show()
+    plt.grid()
+    # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "LMTD-hourly", "hx")
 
 def boiler(sim: api.Simulation):
@@ -218,39 +265,60 @@ def boiler(sim: api.Simulation):
     #### Plots ####
     fig, ax = api.line_plot(sim.hourly, ["BolrPOut_kW"])
     ax.set_ylabel("Power (kW)")
-    _plt.grid()
-    # _plt.show()
+    plt.grid()
+    # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "boiler-hourly", "boiler")
 
-def sink(sim: api.Simulation):
+def demand(sim: api.Simulation):
 
     #### Calculations ####
     sim.scalar["QSnkP_kW_Tot"] = sim.hourly["QSnkP_kW"].sum()
-    # sim.scalar["QSnkPout_kW_Tot"] = sim.hourly["QSnkPout_kW"].sum()
+    sim.scalar["QSnkTIn_Avg"] = sim.hourly["QSnkTIn"].mean()
+    sim.scalar["QSnkTOut_Avg"] = sim.hourly["QSnkTOut"].mean()
+    sim.step["QSnkPreal_kW"] = 0
+    # Losses
+    sim.scalar["qSysOut_dpToFFieldTot_Tot"] = sim.hourly["qSysOut_dpToFFieldTot"].sum()
+    sim.scalar["qSysOut_dpPipeIntTot_Tot"] = sim.hourly["qSysOut_dpPipeIntTot"].sum()
+    sim.scalar["qSysOut_dpSoilIntTot_Tot"] = sim.hourly["qSysOut_dpSoilIntTot"].sum()
+
+    sim.monthly["QDistrict"] = (
+        sim.monthly["qSysOut_dpToFFieldTot"]
+        + sim.monthly["qSysOut_dpPipeIntTot"]
+        + sim.monthly["qSysOut_dpSoilIntTot"]
+    )
+
+    sim.monthly["QDemand_kW"] = sim.monthly["QSnkP_kW"] + sim.monthly["QDistrict"]
+    sim.scalar["QDemand_kW_Tot"] = sim.monthly["QDemand_kW"].sum()
 
     #### Plots ####
     fig, ax = api.line_plot(sim.hourly, ["QSnkP_kW"])
     ax.set_ylabel("Power (kW)")
-    _plt.grid()
-    # _plt.show()
+    ax.legend_.remove()
+    plt.grid()
+    # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "sink-hourly", "sink")
 
 def control(sim: api.Simulation):
     #### Plots ####
     fig, ax = api.line_plot(sim.hourly, ["ControlBorOnChar", "ControlBorOnDischar"])
     ax.set_ylabel("Activation (-)")
-    _plt.grid()
-    # _plt.show()
+    plt.grid()
+    # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "mode-hourly", "control")
 
 def balance(sim: api.Simulation):
 
 
     #### Calculations ####
-    sim.scalar["QSources"] = sim.scalar["CollP_kW_Tot"] + sim.scalar["BolrPOut_kW_Tot"]  + sim.scalar["HpPelComp_kW_Tot"]
+    sim.scalar["QSources"] = sim.scalar["CollP_kW_calc_Tot"] + sim.scalar["BolrPOut_kW_Tot"]  + sim.scalar["HpPelComp_kW_Tot"]
     sim.scalar["QSinks"] = sim.scalar["QSnkP_kW_Tot"]
     sim.scalar["QStore"] = sim.scalar["BoHxQAve_kW_Tot"] + sim.scalar["TesQAcum_Tes1_Tot"]
     sim.scalar["QLosses"] = sim.scalar["TesQLoss_Tes1_Tot"] + sim.scalar["qSysOut_PipeLoss_Tot"]
+
+    sim.monthly["QDistrict_MW"] = sim.monthly["QDistrict"] / 1000
+    sim.scalar["QDistrict_MW"] = sim.monthly["QDistrict_MW"].sum()
+
+
 
     sim.scalar["QImb"] = sim.scalar["QSources"] - sim.scalar["QStore"] - sim.scalar["QSinks"] - sim.scalar["QLosses"]
 
@@ -265,18 +333,49 @@ def balance(sim: api.Simulation):
         xlabel="",
         cmap="Paired"
     )
-    _plt.legend(names_legend, bbox_to_anchor=(1.05, 1), loc='upper left')
+    plt.legend(names_legend, bbox_to_anchor=(1.05, 1), loc='upper left')
     api.export_plots_in_configured_formats(fig, sim.path, "balance-monthly", "balance")
 
 
 
 
 def kpi(sim: api.Simulation):
+     ### Calculations ###
+     sim.scalar["FactorRenewable"] = (sim.scalar["QSnkP_kW_Tot"] - sim.scalar["BolrPOut_kW_Tot"]) / sim.scalar["QSnkP_kW_Tot"]
 
+     ### Create dataframe with Solites KPIs ###
+     sim.scalar["zero"] = 0
 
-    #### Calculations ####
-    sim.scalar["FactorRenewable"] = (sim.scalar["QSnkP_kW_Tot"] - sim.scalar["BolrPOut_kW_Tot"]) / sim.scalar["QSnkP_kW_Tot"]
-    sim.scalar["szVperDemand_m3_per_MWh"] = sim.scalar["BoHxV"] / sim.scalar["QSnkP_kW_Tot"]
+     data = [
+         sim.scalar["IT_kW_m2"],  # 14
+         sim.scalar["CollP_kW_calc_Tot"] / 1000,  # 15
+         sim.scalar["Q_kW_m2"],  # 16
+         sim.scalar["zero"] / 1000,  # 17
+         sim.scalar["BoHxQChar_kW_Tot"]/ 1000,  # 18
+         sim.scalar["BoHxQDischar_kW_Tot"] / 1000,  # 19
+         sim.scalar["BoHxQLoss_kW_Tot"] / 1000,  # 20
+         sim.scalar["BoHxQLossTop_kW_Tot"] / 1000,  # 21
+         sim.scalar["BoHxQLossSide_kW_Tot"] / 1000,  # 22
+         sim.scalar["BoHxQLossBot_kW_Tot"] / 1000,  # 23
+         sim.scalar["QDistrict_MW"],  # 24
+         sim.scalar["BoHxQAccum_kW_Tot"] / 1000,  # 25
+         sim.scalar["zero"],  # 26
+         sim.scalar["zero"],  # 27
+         sim.scalar["HpQEvap_kW_Tot"] / 1000,  # 29
+         sim.scalar["HpQCond_kW_Tot"] / 1000,  # 30
+         sim.scalar["HpPelComp_kW_Tot"] / 1000,  # 31
+         sim.scalar["BolrPOut_kW_Tot"] / 1000,  # 32
+         sim.scalar["QDemand_kW_Tot"] / 1000,  # 33
+         sim.scalar["zero"],  # 34
+         sim.scalar["SolarControlStagDays"],  # 35
+         sim.scalar["HpCOP"],  # 36
+         sim.scalar["BoHxEff"],  # 37
+         sim.scalar["BoHxNCycles"],  # 38
+         sim.scalar["QSnkTIn_Avg"],  # 39
+         sim.scalar["QSnkTOut_Avg"],  # 40
+     ]
+     df = pd.DataFrame(data)
+     df.to_csv(sim.path + "\\data.csv", header=False, index=False)
 
 def to_json(sim: api.Simulation):
     sim.scalar.to_json(sim.path + "\output.json", orient="records", indent=4)
@@ -287,13 +386,14 @@ if __name__ == "__main__":
     api.global_settings.reader.read_step_files = False
 
     processing_steps = [
+                        filter,
                         solar,
                         hx,
                         tes,
                         btes,
                         hp,
                         boiler,
-                        sink,
+                        demand,
                         control,
                         balance,
                         kpi,
