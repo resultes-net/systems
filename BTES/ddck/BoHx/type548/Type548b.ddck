@@ -1,5 +1,5 @@
 *******************************
-** BEGIN Type548a.ddck
+** BEGIN Type548b.ddck
 *******************************
 
 ************************************************************************************************************************
@@ -16,8 +16,8 @@
 ***************************************************************************
 ** This subroutine models a vertical heat exchanger that interacts thermally with the
 ** ground. This ground heat exchanger model is most commonly used in ground source heat pump applications. This
-** subroutine models either a U-tube ground heat exchanger or a concentric tube ground heat exchanger. Thermal resistances are
-** calculated internalls.
+** subroutine models either a U-tube ground heat exchanger or a concentric tube ground heat exchanger. Thermal resistances
+** given as inputs.
 ***************************************************************************
 
 ***********************************
@@ -58,58 +58,47 @@ DirFlow = 1 ! 3: Flow Direction Indicator [-] ([-1,1])
 TTop = 20 ! 4: Temperature on Top of Storage [C] ([-Inf,+Inf])
 
 CONSTANTS #
-V = 4000.0 ! 1: Storage Volume [m^3] ([0.0,+Inf])
-Z = 100.0 ! 2: Borehole Depth [m] ([0.0,+Inf])
-ZHeader = 1.0 ! 3: Header Depth [m] ([0.0,+Inf])
-NBor = 100.0 ! 4: Number of Boreholes [-] ([1,+Inf])
-RBor = 0.1016 ! 5: Borehole Radius [m] ([0.0,+Inf])
-NIn = 1.0 ! 6: Number of Fluid Inlets [-] ([1,+Inf])
-NRadReg = 1.0 ! 7: Number of Radial Regions [-] ([1,+Inf])
-InRad = 0.0 ! 8: Inlet to Radial Region [-] ([0,+Inf])
-NVerReg = 10.0 ! 9: Number of Vertical Regions [-] ([1,+Inf])
-Lambda = 4.68 ! 10: Storage Thermal Conductivity [kJ/hr.m.K] ([0.0,+Inf])
-CpBor = 2016.0 ! 11: Storage Heat Capacity [kJ/m^3/K] ([-Inf,+Inf])
-RatTubBor = -1.0 ! 12: Negative of U-Tubes/Bore [-] ([-10,-1])
-RadOutPip = 0.01664 ! 13: Outer Radius of U-Tube Pipe [m] ([0.0,+Inf])
-RadInPip = 0.01372 ! 14: Inner Radius of U-Tube Pipe [m] ([0.0,+Inf])
-DPip = 0.0254 ! 15: Center-to-Center Half Distance [m] ([0.0,+Inf])
-LambdaFill = 4.68 ! 16: Fill Thermal Conductivity [kJ/hr.m.K] ([0.0,+Inf])
-CpPip = 1.5122 ! 17: Pipe Thermal Conductivity [kJ/hr.m.K] ([0.0,+Inf])
-LambdaGap = 5.04 ! 18: Gap Thermal Conductivity [kJ/hr.m.K] ([0.0,+Inf])
-DGap = 0.0 ! 19: Gap Thickness [m] ([0.0,+Inf])
-MRef = 613.04 ! 20: Reference Borehole Flowrate [kg/hr] ([0.0,+Inf])
-TRef = 30.0 ! 21: Reference Temperature [C] ([-Inf,+Inf])
-HeatTransferMode = -1.0 ! 22: Pipe-to-Pipe Heat Transfer [-] ([-1,0])
-    ! 0 = Do not account for heat transfer between the u-tube pipes,
-    ! -1 = Account for the heat transfer between the u-tube pipes
-InsMode = 0 ! 25: Insulation Indicator [-] ([0,2]).
+V = 4000.0          ! 1: Storage Volume [m^3] ([0.0,+Inf])
+Z = 100.0           ! 2: Borehole Depth [m] ([0.0,+Inf])
+ZHeader = 1.0       ! 3: Header Depth [m] ([0.0,+Inf])
+NBor = 100.0        ! 4: Number of Boreholes [-] ([1,+Inf])
+RBor = 0.1016       ! 5: Borehole Radius [m] ([0.0,+Inf])
+NIn = 1.0           ! 6: Number of Fluid Inlets [-] ([1,+Inf])
+NRadReg = 1.0       ! 7: Number of Radial Regions [-] ([1,+Inf])
+InRad = 0.0         ! 8: Inlet to Radial Region [-] ([0,+Inf])
+NVerReg = 10.0      ! 9: Number of Vertical Regions [-] ([1,+Inf])
+Lambda = 4.68       ! 10: Storage Thermal Conductivity [kJ/hr.m.K] ([0.0,+Inf])
+CpBor = 2016.0      ! 11: Storage Heat Capacity [kJ/m^3/K] ([-Inf,+Inf])
+Rb = 0.03661        ! 12: Fluid to Ground Resistance [any] ([0.0,+Inf])
+Ra = -0.15725       ! 13: Negative of Pipe-to-Pipe Resistance [any] ([-Inf,0.0])
+InsMode = 0         ! 16: Insulation Indicator [-] ([0,2]).
     ! 0 = No insulation,
     ! 1 = Insulation on the upper side of the cylindrical storage volume.  The upper user-specified fraction of the storage height (next parameter) is covered with thermal insulation,
     ! 2 = Insulation on the top of the storage volume that extends a user-specified fraction of the storage height (next parameter) beyond the boundary of the storage volume
-InsFrac = 0.5 ! 26: Insulation Height Fraction [-] ([0.0,1.0]) The fraction of the height of the storage volume that is insulated (if previous parameter=1) or the fraction of the height of the storage volume that the insulation on top of the storage extends beyond the boundary of the storage volume (if previous parameter=2).
-DIns = 0.0254 ! 27: Insulation Thickness [m] ([0.0,+Inf])
-LambdaIns = 1.0 ! 28: Insulation Thermal Conductivity [kJ/hr.m.K] ([0.0,+Inf])
-YearsSim = 1.0 ! 29: Number of Simulation Years [-] ([1,100])
-Tmax = 100.0 ! 30: Maximum Storage Temperature [C] ([-Inf,+Inf])
-TInit = 20.0 ! 31: Initial Surface Temperature of Storage Volume [C] ([-Inf,+Inf])
-DeltaTInit = 0.0 ! 32: Initial Thermal Gradient of Storage Volume [any] ([-Inf,+Inf])
-YearsPre = 0.0 ! 33: Number of Preheating Years [-] ([0,+Inf])
-TMaxPre = 30.0 ! 34: Maximum Preheat Temperature [C] ([-Inf,+Inf])
-TMinPre = 10.0 ! 35: Minimum Preheat Temperature [C] ([-Inf,+Inf])
-DelayPre = 90.0 ! 36: Preheat Phase Delay [day] ([0,365])
-TAirAvePre = 20.0 ! 37: Average Air Temperature - Preheat Years [C] ([-Inf,+Inf])
-DeltaTAirPre = 15.0 ! 38: Amplitude of Air Temperature - Preheat Years [deltaC] ([0.0,+Inf])
-DelayTAirPre = 240.0 ! 39: Air Temperature Phase Delay - Preheat Years [day] ([-365,+365])
-NGrLayer = 1.0 ! 40: Number of Ground Layers [-] ([1,10])
-LambdaLayer = 4.68 ! 41: Thermal Conductivity of Layer  [kJ/hr.m.K] ([0.0,+Inf])
-CpLayer = 2016.0 ! 42: Heat Capacity of Layer  [kJ/m^3/K] ([0.0,+Inf])
-DLayer = 1000.0 ! 43: Thickness of Layer [m] ([0.0,+Inf])
+InsFrac = 0.5       ! 17: Insulation Height Fraction [-] ([0.0,1.0]) The fraction of the height of the storage volume that is insulated (if previous parameter=1) or the fraction of the height of the storage volume that the insulation on top of the storage extends beyond the boundary of the storage volume (if previous parameter=2).
+DIns = 0.0254       ! 18: Insulation Thickness [m] ([0.0,+Inf])
+LambdaIns = 1.0     ! 19: Insulation Thermal Conductivity [kJ/hr.m.K] ([0.0,+Inf])
+YearsSim = 1.0      ! 20: Number of Simulation Years [-] ([1,100])
+Tmax = 100.0        ! 21: Maximum Storage Temperature [C] ([-Inf,+Inf])
+TInit = 20.0        ! 22: Initial Surface Temperature of Storage Volume [C] ([-Inf,+Inf])
+DeltaTInit = 0.0    ! 23: Initial Thermal Gradient of Storage Volume [any] ([-Inf,+Inf])
+YearsPre = 0.0      ! 24: Number of Preheating Years [-] ([0,+Inf])
+TMaxPre = 30.0      ! 25: Maximum Preheat Temperature [C] ([-Inf,+Inf])
+TMinPre = 10.0      ! 26: Minimum Preheat Temperature [C] ([-Inf,+Inf])
+DelayPre = 90.0     ! 27: Preheat Phase Delay [day] ([0,365])
+TAirAvePre = 20.0   ! 28: Average Air Temperature - Preheat Years [C] ([-Inf,+Inf])
+DeltaTAirPre = 15.0 ! 29: Amplitude of Air Temperature - Preheat Years [deltaC] ([0.0,+Inf])
+DelayTAirPre = 240.0! 30: Air Temperature Phase Delay - Preheat Years [day] ([-365,+365])
+NGrLayer = 1.0      ! 31: Number of Ground Layers [-] ([1,10])
+LambdaLayer = 4.68  ! 32: Thermal Conductivity of Layer  [kJ/hr.m.K] ([0.0,+Inf])
+CpLayer = 2016.0    ! 33: Heat Capacity of Layer  [kJ/m^3/K] ([0.0,+Inf])
+DLayer = 1000.0     ! 34: Thickness of Layer [m] ([0.0,+Inf])
 
 
 ***********************************
 ** Begin TYPE
 ***********************************
-UNIT 1 TYPE 548 Type548a_v2a
+UNIT 1 TYPE 548
 PARAMETERS #
 V                   ! 1: Storage Volume [m^3] ([0.0,+Inf])
 Z                   ! 2: Borehole Depth [m] ([0.0,+Inf])
@@ -118,49 +107,40 @@ NBor                ! 4: Number of Boreholes [-] ([1,+Inf])
 RBor                ! 5: Borehole Radius [m] ([0.0,+Inf])
 NIn                 ! 6: Number of Fluid Inlets [-] ([1,+Inf])
 NRadReg             ! 7: Number of Radial Regions [-] ([1,+Inf])
-InRad               ! 8: Inlet to Radial Region [-] ([0,+Inf])
-NVerReg             ! 9: Number of Vertical Regions [-] ([1,+Inf])
-Lambda              ! 10: Storage Thermal Conductivity [kJ/hr.m.K] ([0.0,+Inf])
-CpBor               ! 11: Storage Heat Capacity [kJ/m^3/K] ([-Inf,+Inf])
-RatTubBor           ! 12: Negative of U-Tubes/Bore [-] ([-10,-1])
-RadOutPip           ! 13: Outer Radius of U-Tube Pipe [m] ([0.0,+Inf])
-RadInPip            ! 14: Inner Radius of U-Tube Pipe [m] ([0.0,+Inf])
-DPip                ! 15: Center-to-Center Half Distance [m] ([0.0,+Inf])
-LambdaFill          ! 16: Fill Thermal Conductivity [kJ/hr.m.K] ([0.0,+Inf])
-CpPip               ! 17: Pipe Thermal Conductivity [kJ/hr.m.K] ([0.0,+Inf])
-LambdaGap           ! 18: Gap Thermal Conductivity [kJ/hr.m.K] ([0.0,+Inf])
-DGap                ! 19: Gap Thickness [m] ([0.0,+Inf])
-MRef                ! 20: Reference Borehole Flowrate [kg/hr] ([0.0,+Inf])
-TRef                ! 21: Reference Temperature [C] ([-Inf,+Inf])
-HeatTransferMode    ! 22: Pipe-to-Pipe Heat Transfer [-] ([-1,0])
-    ! 0 = Do not account for heat transfer between the u-tube pipes,
-    ! -1 = Account for the heat transfer between the u-tube pipes
-Cp                  ! 23: Fluid Specific Heat [kJ/kg.K] ([0.0,+Inf])
-Rho                 ! 24: Fluid Density [kg/m^3] ([0.0,+Inf])
-InsMode             ! 25: Insulation Indicator [-] ([0,2]).
+0                   ! 8: Inlet to Radial Region [-] ([0,+Inf])
+1                   ! 9: Inlet to Radial Region [-] ([0,+Inf])
+2                   ! 10: Inlet to Radial Region [-] ([0,+Inf])
+NVerReg             ! 11: Number of Vertical Regions [-] ([1,+Inf])
+Lambda              ! 12: Storage Thermal Conductivity [kJ/hr.m.K] ([0.0,+Inf])
+CpBor               ! 13: Storage Heat Capacity [kJ/m^3/K] ([-Inf,+Inf])
+Rb                  ! 14: Fluid to Ground Resistance [any] ([0.0,+Inf])
+Ra                  ! 15: Negative of Pipe-to-Pipe Resistance [any] ([-Inf,0.0])
+Cp                  ! 16: Fluid Specific Heat [kJ/kg.K] ([0.0,+Inf])
+Rho                 ! 17: Fluid Density [kg/m^3] ([0.0,+Inf])
+InsMode             ! 18: Insulation Indicator [-] ([0,2]).
     ! 0 = No insulation,
     ! 1 = Insulation on the upper side of the cylindrical storage volume.  The upper user-specified fraction of the storage height (next parameter) is covered with thermal insulation,
     ! 2 = Insulation on the top of the storage volume that extends a user-specified fraction of the storage height (next parameter) beyond the boundary of the storage volume
-InsFrac             ! 26: Insulation Height Fraction [-] ([0.0,1.0]) The fraction of the height of the storage volume that is insulated (if previous parameter=1) or the fraction of the height of the storage volume that the insulation on top of the storage extends beyond the boundary of the storage volume (if previous parameter=2).
-DIns                ! 27: Insulation Thickness [m] ([0.0,+Inf])
-LambdaIns           ! 28: Insulation Thermal Conductivity [kJ/hr.m.K] ([0.0,+Inf])
-YearsSim            ! 29: Number of Simulation Years [-] ([1,100])
-Tmax                ! 30: Maximum Storage Temperature [C] ([-Inf,+Inf])
-TInit               ! 31: Initial Surface Temperature of Storage Volume [C] ([-Inf,+Inf])
-DeltaTInit          ! 32: Initial Thermal Gradient of Storage Volume [any] ([-Inf,+Inf])
-YearsPre            ! 33: Number of Preheating Years [-] ([0,+Inf])
-TMaxPre             ! 34: Maximum Preheat Temperature [C] ([-Inf,+Inf])
-TMinPre             ! 35: Minimum Preheat Temperature [C] ([-Inf,+Inf])
-DelayPre            ! 36: Preheat Phase Delay [day] ([0,365])
-TAirAvePre          ! 37: Average Air Temperature - Preheat Years [C] ([-Inf,+Inf])
-DeltaTAirPre        ! 38: Amplitude of Air Temperature - Preheat Years [deltaC] ([0.0,+Inf])
-DeltaTAirPre        ! 39: Air Temperature Phase Delay - Preheat Years [day] ([-365,+365])
-NGrLayer            ! 40: Number of Ground Layers [-] ([1,10])
-LambdaLayer         ! 41: Thermal Conductivity of Layer  [kJ/hr.m.K] ([0.0,+Inf])
-CpLayer             ! 42: Heat Capacity of Layer  [kJ/m^3/K] ([0.0,+Inf])
-DLayer              ! 43: Thickness of Layer [m] ([0.0,+Inf])
+InsFrac             ! 19 Insulation Height Fraction [-] ([0.0,1.0]) The fraction of the height of the storage volume that is insulated (if previous parameter=1) or the fraction of the height of the storage volume that the insulation on top of the storage extends beyond the boundary of the storage volume (if previous parameter=2).
+DIns                ! 20 Insulation Thickness [m] ([0.0,+Inf])
+LambdaIns           ! 21 Insulation Thermal Conductivity [kJ/hr.m.K] ([0.0,+Inf])
+YearsSim            ! 22 Number of Simulation Years [-] ([1,100])
+Tmax                ! 23 Maximum Storage Temperature [C] ([-Inf,+Inf])
+TInit               ! 24 Initial Surface Temperature of Storage Volume [C] ([-Inf,+Inf])
+DeltaTInit          ! 25 Initial Thermal Gradient of Storage Volume [any] ([-Inf,+Inf])
+YearsPre            ! 26 Number of Preheating Years [-] ([0,+Inf])
+TMaxPre             ! 27 Maximum Preheat Temperature [C] ([-Inf,+Inf])
+TMinPre             ! 28 Minimum Preheat Temperature [C] ([-Inf,+Inf])
+DelayPre            ! 29 Preheat Phase Delay [day] ([0,365])
+TAirAvePre          ! 30 Average Air Temperature - Preheat Years [C] ([-Inf,+Inf])
+DeltaTAirPre        ! 31 Amplitude of Air Temperature - Preheat Years [deltaC] ([0.0,+Inf])
+DelayTAirPre        ! 32 Air Temperature Phase Delay - Preheat Years [day] ([-365,+365])
+NGrLayer            ! 33 Number of Ground Layers [-] ([1,10])
+LambdaLayer         ! 34 Thermal Conductivity of Layer  [kJ/hr.m.K] ([0.0,+Inf])
+CpLayer             ! 35: Heat Capacity of Layer  [kJ/m^3/K] ([0.0,+Inf])
+DLayer              ! 36: Thickness of Layer [m] ([0.0,+Inf])
 
-INPUTS 5
+INPUTS #
 TIn ! 1: Inlet Fluid Temperature [C] ([-Inf,+Inf])
 M ! 2: Inlet Flowrate (Total) [kg/hr] ([0.0,+Inf])
 DirFlow ! 3: Flow Direction Indicator [-] ([-1,1])
@@ -271,5 +251,6 @@ GHX
 
 
 *******************************
-**END Type548a.ddck
+**END Type548b.ddck
 *******************************
+
