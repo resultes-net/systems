@@ -164,24 +164,17 @@ def btes(sim: api.Simulation):
 
 
     #### Plots ####
-    # fig, ax = api.line_plot(sim.hourly, ["BoHxT13", "BoHxT23", "BoHxT33",
-    #                                      "BoHxT43", "BoHxT53", "BoHxT63", "BoHxTGro3"])
-    # ax.set_ylabel("Temperature (°C)")
-    # plt.grid()
-    # # plt.show()
-    # api.export_plots_in_configured_formats(fig, sim.path, "t-btes-hourly", "btes")
+    fig, ax = api.line_plot(sim.hourly, ["BoHxTAveField"])
+    ax.set_ylabel("Temperature (°C)")
+    plt.grid()
+    # plt.show()
+    api.export_plots_in_configured_formats(fig, sim.path, "t-avg-field-hourly", "btes")
 
     fig, ax = api.line_plot(sim.hourly, ["BoHxTAve"])
     ax.set_ylabel("Temperature (°C)")
     plt.grid()
     # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "t-avg-hourly", "btes")
-
-    # fig, ax = api.line_plot(sim.hourly, ["BoHxTRT"])
-    # ax.set_ylabel("Temperature (°C)")
-    # plt.grid()
-    # # plt.show()
-    # api.export_plots_in_configured_formats(fig, sim.path, "trt-hourly", "btes")
 
     fig, ax = api.line_plot(sim.hourly, ["BoHxQAve_kW"])
     ax.set_ylabel("Heat (kW)")
@@ -381,7 +374,7 @@ def to_json(sim: api.Simulation):
     sim.scalar.to_json(sim.path + "\output.json", orient="records", indent=4)
     
 if __name__ == "__main__":
-    path_to_sim = _pl.Path(r"C:\Daten\GIT\systems\BTES\results_type548\BTES")
+    path_to_sim = _pl.Path(r"C:\Daten\GIT\systems\BTES\results_type548_solitermR\BTES")
     api.global_settings.reader.force_reread_prt = True
     api.global_settings.reader.read_step_files = False
 
