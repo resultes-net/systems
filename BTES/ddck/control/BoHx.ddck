@@ -11,14 +11,14 @@
 ***************************************************************************
 
 ***********************************
-** Deadband control for charging
+** Deadband control for charging of BTES
 ***********************************
 
 EQUATIONS #
-TOnCharHigh = $TesT5_Tes1
+TOnCharHigh = $TesT5_Tes1 !$TesT10_Tes1
 TOnCharLow = $TSetTes
-dTOnCharOn = 0
-dTOnCharOff = -5
+dTOnCharOn = 6
+dTOnCharOff = 1
 
 
 UNIT 55 TYPE 2
@@ -38,14 +38,14 @@ EQUATIONS #
 OnChar = [55,1] ! Temperature control
 
 ***********************************
-** Deadband control for discharging
+** Deadband control for discharging of BTES
 ***********************************
 
 EQUATIONS #
 TOnDischarHigh = $TSetTes
-TOnDischarLow = $TesT10_Tes1
+TOnDischarLow = $TesT6_Tes1
 dTOnDischarOn = 10
-dTOnDischarOff = 0
+dTOnDischarOff = 5
 
 
 UNIT 56 TYPE 2

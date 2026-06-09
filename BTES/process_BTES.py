@@ -374,7 +374,7 @@ def to_json(sim: api.Simulation):
     sim.scalar.to_json(sim.path + "\output.json", orient="records", indent=4)
     
 if __name__ == "__main__":
-    path_to_sim = _pl.Path(r"C:\Daten\GIT\systems\BTES\results_type548_solitermR\BTES")
+    path_to_sim = _pl.Path(r"C:\Daten\GIT\systems\BTES\results")
     api.global_settings.reader.force_reread_prt = True
     api.global_settings.reader.read_step_files = False
 
@@ -393,7 +393,7 @@ if __name__ == "__main__":
                         to_json,
                         ]
 
-    simulation_data = api.process_single_simulation(
+    simulation_data = api.process_whole_result_set(
         path_to_sim,
         processing_steps,
     )
