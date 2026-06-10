@@ -39,7 +39,7 @@ EQUATIONS #
 ***********************************
 EQUATIONS #
 on = 1
-Tset = $TSetDem
+Tset = $TSetBolr
 tRoomStore = $tamb
 
 ***********************************
