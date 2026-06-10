@@ -153,6 +153,7 @@ def test_get_solved_equations() -> None:
                 "scaling": "relative_to_collector_area_kg_per_h_m2",
                 "value": 15.0,
             },
+            "output_temperature_setpoint_degC": 100.0,
         },
         "storage": {
             "volume": {"scaling": "absolute_m3", "value": 400},
@@ -178,6 +179,8 @@ def _create_parameters_ddck_contents(parameters: _pptes.PtesParameters) -> str:
 
     unscaledYearlyHeatDemandMWh = sum(demand.hourly_heat_demand_MW)
 
+    collector_field = parameters.collector_field
+
     port_heights = parameters.storage.ports_relative_heights_1
 
     formatted_specified_and_solved_variables_block = (
@@ -198,6 +201,8 @@ $QSnkQUnscaled_MWh = {unscaledYearlyHeatDemandMWh}
 $QSnkQ_MWh = $QSnkScalingFactor*$QSnkQUnscaled_MWh
 
 $HPsizeUsed = $QSnkQ_MWh/10
+
+$TSetColl = {collector_field.output_temperature_setpoint_degC}
 
 $psPtesPortsHeightRelTop = {port_heights.top}
 $psPtesPortsHeightRelMiddle = {port_heights.middle}
