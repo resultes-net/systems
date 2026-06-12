@@ -3,6 +3,8 @@ import pathlib as pl
 import sys
 
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+import matplotlib.ticker as ticker
 import numpy as np
 import pandas as pd
 from pytrnsys_process import api
@@ -18,6 +20,35 @@ def filter(sim: api.Simulation):
     sim.hourly.index = pd.to_datetime(sim.hourly.index)
     sim.hourly = sim.hourly[sim.hourly.index.year == last_year]
 
+    # sim.hourly.index = sim.hourly.index - pd.DateOffset(years=3)
+    # sim.monthly.index = sim.monthly.index - pd.DateOffset(years=3)
+
+def weather(sim: api.Simulation):
+
+    #### Calculations ####
+    sim.hourly["IT_H_kW"] = sim.hourly["IT_H"]/3600
+    sim.monthly["IT_H_kW"] = sim.monthly["IT_H"] / 3600
+
+    #### Plots ####
+    fig, ax = api.line_plot(sim.hourly, ["Tamb"])
+    ax.set_ylabel("Temperature (°C)")
+    plt.grid()
+    # plt.show()
+    ax.legend_.remove()
+    api.export_plots_in_configured_formats(fig, sim.path, "temp-hourly", "weather")
+
+    fig, ax = api.line_plot(sim.hourly, ["IT_H_kW"])
+    ax.set_ylabel("Radiation (kW/m2)")
+    plt.grid()
+    # plt.show()
+    api.export_plots_in_configured_formats(fig, sim.path, "hor-rad-hourly", "weather")
+
+    fig, ax = api.bar_chart(sim.monthly, ["IT_H_kW"])
+    ax.set_ylabel("Radiation (kW/m2)")
+    # plt.grid()
+    # plt.show()
+    ax.legend_.remove()
+    api.export_plots_in_configured_formats(fig, sim.path, "hor-rad-monthly", "weather")
 
 def solar(sim: api.Simulation):
 
@@ -561,6 +592,7 @@ def kpi(sim: api.Simulation):
     df = pd.DataFrame(data)
 
     df.to_csv(sim.path + "\\data.csv", header=False, index=False)
+    sim.hourly.to_csv(sim.path + "\\hourly.csv", header=True, index=True)
 
 
 def to_json(sim: api.Simulation):
@@ -573,11 +605,12 @@ if __name__ == "__main__":
         sys.exit(-1)
 
     path_to_results_folder = pl.Path(sys.argv[1])
-    api.global_settings.reader.force_reread_prt = True
+    api.global_settings.reader.force_reread_prt = False
     api.global_settings.reader.read_step_files = True
 
     processing_steps = [
         filter,
+        weather,
         solar,
         # hx,
         ttes,

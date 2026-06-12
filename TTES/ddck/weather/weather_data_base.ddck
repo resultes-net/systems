@@ -282,7 +282,33 @@ ID_E AI_E IT_W IB_W ID_W AI_W IT_surfUser_1 IB_surfUser_1 ID_surfUser_1 IDS_surf
 IT_surfUser_2 IB_surfUser_2 ID_surfUser_2 IDS_surfUser_2 IDG_surfUser_2 AI_surfUser_2 
 Time Tamb tAmbDry relHum vWind dirWind pAmb_Pa AISZ AISA IT_H IB_H ID_H AI_H IT_N AI_N IB_N IT_S IB_S ID_S AI_S IT_E IB_E 
 ID_E AI_E IT_W IB_W ID_W AI_W IT_surfUser_1 IB_surfUser_1 ID_surfUser_1 IDS_surfUser_1 IDG_surfUser_1 AI_surfUser_1
-IT_surfUser_2 IB_surfUser_2 ID_surfUser_2 IDS_surfUser_2 IDG_surfUser_2 AI_surfUser_2 
+IT_surfUser_2 IB_surfUser_2 ID_surfUser_2 IDS_surfUser_2 IDG_surfUser_2 AI_surfUser_2
+
+***************************************
+** HOURLY PRINTER
+**************************************
+
+CONSTANTS 1
+unitPrinterWeatherHo=47
+
+
+ASSIGN    temp\WEATHER_BASE_HO.Prt     unitPrinterWeatherHo
+
+UNIT 45 Type 46     ! Printegrator Monthly Values for Weather data
+PARAMETERS 6
+unitPrinterWeatherHo    ! 1: Logical unit number, -
+-1     ! 2: Logical unit for monthly summaries, -
+1     ! 3: Relative or absolute start time. 0: print at time intervals relative to the simulation start time. 1: print at absolute time intervals. No effect for monthly integrations
+1     ! 4: Printing & integrating interval, h. -1 for monthly integration
+1     ! 5: Number of inputs to avoid integration, -
+1     ! 6: Output number to avoid integration
+INPUTS 40
+Time Tamb tAmbDry relHum vWind dirWind pAmb_Pa AISZ AISA IT_H IB_H ID_H AI_H IT_N AI_N IB_N IT_S IB_S ID_S AI_S IT_E IB_E
+ID_E AI_E IT_W IB_W ID_W AI_W IT_surfUser_1 IB_surfUser_1 ID_surfUser_1 IDS_surfUser_1 IDG_surfUser_1 AI_surfUser_1
+IT_surfUser_2 IB_surfUser_2 ID_surfUser_2 IDS_surfUser_2 IDG_surfUser_2 AI_surfUser_2
+Time Tamb tAmbDry relHum vWind dirWind pAmb_Pa AISZ AISA IT_H IB_H ID_H AI_H IT_N AI_N IB_N IT_S IB_S ID_S AI_S IT_E IB_E
+ID_E AI_E IT_W IB_W ID_W AI_W IT_surfUser_1 IB_surfUser_1 ID_surfUser_1 IDS_surfUser_1 IDG_surfUser_1 AI_surfUser_1
+IT_surfUser_2 IB_surfUser_2 ID_surfUser_2 IDS_surfUser_2 IDG_surfUser_2 AI_surfUser_2
 
    
 
