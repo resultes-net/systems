@@ -18,7 +18,7 @@ MfrSources = MfrPuCollSec + MfrPuSrcSec
 
 ** Demand
 MfrQSnk = QSnkM ! 500
-! TSetDem is defined in parameters\parameters.ddck or the run config
+! TSetDem is defined in parameters\parameters.ddck
 
 ** HX
 xFracValHXPri = NOT(ValHXOut)
