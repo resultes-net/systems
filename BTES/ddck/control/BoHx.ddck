@@ -17,7 +17,7 @@
 EQUATIONS #
 TOnCharHigh = $TesT5_Tes1 !$TesT10_Tes1
 TOnCharLow = $TSetTes
-dTOnCharOn = 6
+dTOnCharOn = 4
 dTOnCharOff = 1
 
 
@@ -44,8 +44,8 @@ OnChar = [55,1] ! Temperature control
 EQUATIONS #
 TOnDischarHigh = $TSetTes
 TOnDischarLow = $TesT6_Tes1
-dTOnDischarOn = 10
-dTOnDischarOff = 5
+dTOnDischarOn = 4 !10
+dTOnDischarOff = 1! 5
 
 
 UNIT 56 TYPE 2

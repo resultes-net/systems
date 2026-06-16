@@ -30,8 +30,9 @@ xFracValBuffToGhx = ControlBorOnChar
 CONSTANTS #
 TSetDem = 50
 TSetBor = 10
-TSetTes = TSetDem + 5
-TSetColl = TSetTes + HxLMTDNom + 3
+TSetTes = TSetDem + 0
+deltaTColl = 0
+TSetColl = TSetTes + HxLMTDNom + deltaTColl
 
 
 

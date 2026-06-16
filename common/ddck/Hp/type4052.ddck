@@ -103,9 +103,11 @@ EQUATIONS #		! Heat Pump Outputs
 TEvapOut    = [162,1]
 TCondOut    = [162,2]
 QEvap       = [162,3]
-QEvap_kW    = QEvap/1000
+!QEvap_kW    = QEvap/1000
+QEvap_kW = CpEvap/1000 * MfrEvapIn * (TEvapIn-TEvapOut)/3600
 QCond       = [162,4]
-QCond_kW    = QCond/1000
+!QCond_kW    = QCond/1000
+QCond_kW = CpCond/1000 * MfrCondIn * (TCondOut-TCondIn)/3600
 PelComp     = [162,5]
 PelComp_kW  = PelComp/1000
 Eer         = [162,6]

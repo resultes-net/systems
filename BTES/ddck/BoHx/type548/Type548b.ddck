@@ -89,10 +89,10 @@ DelayPre = 90.0     ! 27: Preheat Phase Delay [day] ([0,365])
 TAirAvePre = 20.0   ! 28: Average Air Temperature - Preheat Years [C] ([-Inf,+Inf])
 DeltaTAirPre = 15.0 ! 29: Amplitude of Air Temperature - Preheat Years [deltaC] ([0.0,+Inf])
 DelayTAirPre = 240.0! 30: Air Temperature Phase Delay - Preheat Years [day] ([-365,+365])
-NGrLayer = 1.0      ! 31: Number of Ground Layers [-] ([1,10])
+NGrLayer = 3.0      ! 31: Number of Ground Layers [-] ([1,10])
 LambdaLayer = 4.68  ! 32: Thermal Conductivity of Layer  [kJ/hr.m.K] ([0.0,+Inf])
 CpLayer = 2016.0    ! 33: Heat Capacity of Layer  [kJ/m^3/K] ([0.0,+Inf])
-DLayer = 1000.0     ! 34: Thickness of Layer [m] ([0.0,+Inf])
+DLayer = 1000.0/NGrLayer     ! 34: Thickness of Layer [m] ([0.0,+Inf])
 
 
 ***********************************
@@ -139,6 +139,12 @@ NGrLayer            ! 33 Number of Ground Layers [-] ([1,10])
 LambdaLayer         ! 34 Thermal Conductivity of Layer  [kJ/hr.m.K] ([0.0,+Inf])
 CpLayer             ! 35: Heat Capacity of Layer  [kJ/m^3/K] ([0.0,+Inf])
 DLayer              ! 36: Thickness of Layer [m] ([0.0,+Inf])
+LambdaLayer         ! 34 Thermal Conductivity of Layer  [kJ/hr.m.K] ([0.0,+Inf])
+CpLayer             ! 35: Heat Capacity of Layer  [kJ/m^3/K] ([0.0,+Inf])
+DLayer              ! 36: Thickness of Layer [m] ([0.0,+Inf])
+LambdaLayer         ! 34 Thermal Conductivity of Layer  [kJ/hr.m.K] ([0.0,+Inf])
+CpLayer             ! 35: Heat Capacity of Layer  [kJ/m^3/K] ([0.0,+Inf])
+DLayer              ! 36: Thickness of Layer [m] ([0.0,+Inf])
 
 INPUTS #
 TIn ! 1: Inlet Fluid Temperature [C] ([-Inf,+Inf])
@@ -167,7 +173,7 @@ TAveFieldRing1 = [1, 10] ! Average Field Temperature In Radial Ring [C] ([-Inf,+
 TAveFieldRing2 = [1, 11] ! Average Field Temperature In Radial Ring [C] ([-Inf,+Inf])
 TAveFieldRing3 = [1, 12] ! Average Field Temperature In Radial Ring [C] ([-Inf,+Inf])
 
-QCalc_kW = Cp * Rho * (TOut-TIn)/3600
+QCalc_kW = Cp * M * (TOut-TIn)/3600
 QAve_kW = QAve/3600
 QLossTop_kW = QLossTop/3600
 QLossSide_kW = QLossSide/3600
@@ -219,10 +225,10 @@ unitPrintHo		! 1: Logical unit number, -
 7             			! 12: Output number to avoid integration
 
 INPUTS #
-TIn Tout TAve TAveField TAveFieldRing1 TAveFieldRing2 TAveFieldRing3 !1-5
+M TIn Tout TAve TAveField TAveFieldRing1 TAveFieldRing2 TAveFieldRing3 !1-5
 QCalc_kW QAve_kW QLossTop_kW  QLossSide_kW QLossBot_kW QLoss_kW QAccum_kW !6-10
 **
-TIn Tout TAve TAveField TAveFieldRing1 TAveFieldRing2 TAveFieldRing3 !1-5
+M TIn Tout TAve TAveField TAveFieldRing1 TAveFieldRing2 TAveFieldRing3 !1-5
 QCalc_kW QAve_kW QLossTop_kW  QLossSide_kW QLossBot_kW QLoss_kW QAccum_kW !6-10
 
 
