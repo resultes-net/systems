@@ -486,9 +486,12 @@ def balance(sim: api.Simulation):
         ],
         xlabel="",
         cmap="Paired",
+        zorder=3
     )
     ax.set_ylabel("Energy (MWh)")
     plt.legend(names_legend, bbox_to_anchor=(1.05, 1), loc="upper left")
+    plt.grid(axis='y', linestyle='-', alpha=0.7, zorder=0)
+    plt.gca().yaxis.set_major_locator(ticker.MultipleLocator(1000))
     # plt.show()
 
     api.export_plots_in_configured_formats(fig, sim.path, "balance-monthly", "balance")
