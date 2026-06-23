@@ -210,7 +210,7 @@ $TSetDem = {temperatures.demand_setpoint_degC}
 $TSetBolr = {temperatures.boiler_output_setpoint_degC}
 $TSetHp = {temperatures.heat_pump_output_setpoint_degC}
 $TTesMax = {temperatures.storage_maximum_degC}
-$TSetColl = {temperatures.output_temperature_setpoint_degC}
+$TSetColl = {temperatures.collector_output_setpoint_degC}
 
 $psPtesPortsHeightRelTop = {port_heights.top}
 $psPtesPortsHeightRelMiddle = {port_heights.middle}
