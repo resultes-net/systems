@@ -2,14 +2,12 @@ import collections.abc as _cabc
 import dataclasses as _dc
 import json as _json
 import pathlib as _pl
-import shutil as _su
 import sys as _sys
 import typing as _tp
 
 import pydantic as _pyd
 import resultes_pydantic_models.simulations.parameters as _params
 import resultes_pydantic_models.simulations.parameters.common.collector_field as _pcoll
-import resultes_pydantic_models.simulations.parameters.common.demand as _demand
 import resultes_pydantic_models.simulations.parameters.ptes as _pptes
 import resultes_pydantic_models.simulations.parameters.ptes.parameters.thermal_energy_storage as _pptess
 import sympy as _sym
@@ -153,7 +151,6 @@ def test_get_solved_equations() -> None:
                 "scaling": "relative_to_collector_area_kg_per_h_m2",
                 "value": 15.0,
             },
-            "output_temperature_setpoint_degC": 100.0,
         },
         "storage": {
             "volume": {"scaling": "absolute_m3", "value": 400},
@@ -168,6 +165,7 @@ def test_get_solved_equations() -> None:
             "boiler_output_setpoint_degC": 80.0,
             "heat_pump_output_setpoint_degC": 80.0,
             "storage_maximum_degC": 85.0,
+            "output_temperature_setpoint_degC": 100.0,
         },
     }
 
@@ -184,8 +182,6 @@ def _create_parameters_ddck_contents(parameters: _pptes.PtesParameters) -> str:
     demand = parameters.demand
 
     unscaledYearlyHeatDemandMWh = sum(demand.hourly_heat_demand_MW)
-
-    collector_field = parameters.collector_field
 
     temperatures = parameters.temperatures
 
@@ -210,12 +206,11 @@ $QSnkQ_MWh = $QSnkScalingFactor*$QSnkQUnscaled_MWh
 
 $HPsizeUsed = $QSnkQ_MWh/10
 
-$TSetColl = {collector_field.output_temperature_setpoint_degC}
-
 $TSetDem = {temperatures.demand_setpoint_degC}
 $TSetBolr = {temperatures.boiler_output_setpoint_degC}
 $TSetHp = {temperatures.heat_pump_output_setpoint_degC}
 $TTesMax = {temperatures.storage_maximum_degC}
+$TSetColl = {temperatures.output_temperature_setpoint_degC}
 
 $psPtesPortsHeightRelTop = {port_heights.top}
 $psPtesPortsHeightRelMiddle = {port_heights.middle}
