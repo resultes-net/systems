@@ -122,7 +122,7 @@ def ptes(sim: api.Simulation):
         sim.scalar["pitStoreStVolume"]
         * sim.scalar["pitStoreFlDen"]
         * sim.scalar["pitStoreFlSpeHeat"]
-        * (sim.scalar["SolarControlTTesMax"] - 0)
+        * (sim.scalar["TTesMax"] - 0)
         / 3600
     )
     sim.scalar["pitStoreNCycles"] = (
