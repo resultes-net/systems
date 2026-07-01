@@ -6,10 +6,10 @@ import sys as _sys
 import typing as _tp
 
 import pydantic as _pyd
-import resultes_pydantic_models.simulations.parameters as _params
 import resultes_pydantic_models.simulations.parameters.common.collector_field as _pcoll
 import resultes_pydantic_models.simulations.parameters.ptes as _pptes
 import resultes_pydantic_models.simulations.parameters.ptes.parameters.thermal_energy_storage as _pptess
+import resultes_pydantic_models.simulations.simulation as _sim
 import sympy as _sym
 
 demand_MWh = _sym.Symbol("$QSnkQ_MWh")
@@ -165,7 +165,7 @@ def test_get_solved_equations() -> None:
             "boiler_output_setpoint_degC": 80.0,
             "heat_pump_output_setpoint_degC": 80.0,
             "storage_maximum_degC": 85.0,
-            "output_temperature_setpoint_degC": 100.0,
+            "collector_output_setpoint_degC": 90.0,
         },
     }
 
@@ -231,8 +231,9 @@ def main(parameters_json_file_path: _pl.Path) -> None:
     with parameters_json_file_path.open("r") as file:
         data = _json.load(file)
 
-    parameters = _params.Parameters(**data)
-    values = parameters.values
+    simulation = _sim.Simulation(**data)
+
+    values = simulation.parameters.values
     assert isinstance(values, _pptes.PtesParameters)
 
     parameters_ddck_contents = _create_parameters_ddck_contents(values)
