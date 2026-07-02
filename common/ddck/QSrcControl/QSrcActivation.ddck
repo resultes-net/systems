@@ -72,7 +72,7 @@ CONSTANTS #
 DtTesOn = 3      ! Upper dead band collector pump ON
 DtTesOff = 0     ! Upper dead band collector pump OFF
 
-UNIT 55 TYPE 2
+UNIT 56 TYPE 2
 PARAMETERS 2
 5               ! 1 No. of oscillations
 TMonMax         ! 2 High limit cut-out
@@ -87,7 +87,7 @@ DtTesOff           ! 6 Lower dead band dT
 0.0 20.0 0.0 0 DtTesOn DtTesOff
 
 EQUATIONS #
-PuQSrcSecTes = [55,1]
+PuQSrcSecTes = [56,1]
 
 *************************************
 ********** Online Plotter ***********

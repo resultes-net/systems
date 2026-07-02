@@ -13,8 +13,8 @@ TSetColl = TSetDem + HxLMTDNom + HxCollLMTDNom + 3 !20
 
 ** Auxiliary source
 MfrQSrc = QSrcM
-MfrPuSrcSec = MfrQSrc !1000.0
-MfrSources = MfrPuCollSec + MfrPuSrcSec
+MfrPuQSrcSec = MfrQSrc*QSrcControlPuQSrcSecOn !1000.0
+MfrSources = MfrPuCollSec + MfrPuQSrcSec
 
 ** Demand
 MfrQSnk = QSnkM ! 500

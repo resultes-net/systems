@@ -608,7 +608,7 @@ if __name__ == "__main__":
         sys.exit(-1)
 
     path_to_results_folder = pl.Path(sys.argv[1])
-    api.global_settings.reader.force_reread_prt = False
+    api.global_settings.reader.force_reread_prt = True
     api.global_settings.reader.read_step_files = True
 
     processing_steps = [
