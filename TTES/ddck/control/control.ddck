@@ -13,7 +13,7 @@ TSetColl = TSetDem + HxCollLMTDNom + 3
 
 ** Auxiliary source
 MfrQSrc = QSrcM
-MfrPuQSrcSec = MfrQSrc !1000.0
+MfrPuQSrcSec = MfrQSrc*QSrcControlPuQSrcSecOn !1000.0
 MfrSources = MfrPuCollSec + MfrPuQSrcSec
 
 !$MfrQAddSrc = $QAddSrcM

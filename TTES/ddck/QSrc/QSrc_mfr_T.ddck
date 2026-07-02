@@ -8,7 +8,7 @@
 CONSTANTS #
 
 dT = 20    ! [K]
-MUnscaled = 0.5 !1 !90000070/1000
+MUnscaled = 500 !1 !90000070/1000
 MWanted = MUnscaled
 Scaling = MWanted/MUnscaled
 !P = 160
@@ -99,9 +99,9 @@ unitPrintSourceMo		! 1: Logical unit number, -
 1						! 5: Number of inputs to avoid integration, -
 1						! 6: Output number to avoid integration
 INPUTS #
-$Time P_kW
+$Time M P_kW
 **
-$Time P_kW
+$Time M P_kW
 
 
 
