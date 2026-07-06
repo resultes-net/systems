@@ -160,12 +160,10 @@ def test_get_solved_equations() -> None:
                 "bottom": 0.05,
             },
         },
-        "temperatures": {
-            "demand_setpoint_degC": 80.0,
-            "boiler_output_setpoint_degC": 80.0,
-            "heat_pump_output_setpoint_degC": 80.0,
-            "storage_maximum_degC": 85.0,
-            "collector_output_setpoint_degC": 90.0,
+        "control": {
+            "demand_temperature_setpoint_degC": 80.0,
+            "demand_delta_T_degC": 30.0,
+            "storage_temperature_maximum_degC": 85.0,
         },
     }
 
@@ -183,7 +181,7 @@ def _create_parameters_ddck_contents(parameters: _pptes.PtesParameters) -> str:
 
     unscaledYearlyHeatDemandMWh = sum(demand.hourly_heat_demand_MW)
 
-    temperatures = parameters.temperatures
+    control = parameters.control
 
     port_heights = parameters.storage.ports_relative_heights_1
 
@@ -206,11 +204,9 @@ $QSnkQ_MWh = $QSnkScalingFactor*$QSnkQUnscaled_MWh
 
 $HPsizeUsed = $QSnkQ_MWh/10
 
-$TSetDem = {temperatures.demand_setpoint_degC}
-$TSetBolr = {temperatures.boiler_output_setpoint_degC}
-$TSetHp = {temperatures.heat_pump_output_setpoint_degC}
-$TTesMax = {temperatures.storage_maximum_degC}
-$TSetColl = {temperatures.collector_output_setpoint_degC}
+$TSetDem = {control.demand_temperature_setpoint_degC}
+$QSnkdT = {control.demand_delta_T_degC}
+$TTesMax = {control.storage_temperature_maximum_degC}
 
 $psPtesPortsHeightRelTop = {port_heights.top}
 $psPtesPortsHeightRelMiddle = {port_heights.middle}

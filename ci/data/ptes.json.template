@@ -8803,14 +8803,11 @@
                     "bottom": 0.05
                 }
             },
-            "temperatures": {
-                "demand_setpoint_degC": 80.0,
-                "boiler_output_setpoint_degC": 80.0,
-                "heat_pump_output_setpoint_degC": 80.0,
-                "storage_maximum_degC": 85.0,
-                "collector_output_setpoint_degC": 100.0
-
-            }
+            "control": {
+                "demand_temperature_setpoint_degC": 80.0,
+                "demand_delta_T_degC": 30.0,
+                "storage_temperature_maximum_degC": 85.0,
+            },
         }
     }
 }
