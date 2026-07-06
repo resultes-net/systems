@@ -1,5 +1,6 @@
 {
     "name": "<PROJECT_NAME>",
+    "location": "Zurich",
     "parameters": {
         "values": {
             "type": "ptes",
