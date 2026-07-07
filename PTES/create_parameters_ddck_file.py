@@ -19,10 +19,12 @@ collector_area_m2_per_MWh = _sym.Symbol("AperDemand_m2_per_MWh")
 
 pit_store_volume_m3 = _sym.Symbol("$pitStoreStVolume")
 pit_store_volume_m3_per_MWh = _sym.Symbol("VperDemand_m3_per_MWh")
+pit_store_volume_m3_per_m2 = _sym.Symbol("VperCollArea_m3_per_m2")
 
 equations = [
     _sym.Eq(collector_area_m2, collector_area_m2_per_MWh * demand_MWh),
     _sym.Eq(pit_store_volume_m3, pit_store_volume_m3_per_MWh * demand_MWh),
+    _sym.Eq(pit_store_volume_m3, pit_store_volume_m3_per_m2 * collector_area_m2),
 ]
 
 PARAMETERS_DDCK_DIR_PATH = _pl.Path(__file__).parent / "ddck" / "parameters"
@@ -40,7 +42,7 @@ DEMAND_PROFILE_FILE_PATH = PARAMETERS_DDCK_DIR_PATH / "demand.csv"
 class _SpecifiedVariable:
     specified_variable: _sym.Symbol
     value: float
-    variable_to_solve_for: _sym.Symbol
+    variables_to_solve_for: _cabc.Sequence[_sym.Symbol]
 
 
 def get_specified_variables_and_solution(
@@ -55,8 +57,8 @@ def get_specified_variables_and_solution(
     )
 
     variables_to_solve_for = [
-        collector_field_area_specified_variable.variable_to_solve_for,
-        pit_store_volume_specified_variable.variable_to_solve_for,
+        *collector_field_area_specified_variable.variables_to_solve_for,
+        *pit_store_volume_specified_variable.variables_to_solve_for,
     ]
 
     solutions = _sym.solve(equations, variables_to_solve_for, dict=True)
@@ -81,9 +83,9 @@ def _get_collector_field_area_specified_variable(
     value = area.value
 
     if scaling == "absolute_m2":
-        return _SpecifiedVariable(collector_area_m2, value, collector_area_m2_per_MWh)
+        return _SpecifiedVariable(collector_area_m2, value, [collector_area_m2_per_MWh])
     if scaling == "relative_to_demand_m2_per_MWh":
-        return _SpecifiedVariable(collector_area_m2_per_MWh, value, collector_area_m2)
+        return _SpecifiedVariable(collector_area_m2_per_MWh, value, [collector_area_m2])
 
     _tp.assert_never(scaling)
 
@@ -98,11 +100,21 @@ def _get_pit_store_volume_specified_variable(
 
     if scaling == "absolute_m3":
         return _SpecifiedVariable(
-            pit_store_volume_m3, value, pit_store_volume_m3_per_MWh
+            pit_store_volume_m3,
+            value,
+            [pit_store_volume_m3_per_MWh, pit_store_volume_m3_per_m2],
         )
     if scaling == "relative_to_demand_m3_per_MWh":
         return _SpecifiedVariable(
-            pit_store_volume_m3_per_MWh, value, pit_store_volume_m3
+            pit_store_volume_m3_per_MWh,
+            value,
+            [pit_store_volume_m3, pit_store_volume_m3_per_m2],
+        )
+    if scaling == "relative_to_collector_area_m3_per_m2":
+        return _SpecifiedVariable(
+            pit_store_volume_m3_per_m2,
+            value,
+            [pit_store_volume_m3, pit_store_volume_m3_per_MWh],
         )
 
     _tp.assert_never(scaling)
