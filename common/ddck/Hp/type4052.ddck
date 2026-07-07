@@ -35,7 +35,7 @@ EQUATIONS #
 ** inputs from other ddcks
 *************************************
 EQUATIONS #
-TWanted = $TSetHp
+TWanted = $TSetDem
 QWanted = 0 ! Not relevant for this control mode
 QWanted_kW = QWanted/1000 ! Not relevant for this control mode
 On = 1
