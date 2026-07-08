@@ -5,9 +5,9 @@
         "values": {
             "type": "ptes",
             "time": {
-                "start": 5760,
-                "stop": 17280,
-                "dt_sim": 0.5
+                "start": 0,
+                "stop": 26280,
+                "dt_sim": 0.25
             },
             "demand": {
                 "name": "<default>",
