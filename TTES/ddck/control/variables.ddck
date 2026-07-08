@@ -1,0 +1,23 @@
+***************************
+** Here we define the necessary connections with the common control files
+***************************
+
+** Solar control
+EQUATIONS #
+TNetReturn = TTeeMix_ValByPass!TValByPass_Tee2
+TTesTop = T10_Tes1
+TTesBottom = T1_Tes1
+SolarControlTTes = T10_Tes1
+
+** Stratification valve control.
+EQUATIONS #
+ValStratControlTHigh = TTeeQSrcAddSup_ValStrat
+ValStratControlTLow = T10_Tes1
+ValStratControlTMon = T10_Tes1
+
+ValStratControlTWarmPos = T9_Tes1
+ValStratControlTHotPos = T10_Tes1
+ValStratControlTIn = TTeeQSrcAddSup_ValStrat
+
+
+

@@ -18,8 +18,8 @@ EQUATIONS #
 myTHigh = $TSetDem
 myTLow = $TTee7_ValHPSec
 
-dtOn = 5    ! Upper dead band coll. pump ON, JS: was 10 before, yield is higher with 7, to be improved
-dtOff = -20   ! Lower dead band coll. pump OFF
+dtOn = 5    ! Upper dead band coll. pump ON
+dtOff = 2   ! Lower dead band coll. pump OFF
 
 maxMyTMon = 1e6
 myTMon = myTHigh
@@ -39,7 +39,7 @@ dtOff               ! 6 Lower dead band dT
 0.0 20.0 0.0 0 dtOn dtOff
 
 EQUATIONS #
-out = [56,1] ! Temperature control
+out = [56,1] ! 1: fluid is conducted to HX; 0: fluid is bypassed
 
 ***********************************
 ** Time step printer

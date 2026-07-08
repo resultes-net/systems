@@ -1,0 +1,101 @@
+*************************************
+**BEGIN control.ddck
+*************************************
+EQUATIONS #
+
+** Weather
+TRoomStore = tAmb
+
+** Collectors
+MfrPuCollPri = SolarControlPuPriOn * CollMfrOut !MfrPuCollPriSet
+MfrPuCollSec = SolarControlPuSecOn * MfrPuCollPri * Lloop2Cp/Lloop5Cp !1000.0
+TSetColl = TSetDem + 20
+
+** Auxiliary source
+MfrQSrc = QSrcM
+MfrPuQSrcSec = MfrQSrc !1000.0
+MfrSources = MfrPuCollSec + MfrPuQSrcSec
+
+!$MfrQAddSrc = $QAddSrcM
+!$MfrPuQSrcAddSec = $MfrQAddSrc
+
+
+
+** Demand
+MfrQSnk = QSnkM ! 500
+TSetDem = 50
+
+** HX
+!xFracValHXPri = NOT(ValHXOut)
+!xFracValHXSec = xFracValHXPri
+
+** HP
+!HpAct = 1
+!ValHPPri = ValHPOut*HpAct*GT(MSCnr_Tee, HPMfrCondMin)
+!HPIsOn = ValHPPri
+!xFracValHPPri = NOT(ValHPPri)
+!xFracValHPSec = xFracValHPPri
+
+** Stratification
+xFracValStrat = NOT(ValStratControlHot)
+
+** Primary
+!MfrPump = HPIsOn*HpMfrEvap + NOT(HPIsOn)*MTee7_ValHPSec
+!MfrDemand = MfrPump
+
+** HP recirculation
+!MfrPuRecirc = MValHPSec_Tee10*ValHPPri !(GT(MTee7_ValHPSec,HPMfrCondMin)*MTee7_ValHPSec + LE(MTee7_ValHPSec,HPMfrCondMin)*HPMfrCondMin) * HPIsOn
+
+***********************
+** Pit storage modes **
+***********************
+!EQUATIONS #
+!ModePP13 = GT(MfrSources, MfrDemand)*ValStratControlHot ! charging through upper port
+!ModePP31 = LE(MfrSources, MfrDemand) + GE(MfrSources, MfrDemand)*ModePP23 ! discharging
+!ModePP23 = NOT(ValStratControlHot) ! charging through middle port GT(MfrSources, MfrDemand)*
+
+*************************
+** Demand mixing valve **
+*************************
+EQUATIONS #
+T_set_ValMix = TSetDem
+
+UNIT 441 TYPE 811 ! Passive Divider for heating 
+PARAMETERS 1
+10 !Nb.of iterations before fixing the value
+INPUTS 4 
+TBolr_ValMix
+TTeeMix_ValMix
+MValMix_SCnr
+T_set_ValMix
+*** INITIAL INPUT VALUES
+35.0 21.0 800.0 T_set_ValMix
+EQUATIONS 1
+xFracValMix =  1.-[441,5]
+
+***********************************
+** Time step printer
+***********************************
+
+!CONSTANTS 1
+!unitStepPuRecirc = 33
+!
+!ASSIGN    temp\HP_RECIRC.Prt    unitStepPuRecirc
+!
+!UNIT 520 TYPE 25! User defined Printer
+!PARAMETERS 10
+!dtSim          ! 1 Printing interval
+!START          ! 2 Start time
+!STOP           ! 3 Stop time
+!unitStepPuRecirc   ! 4 Logical unit
+!0               ! 5 Units printing mode
+!0               ! 6 Relative or absolute start time
+!-1              ! 7 Overwrite or Append
+!-1              ! 8 Print header
+!0               ! 9 Delimiter
+!1               ! 10 Print labels
+!INPUTS #
+!MTee7_ValHPSec HPMfrCondMin HPIsOn MfrPuRecirc
+!**
+!MTee7_ValHPSec HPMfrCondMin HPIsOn MfrPuRecirc
+

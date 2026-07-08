@@ -47,8 +47,8 @@ TTesDpL50_1=[50,3]
 *************************************
 ****** Parameters of Type1924 *******
 *************************************
-CONSTANTS 3
-TRoomStore=15 ! 
+CONSTANTS 2
+!TRoomStore=15 !
 VStoreRef = 0.763
 ratioTes1 = Vol_Tes1 / VStoreRef
 *********Connecting values of DIRECT PORT=1***********

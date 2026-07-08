@@ -80,23 +80,19 @@ MfrInPP31      = M31        ! 6  (kg/hr) Inlet Flowrate for Port-31
 CONSTANTS #
 StVolume = 30000            !(m3) volume of storage
 StHeight = 30               !(m) height of storage
-SlAng = 60                  !(�) angle between the top surface and the side wall
+SlAng = 27                  !(°) angle between the horizontal and the side wall
 StNodes = 50
 
 ** calculating the radius ratio needed by this type through the slope angle
 CONSTANTS #
 h = StHeight                ! calculation variable
 V = StVolume                ! calculation variable
-alpha = SlAng*$PI/180               ! calculation variable
-dR = StHeight * tan(alpha)  !(m) Difference between upper radius and lower radius
-!LoRad = -(h^2*$PI^(1/2) - (-(h*($PI*h^3 - 12*V*tan(alpha)^2))/3)^(1/2))/(2*h*$PI^(1/2)*tan(alpha))     !equation solved with matlab to find the lower/bottom radius of the pit storage
+alpha = SlAng               ! calculation variable
+dR = StHeight/TAN(alpha)    !(m) Difference between upper radius and lower radius
 LoRad = (-3*dR + (36*V / ($PI * h) - 3*dR^2)^0.5) / 6
 UpRad = LoRad + dR
 VCalc = $PI*h/3*(LoRad^2+LoRad*UpRad+UpRad^2)
 Ratio = UpRad/LoRad
-h0 = LoRad / tan(alpha)
-hEq = (h0^3+1.5*V/($PI*(tan(alpha))^2))^(1/3)-h0
-nInter = StNodes - hEq*(StNodes-1)/h
 
 
 ** standardization of parameters for every node / layer
@@ -113,7 +109,7 @@ CONSTANTS #
 LUfile       = -1           ! 1  (-) LU for Data File, if -1 then you have to define the parameters after parameter 6, if >0, then you need a DataFile to define the mentioned parameters - for more information see the example project in trnsys studio
 NTankN       = StNodes      ! 2  (-) Number of Tank Nodes
 !NPorts       = 10           ! 3  (-) Number of Ports
-NPorts       = 3           ! 3  (-) Number of Port Pairs
+NPorts       = 3            ! 3  (-) Number of Port Pairs
 NImmHX       = 0            ! 4  (-) Number of Immersed Heat Exchangers
 NMiscHF      = 0            ! 5  (-) Number of Miscellaneous Heat Flows
 NTherSt      = 3            ! 6  (-) Number of Thermostats
@@ -262,16 +258,16 @@ AdTherCond   = 0            ! 27 (kJ/hr.m.K) Additional Thermal Conductivity
 !PP43ExN        = 33           ! 33 (-) Port Pair 43 Exit Node
 
 PP13InM        = 1            ! 28 (-) Port Pair 12 Inlet Mode
-PP13EnN        = 1            ! 29 (-) Port Pair 12 Entry Node
-PP13ExN        = 50           ! 30 (-) Port Pair 12 Exit Node
+PP13EnN        = 2            ! 29 (-) Port Pair 12 Entry Node
+PP13ExN        = 49           ! 30 (-) Port Pair 12 Exit Node
 
 PP23InM        = 1            ! 31 (-) Port Pair 13 Inlet Mode
 PP23EnN        = 25           ! 32 (-) Port Pair 13 Entry Node
-PP23ExN        = 50           ! 33 (-) Port Pair 13 Exit Node
+PP23ExN        = 49           ! 33 (-) Port Pair 13 Exit Node
 
 PP31InM        = 1            ! 31 (-) Port Pair 14 Inlet Mode
-PP31EnN        = 50           ! 32 (-) Port Pair 14 Entry Node
-PP31ExN        = 1            ! 33 (-) Port Pair 14 Exit Node
+PP31EnN        = 49           ! 32 (-) Port Pair 14 Entry Node
+PP31ExN        = 2            ! 33 (-) Port Pair 14 Exit Node
 
 
 FlueOLCoeN1   = FlueOLCoe    ! 34 (kJ/hr.K) Flue Overall Loss Coefficient for Node-1
@@ -438,20 +434,20 @@ AuxHeInpN50  = 0!HeTrN50      ! 18 (kJ/hr) Auxiliary Heat Input for Node-50
 
 UNIT 319 TYPE 1535   ! truncated cone tank model
 PARAMETERS #
-LUfile
-NTankN
-NPorts
-NImmHX
-NMiscHF
-NTherSt
-TankV
-TankH
-RatRad
-FlSpeHeat
-FlDen
-FlThCond
-FlVisc
-FlThExpCoe
+LUfile      ! 1  (-) LU for Data File, if -1 then you have to defi
+NTankN      ! 2  (-) Number of Tank Nodes
+NPorts      ! 3  (-) Number of Ports
+NImmHX      ! 4  (-) Number of Immersed Heat Exchangers
+NMiscHF     ! 5  (-) Number of Miscellaneous Heat Flows
+NTherSt     ! 6  (-) Number of Thermostats
+TankV       ! 7  (m3) Tank Volume
+TankH       ! 8  (m) Tank Height
+RatRad      ! 9  (-) Ratio of Tank Radii
+FlSpeHeat   ! 10 (kJ/kg.K) Specific Heat
+FlDen       ! 11 (kg/m3) Fluid Density
+FlThCond    ! 12 (kJ/hr.m.K) Fluid Thermal Conductivity
+FlVisc      ! 13 (kg/m.hr) Fluid Viscosity
+FlThExpCoe  ! 14 (1/K) Fluid Thermal Expansion Coefficient
 IniTN1
 IniTN2
 IniTN3
@@ -875,67 +871,6 @@ TTankN48 =    [319, 72]     ! 79 (C) Tank Nodal Temperature-48
 TTankN49 =    [319, 73]     ! 80 (C) Tank Nodal Temperature-49
 TTankN50 =    [319, 74]     ! 81 (C) Tank Nodal Temperature-50
 
-! this part of the code calculates the percentage of the storage, which still has the temperature to feed in directly into the district heating
-EQUATIONS 55
-TDef = 85                   ! (�C) defined temperature for feeding the district heating directly
-HLay = StHeight / StNodes   ! (m) height per layer
-RadL1 = UpRad - HLay/(2*tan(SlAng)) ! (m) average radius of layer 1
-dRadL = dR / StNodes                ! (m) difference of of the radius of layer N and layer N-1
-! first part of following equations is to look, if the layer has a temperature below or above the defined temp for DH
-! second part of the equation is to calculate the volumetric percentage of the layer to the whole storage - it is assumed that one layer is cylindrical
-PerN1  = GE(TTankN1 ,TDef) * (HLay*(RadL1-0 *dRadL)^2*$PI/StVolume)
-PerN2  = GE(TTankN2 ,TDef) * (HLay*(RadL1-1 *dRadL)^2*$PI/StVolume)
-PerN3  = GE(TTankN3 ,TDef) * (HLay*(RadL1-2 *dRadL)^2*$PI/StVolume)
-PerN4  = GE(TTankN4 ,TDef) * (HLay*(RadL1-3 *dRadL)^2*$PI/StVolume)
-PerN5  = GE(TTankN5 ,TDef) * (HLay*(RadL1-4 *dRadL)^2*$PI/StVolume)
-PerN6  = GE(TTankN6 ,TDef) * (HLay*(RadL1-5 *dRadL)^2*$PI/StVolume)
-PerN7  = GE(TTankN7 ,TDef) * (HLay*(RadL1-6 *dRadL)^2*$PI/StVolume)
-PerN8  = GE(TTankN8 ,TDef) * (HLay*(RadL1-7 *dRadL)^2*$PI/StVolume)
-PerN9  = GE(TTankN9 ,TDef) * (HLay*(RadL1-8 *dRadL)^2*$PI/StVolume)
-PerN10 = GE(TTankN10,TDef) * (HLay*(RadL1-9 *dRadL)^2*$PI/StVolume)
-PerN11 = GE(TTankN11,TDef) * (HLay*(RadL1-10*dRadL)^2*$PI/StVolume)
-PerN12 = GE(TTankN12,TDef) * (HLay*(RadL1-11*dRadL)^2*$PI/StVolume)
-PerN13 = GE(TTankN13,TDef) * (HLay*(RadL1-12*dRadL)^2*$PI/StVolume)
-PerN14 = GE(TTankN14,TDef) * (HLay*(RadL1-13*dRadL)^2*$PI/StVolume)
-PerN15 = GE(TTankN15,TDef) * (HLay*(RadL1-14*dRadL)^2*$PI/StVolume)
-PerN16 = GE(TTankN16,TDef) * (HLay*(RadL1-15*dRadL)^2*$PI/StVolume)
-PerN17 = GE(TTankN17,TDef) * (HLay*(RadL1-16*dRadL)^2*$PI/StVolume)
-PerN18 = GE(TTankN18,TDef) * (HLay*(RadL1-17*dRadL)^2*$PI/StVolume)
-PerN19 = GE(TTankN19,TDef) * (HLay*(RadL1-18*dRadL)^2*$PI/StVolume)
-PerN20 = GE(TTankN20,TDef) * (HLay*(RadL1-19*dRadL)^2*$PI/StVolume)
-PerN21 = GE(TTankN21,TDef) * (HLay*(RadL1-20*dRadL)^2*$PI/StVolume)
-PerN22 = GE(TTankN22,TDef) * (HLay*(RadL1-21*dRadL)^2*$PI/StVolume)
-PerN23 = GE(TTankN23,TDef) * (HLay*(RadL1-22*dRadL)^2*$PI/StVolume)
-PerN24 = GE(TTankN24,TDef) * (HLay*(RadL1-23*dRadL)^2*$PI/StVolume)
-PerN25 = GE(TTankN25,TDef) * (HLay*(RadL1-24*dRadL)^2*$PI/StVolume)
-PerN26 = GE(TTankN26,TDef) * (HLay*(RadL1-25*dRadL)^2*$PI/StVolume)
-PerN27 = GE(TTankN27,TDef) * (HLay*(RadL1-26*dRadL)^2*$PI/StVolume)
-PerN28 = GE(TTankN28,TDef) * (HLay*(RadL1-27*dRadL)^2*$PI/StVolume)
-PerN29 = GE(TTankN29,TDef) * (HLay*(RadL1-28*dRadL)^2*$PI/StVolume)
-PerN30 = GE(TTankN30,TDef) * (HLay*(RadL1-29*dRadL)^2*$PI/StVolume)
-PerN31 = GE(TTankN31,TDef) * (HLay*(RadL1-30*dRadL)^2*$PI/StVolume)
-PerN32 = GE(TTankN32,TDef) * (HLay*(RadL1-31*dRadL)^2*$PI/StVolume)
-PerN33 = GE(TTankN33,TDef) * (HLay*(RadL1-32*dRadL)^2*$PI/StVolume)
-PerN34 = GE(TTankN34,TDef) * (HLay*(RadL1-33*dRadL)^2*$PI/StVolume)
-PerN35 = GE(TTankN35,TDef) * (HLay*(RadL1-34*dRadL)^2*$PI/StVolume)
-PerN36 = GE(TTankN36,TDef) * (HLay*(RadL1-35*dRadL)^2*$PI/StVolume)
-PerN37 = GE(TTankN37,TDef) * (HLay*(RadL1-36*dRadL)^2*$PI/StVolume)
-PerN38 = GE(TTankN38,TDef) * (HLay*(RadL1-37*dRadL)^2*$PI/StVolume)
-PerN39 = GE(TTankN39,TDef) * (HLay*(RadL1-38*dRadL)^2*$PI/StVolume)
-PerN40 = GE(TTankN40,TDef) * (HLay*(RadL1-39*dRadL)^2*$PI/StVolume)
-PerN41 = GE(TTankN41,TDef) * (HLay*(RadL1-40*dRadL)^2*$PI/StVolume)
-PerN42 = GE(TTankN42,TDef) * (HLay*(RadL1-41*dRadL)^2*$PI/StVolume)
-PerN43 = GE(TTankN43,TDef) * (HLay*(RadL1-42*dRadL)^2*$PI/StVolume)
-PerN44 = GE(TTankN44,TDef) * (HLay*(RadL1-43*dRadL)^2*$PI/StVolume)
-PerN45 = GE(TTankN45,TDef) * (HLay*(RadL1-44*dRadL)^2*$PI/StVolume)
-PerN46 = GE(TTankN46,TDef) * (HLay*(RadL1-45*dRadL)^2*$PI/StVolume)
-PerN47 = GE(TTankN47,TDef) * (HLay*(RadL1-46*dRadL)^2*$PI/StVolume)
-PerN48 = GE(TTankN48,TDef) * (HLay*(RadL1-47*dRadL)^2*$PI/StVolume)
-PerN49 = GE(TTankN49,TDef) * (HLay*(RadL1-48*dRadL)^2*$PI/StVolume)
-PerN50 = GE(TTankN50,TDef) * (HLay*(RadL1-49*dRadL)^2*$PI/StVolume)
-
-HotWatProportion = PerN1+PerN2+PerN3+PerN4+PerN5+PerN6+PerN7+PerN8+PerN9+PerN10+PerN11+PerN12+PerN13+PerN14+PerN15+PerN16+PerN17+PerN18+PerN19+PerN20+PerN21+PerN22+PerN23+PerN24+PerN25+PerN26+PerN27+PerN28+PerN29+PerN30+PerN31+PerN32+PerN33+PerN34+PerN35+PerN36+PerN37+PerN38+PerN39+PerN40+PerN41+PerN42+PerN43+PerN44+PerN45+PerN46+PerN47+PerN48+PerN49+PerN50
-
 ***********************************
 ** Hourly printer
 ***********************************
@@ -1003,8 +938,8 @@ QLosses_kW Q13_kW Q23_kW Q31_kW QDis_kW QAccum_kW QImb_kW
 *************************************
 UNIT 501 TYPE 65     ! Online Plotter HX
 PARAMETERS 12
-10     ! 1 Nb. of left-axis variables
-5     ! 2 Nb. of right-axis variables
+#     ! 1 Nb. of left-axis variables
+#     ! 2 Nb. of right-axis variables
 0     ! 3 Left axis minimum
 100     ! 4 Left axis maximum -
 -10000     ! 5 Right axis minimum
@@ -1015,9 +950,9 @@ $nPlotsPerSim     ! 7 Number of plots per simulation
 -1     ! 10 Logical unit for output file
 0     ! 11 Output file units
 0     ! 12 Output file delimiter
-INPUTS 15
-TTankN1 TTankN5 TTankN10 TTankN15 TTankN20 TTankN30 TTankN35 TTankN40 TTankN45 TTankN50 QAccum_kW QDis_kW QLosses_kW QStore HotWatProportion
-TTankN1 TTankN5 TTankN10 TTankN15 TTankN20 TTankN30 TTankN35 TTankN40 TTankN45 TTankN50 QAccum_kW QDis_kW QLosses_kW QStore HotWatProportion
+INPUTS #
+TTankN1 TTankN5 TTankN10 TTankN15 TTankN20 TTankN30 TTankN35 TTankN40 TTankN45 TTankN50 | QAccum_kW QDis_kW QLosses_kW QStore
+TTankN1 TTankN5 TTankN10 TTankN15 TTankN20 TTankN30 TTankN35 TTankN40 TTankN45 TTankN50 | QAccum_kW QDis_kW QLosses_kW QStore
 LABELS  3
 Temperatures
 EnergyFlows

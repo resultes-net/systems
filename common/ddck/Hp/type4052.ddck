@@ -65,15 +65,15 @@ QLoadMax_kW = 3000
 QLoadMin_kW = 1
 QLoadMax = QLoadMax_kW*1000 ! [W]
 QLoadMin = QLoadMin_kW*1000 ! [W]
-DTLoadMax = 50 !maximum Dt allowed in HTF at evaporator side
+DTLoadMax = 15 !maximum Dt allowed in HTF at evaporator side
 CopMax = 15
 useMassFlowIn = 1
 Mode = 2 ! 1: cooling, 2: heating
 MfrCondMin = 300
 
 EQUATIONS #
-DTEvapInt = 0 !DT between fluid and refrigerant
-DTCondInt = 0 !DT between fluid and refrigerant
+DTEvapInt = 8 !DT between fluid and refrigerant
+DTCondInt = 8 !DT between fluid and refrigerant
 
 UNIT 162 TYPE 4052	! Lorenz Heat Pump Model
 PARAMETERS #

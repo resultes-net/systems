@@ -35,7 +35,7 @@ dtOff            ! Lower dead band dT
 0.0 20.0 0.0 0 dtOn dtOff
 
 EQUATIONS #
-out = [56,1] ! Temperature control
+out = [56,1] ! 1: fluid is conducted to HX; 0: fluid is bypassed
 
 
 

@@ -2,6 +2,10 @@
 **BEGIN tes_printer.ddck
 *************************************
 
+EQUATIONS #
+Qdp1_Tes1_Pos = GE(Qdp1_Tes1,0)*Qdp1_Tes1
+Qdp1_Tes1_Neg = LE(Qdp1_Tes1,0)*Qdp1_Tes1*(-1)
+
 ***********************************
 ** Hourly printer
 ***********************************
@@ -18,12 +22,46 @@ unitPrinter		! 1: Logical unit number, -
 1             		! 4: Printing & integrating interval, h. -1 for monthly integration
 0             		! 5: Number of inputs to avoid integration, -
 INPUTS #
-T1_Tes1 T2_Tes1 T3_Tes1 T4_Tes1 T5_Tes1 T6_Tes1 T7_Tes1 T8_Tes1 T9_Tes1 T10_Tes1 TAvg_Tes1 Tdp1In_Tes1 Tdp1InRev_Tes1 TTesDpL99_4 MTesDpL99_4_A
+T1_Tes1 T2_Tes1 T3_Tes1 T4_Tes1 T5_Tes1 T6_Tes1 T7_Tes1 T8_Tes1 T9_Tes1 T10_Tes1
+TAvg_Tes1
+Tdp1In_Tes1 Tdp1InRev_Tes1 TTesDpL99_4 MTesDpL99_4_A
+Tdp2In_Tes1 Tdp2InRev_Tes1 TTesDpL50_1 MTesDpL50_1_A
+QLoss_Tes1 Qdp1_Tes1 Qdp1_Tes1_Pos Qdp1_Tes1_Neg Qdp2_Tes1 QAcum_Tes1
 **  
-T1_Tes1 T2_Tes1 T3_Tes1 T4_Tes1 T5_Tes1 T6_Tes1 T7_Tes1 T8_Tes1 T9_Tes1 T10_Tes1 TAvg_Tes1 Tdp1In_Tes1 Tdp1InRev_Tes1 TTesDpL99_4 MTesDpL99_4_A
+T1_Tes1 T2_Tes1 T3_Tes1 T4_Tes1 T5_Tes1 T6_Tes1 T7_Tes1 T8_Tes1 T9_Tes1 T10_Tes1
+TAvg_Tes1
+Tdp1In_Tes1 Tdp1InRev_Tes1 TTesDpL99_4 MTesDpL99_4_A
+Tdp2In_Tes1 Tdp2InRev_Tes1 TTesDpL50_1 MTesDpL50_1_A
+QLoss_Tes1 Qdp1_Tes1 Qdp1_Tes1_Pos Qdp1_Tes1_Neg Qdp2_Tes1 QAcum_Tes1
+
+
+***********************************
+** Monthly printer
+***********************************
+CONSTANTS #
+unitPrinterMo = 89
+
+ASSIGN    temp\TES_MO.Prt    unitPrinterMo
+
+UNIT 35 TYPE 46		! Printegrator Monthly Values for System
+PARAMETERS #
+unitPrinterMo		! 1: Logical unit number, -
+-1            		! 2: Logical unit for monthly summaries, -
+1             		! 3: Relative or absolute start time. 0: print at time intervals relative to the simulation start time. 1: print at absolute time intervals. No effect for monthly integrations
+-1             		! 4: Printing & integrating interval, h. -1 for monthly integration
+0             		! 5: Number of inputs to avoid integration, -
+INPUTS #
+Qdp1_Tes1_Pos Qdp1_Tes1_Neg
+**
+Qdp1_Tes1_Pos Qdp1_Tes1_Neg
+
+
+
+
 
 CONSTANTS #
-MMin = -kpriMMax
+MMin = -CollMfrMax
+MMax = CollMfrMax
 
 ***********************************
 ** Online Plotter
@@ -35,7 +73,7 @@ PARAMETERS #
 -1     				! 3: Left axis minimum
 200     			! 4: Left axis maximum
 MMin    			! 5: Right axis minimum
-kpriMMax			! 6: Right axis maximum
+MMax			! 6: Right axis maximum
 nPlotsPerSim		! 7: Number of plots per simulation
 12     				! 8: X-axis gridpoints
 1     				! 9: Shut off Online w/o removing
