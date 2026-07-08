@@ -192,6 +192,7 @@ def _create_parameters_ddck_contents(parameters: _pptes.PtesParameters) -> str:
     demand = parameters.demand
 
     unscaledYearlyHeatDemandMWh = sum(demand.hourly_heat_demand_MW)
+    maxHourlyHeatDemand_kW = max(demand.hourly_heat_demand_MW)
 
     control = parameters.control
 
@@ -213,6 +214,7 @@ $dtSim = {time.dt_sim}
 $QSnkScalingFactor = {demand.scaling_factor:.2}
 $QSnkQUnscaled_MWh = {unscaledYearlyHeatDemandMWh}
 $QSnkQ_MWh = $QSnkScalingFactor*$QSnkQUnscaled_MWh
+$QSnkHourlyMax_kW = {maxHourlyHeatDemand_kW}
 
 $HPsizeUsed = $QSnkQ_MWh/10
 
