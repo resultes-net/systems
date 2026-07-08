@@ -46,14 +46,14 @@ EQUATIONS #
 ***********************************
 ** Dependencies with other ddck
 ***********************************
-
+EQUATIONS #
+QNom = 1000 ! [kW]
 
 ***********************************
 ** Begin CONSTANTS
 ***********************************
 EQUATIONS #
 Mode = 2.0
-QNom = 1000 ! [kW]
 LMTDNom = 5 ! [K]
 UA_kW_K = QNom / LMTDNom ! [kW/K]
 UA = UA_kW_K*3600 ! [kJ/hr.K]
