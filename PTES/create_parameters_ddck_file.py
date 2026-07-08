@@ -216,7 +216,7 @@ $QSnkQUnscaled_MWh = {unscaledYearlyHeatDemandMWh}
 $QSnkQ_MWh = $QSnkScalingFactor*$QSnkQUnscaled_MWh
 $QSnkHourlyMax_kW = {maxHourlyHeatDemand_kW}
 
-$HPsizeUsed = $QSnkQ_MWh/10
+$HPQLoadMax_kW = $QSnkQ_MWh/10
 
 $TSetDem = {control.demand_temperature_setpoint_degC}
 $QSnkdT = {control.demand_delta_T_degC}
