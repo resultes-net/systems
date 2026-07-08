@@ -61,7 +61,6 @@ MfrCondNom = SizeRatio*MfrCondRef		! adapt cond to corrected evap MfrEvapNom*rat
 
 CONSTANTS #
 Eta  = 0.6 !0.45
-QLoadMax_kW = 3000
 QLoadMin_kW = 1
 QLoadMax = QLoadMax_kW*1000 ! [W]
 QLoadMin = QLoadMin_kW*1000 ! [W]
