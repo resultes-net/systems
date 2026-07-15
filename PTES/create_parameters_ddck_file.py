@@ -37,6 +37,8 @@ PREDEFINED_DEMAND_PROFILE_FILE_PATH = (
 
 DEMAND_PROFILE_FILE_PATH = PARAMETERS_DDCK_DIR_PATH / "demand.csv"
 
+IAM_PARAMETERS_FILE_PATH = PARAMETERS_DDCK_DIR_PATH / "SolarCollectorIAM.txt"
+
 
 @_dc.dataclass
 class _SpecifiedVariable:
@@ -251,6 +253,8 @@ def main(parameters_json_file_path: _pl.Path) -> None:
 
     _write_demand_profile(values.demand.hourly_heat_demand_MW)
 
+    _write_iam_parameters_file(values.collector_field.iam)
+
 
 def _write_demand_profile(hourly_heat_demand_MW: _cabc.Sequence[float]) -> None:
     header = "Hourly heat demand [MW]\n"
@@ -260,6 +264,20 @@ def _write_demand_profile(hourly_heat_demand_MW: _cabc.Sequence[float]) -> None:
     demand_profile_contents = header + formatted_hourly_heat_demands
 
     DEMAND_PROFILE_FILE_PATH.write_text(demand_profile_contents)
+
+
+def _write_iam_parameters_file(iam: _pcoll.IAM) -> None:
+    transversal_angles = " ".join(f"{a}" for a in iam.transversal_angles_degC)
+    longitudinal_angles = " ".join(f"{a}" for a in iam.longitudinal_angles_degC)
+    values = "\n".join(f"{v}" for v in iam.values)
+
+    iam_parameters_contents = f"""\
+{transversal_angles}
+{longitudinal_angles}
+{values}
+"""
+
+    IAM_PARAMETERS_FILE_PATH.write_text(iam_parameters_contents)
 
 
 if __name__ == "__main__":
