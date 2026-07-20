@@ -375,11 +375,20 @@ def demand(sim: api.Simulation):
 
 
 def balance(sim: api.Simulation):
+    #### Read solites values ####
+    df_solites = pd.read_csv('solites_balance.csv', sep=r'\s+', header=None)
+    df_solites = df_solites.T
+
+    sim.monthly['solites_solar']    = df_solites[0].values
+    sim.monthly['solites_losses']   = df_solites[4].values
+    sim.monthly['solites_accum']    = df_solites[5].values
+    sim.monthly['solites_aux']      = df_solites[6].values
+    sim.monthly['solites_demand']   = df_solites[7].values
+
+
+
 
     #### Calculations ####
-
-
-
     sim.scalar["QSources"] = (
         sim.scalar["CollP_kW_calc_Tot"]
         + sim.scalar["BolrPOut_kW_Tot"]
@@ -425,42 +434,70 @@ def balance(sim: api.Simulation):
     sim.scalar["qSysOut_PipeLoss_MW"] = sim.monthly["qSysOut_PipeLoss_MW"].sum()
     sim.scalar["QDistrict_MW"] = sim.monthly["QDistrict_MW"].sum()
 
+    # names_legend = [
+    #     "$Q_{Coll}$",
+    #     "$Q_{Boiler}$",
+    #     "$Q_{Source}$",
+    #     "$Q_{Demand}$",
+    #     "$Q_{TTES,Accum}$",
+    #     "$Q_{TTES,Losses}$",
+    #     "$Q_{Pipes}$",
+    #     "$Q_{District}$",
+    #     "$Q_{Imb}$",
+    # ]
+
     names_legend = [
         "$Q_{Coll}$",
-        # "$P_{Comp}$",
         "$Q_{Boiler}$",
-        "$Q_{Source}$",
         "$Q_{Demand}$",
         "$Q_{TTES,Accum}$",
         "$Q_{TTES,Losses}$",
-        "$Q_{Pipes}$",
-        "$Q_{District}$",
         "$Q_{Imb}$",
     ]
 
-    # Monthly
+    # Monthly Resultes
     fig, ax = api.energy_balance(
         sim.monthly,
         q_in_columns=[
             "CollP_kW_calc_MW",
             "BolrPOut_MW",
-            "QSrcP_MW"
         ],
         q_out_columns=[
             "QSnkP_MW",
             "QAcum_Tes1_MW",
             "QLoss_Tes1_MW",
-            "qSysOut_PipeLoss_MW",
-            "QDistrict_MW",
         ],
         xlabel="",
         cmap="Paired",
     )
     ax.set_ylabel("Energy (MWh)")
     plt.legend(names_legend, bbox_to_anchor=(1.05, 1), loc="upper left")
-    # plt.show()
-
     api.export_plots_in_configured_formats(fig, sim.path, "balance-monthly", "balance")
+
+    # Monthly Solites
+    fig, ax = api.energy_balance(
+        sim.monthly,
+        q_in_columns=[
+            "solites_solar",
+            "solites_aux",
+        ],
+        q_out_columns=[
+            "solites_demand",
+            "solites_accum",
+            "solites_losses",
+        ],
+        xlabel="",
+        cmap="Paired",
+    )
+    ax.set_ylabel("Energy (MWh)")
+    plt.legend(names_legend, bbox_to_anchor=(1.05, 1), loc="upper left")
+    api.export_plots_in_configured_formats(fig, sim.path, "balance-solites-monthly", "balance")
+
+    sim.monthly['solites_solar']    = df_solites[0].values
+    sim.monthly['solites_losses']   = df_solites[4].values
+    sim.monthly['solites_accum']    = df_solites[5].values
+    sim.monthly['solites_aux']      = df_solites[6].values
+    sim.monthly['solites_demand']   = df_solites[7].values
 
     # Yearly
     fig, ax = api.energy_balance(
@@ -568,7 +605,7 @@ if __name__ == "__main__":
         sys.exit(-1)
 
     path_to_results_folder = pl.Path(sys.argv[1])
-    api.global_settings.reader.force_reread_prt = True
+    api.global_settings.reader.force_reread_prt = False
     api.global_settings.reader.read_step_files = True
 
     processing_steps = [
