@@ -222,6 +222,13 @@ $QSnkHourlyMax_kW = {maxHourlyHeatDemand_kW}
 
 $HPQLoadMax_kW = $QSnkQ_MWh/10
 
+$CollC0 = {collector_field.performance_coefficients.a0}
+$CollC1 = {collector_field.performance_coefficients.a1_kW_per_m2_per_K}
+$CollC2 = {collector_field.performance_coefficients.a2_kW_per_m2_per_K2}
+$CollC3 = {collector_field.performance_coefficients.a3_kJ_per_m3_per_K}
+$CollC4 = {collector_field.performance_coefficients.a4_1}
+$CollC5 = {collector_field.performance_coefficients.a5_kJ_per_m2_per_K}
+
 $CollNbLgtdAng = {len(collector_field.iam.longitudinal_angles_degC)}
 $CollNbTrsvAng = {len(collector_field.iam.transversal_angles_degC)}
 
