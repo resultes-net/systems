@@ -157,9 +157,18 @@ def test_get_solved_equations() -> None:
             "orientation_east_west_deg": 0.0,
             "type": "flat-plate",
             "performance_coefficients": {
-                "a0": 0.857,
-                "a1_kW_per_m2_per_K": 0.00416,
-                "a2_kW_per_m2_per_K2": 8.9e-06,
+                "a0_1": 0.737,
+                "a1_kW_per_m2_per_K": 0.0005,
+                "a2_kW_per_m2_per_K2": 6e-06,
+                "a3_kJ_per_m3_per_K": 0,
+                "a4_1": 0,
+                "a5_kJ_per_m2_per_K": 15.32,
+            },
+            "iam": {
+                "name": "coarseIAM.txt",
+                "transversal_angles_degC": [0, 45, 90],
+                "longitudinal_angles_degC": [0, 45, 90],
+                "values": [0, 0, 0, 0, 0, 0, 0, 0, 1],
             },
             "nominal_massflow": {
                 "scaling": "relative_to_collector_area_kg_per_h_m2",
