@@ -196,9 +196,11 @@ def _create_parameters_ddck_contents(parameters: _pptes.PtesParameters) -> str:
     unscaledYearlyHeatDemandMWh = sum(demand.hourly_heat_demand_MW)
     maxHourlyHeatDemand_kW = max(demand.hourly_heat_demand_MW)
 
-    control = parameters.control
+    collector_field = parameters.collector_field
 
     port_heights = parameters.storage.ports_relative_heights_1
+
+    control = parameters.control
 
     formatted_specified_and_solved_variables_block = (
         _get_formatted_specified_variables_and_solved_equations(parameters)
@@ -220,13 +222,16 @@ $QSnkHourlyMax_kW = {maxHourlyHeatDemand_kW}
 
 $HPQLoadMax_kW = $QSnkQ_MWh/10
 
-$TSetDem = {control.demand_temperature_setpoint_degC}
-$QSnkdT = {control.demand_delta_T_degC}
-$TTesMax = {control.storage_temperature_maximum_degC}
+$CollNbLgtdAng = {len(collector_field.iam.longitudinal_angles_degC)}
+$CollNbTrsvAng = {len(collector_field.iam.transversal_angles_degC)}
 
 $psPtesPortsHeightRelTop = {port_heights.top}
 $psPtesPortsHeightRelMiddle = {port_heights.middle}
 $psPtesPortsHeightRelBottom = {port_heights.bottom}
+
+$TSetDem = {control.demand_temperature_setpoint_degC}
+$QSnkdT = {control.demand_delta_T_degC}
+$TTesMax = {control.storage_temperature_maximum_degC}
 
 {formatted_specified_and_solved_variables_block}
 
