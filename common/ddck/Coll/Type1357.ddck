@@ -53,7 +53,6 @@ IT_kW     = IT_kWm2 * ACollAp
 
 CONSTANTS #
 !Inputs
-AziAg      = 0
 EmGnd      = 0.95
 Mode_ctrl  = 4
 MfrNomNorm = 20                 ! [kg/h/m2]
@@ -100,7 +99,7 @@ $ID_surfUser_1          ! 6: Sky Diffuse Radiation on Tilt [kJ/hr.m^2] ([0.0,+In
 $IDG_surfUser_1         ! 7: Ground Diffuse Radiation on Tilt [kJ/hr.m^2] ([0.0,+Inf])
 $slopeSurfUser_1        ! 8: Collector Slope [degrees] ([-360,+360])
 $AI_surfUser_1          ! 9: Incidence Angle [degrees] ([-360,+360])
-AziAg                   ! 10: Collector Azimuth Angle [degrees] ([-360,+360])
+$aziSurfUser_1                   ! 10: Collector Azimuth Angle [degrees] ([-360,+360])
 $AISZ                   ! 11: Solar Zenith Angle [degrees] ([0,90])
 $AISA                   ! 12: Solar Azimuth Angle [degrees] ([0,90])
 $vWind                  ! 13: Wind Velocity [m/s] ([0.,+Inf])
