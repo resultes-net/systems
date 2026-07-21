@@ -27,7 +27,7 @@ Ghi = $IT_H
 PuQSrcPriOn = GT($QSrcM, 0)
 
 TTes = $TTesTop
-TTesMax = $SolarControlTTesMax - 3
+TTesMax = $TTesMax - 3
 
 
 ***********************************
