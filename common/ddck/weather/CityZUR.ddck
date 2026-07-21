@@ -25,9 +25,9 @@ unitWeatherData=38
 unitWeatherData2=39
 unitWeatherData3=40
 
-ASSIGN ..\..\ddck\weather\CH-Zuerich-Kloten-66700.tm2 unitWeatherData
-ASSIGN ..\..\ddck\weather\CH-Zuerich-Kloten-66700.tm2 unitWeatherData2
-ASSIGN ..\..\ddck\weather\CH-Zuerich-Kloten-66700.tm2 unitWeatherData3
+ASSIGN ..\..\..\common\ddck\weather\CH-Zuerich-Kloten-66700.tm2 unitWeatherData
+ASSIGN ..\..\..\common\ddck\weather\CH-Zuerich-Kloten-66700.tm2 unitWeatherData2
+ASSIGN ..\..\..\common\ddck\weather\CH-Zuerich-Kloten-66700.tm2 unitWeatherData3
 
 
 *******************************
