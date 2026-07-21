@@ -35,7 +35,7 @@ EQUATIONS #
 EQUATIONS 1
 profileSrcUnit = 104
 
-ASSIGN  "C:\Daten\GIT\systems\common\ddck\QSrc\src_profile_mfr_T.csv" profileSrcUnit
+ASSIGN  "..\..\..\common\ddck\QSrc\src_profile_mfr_T.csv" profileSrcUnit
 UNIT 41 TYPE 9
 PARAMETERS #
 5     ! 1 Mode
