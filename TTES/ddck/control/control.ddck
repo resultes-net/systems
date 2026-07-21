@@ -9,11 +9,11 @@ TRoomStore = tAmb
 ** Collectors
 MfrPuCollPri = SolarControlPuPriOn * CollMfrOut !MfrPuCollPriSet
 MfrPuCollSec = SolarControlPuSecOn * MfrPuCollPri * Lloop2Cp/Lloop5Cp !1000.0
-TSetColl = TSetDem + 20
+TSetColl = TSetDem + HxCollLMTDNom + 3
 
 ** Auxiliary source
 MfrQSrc = QSrcM
-MfrPuQSrcSec = MfrQSrc !1000.0
+MfrPuQSrcSec = MfrQSrc*QSrcControlPuQSrcSecOn !1000.0
 MfrSources = MfrPuCollSec + MfrPuQSrcSec
 
 !$MfrQAddSrc = $QAddSrcM

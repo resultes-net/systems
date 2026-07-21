@@ -370,9 +370,6 @@ def demand(sim: api.Simulation):
 def balance(sim: api.Simulation):
 
     #### Calculations ####
-
-
-
     sim.scalar["QSources"] = (
         sim.scalar["CollP_kW_calc_Tot"]
         + sim.scalar["BolrPOut_kW_Tot"]

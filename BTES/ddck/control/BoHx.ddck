@@ -4,43 +4,21 @@
 
 ***************************************************************************
 ** This controller rules the charging/discharging processes of the boreholes.
-** These conditions must be met at the same time:
-**      1. If the temperature in the buffer tank is higher than the average temperature of the
-**      soil, the charging mode is enabled (with a deadband). Otherwise, the discharging
-**      mode is enabled, alongside the respective cheat pump.
-**      2. The outlet temperature from the boreholes must be lower than the inlet.
+** We charge the boreholes when:
+**      1. The intermediate temperature of the buffer tank is higher than its set-point.
+** We discharge the boreholes when:
+**      1. The upper temperature of the buffer tank is lower than its set-point.
 ***************************************************************************
 
 ***********************************
-** Control Temperatures
+** Deadband control for charging of BTES
 ***********************************
 
 EQUATIONS #
-THigh = $TesTsen7_Tes1
-!TLow = $BoHxTGroundAve
-TLow = $TSetTes
-TMon = THigh
-TMonMax = 150
-
-
-***********************************
-** Borehole mode activation
-***********************************
-
-!EQUATIONS #
-!OnChar = GT($TesT5_Tes1, $TSetTes) !+10)
-!OnDischar = LT($TesT10_Tes1, $TSetTes-10)
-
-
-***********************************
-** Deadband control for charging
-***********************************
-
-EQUATIONS #
-TOnCharHigh = $TesT5_Tes1
+TOnCharHigh = $TesT5_Tes1 !$TesT10_Tes1
 TOnCharLow = $TSetTes
-dTOnCharOn = 0
-dTOnCharOff = -5
+dTOnCharOn = 4
+dTOnCharOff = 1
 
 
 UNIT 55 TYPE 2
@@ -60,14 +38,14 @@ EQUATIONS #
 OnChar = [55,1] ! Temperature control
 
 ***********************************
-** Deadband control for discharging
+** Deadband control for discharging of BTES
 ***********************************
 
 EQUATIONS #
 TOnDischarHigh = $TSetTes
-TOnDischarLow = $TesT10_Tes1
-dTOnDischarOn = 10
-dTOnDischarOff = 0
+TOnDischarLow = $TesT6_Tes1
+dTOnDischarOn = 4 !10
+dTOnDischarOff = 1! 5
 
 
 UNIT 56 TYPE 2

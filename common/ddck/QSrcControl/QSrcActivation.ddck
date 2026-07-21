@@ -1,0 +1,118 @@
+***************************************************
+**Solar controller
+**************************************************
+
+*****************************************
+** Contact person : Mikel Arenas
+** Creation date  : 02.07.2025
+** Last changes   :
+*****************************************
+
+***************************************************************************
+** This controller rules the activation of the secondary loop pump
+** of the auxiliary heat source:
+**      Secondary loop: primary loop, temperature difference and tank temperature.
+***************************************************************************
+
+
+***********************************
+** Inputs from other ddcks
+***********************************
+
+EQUATIONS #
+THigh = $QSrcTOut
+TLow = MAX($TNetReturn, $TTesBottom)
+TMon = $QSrcTOut
+Ghi = $IT_H
+PuQSrcPriOn = GT($QSrcM, 0)
+
+TTes = $TTesTop
+TTesMax = $SolarControlTTesMax - 3
+
+
+***********************************
+** Outputs to other ddcks
+***********************************
+
+EQUATIONS #
+PuQSrcSecOn = PuQSrcPriOn * PuQSrcSecTemp * PuQSrcSecTes!*NOT(Stag) ! Activation of secondary loop pump: primary loop pump and temperature difference
+
+***********************************
+** Secondary loop pump
+***********************************
+
+CONSTANTS #
+TMonMax = 999   ! Maximum monitored temperature
+
+** Temperature difference
+CONSTANTS #
+DtOn = 5       ! Upper dead band collector pump ON
+DtOff = -5     ! Upper dead band collector pump OFF
+
+
+UNIT 55 TYPE 2
+PARAMETERS 2
+5               ! 1 No. of oscillations
+TMonMax         ! 2 High limit cut-out
+INPUTS 6
+THigh           ! 1 Upper input temperature Th
+TLow            ! 2 Lower input temperature Tl
+TMon            ! 3 Monitoring temperature Tin
+PuQSrcSecTemp    ! 4 70,1 Input control function
+!puColOnPri      ! 4 70,1 Input control function
+DtOn            ! 5 Upper dead band dT
+DtOff           ! 6 Lower dead band dT
+0.0 20.0 0.0 0 DtOn DtOff
+
+EQUATIONS #
+PuQSrcSecTemp = [55,1] ! Temperature difference
+
+** Maximum TES temperature
+CONSTANTS #
+DtTesOn = 3      ! Upper dead band collector pump ON
+DtTesOff = 0     ! Upper dead band collector pump OFF
+
+UNIT 56 TYPE 2
+PARAMETERS 2
+5               ! 1 No. of oscillations
+TMonMax         ! 2 High limit cut-out
+INPUTS 6
+TTesMax           ! 1 Upper input temperature Th
+TTes            ! 2 Lower input temperature Tl
+TMon            ! 3 Monitoring temperature Tin
+PuQSrcSecTes    ! 4 70,1 Input control function
+!puColOnPri      ! 4 70,1 Input control function
+DtTesOn            ! 5 Upper dead band dT
+DtTesOff           ! 6 Lower dead band dT
+0.0 20.0 0.0 0 DtTesOn DtTesOff
+
+EQUATIONS #
+PuQSrcSecTes = [56,1]
+
+*************************************
+********** Online Plotter ***********
+*************************************
+
+UNIT 501 TYPE 65     ! Online Plotter HX
+PARAMETERS 12
+#                   ! 1 Nb. of left-axis variables
+#                   ! 2 Nb. of right-axis variables
+0                   ! 3 Left axis minimum
+200                 ! 4 Left axis maximum -
+0                   ! 5 Right axis minimum
+2                   ! 6 Right axis maximum
+$nPlotsPerSim       ! 7 Number of plots per simulation
+12                  ! 8 X-axis gridpoints
+1                   ! 9 Shut off Online w/o removing
+-1                  ! 10 Logical unit for output file
+0                   ! 11 Output file units
+0                   ! 12 Output file delimiter
+INPUTS #
+THigh TLow TMon TMonMax  | PuQSrcPriOn PuQSrcSecOn
+THigh TLow TMon TMonMax  | PuQSrcPriOn PuQSrcSecOn
+LABELS  3
+Temperatures
+MassFlows
+AuxiliarySrc_control
+
+

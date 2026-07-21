@@ -182,7 +182,7 @@ INPUTS 91! for Type 9351
 0,0 0,0 0,0 0,0 0,0 MfrQSnk 0,0 0,0 0,0 MfrPuCollPri 
 0,0 MfrPuCollSec 0,0 MfrQSrc 0,0 0,0 0,0 0,0 xFracValHPSec xFracValHXSec 
 0,0 0,0 0,0 0,0 xFracValHXPri xFracValHPPri 0,0 0,0 0,0 0,0 
-0,0 0,0 0,0 0,0 0,0 MfrPuSrcSec 0,0 0,0 xFracValMix 0,0 
+0,0 0,0 0,0 0,0 0,0 MfrPuQSrcSec 0,0 0,0 xFracValMix 0,0
 0,0 MfrPump 0,0 0,0 xFracValStrat 0,0 0,0 0,0 0,0 0,0 
 0,0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 
 0,0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 
