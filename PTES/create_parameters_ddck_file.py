@@ -7,6 +7,7 @@ import typing as _tp
 
 import pydantic as _pyd
 import resultes_pydantic_models.simulations.parameters.common.collector_field as _pcoll
+import resultes_pydantic_models.simulations.parameters.common.waste_heat_recovery_source as _pwhrs
 import resultes_pydantic_models.simulations.parameters.ptes as _pptes
 import resultes_pydantic_models.simulations.parameters.ptes.parameters.thermal_energy_storage as _pptess
 import resultes_pydantic_models.simulations.simulation as _sim
@@ -36,6 +37,8 @@ PREDEFINED_DEMAND_PROFILE_FILE_PATH = (
 )
 
 DEMAND_PROFILE_FILE_PATH = PARAMETERS_DDCK_DIR_PATH / "demand.csv"
+
+WHR_SOURCE_SUPPLY_PROFILE_PATH = PARAMETERS_DDCK_DIR_PATH / "src_profile_mfr_T.csv"
 
 IAM_PARAMETERS_FILE_PATH = PARAMETERS_DDCK_DIR_PATH / "SolarCollectorIAM.txt"
 
@@ -183,6 +186,13 @@ def test_get_solved_equations() -> None:
                 "bottom": 0.05,
             },
         },
+        "waste_heat_recovery_source": {
+            "name": "constant.csv",
+            "hourly_values": [
+                {"mass_flow_rate_kg_per_h": 500, "temperature_deg_C": 35}
+                for _ in range(365 * 24)
+            ],
+        },
         "control": {
             "demand_temperature_setpoint_degC": 80.0,
             "demand_delta_T_degC": 30.0,
@@ -277,17 +287,34 @@ def main(parameters_json_file_path: _pl.Path) -> None:
 
     _write_demand_profile(values.demand.hourly_heat_demand_MW)
 
+    _write_whr_source_supply_profile(values.waste_heat_recovery_source)
+
     _write_iam_parameters_file(values.collector_field.iam)
 
 
 def _write_demand_profile(hourly_heat_demand_MW: _cabc.Sequence[float]) -> None:
-    header = "Hourly heat demand [MW]\n"
+    header = '"Hourly heat demand [MW]"\n'
 
     formatted_hourly_heat_demands = "\n".join(str(p) for p in hourly_heat_demand_MW)
 
     demand_profile_contents = header + formatted_hourly_heat_demands
 
     DEMAND_PROFILE_FILE_PATH.write_text(demand_profile_contents)
+
+
+def _write_whr_source_supply_profile(
+    waste_heat_recovery_soruce: _pwhrs.WasteHeatRecoverySource,
+) -> None:
+    header = '"Mass flow rate [kg/h]" "Temperature [°C]"\n'
+
+    formatted_rows = "\n".join(
+        f"{v.mass_flow_rate_kg_per_h} {v.temperature_deg_C}"
+        for v in waste_heat_recovery_soruce.hourly_values
+    )
+
+    whr_source_supply_profile_contents = header + formatted_rows
+
+    WHR_SOURCE_SUPPLY_PROFILE_PATH.write_text(whr_source_supply_profile_contents)
 
 
 def _write_iam_parameters_file(iam: _pcoll.IAM) -> None:

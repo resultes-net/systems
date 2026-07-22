@@ -5,11 +5,6 @@
 ***********************************
 ** Parameters
 ***********************************
-CONSTANTS #
-
-MUnscaled = 500
-MWanted = MUnscaled
-Scaling = MWanted/MUnscaled
 
 ***********************************
 ** inputs from hydraulic solver
@@ -48,7 +43,7 @@ profileSrcUnit ! 9 Logical unit for input file (used to be 18)
 -1 ! 10 Free format mode
 
 EQUATIONS #
-M = Scaling*[41,1]   !Mass flow rate of sink read from profile
+M = [41,1]   !Mass flow rate of sink read from profile
 TOut = [41,2]
 P_kW = M/3600*cp*(TOut-TIn)
 
