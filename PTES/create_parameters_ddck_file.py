@@ -277,7 +277,7 @@ def main(parameters_json_file_path: _pl.Path) -> None:
     with parameters_json_file_path.open("r") as file:
         data = _json.load(file)
 
-    simulation = _sim.Simulation(**data)
+    simulation = _sim.SimulationWithParams(**data)
 
     values = simulation.parameters.values
     assert isinstance(values, _pptes.PtesParameters)
@@ -297,22 +297,24 @@ def _write_demand_profile(hourly_heat_demand_MW: _cabc.Sequence[float]) -> None:
 
     formatted_hourly_heat_demands = "\n".join(str(p) for p in hourly_heat_demand_MW)
 
-    demand_profile_contents = header + formatted_hourly_heat_demands
+    demand_profile_contents = header + formatted_hourly_heat_demands + "\n"
 
     DEMAND_PROFILE_FILE_PATH.write_text(demand_profile_contents)
 
 
 def _write_whr_source_supply_profile(
-    waste_heat_recovery_soruce: _pwhrs.WasteHeatRecoverySource,
+    waste_heat_recovery_source: _pwhrs.WasteHeatRecoverySource,
 ) -> None:
     header = '"Mass flow rate [kg/h]" "Temperature [°C]"\n'
 
-    formatted_rows = "\n".join(
-        f"{v.mass_flow_rate_kg_per_h} {v.temperature_deg_C}"
-        for v in waste_heat_recovery_soruce.hourly_values
+    rows = zip(
+        waste_heat_recovery_source.mass_flow_rates_kg_per_h,
+        waste_heat_recovery_source.temperatures_deg_C,
     )
 
-    whr_source_supply_profile_contents = header + formatted_rows
+    formatted_rows = "\n".join(f"{m} {t}" for m, t in rows)
+
+    whr_source_supply_profile_contents = header + formatted_rows + "\n"
 
     WHR_SOURCE_SUPPLY_PROFILE_PATH.write_text(whr_source_supply_profile_contents)
 
