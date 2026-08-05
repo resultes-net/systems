@@ -6,8 +6,6 @@ import sys as _sys
 import typing as _tp
 
 import pydantic as _pyd
-import resultes_pydantic_models.simulations.parameters.common.collector_field as _pcoll
-import resultes_pydantic_models.simulations.parameters.common.waste_heat_recovery_source as _pwhrs
 import resultes_pydantic_models.simulations.parameters.ptes as _pptes
 import resultes_pydantic_models.simulations.parameters.ptes.parameters.thermal_energy_storage as _pptess
 import resultes_pydantic_models.simulations.simulation as _sim
@@ -16,14 +14,12 @@ import sympy as _sym
 demand_MWh = _sym.Symbol("$QSnkQ_MWh")
 
 collector_area_m2 = _sym.Symbol("$CollAcollAp")
-collector_area_m2_per_MWh = _sym.Symbol("AperDemand_m2_per_MWh")
 
 pit_store_volume_m3 = _sym.Symbol("$pitStoreStVolume")
 pit_store_volume_m3_per_MWh = _sym.Symbol("VperDemand_m3_per_MWh")
 pit_store_volume_m3_per_m2 = _sym.Symbol("VperCollArea_m3_per_m2")
 
 equations = [
-    _sym.Eq(collector_area_m2, collector_area_m2_per_MWh * demand_MWh),
     _sym.Eq(pit_store_volume_m3, pit_store_volume_m3_per_MWh * demand_MWh),
     _sym.Eq(pit_store_volume_m3, pit_store_volume_m3_per_m2 * collector_area_m2),
 ]
@@ -31,16 +27,6 @@ equations = [
 PARAMETERS_DDCK_DIR_PATH = _pl.Path(__file__).parent / "ddck" / "parameters"
 
 PARAMETERS_DDCK_FILE_PATH = PARAMETERS_DDCK_DIR_PATH / "parameters.ddck"
-
-PREDEFINED_DEMAND_PROFILE_FILE_PATH = (
-    _pl.Path(__file__).parents[1] / "common" / "ddck" / "QSnk" / "profile_norm.csv"
-)
-
-DEMAND_PROFILE_FILE_PATH = PARAMETERS_DDCK_DIR_PATH / "demand.csv"
-
-WHR_SOURCE_SUPPLY_PROFILE_PATH = PARAMETERS_DDCK_DIR_PATH / "src_profile_mfr_T.csv"
-
-IAM_PARAMETERS_FILE_PATH = PARAMETERS_DDCK_DIR_PATH / "SolarCollectorIAM.txt"
 
 
 @_dc.dataclass
@@ -51,18 +37,13 @@ class _SpecifiedVariable:
 
 
 def get_specified_variables_and_solution(
-    parameters: _pptes.PtesParameters,
+    parameters: _pptes.PtesSpecificParameters,
 ) -> tuple[_cabc.Sequence[_SpecifiedVariable], _cabc.Mapping[_sym.Symbol, _sym.Expr]]:
-    collector_field_area_specified_variable = (
-        _get_collector_field_area_specified_variable(parameters.collector_field)
-    )
-
     pit_store_volume_specified_variable = _get_pit_store_volume_specified_variable(
         parameters.storage
     )
 
     variables_to_solve_for = [
-        *collector_field_area_specified_variable.variables_to_solve_for,
         *pit_store_volume_specified_variable.variables_to_solve_for,
     ]
 
@@ -72,27 +53,10 @@ def get_specified_variables_and_solution(
     solution = _tp.cast(_cabc.Mapping[_sym.Symbol, _sym.Expr], solutions[0])
 
     specified_variables = [
-        collector_field_area_specified_variable,
         pit_store_volume_specified_variable,
     ]
 
     return specified_variables, solution
-
-
-def _get_collector_field_area_specified_variable(
-    collector_field: _pcoll.CollectorField,
-) -> _SpecifiedVariable:
-    area = collector_field.area
-
-    scaling = area.scaling
-    value = area.value
-
-    if scaling == "absolute_m2":
-        return _SpecifiedVariable(collector_area_m2, value, [collector_area_m2_per_MWh])
-    if scaling == "relative_to_demand_m2_per_MWh":
-        return _SpecifiedVariable(collector_area_m2_per_MWh, value, [collector_area_m2])
-
-    _tp.assert_never(scaling)
 
 
 def _get_pit_store_volume_specified_variable(
@@ -126,7 +90,7 @@ def _get_pit_store_volume_specified_variable(
 
 
 def _get_formatted_specified_variables_and_solved_equations(
-    parameters: _pptes.PtesParameters,
+    parameters: _pptes.PtesSpecificParameters,
 ) -> str:
     specified_variables, solution = get_specified_variables_and_solution(parameters)
 
@@ -148,36 +112,6 @@ def _get_formatted_specified_variables_and_solved_equations(
 def test_get_solved_equations() -> None:
     data: _pyd.JsonValue = {
         "type": "ptes",
-        "time": {"start": 5760, "stop": 17280, "dt_sim": 0.5},
-        "demand": {
-            "name": "synthetic",
-            "scaling_factor": 2,
-            "hourly_heat_demand_MW": [3 if i % 2 == 0 else 5 for i in range(365 * 24)],
-        },
-        "collector_field": {
-            "area": {"scaling": "relative_to_demand_m2_per_MWh", "value": 4.0},
-            "inclination_deg": 45.0,
-            "orientation_east_west_deg": 0.0,
-            "type": "flat-plate",
-            "performance_coefficients": {
-                "a0_1": 0.737,
-                "a1_kW_per_m2_per_K": 0.0005,
-                "a2_kW_per_m2_per_K2": 6e-06,
-                "a3_kJ_per_m3_per_K": 0,
-                "a4_1": 0,
-                "a5_kJ_per_m2_per_K": 15.32,
-            },
-            "iam": {
-                "name": "coarseIAM.txt",
-                "transversal_angles_degC": [0, 45, 90],
-                "longitudinal_angles_degC": [0, 45, 90],
-                "values": [0, 0, 0, 0, 0, 0, 0, 0, 1],
-            },
-            "nominal_massflow": {
-                "scaling": "relative_to_collector_area_kg_per_h_m2",
-                "value": 15.0,
-            },
-        },
         "storage": {
             "volume": {"scaling": "absolute_m3", "value": 400},
             "ports_relative_heights_1": {
@@ -186,40 +120,17 @@ def test_get_solved_equations() -> None:
                 "bottom": 0.05,
             },
         },
-        "waste_heat_recovery_source": {
-            "name": "constant.csv",
-            "hourly_values": [
-                {"mass_flow_rate_kg_per_h": 500, "temperature_deg_C": 35}
-                for _ in range(365 * 24)
-            ],
-        },
-        "control": {
-            "demand_temperature_setpoint_degC": 80.0,
-            "demand_delta_T_degC": 30.0,
-            "storage_temperature_maximum_degC": 85.0,
-        },
     }
 
-    parameters = _pptes.PtesParameters(**data)
+    parameters = _pptes.PtesSpecificParameters(**data)
 
     result = _create_parameters_ddck_contents(parameters)
 
     print(result)
 
 
-def _create_parameters_ddck_contents(parameters: _pptes.PtesParameters) -> str:
-    time = parameters.time
-
-    demand = parameters.demand
-
-    unscaledYearlyHeatDemandMWh = sum(demand.hourly_heat_demand_MW)
-    maxHourlyHeatDemand_kW = max(demand.hourly_heat_demand_MW)
-
-    collector_field = parameters.collector_field
-
+def _create_parameters_ddck_contents(parameters: _pptes.PtesSpecificParameters) -> str:
     port_heights = parameters.storage.ports_relative_heights_1
-
-    control = parameters.control
 
     formatted_specified_and_solved_variables_block = (
         _get_formatted_specified_variables_and_solved_equations(parameters)
@@ -230,37 +141,9 @@ def _create_parameters_ddck_contents(parameters: _pptes.PtesParameters) -> str:
 **BEGIN parameters.ddck 
 *******************************
 CONSTANTS #
-$START = {time.start}
-$STOP = {time.stop}
-$dtSim = {time.dt_sim}
-
-$QSnkScalingFactor = {demand.scaling_factor:.2}
-$QSnkQUnscaled_MWh = {unscaledYearlyHeatDemandMWh}
-$QSnkQ_MWh = $QSnkScalingFactor*$QSnkQUnscaled_MWh
-$QSnkHourlyMax_kW = {maxHourlyHeatDemand_kW}
-
-$HPQLoadMax_kW = $QSnkQ_MWh/10
-
-$slopeSurfUser_1 = {collector_field.inclination_deg}
-$aziSurfUser_1 = {collector_field.orientation_east_west_deg}
-
-$CollC0 = {collector_field.performance_coefficients.a0_1}
-$CollC1 = {collector_field.performance_coefficients.a1_kW_per_m2_per_K}
-$CollC2 = {collector_field.performance_coefficients.a2_kW_per_m2_per_K2}
-$CollC3 = {collector_field.performance_coefficients.a3_kJ_per_m3_per_K}
-$CollC4 = {collector_field.performance_coefficients.a4_1}
-$CollC5 = {collector_field.performance_coefficients.a5_kJ_per_m2_per_K}
-
-$CollNbLgtdAng = {len(collector_field.iam.longitudinal_angles_degC)}
-$CollNbTrsvAng = {len(collector_field.iam.transversal_angles_degC)}
-
-$psPtesPortsHeightRelTop = {port_heights.top}
-$psPtesPortsHeightRelMiddle = {port_heights.middle}
-$psPtesPortsHeightRelBottom = {port_heights.bottom}
-
-$TSetDem = {control.demand_temperature_setpoint_degC}
-$QSnkdT = {control.demand_delta_T_degC}
-$TTesMax = {control.storage_temperature_maximum_degC}
+PtesPortsHeightRelTop = {port_heights.top}
+PtesPortsHeightRelMiddle = {port_heights.middle}
+PtesPortsHeightRelBottom = {port_heights.bottom}
 
 {formatted_specified_and_solved_variables_block}
 
@@ -280,57 +163,10 @@ def main(parameters_json_file_path: _pl.Path) -> None:
     simulation = _sim.SimulationWithParams(**data)
 
     values = simulation.parameters.values
-    assert isinstance(values, _pptes.PtesParameters)
+    assert isinstance(values, _pptes.PtesSpecificParameters)
 
     parameters_ddck_contents = _create_parameters_ddck_contents(values)
     PARAMETERS_DDCK_FILE_PATH.write_text(parameters_ddck_contents)
-
-    _write_demand_profile(values.demand.hourly_heat_demand_MW)
-
-    _write_whr_source_supply_profile(values.waste_heat_recovery_source)
-
-    _write_iam_parameters_file(values.collector_field.iam)
-
-
-def _write_demand_profile(hourly_heat_demand_MW: _cabc.Sequence[float]) -> None:
-    header = '"Hourly heat demand [MW]"\n'
-
-    formatted_hourly_heat_demands = "\n".join(str(p) for p in hourly_heat_demand_MW)
-
-    demand_profile_contents = header + formatted_hourly_heat_demands + "\n"
-
-    DEMAND_PROFILE_FILE_PATH.write_text(demand_profile_contents)
-
-
-def _write_whr_source_supply_profile(
-    waste_heat_recovery_source: _pwhrs.WasteHeatRecoverySource,
-) -> None:
-    header = '"Mass flow rate [kg/h]" "Temperature [°C]"\n'
-
-    rows = zip(
-        waste_heat_recovery_source.mass_flow_rates_kg_per_h,
-        waste_heat_recovery_source.temperatures_deg_C,
-    )
-
-    formatted_rows = "\n".join(f"{m} {t}" for m, t in rows)
-
-    whr_source_supply_profile_contents = header + formatted_rows + "\n"
-
-    WHR_SOURCE_SUPPLY_PROFILE_PATH.write_text(whr_source_supply_profile_contents)
-
-
-def _write_iam_parameters_file(iam: _pcoll.IAM) -> None:
-    transversal_angles = " ".join(f"{a}" for a in iam.transversal_angles_degC)
-    longitudinal_angles = " ".join(f"{a}" for a in iam.longitudinal_angles_degC)
-    values = "\n".join(f"{v}" for v in iam.values)
-
-    iam_parameters_contents = f"""\
-{transversal_angles}
-{longitudinal_angles}
-{values}
-"""
-
-    IAM_PARAMETERS_FILE_PATH.write_text(iam_parameters_contents)
 
 
 if __name__ == "__main__":
