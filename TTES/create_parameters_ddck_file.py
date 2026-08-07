@@ -32,7 +32,7 @@ tank_lambda_W_per_m_K = create_real_positive_symbol("tankLambda_W_per_m_K")
 tank_U_value_W_per_m2_K = create_real_positive_symbol("$Ufoam_Tes1")
 tank_insulation_thickness_cm = create_real_positive_symbol("tankInsulation_cm")
 
-pi = create_real_positive_symbol("PI")
+pi = create_real_positive_symbol("$PI")
 
 equations = [
     _sym.Eq(tank_volume_m3, tank_volume_m3_per_MWh * demand_MWh),
