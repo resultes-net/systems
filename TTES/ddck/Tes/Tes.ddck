@@ -51,14 +51,6 @@ CONSTANTS 2
 !TRoomStore=15 !
 VStoreRef = 0.763
 ratioTes1 = Vol_Tes1 / VStoreRef
-*********Connecting values of DIRECT PORT=1***********
-CONSTANTS 2
-zInDp1_Tes1=0.99
-zOutDp1_Tes1=0.04
-*********Connecting values of DIRECT PORT=2***********
-CONSTANTS 2
-zInDp2_Tes1=0.50
-zOutDp2_Tes1=0.01
 *********Constant of DIRECT PORT=1***********
 CONSTANTS 1
 Dp1Strat_Tes1=0 ! 0: no forced stratification ; 1: force to stratify
@@ -109,8 +101,7 @@ maxTDiff_Tes1=0.015 ! 9: K, maximum temperature difference between plugs
 readMode_Tes1=0     ! 10: 1: from table, 0: Tini and CapTot
 Tref_Tes1=273.15    ! 11: oC, reference temperature
 Tmax_Tes1=100.       ! 6: oC, initial temperature
-CONSTANTS 10
-Ufoam_Tes1= 0.67 ! W/(m2K) 6 cm of foam of 0.04 W/(mK) 
+CONSTANTS #
 Ubot_Tes1 = 1.5 ! W/(m2K) 2 cm of foam of 0.04 W/(mK)
 Atop_Tes1 = Vol_Tes1/Heigh_Tes1 ! m2
 Diameter_Tes1 = (4*ATop_Tes1/PI)^0.5 ! m 
