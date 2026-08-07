@@ -23,7 +23,6 @@ MfrSources = MfrPuCollSec + MfrPuQSrcSec
 
 ** Demand
 MfrQSnk = QSnkM ! 500
-TSetDem = 50
 
 ** HX
 !xFracValHXPri = NOT(ValHXOut)
