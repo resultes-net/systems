@@ -88,12 +88,10 @@ zSenAvgBot4_Tes1 = 0.65
 zSenAvgTop4_Tes1 = 0.75
 zSenAvgBot5_Tes1 = 0.85
 zSenAvgTop5_Tes1 = 0.95
-CONSTANTS 12
-Vol_Tes1=1          ! 1: m3, volume of store
+CONSTANTS #
 RhoWat_Tes1=RhoWat  ! 2: kg/m3, density of storage media
 CpWat_Tes1=CpWat    ! 3: kJ/kgK, specific heat of storage media
 lamZ_Tes1=0.6       ! 4: W/mK, effective vertical thermal conductivity of TES
-Heigh_Tes1=1.       ! 5: m, storage height
 Tini_Tes1=60.       ! 6: oC, initial temperature
 nCvMax_Tes1=400     ! 7: -, minimum relative plug height
 nCvMin_Tes1=20      ! 8: -, maximum relative plug height
