@@ -7,8 +7,8 @@ EQUATIONS #
 TRoomStore = tAmb
 
 ** Collectors
-MfrPuCollPri = SolarControlPuPriOn * CollMfrOut !MfrPuCollPriSet
-MfrPuCollSec = SolarControlPuSecOn * MfrPuCollPri * Lloop2Cp/Lloop5Cp !1000.0
+MfrPuCollPri = SolarControlPuPriOn * CollMfrOut
+MfrPuCollSec = SolarControlPuSecOn * MfrPuCollPri * Lloop2Cp/Lloop5Cp
 TSetColl = TSetDem + HxLMTDNom + HxCollLMTDNom + 3
 
 ** Auxiliary source
@@ -17,7 +17,7 @@ MfrPuQSrcSec = MfrQSrc*QSrcControlPuQSrcSecOn
 MfrSources = MfrPuCollSec + MfrPuQSrcSec
 
 ** Demand
-MfrQSnk = QSnkM ! 500
+MfrQSnk = QSnkM
 ! TSetDem is defined in parameters\parameters.ddck
 
 ** HX
