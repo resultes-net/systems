@@ -17,9 +17,16 @@ demand_MWh = _sym.Symbol("$QSnkQ_MWh")
 collector_area_m2 = _sym.Symbol("$CollAcollAp")
 collector_area_m2_per_MWh = _sym.Symbol("AperDemand_m2_per_MWh")
 
+collector_mass_flow_rate_kg_per_m2_h = _sym.Symbol("$CollMfrNomNorm")
+collecotr_mass_flow_rate_kg_per_h = _sym.Symbol("CollMfrNom_kg_per_h")
+
 
 equations = [
     _sym.Eq(collector_area_m2, collector_area_m2_per_MWh * demand_MWh),
+    _sym.Eq(
+        collecotr_mass_flow_rate_kg_per_h,
+        collector_mass_flow_rate_kg_per_m2_h * collector_area_m2,
+    ),
 ]
 
 PARAMETERS_DDCK_DIR_PATH = _pl.Path(__file__).parent / "ddck" / "parameters"
@@ -51,8 +58,15 @@ def get_specified_variables_and_solution(
         _get_collector_field_area_specified_variable(parameters.collector_field)
     )
 
+    collector_field_nominal_mass_flow_rate_specified_variable = (
+        _get_collector_field_mass_flow_rate_specified_variable(
+            parameters.collector_field
+        )
+    )
+
     variables_to_solve_for = [
         *collector_field_area_specified_variable.variables_to_solve_for,
+        *collector_field_nominal_mass_flow_rate_specified_variable.variables_to_solve_for,
     ]
 
     solutions = _sym.solve(equations, variables_to_solve_for, dict=True)
@@ -62,6 +76,7 @@ def get_specified_variables_and_solution(
 
     specified_variables = [
         collector_field_area_specified_variable,
+        collector_field_nominal_mass_flow_rate_specified_variable,
     ]
 
     return specified_variables, solution
@@ -79,6 +94,30 @@ def _get_collector_field_area_specified_variable(
         return _SpecifiedVariable(collector_area_m2, value, [collector_area_m2_per_MWh])
     if scaling == "relative_to_demand_m2_per_MWh":
         return _SpecifiedVariable(collector_area_m2_per_MWh, value, [collector_area_m2])
+
+    _tp.assert_never(scaling)
+
+
+def _get_collector_field_mass_flow_rate_specified_variable(
+    collector_field: _pcoll.CollectorField,
+) -> _SpecifiedVariable:
+    mass_flow_rate = collector_field.nominal_massflow
+
+    scaling = mass_flow_rate.scaling
+    value = mass_flow_rate.value
+
+    if scaling == "absolute_kg_per_h":
+        return _SpecifiedVariable(
+            collecotr_mass_flow_rate_kg_per_h,
+            value,
+            [collector_mass_flow_rate_kg_per_m2_h],
+        )
+    if scaling == "relative_to_collector_area_kg_per_h_m2":
+        return _SpecifiedVariable(
+            collector_mass_flow_rate_kg_per_m2_h,
+            value,
+            [collecotr_mass_flow_rate_kg_per_h],
+        )
 
     _tp.assert_never(scaling)
 
@@ -132,7 +171,7 @@ def test_get_solved_equations() -> None:
             },
             "nominal_massflow": {
                 "scaling": "relative_to_collector_area_kg_per_h_m2",
-                "value": 15.0,
+                "value": 20.0,
             },
         },
         "waste_heat_recovery_source": {
