@@ -1,5 +1,5 @@
 *******************************
-** BEGIN Type1357_v2a.ddck
+** BEGIN Type1357.ddck
 *******************************
 
 ************************************************************************************************************************
@@ -55,10 +55,8 @@ CONSTANTS #
 !Inputs
 EmGnd      = 0.95
 Mode_ctrl  = 4
-MfrNomNorm = 20                 ! [kg/h/m2]
-MfrNom     = MfrNomNorm*ACollAp                   ! 15*460 = 6900 kg/h
-MfrMin     = 0.2 * MfrNom                ! 1380
-MfrMax     = 10  * MfrNom                ! 13800
+MfrMin     = 0.2 * MfrNom
+MfrMax     = 10  * MfrNom
 
 ***********************************
 ** Begin TYPE

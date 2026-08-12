@@ -17,8 +17,8 @@ demand_MWh = _sym.Symbol("$QSnkQ_MWh")
 collector_area_m2 = _sym.Symbol("$CollAcollAp")
 collector_area_m2_per_MWh = _sym.Symbol("AperDemand_m2_per_MWh")
 
-collector_mass_flow_rate_kg_per_m2_h = _sym.Symbol("$CollMfrNomNorm")
-collecotr_mass_flow_rate_kg_per_h = _sym.Symbol("CollMfrNom_kg_per_h")
+collector_mass_flow_rate_kg_per_m2_h = _sym.Symbol("CollMfrNomNorm_kg_per_m2_h")
+collecotr_mass_flow_rate_kg_per_h = _sym.Symbol("$CollMfrNom")
 
 
 equations = [
