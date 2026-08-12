@@ -1,0 +1,140 @@
+*************************************
+** BEGIN ValByPass.ddck
+*************************************
+
+*************************************
+** ABOUT
+** This control controls by pass valve for when the storage temperature at the top is lower than the network return
+** temperature.
+*************************************
+
+*************************************
+** Connection to hydraulics file
+*************************************
+EQUATIONS #
+TNetReturn = $TTeeMix_ValByPass
+TSources = $TValStrat_TeeStrat
+MSources = $MValStrat_TeeStrat
+TStore = $Tsen10_Tes1
+
+*************************************
+** Connection to other ddcks
+*************************************
+EQUATIONS #
+MSink = $MfrQSnk
+
+*************************************
+** Control
+*************************************
+EQUATIONS #
+MFromStore = MAX(0, MSink-MSources)
+
+CONSTANTS #
+dTUpper = 2
+dTLower = 0
+TInfinity = 1e6
+
+UNIT 1 TYPE 2
+PARAMETERS #
+15                  ! 1: Number of oscilattions
+TInfinity           ! 2: High limit cutout
+INPUTS #
+TStore              ! 1: Upper value
+TNetReturn          ! 2: Lower value
+0,0                 ! 3: Cutout monitoring value
+storeOn             ! 4: Input control function
+dTUpper             ! 5: Upper dead band
+dTLower             ! 6: Lower dead band
+**
+0                   ! 1: Upper value
+0                   ! 2: Lower value
+0                   ! 3: Cutout monitoring value
+0                   ! 4: Input control function
+0                   ! 5: Upper dead band
+0                   ! 6: Lower dead band
+
+EQUATIONS #
+storeOn = [1,1]
+
+EQUATIONS #
+MMixed = MSources + MFromStore
+MMixedDenom = GT(MMixed,0)*MMixed + EQL(MMixed,0)*1
+TMixed = GT(MMixed,0)*(MSources*TSources + TStore*MFromStore)/MMixedDenom + EQL(MMixed,0)*(TNetReturn + dTUpper)
+
+UNIT 2 TYPE 2
+PARAMETERS #
+15                  ! 1: Number of oscilattions
+TInfinity           ! 2: High limit cutout
+INPUTS #
+TMixed              ! 1: Upper value
+TNetReturn          ! 2: Lower value
+0,0                 ! 3: Cutout monitoring value
+mixOn               ! 4: Input control function
+dTUpper             ! 5: Upper dead band
+dTLower             ! 6: Lower dead band
+**
+0                   ! 1: Upper value
+0                   ! 2: Lower value
+0                   ! 3: Cutout monitoring value
+0                   ! 4: Input control function
+0                   ! 5: Upper dead band
+0                   ! 6: Lower dead band
+
+EQUATIONS #
+mixOn = [2,1]
+
+EQUATIONS #
+needStoreButTempTooLow = GT(MFromStore,0)*NOT(storeOn)
+bypassOff = mixOn*NOT(needStoreButTempTooLow)
+$xFracValByPass = NOT(bypassOff)
+
+***********************************
+** Hourly printer
+***********************************
+CONSTANTS #
+unitPrinter = 33
+
+ASSIGN    temp\ValByPass_HR.Prt    unitPrinter     
+
+UNIT 34 TYPE 46		! Printegrator Monthly Values for System
+PARAMETERS #    
+unitPrinter		! 1: Logical unit number, -
+-1            		! 2: Logical unit for monthly summaries, -
+1             		! 3: Relative or absolute start time. 0: print at time intervals relative to the simulation start time. 1: print at absolute time intervals. No effect for monthly integrations
+1             		! 4: Printing & integrating interval, h. -1 for monthly integration
+3             		! 5: Number of inputs to avoid integration, -
+1 2 3
+
+INPUTS #
+TSources TStore TNetReturn TMixed mixOn storeOn needStoreButTempTooLow bypassOff MSources MFromStore MMixed
+**  
+TSources TStore TNetReturn TMixed mixOn storeOn needStoreButTempTooLow bypassOff MSources MFromStore MMixed
+
+***********************************
+** Online Plotter
+***********************************
+UNIT 103 TYPE 65		!Changed automatically
+PARAMETERS #     
+#     				! 1: Nb. of left-axis variables
+#     				! 2: Nb. of right-axis variables
+-0.5   				! 3: Left axis minimum
+100        			! 4: Left axis maximum
+-1   				! 5: Right axis minimum
+1e5       			! 6: Right axis maximum
+$nPlotsPerSim		! 7: Number of plots per simulation
+12     				! 8: X-axis gridpoints
+1     				! 9: Shut off Online w/o removing
+-1     				! 10: Logical unit for output file
+0     				! 11: Output file units
+0     				! 12: Output file delimiter
+INPUTS #    
+TSources TStore TNetReturn TMixed mixOn storeOn needStoreButTempTooLow bypassOff | MSources MFromStore MMixed
+TSources TStore TNetReturn TMixed mixOn storeOn needStoreButTempTooLow bypassOff | MSources MFromStore MMixed
+LABELS #     
+"Tempertures [degC] and statuses [1]"
+"Mass flow rates [kg/h]"
+ValByPass
+
+*******************************
+** END ValByPass.ddck
+*******************************
