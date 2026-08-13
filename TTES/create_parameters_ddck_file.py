@@ -29,6 +29,8 @@ tank_height_m = create_real_positive_symbol("$Heigh_Tes1")
 tank_diameter_m = create_real_positive_symbol("tankDiameter")
 
 tank_lambda_W_per_m_K = create_real_positive_symbol("tankLambda_W_per_m_K")
+TANK_LAMBDA_W_PER_m_K_value = 0.04
+
 tank_U_value_W_per_m2_K = create_real_positive_symbol("$Ufoam_Tes1")
 tank_insulation_thickness_cm = create_real_positive_symbol("tankInsulation_cm")
 
@@ -70,7 +72,9 @@ def get_specified_variables_and_solution(
         [tank_height_m, tank_diameter_m],
     )
 
-    tank_lambda_specified_variable = _SpecifiedVariable(tank_lambda_W_per_m_K, 0.04, [])
+    tank_lambda_specified_variable = _SpecifiedVariable(
+        tank_lambda_W_per_m_K, TANK_LAMBDA_W_PER_m_K_value, []
+    )
 
     tank_insulation_thickness_specified_variable = _SpecifiedVariable(
         tank_insulation_thickness_cm,
