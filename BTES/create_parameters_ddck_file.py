@@ -60,9 +60,9 @@ def get_specified_variables_and_solution(
 
 
 def _get_pit_store_volume_specified_variable(
-    ptes_storage: _pbtess.PtesStorage,
+    btes_storage: _pbtess.BtesStorage,
 ) -> _SpecifiedVariable:
-    volume = ptes_storage.volume
+    volume = btes_storage.volume
 
     scaling = volume.scaling
     value = volume.value
@@ -111,7 +111,7 @@ def _get_formatted_specified_variables_and_solved_equations(
 
 def test_get_solved_equations() -> None:
     data: _pyd.JsonValue = {
-        "type": "ptes",
+        "type": "btes",
         "storage": {
             "volume": {"scaling": "absolute_m3", "value": 400},
             "ports_relative_heights_1": {
@@ -141,9 +141,9 @@ def _create_parameters_ddck_contents(parameters: _pbtes.BtesSpecificParameters) 
 **BEGIN parameters.ddck 
 *******************************
 CONSTANTS #
-PtesPortsHeightRelTop = {port_heights.top}
-PtesPortsHeightRelMiddle = {port_heights.middle}
-PtesPortsHeightRelBottom = {port_heights.bottom}
+BtesPortsHeightRelTop = {port_heights.top}
+BtesPortsHeightRelMiddle = {port_heights.middle}
+BtesPortsHeightRelBottom = {port_heights.bottom}
 
 {formatted_specified_and_solved_variables_block}
 
