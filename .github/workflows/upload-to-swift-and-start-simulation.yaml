@@ -28,6 +28,14 @@ jobs:
           .\venv\Scripts\python.exe -m pip install --upgrade pip uv wheel
           .\venv\Scripts\python.exe -m uv pip install -r requirements.txt
 
+      - name: Get OS auth secret
+        env:
+          PCU_PPGL7VO_OPENRC_PS1: ${{ secrets.PCU_PPGL7VO_OPENRC_PS1 }}
+        run: |
+          mkdir -Force .\config\secrets
+          $env:PCU_PPGL7VO_OPENRC_PS1 | `
+              Out-File -FilePath .\config\secrets\PCU-PPGL7VO-openrc.ps1 -NoNewline
+
       - name: Upload zip file to swift
         run: |
           .\scripts\openstack object create --name pytrnsys-systems/systems-${{ github.ref_name }}.zip resultes-static systems-${{ github.ref_name }}.zip
@@ -45,14 +53,6 @@ jobs:
       - name: Create parameters JSON file
         run: |
           (cat .\data\ptes.json.template) -replace '<PROJECT_NAME>',"${{ github.sha }}".Substring(0,7) > .\data\ptes.json
-
-      - name: Get OS auth secret
-        env:
-          PCU_PPGL7VO_OPENRC_PS1: ${{ secrets.PCU_PPGL7VO_OPENRC_PS1 }}
-        run: |
-          mkdir -Force .\config\secrets
-          $env:PCU_PPGL7VO_OPENRC_PS1 | `
-              Out-File -FilePath .\config\secrets\PCU-PPGL7VO-openrc.ps1 -NoNewline
 
       - name: Create new PTES simulation
         run: |
