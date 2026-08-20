@@ -18,11 +18,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
 
-      - name: Create OpenStack config file
-        run: |
-          echo '${{ secrets.OPENRC_PS1_HEX }}' > .\config\openrc.ps1.hex
-          certutil -decodehex .\config\openrc.ps1.hex .\config\openrc.ps1 1
-
       - name: Zip directory contents
         run: |
           Get-ChildItem .. -Exclude ci,.* | Compress-Archive -DestinationPath systems-${{ github.ref_name }}.zip
@@ -50,6 +45,14 @@ jobs:
       - name: Create parameters JSON file
         run: |
           (cat .\data\ptes.json.template) -replace '<PROJECT_NAME>',"${{ github.sha }}".Substring(0,7) > .\data\ptes.json
+
+      - name: Get OS auth secret
+        env:
+          PCU_PPGL7VO_OPENRC_PS1: ${{ secrets.PCU_PPGL7VO_OPENRC_PS1 }}
+        run: |
+          mkdir -Force .\config\secrets
+          $env:PCU_PPGL7VO_OPENRC_PS1 | `
+              Out-File -FilePath .\config\secrets\PCU-PPGL7VO-openrc.ps1 -NoNewline
 
       - name: Create new PTES simulation
         run: |
