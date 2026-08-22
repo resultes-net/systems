@@ -125,8 +125,8 @@ def btes(sim: api.Simulation):
     sim.scalar["BoHxQLossTop_kW_Tot"] = sim.hourly["BoHxQLossTop_kW"].sum()
     sim.scalar["BoHxQLossSide_kW_Tot"] = sim.hourly["BoHxQLossSide_kW"].sum()
     sim.scalar["BoHxQLossBot_kW_Tot"] = sim.hourly["BoHxQLossBot_kW"].sum()
-    sim.hourly["BoHxQChar_kW"] = abs(sim.hourly['BoHxQCalc_kW'].where(sim.hourly['BoHxQCalc_kW'] < 0, 0)) #sim.hourly.loc[sim.hourly["BoHxQAve_kW"] > 0, "BoHxQAve_kW"]
-    sim.hourly["BoHxQDischar_kW"] = abs(sim.hourly['BoHxQCalc_kW'].where(sim.hourly['BoHxQCalc_kW'] > 0, 0))   #abs(sim.hourly["BoHxQCalc_kW"]) * sim.hourly["ControlBorOnDischar"]
+    sim.hourly["BoHxQChar_kW"] = abs(sim.hourly['BoHxQCalc_kW'].where(sim.hourly['BoHxQCalc_kW'] < 0, 0))
+    sim.hourly["BoHxQDischar_kW"] = abs(sim.hourly['BoHxQCalc_kW'].where(sim.hourly['BoHxQCalc_kW'] > 0, 0))
     sim.scalar["BoHxQAccum_kW_Tot"] = sim.hourly["BoHxQAccum_kW"].sum()
 
 
@@ -318,7 +318,7 @@ def demand(sim: api.Simulation):
 
 def control(sim: api.Simulation):
     #### Plots ####
-    fig, ax = api.line_plot(sim.hourly, ["ControlBorOnChar", "ControlBorOnDischar"])
+    fig, ax = api.line_plot(sim.hourly, ["CtrlBorOnChar", "CtrlBorOnDischar"])
     ax.set_ylabel("Activation (-)")
     plt.grid()
     # plt.show()

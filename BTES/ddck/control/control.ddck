@@ -14,15 +14,15 @@ MfrPuCollSec = SolarControlPuSecOn * MfrPuCollPri * Lloop4Cp/Lloop3Cp !1000.0
 
 MfrQSnk = QSnkM
 
-MfrPuGhx = HpMfrEvapNom*(ControlBorOnChar+ControlBorOnDischar)
-MfrPuHp = HpMfrCondNom*ControlBorOnDischar
-HpIsOn = ControlBorOnDischar  !NOT(ControlBorOnChar) ! Heat pump activation signal
+MfrPuGhx = HpMfrEvapNom*(CtrlBorOnChar+CtrlBorOnDischar)
+MfrPuHp = HpMfrCondNom*CtrlBorOnDischar
+HpIsOn = CtrlBorOnDischar  !NOT(CtrlBorOnChar) ! Heat pump activation signal
 
 **************
 *** Valves ***
 **************
 
-xFracValBuffToGhx = ControlBorOnChar
+xFracValBuffToGhx = CtrlBorOnChar
 
 ******************
 *** Set points ***
@@ -90,7 +90,7 @@ unitHourly		! 1: Logical unit number, -
 2            		! 7: Output number to avoid integration
 3             		! 8: Output number to avoid integration
 INPUTS #
-Time ControlBorOnChar ControlBorOnDischar
+Time CtrlBorOnChar CtrlBorOnDischar
 **
-Time ControlBorOnChar ControlBorOnDischar
+Time CtrlBorOnChar CtrlBorOnDischar
 
