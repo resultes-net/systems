@@ -264,10 +264,10 @@ def hx(sim: api.Simulation):
     api.export_plots_in_configured_formats(fig, sim.path, "q-hourly", "hx")
 
     fig, ax = api.line_plot(sim.hourly, ["HxEff"])
-    ax.set_ylabel("Efficiency (-)")
+    ax.set_ylabel("Effectiveness (-)")
     plt.grid()
     # plt.show()
-    api.export_plots_in_configured_formats(fig, sim.path, "efficiency-hourly", "hx")
+    api.export_plots_in_configured_formats(fig, sim.path, "effectiveness-hourly", "hx")
 
     fig, ax = api.line_plot(sim.hourly, ["HxLMTD"])
     ax.set_ylabel("LMTD (K)")
