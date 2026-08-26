@@ -140,7 +140,7 @@ def btes(sim: api.Simulation):
     sim.scalar["BoHxQMax"] = (
         sim.scalar["BoHxV"]
         * sim.scalar["BoHxCpLayer"]
-        * (sim.scalar["SolarControlTTesMax"] - 0)
+        * (sim.scalar["TTesMax"] - 0)
         / 3600
     )
     sim.scalar["BoHxNCycles"] = (
