@@ -1,12 +1,12 @@
-import pathlib as _pl
+import os
+import pathlib as pl
+import sys
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from datetime import datetime
 from pytrnsys_process import api
 
-import sys
-import os
 dir_project = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 dir_common = carpeta_a_path = os.path.join(dir_project, 'common')
 sys.path.append(dir_common)
@@ -394,10 +394,14 @@ def kpi(sim: api.Simulation):
      df.to_csv(sim.path + "\\data.csv", header=False, index=False)
 
 def to_json(sim: api.Simulation):
-    sim.scalar.to_json(sim.path + "\output.json", orient="records", indent=4)
+    sim.scalar.to_json(sim.path + "\\output.json", orient="records", indent=4)
     
 if __name__ == "__main__":
-    path_to_sim = _pl.Path(r"C:\Daten\GIT\systems\BTES\results_more_power")
+    if len(sys.argv) != 2:
+        print(f"ERROR: Usage: {sys.argv[0]} <path-to-results-folder>", file=sys.stderr)
+        sys.exit(-1)
+
+    path_to_results_folder = pl.Path(sys.argv[1])
     api.global_settings.reader.force_reread_prt = True
     api.global_settings.reader.read_step_files = False
 
@@ -417,6 +421,6 @@ if __name__ == "__main__":
                         ]
 
     simulation_data = api.process_whole_result_set(
-        path_to_sim,
+        path_to_results_folder,
         processing_steps,
     )
