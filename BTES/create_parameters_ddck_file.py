@@ -141,7 +141,7 @@ CONSTANTS #
 $BoHxZ = {storage.borehole_depth_m}
 BoSpacing = {storage.borehole_spacing_m}
 $BoHxNBor = INT({n_boreholes_fractional_1.name} + 0.5)
-$BoHxV = * (0.525 * BoSpacing)**2 * $PI * $BoHxZ
+$BoHxV = $BoHxNBor * (0.525 * BoSpacing)**2 * $PI * $BoHxZ
 
 {formatted_specified_and_solved_variables_block}
 
