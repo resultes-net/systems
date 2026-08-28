@@ -113,7 +113,9 @@ def test_get_solved_equations() -> None:
     data: _pyd.JsonValue = {
         "type": "btes",
         "storage": {
-            "volume": {"scaling": "absolute_m3", "value": 400},
+            "n_boreholes": {"scaling": "relative_to_collector_area_1_per_m2", "value": 4e-3},
+            "borehole_depth_m": 70,
+            "borehole_spacing_m": 3,
         },
     }
 
@@ -138,7 +140,7 @@ def _create_parameters_ddck_contents(parameters: _pbtes.BtesSpecificParameters) 
 CONSTANTS #
 $BoHxZ = {storage.borehole_depth_m}
 BoSpacing = {storage.borehole_spacing_m}
-$BoHxV = {n_boreholes_1.name} * (0.525 * BoSpacing)**2 * PI * $BoHxZ
+$BoHxV = {n_boreholes_1.name} * (0.525 * BoSpacing)**2 * $PI * $BoHxZ
 
 {formatted_specified_and_solved_variables_block}
 
