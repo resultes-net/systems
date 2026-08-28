@@ -15,13 +15,15 @@ demand_MWh = _sym.Symbol("$QSnkQ_MWh")
 
 collector_area_m2 = _sym.Symbol("$CollAcollAp")
 
-pit_store_volume_m3 = _sym.Symbol("$pitStoreStVolume")
-pit_store_volume_m3_per_MWh = _sym.Symbol("VperDemand_m3_per_MWh")
-pit_store_volume_m3_per_m2 = _sym.Symbol("VperCollArea_m3_per_m2")
+borehole_store_volume_m3 = _sym.Symbol("$BoHxV")
+borehole_store_volume_m3_per_MWh = _sym.Symbol("VperDemand_m3_per_MWh")
+borehole_store_volume_m3_per_m2 = _sym.Symbol("VperCollArea_m3_per_m2")
 
 equations = [
-    _sym.Eq(pit_store_volume_m3, pit_store_volume_m3_per_MWh * demand_MWh),
-    _sym.Eq(pit_store_volume_m3, pit_store_volume_m3_per_m2 * collector_area_m2),
+    _sym.Eq(borehole_store_volume_m3, borehole_store_volume_m3_per_MWh * demand_MWh),
+    _sym.Eq(
+        borehole_store_volume_m3, borehole_store_volume_m3_per_m2 * collector_area_m2
+    ),
 ]
 
 PARAMETERS_DDCK_DIR_PATH = _pl.Path(__file__).parent / "ddck" / "parameters"
@@ -39,12 +41,12 @@ class _SpecifiedVariable:
 def get_specified_variables_and_solution(
     parameters: _pbtes.BtesSpecificParameters,
 ) -> tuple[_cabc.Sequence[_SpecifiedVariable], _cabc.Mapping[_sym.Symbol, _sym.Expr]]:
-    pit_store_volume_specified_variable = _get_pit_store_volume_specified_variable(
-        parameters.storage
+    borehole_store_volume_specified_variable = (
+        _get_borehole_store_volume_specified_variable(parameters.storage)
     )
 
     variables_to_solve_for = [
-        *pit_store_volume_specified_variable.variables_to_solve_for,
+        *borehole_store_volume_specified_variable.variables_to_solve_for,
     ]
 
     solutions = _sym.solve(equations, variables_to_solve_for, dict=True)
@@ -53,13 +55,13 @@ def get_specified_variables_and_solution(
     solution = _tp.cast(_cabc.Mapping[_sym.Symbol, _sym.Expr], solutions[0])
 
     specified_variables = [
-        pit_store_volume_specified_variable,
+        borehole_store_volume_specified_variable,
     ]
 
     return specified_variables, solution
 
 
-def _get_pit_store_volume_specified_variable(
+def _get_borehole_store_volume_specified_variable(
     btes_storage: _pbtess.BtesStorage,
 ) -> _SpecifiedVariable:
     volume = btes_storage.volume
@@ -69,21 +71,21 @@ def _get_pit_store_volume_specified_variable(
 
     if scaling == "absolute_m3":
         return _SpecifiedVariable(
-            pit_store_volume_m3,
+            borehole_store_volume_m3,
             value,
-            [pit_store_volume_m3_per_MWh, pit_store_volume_m3_per_m2],
+            [borehole_store_volume_m3_per_MWh, borehole_store_volume_m3_per_m2],
         )
     if scaling == "relative_to_demand_m3_per_MWh":
         return _SpecifiedVariable(
-            pit_store_volume_m3_per_MWh,
+            borehole_store_volume_m3_per_MWh,
             value,
-            [pit_store_volume_m3, pit_store_volume_m3_per_m2],
+            [borehole_store_volume_m3, borehole_store_volume_m3_per_m2],
         )
     if scaling == "relative_to_collector_area_m3_per_m2":
         return _SpecifiedVariable(
-            pit_store_volume_m3_per_m2,
+            borehole_store_volume_m3_per_m2,
             value,
-            [pit_store_volume_m3, pit_store_volume_m3_per_MWh],
+            [borehole_store_volume_m3, borehole_store_volume_m3_per_MWh],
         )
 
     _tp.assert_never(scaling)
@@ -114,11 +116,6 @@ def test_get_solved_equations() -> None:
         "type": "btes",
         "storage": {
             "volume": {"scaling": "absolute_m3", "value": 400},
-            "ports_relative_heights_1": {
-                "top": 0.80,
-                "middle": 0.70,
-                "bottom": 0.05,
-            },
         },
     }
 
@@ -130,8 +127,6 @@ def test_get_solved_equations() -> None:
 
 
 def _create_parameters_ddck_contents(parameters: _pbtes.BtesSpecificParameters) -> str:
-    port_heights = parameters.storage.ports_relative_heights_1
-
     formatted_specified_and_solved_variables_block = (
         _get_formatted_specified_variables_and_solved_equations(parameters)
     )
@@ -140,11 +135,6 @@ def _create_parameters_ddck_contents(parameters: _pbtes.BtesSpecificParameters) 
 *******************************
 **BEGIN parameters.ddck 
 *******************************
-CONSTANTS #
-BtesPortsHeightRelTop = {port_heights.top}
-BtesPortsHeightRelMiddle = {port_heights.middle}
-BtesPortsHeightRelBottom = {port_heights.bottom}
-
 {formatted_specified_and_solved_variables_block}
 
 
