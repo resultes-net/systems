@@ -15,15 +15,13 @@ demand_MWh = _sym.Symbol("$QSnkQ_MWh")
 
 collector_area_m2 = _sym.Symbol("$CollAcollAp")
 
-borehole_store_volume_m3 = _sym.Symbol("$BoHxV")
-borehole_store_volume_m3_per_MWh = _sym.Symbol("VperDemand_m3_per_MWh")
-borehole_store_volume_m3_per_m2 = _sym.Symbol("VperCollArea_m3_per_m2")
+n_boreholes_1 = _sym.Symbol("$BoHxNBor")
+n_boreholes_1_per_MWh = _sym.Symbol("nBor_1_per_MWh")
+n_boreholes_1_per_m2 = _sym.Symbol("nBor_1_per_m2")
 
 equations = [
-    _sym.Eq(borehole_store_volume_m3, borehole_store_volume_m3_per_MWh * demand_MWh),
-    _sym.Eq(
-        borehole_store_volume_m3, borehole_store_volume_m3_per_m2 * collector_area_m2
-    ),
+    _sym.Eq(n_boreholes_1, n_boreholes_1_per_MWh * demand_MWh),
+    _sym.Eq(n_boreholes_1, n_boreholes_1_per_m2 * collector_area_m2),
 ]
 
 PARAMETERS_DDCK_DIR_PATH = _pl.Path(__file__).parent / "ddck" / "parameters"
@@ -64,28 +62,28 @@ def get_specified_variables_and_solution(
 def _get_borehole_store_volume_specified_variable(
     btes_storage: _pbtess.BtesStorage,
 ) -> _SpecifiedVariable:
-    volume = btes_storage.volume
+    n_boreholes = btes_storage.n_boreholes
 
-    scaling = volume.scaling
-    value = volume.value
+    scaling = n_boreholes.scaling
+    value = n_boreholes.value
 
-    if scaling == "absolute_m3":
+    if scaling == "absolute_1":
         return _SpecifiedVariable(
-            borehole_store_volume_m3,
+            n_boreholes_1,
             value,
-            [borehole_store_volume_m3_per_MWh, borehole_store_volume_m3_per_m2],
+            [n_boreholes_1_per_MWh, n_boreholes_1_per_m2],
         )
-    if scaling == "relative_to_demand_m3_per_MWh":
+    if scaling == "relative_to_demand_1_per_MWh":
         return _SpecifiedVariable(
-            borehole_store_volume_m3_per_MWh,
+            n_boreholes_1_per_MWh,
             value,
-            [borehole_store_volume_m3, borehole_store_volume_m3_per_m2],
+            [n_boreholes_1, n_boreholes_1_per_m2],
         )
-    if scaling == "relative_to_collector_area_m3_per_m2":
+    if scaling == "relative_to_collector_area_1_per_m2":
         return _SpecifiedVariable(
-            borehole_store_volume_m3_per_m2,
+            n_boreholes_1_per_m2,
             value,
-            [borehole_store_volume_m3, borehole_store_volume_m3_per_MWh],
+            [n_boreholes_1, n_boreholes_1_per_MWh],
         )
 
     _tp.assert_never(scaling)
@@ -131,10 +129,17 @@ def _create_parameters_ddck_contents(parameters: _pbtes.BtesSpecificParameters) 
         _get_formatted_specified_variables_and_solved_equations(parameters)
     )
 
+    storage = parameters.storage
+
     parameters_ddck_contents = f"""\
 *******************************
 **BEGIN parameters.ddck 
 *******************************
+CONSTANTS #
+$BoHxZ = {storage.borehole_depth_m}
+BoSpacing = {storage.borehole_spacing_m}
+$BoHxV = {n_boreholes_1.name} * (0.525 * BoSpacing)**2 * PI * $BoHxZ
+
 {formatted_specified_and_solved_variables_block}
 
 

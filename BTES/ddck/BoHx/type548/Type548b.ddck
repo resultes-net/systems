@@ -58,9 +58,7 @@ DirFlow = 1 ! 3: Flow Direction Indicator [-] ([-1,1])
 TTop = 20 ! 4: Temperature on Top of Storage [C] ([-Inf,+Inf])
 
 CONSTANTS #
-Z = 100.0           ! 2: Borehole Depth [m] ([0.0,+Inf])
 ZHeader = 1.0       ! 3: Header Depth [m] ([0.0,+Inf])
-NBor = 100.0        ! 4: Number of Boreholes [-] ([1,+Inf])
 RBor = 0.1016       ! 5: Borehole Radius [m] ([0.0,+Inf])
 NIn = 1.0           ! 6: Number of Fluid Inlets [-] ([1,+Inf])
 NRadReg = 3         ! 7: Number of Radial Regions [-] ([1,+Inf])
