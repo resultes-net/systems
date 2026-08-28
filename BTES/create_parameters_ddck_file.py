@@ -15,13 +15,13 @@ demand_MWh = _sym.Symbol("$QSnkQ_MWh")
 
 collector_area_m2 = _sym.Symbol("$CollAcollAp")
 
-n_boreholes_1 = _sym.Symbol("$BoHxNBor")
+n_boreholes_fractional_1 = _sym.Symbol("nBor_frac_1")
 n_boreholes_1_per_MWh = _sym.Symbol("nBor_1_per_MWh")
 n_boreholes_1_per_m2 = _sym.Symbol("nBor_1_per_m2")
 
 equations = [
-    _sym.Eq(n_boreholes_1, n_boreholes_1_per_MWh * demand_MWh),
-    _sym.Eq(n_boreholes_1, n_boreholes_1_per_m2 * collector_area_m2),
+    _sym.Eq(n_boreholes_fractional_1, n_boreholes_1_per_MWh * demand_MWh),
+    _sym.Eq(n_boreholes_fractional_1, n_boreholes_1_per_m2 * collector_area_m2),
 ]
 
 PARAMETERS_DDCK_DIR_PATH = _pl.Path(__file__).parent / "ddck" / "parameters"
@@ -69,7 +69,7 @@ def _get_borehole_store_volume_specified_variable(
 
     if scaling == "absolute_1":
         return _SpecifiedVariable(
-            n_boreholes_1,
+            n_boreholes_fractional_1,
             value,
             [n_boreholes_1_per_MWh, n_boreholes_1_per_m2],
         )
@@ -77,13 +77,13 @@ def _get_borehole_store_volume_specified_variable(
         return _SpecifiedVariable(
             n_boreholes_1_per_MWh,
             value,
-            [n_boreholes_1, n_boreholes_1_per_m2],
+            [n_boreholes_fractional_1, n_boreholes_1_per_m2],
         )
     if scaling == "relative_to_collector_area_1_per_m2":
         return _SpecifiedVariable(
             n_boreholes_1_per_m2,
             value,
-            [n_boreholes_1, n_boreholes_1_per_MWh],
+            [n_boreholes_fractional_1, n_boreholes_1_per_MWh],
         )
 
     _tp.assert_never(scaling)
@@ -140,7 +140,8 @@ def _create_parameters_ddck_contents(parameters: _pbtes.BtesSpecificParameters) 
 CONSTANTS #
 $BoHxZ = {storage.borehole_depth_m}
 BoSpacing = {storage.borehole_spacing_m}
-$BoHxV = {n_boreholes_1.name} * (0.525 * BoSpacing)**2 * $PI * $BoHxZ
+$BoHxNBor = INT({n_boreholes_fractional_1.name} + 0.5)
+$BoHxV = * (0.525 * BoSpacing)**2 * $PI * $BoHxZ
 
 {formatted_specified_and_solved_variables_block}
 
