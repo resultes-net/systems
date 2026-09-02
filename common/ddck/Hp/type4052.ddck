@@ -21,8 +21,8 @@ CpEvap  = @cp(EvapIn,bar)*1000  !J/kgK
 CpCond = @cp(CondIn,bar)*1000 !J/kgK
 TCondIn = @temp(CondIn, TPiCondIn)
 TEvapIn = @temp(EvapIn, TPiEvapIn)
-MfrEvapIn = ABS(@mfr(EvapIn, MfrPuEvap))
-MfrCondIn = ABS(@mfr(CondIn, MfrPiCondIn))
+MfrEvapIn = @mfr(EvapIn, MfrPuEvap)
+MfrCondIn = @mfr(CondIn, MfrPiCondIn)
 
 *************************************
 ** outputs to hydraulic solver
