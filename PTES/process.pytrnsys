@@ -38,7 +38,7 @@ def solar(sim: api.Simulation):
     sim.scalar["SolarControlStagDays"] = sim.hourly["SolarControlStagDays"].iloc[-1]
 
     #### Plots ####
-    fig, ax = api.line_plot(sim.hourly / 1e3, ["CollP_kW"])
+    fig, ax = api.line_plot(sim.hourly / 1e3, ["CollP_kW"], use_legend=False)
     ax.set_ylabel("Power [MW]")
     plt.grid()
     # plt.show()
@@ -320,7 +320,7 @@ def boiler(sim: api.Simulation):
     sim.scalar["BolrPOut_kW_Tot"] = sim.hourly["BolrPOut_kW"].sum()
 
     #### Plots ####
-    fig, ax = api.line_plot(sim.hourly / 1e3, ["BolrPOut_kW"])
+    fig, ax = api.line_plot(sim.hourly / 1e3, ["BolrPOut_kW"], use_legend=False)
     ax.set_ylabel("Power [MW]")
     plt.grid()
     # plt.show()
@@ -333,7 +333,7 @@ def source(sim: api.Simulation):
     sim.scalar["QSrcP_kW_Tot"] = sim.hourly["QSrcP_kW"].sum()
 
     #### Plots ####
-    fig, ax = api.line_plot(sim.hourly / 1e3, ["QSrcP_kW"])
+    fig, ax = api.line_plot(sim.hourly / 1e3, ["QSrcP_kW"], use_legend=False)
     ax.set_ylabel("Power [MW]")
     plt.grid()
     # plt.show()
@@ -363,7 +363,7 @@ def demand(sim: api.Simulation):
     sim.scalar["QDemand_kW_Tot"] = sim.monthly["QDemand_kW"].sum()
 
     #### Plots ####
-    fig, ax = api.line_plot(sim.hourly / 1e3, ["QSnkP_kW"])
+    fig, ax = api.line_plot(sim.hourly / 1e3, ["QSnkP_kW"], use_legend=False)
     ax.set_ylabel("Power [MW]")
     ax.legend_.remove()
     plt.grid()
