@@ -170,11 +170,9 @@ def ptes(sim: api.Simulation):
     # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "t-nodes-ptes-hourly", "ptes")
 
-    fig, ax = api.line_plot(sim.hourly, ["pitStoreSoc"])
+    fig, ax = api.line_plot(sim.hourly, ["pitStoreSoc"], use_legend=False)
     ax.set_ylabel("SOC [-]")
-    ax.legend_.remove()
     plt.grid()
-    # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "soc-hourly", "ptes")
 
     fig, ax = api.energy_balance(
@@ -365,7 +363,6 @@ def demand(sim: api.Simulation):
     #### Plots ####
     fig, ax = api.line_plot(sim.hourly / 1e3, ["QSnkP_kW"], use_legend=False)
     ax.set_ylabel("Power [MW]")
-    ax.legend_.remove()
     plt.grid()
     # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "sink-hourly", "sink")
