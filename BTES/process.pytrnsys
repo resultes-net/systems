@@ -183,7 +183,7 @@ def btes(sim: api.Simulation):
     api.export_plots_in_configured_formats(fig, sim.path, "t-avg-hourly", "btes")
 
     fig, ax = api.line_plot(sim.hourly / 1e3, ["BoHxQAve_kW"], use_legend=False)
-    ax.set_ylabel("Heat [MW]")
+    ax.set_ylabel("Power [MW]")
     plt.grid()
     # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "q-hourly", "btes")
@@ -203,6 +203,7 @@ def hp(sim: api.Simulation):
         xlabel="",
         ylabel="Energy [MWh]",
     )
+    ax.legend(["Compressor", "Evaporator", "Condenser", "Imbalance"])
     api.export_plots_in_configured_formats(fig, sim.path, "balance-monthly", "hp")
 
     #### Q vs T ####
@@ -236,7 +237,7 @@ def hp(sim: api.Simulation):
 def hx(sim: api.Simulation):
     #### Plots ####
     fig, ax = api.line_plot(sim.hourly / 1e3, ["HxQ_kW"], use_legend=False)
-    ax.set_ylabel("Heat [MW]")
+    ax.set_ylabel("Power [MW]")
     plt.grid()
     # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "q-hourly", "hx")
@@ -339,7 +340,7 @@ def balance(sim: api.Simulation):
         "$Q_{TES,Accum}$",
         "$Q_{TES,Losses}$",
         "$Q_{District}$",
-        "$Q_{Imbalance}",
+        "$Q_{Imbalance}$",
     ]
 
     fig, _ = api.energy_balance(

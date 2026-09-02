@@ -288,22 +288,25 @@ def hp(sim: api.Simulation):
     api.export_plots_in_configured_formats(fig, sim.path, "qcond-hourly", "hp")
 
     #### Q vs T ####
-    plot_variables = [
-        ["HpQEvap_kW", "HpTEvapOut"],
-        ["HpQCond_kW", "HpTCondOut"],
-    ]
-
     plt.figure()
 
-    for q, t in plot_variables:
-        a = sim.hourly[q] / 1e6
-        b = sim.hourly[t]
-        df = pd.DataFrame({q: a, t: b})
+    q = sim.hourly["HpQEvap_kW"] / 1e6
+    t = sim.hourly["HpTEvapOut"]
+    df = pd.DataFrame({"q": q, "t": t})
 
-        df = df.sort_values(by=t)
-        df[q] = np.cumsum(df[q])
+    df = df.sort_values(by="t")
+    df["q"] = np.cumsum(df["q"])
 
-        fig = plt.plot(df[t], df[q], label=q + "____" + t)
+    fig = plt.plot(df["t"], df["q"], label="Evaporator")
+
+    q = sim.hourly["HpQCond_kW"] / 1e6
+    t = sim.hourly["HpTCondOut"]
+    df = pd.DataFrame({"q": q, "t": t})
+
+    df = df.sort_values(by="t")
+    df["q"] = np.cumsum(df["q"])
+
+    fig = plt.plot(df["t"], df["q"], label="Condenser")
 
     plt.xlabel("Temperature [°C]")
     plt.ylabel("Cumulative energy [GWh]")
