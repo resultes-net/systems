@@ -210,21 +210,21 @@ def hp(sim: api.Simulation):
 
     q = sim.hourly["HpQEvap_kW"] / 1e6
     t = sim.hourly["HpTEvapOut"]
-    df = pd.DataFrame({q: q, t: t})
+    df = pd.DataFrame({"q": q, "t": t})
 
-    df = df.sort_values(by=t)
-    df[q] = np.cumsum(df[q])
+    df = df.sort_values(by="t")
+    df["q"] = np.cumsum(df["q"])
 
-    fig = plt.plot(df[t], df[q], label="Evaporator")
+    fig = plt.plot(df["t"], df["q"], label="Evaporator")
 
     q = sim.hourly["HpQCond_kW"] / 1e6
     t = sim.hourly["HpTCondOut"]
-    df = pd.DataFrame({q: q, t: t})
+    df = pd.DataFrame({"q": q, "t": t})
 
-    df = df.sort_values(by=t)
-    df[q] = np.cumsum(df[q])
+    df = df.sort_values(by="t")
+    df["q"] = np.cumsum(df["q"])
 
-    fig = plt.plot(df[t], df[q], label="Condenser")
+    fig = plt.plot(df["t"], df["q"], label="Condenser")
 
     plt.xlabel("Temperature [°C]")
     plt.ylabel("Cumulative energy [GWh]")
@@ -290,7 +290,6 @@ def demand(sim: api.Simulation):
     #### Plots ####
     fig, ax = api.line_plot(sim.hourly / 1e3, ["QSnkP_kW"], use_legend=False)
     ax.set_ylabel("Power [MW]")
-    ax.legend_.remove()
     plt.grid()
     # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "sink-hourly", "sink")
