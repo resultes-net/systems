@@ -44,14 +44,11 @@ def solar(sim: api.Simulation):
     fig, ax = api.line_plot(sim.hourly / 1e3, ["CollP_kW"], use_legend=False)
     ax.set_ylabel("Power [MW]")
     plt.grid()
-    # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "solar-hourly", "solar")
 
     fig, ax = api.bar_chart(sim.monthly / 1e6, ["CollP_kW"], use_legend=False)
     ax.set_ylabel("Energy [GWh]")
     ax.legend()
-    ax.legend_ = None
-    # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "solar-monthly", "solar")
 
     fig, ax = api.line_plot(sim.hourly, ["CollTIn", "CollTOut"])
