@@ -199,7 +199,7 @@ def _create_parameters_ddck_contents(parameters: _com.CommonParameters) -> str:
     demand = parameters.demand
 
     unscaledYearlyHeatDemandMWh = sum(demand.hourly_heat_demand_MW)
-    maxHourlyHeatDemand_kW = max(demand.hourly_heat_demand_MW)
+    maxHourlyHeatDemand_kW = max(demand.hourly_heat_demand_MW) * 1e3
 
     collector_field = parameters.collector_field
 
