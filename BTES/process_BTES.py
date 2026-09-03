@@ -121,6 +121,10 @@ def tes(sim: api.Simulation):
 
 
 def btes(sim: api.Simulation):
+    #### Read solites values ####
+    df_solites = pd.read_csv('solites_temp.csv', sep=r'\s+', header=None)
+    sim.hourly["BoHxTemp_solites"] = df_solites.iloc[: len(sim.hourly), 0].values
+
     #### Calculations ####
     sim.scalar["BoHxQLoss_kW_Tot"] = sim.hourly["BoHxQLoss_kW"].sum()
     sim.scalar["BoHxQLossTop_kW_Tot"] = sim.hourly["BoHxQLossTop_kW"].sum()
@@ -168,11 +172,13 @@ def btes(sim: api.Simulation):
     # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "t-avg-field-hourly", "btes")
 
-    fig, ax = api.line_plot(sim.hourly, ["BoHxTAve"])
+    fig, ax = api.line_plot(sim.hourly, ["BoHxTAve", "BoHxTemp_solites"])
     ax.set_ylabel("Temperature (°C)")
     plt.grid()
     # plt.show()
+    plt.legend(['Resultes', 'Solites']) #, bbox_to_anchor=(1.05, 1), loc='upper left')
     api.export_plots_in_configured_formats(fig, sim.path, "t-avg-hourly", "btes")
+
 
     fig, ax = api.line_plot(sim.hourly, ["BoHxQAve_kW"])
     ax.set_ylabel("Heat (kW)")
@@ -371,8 +377,8 @@ def balance(sim: api.Simulation):
         ],
         q_out_columns=[
             "TesQAcum_Tes1",
-            # "BoHxQAve_kW",
-            "BoHxQAccum_kW",
+            "BoHxQAve_kW",
+            # "BoHxQAccum_kW",
             "BoHxQLoss_kW",
             "QSnkP_kW",
             # "TesQLoss_Tes1",
