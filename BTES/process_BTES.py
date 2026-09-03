@@ -325,6 +325,19 @@ def control(sim: api.Simulation):
 
 
 def balance(sim: api.Simulation):
+    #### Read solites values ####
+    df_solites = pd.read_csv('solites_balance.csv', sep=r'\s+', header=None)
+    df_solites = df_solites.T
+
+    sim.monthly['solites_solar']    = df_solites[0].values
+    sim.monthly['solites_btes_losses']   = df_solites[1].values
+    sim.monthly['solites_btes_accum']    = df_solites[2].values
+    sim.monthly['solites_ttes_accum'] = df_solites[3].values
+    sim.monthly['solites_comp']     = df_solites[4].values
+    sim.monthly['solites_aux']      = df_solites[5].values
+    sim.monthly['solites_demand']   = df_solites[6].values
+
+
     #### Calculations ####
     sim.scalar["QSources"] = sim.scalar["CollP_kW_calc_Tot"] + sim.scalar["BolrPOut_kW_Tot"] + sim.scalar[
         "HpPelComp_kW_Tot"]
@@ -337,20 +350,71 @@ def balance(sim: api.Simulation):
 
     sim.scalar["QImb"] = sim.scalar["QSources"] - sim.scalar["QStore"] - sim.scalar["QSinks"] - sim.scalar["QLosses"]
 
-    #### Plots ####
-    names_legend = ['$Q_{Coll}$', '$P_{Comp}$', '$Q_{Boiler}$', '$Q_{BTES,Accum}$',
-                    '$Q_{Demand}$', '$Q_{TES,Accum}$', '$Q_{TES,Losses}$', '$Q_{District}$']
-
+    # Monthly Resultes
+    names_legend = [
+        '$Q_{Coll}$',
+        '$P_{Comp}$',
+        '$Q_{Boiler}$',
+        '$Q_{TES,Accum}$',
+        '$Q_{BTES,Accum}$',
+        '$Q_{BTES,Losses}$',
+        '$Q_{Demand}$',
+        # '$Q_{TES,Losses}$',
+        # '$Q_{District}$'
+        ]
     fig, ax = api.energy_balance(
         sim.monthly,
-        q_in_columns=["CollP_kW_calc", "HpPelComp_kW", "BolrPOut_kW"],
-        q_out_columns=["BoHxQAve_kW", "QSnkP_kW", "TesQAcum_Tes1", "TesQLoss_Tes1", "qSysOut_dpToFFieldTot"],
+        q_in_columns=[
+            "CollP_kW_calc",
+            "HpPelComp_kW",
+            "BolrPOut_kW"
+        ],
+        q_out_columns=[
+            "TesQAcum_Tes1",
+            # "BoHxQAve_kW",
+            "BoHxQAccum_kW",
+            "BoHxQLoss_kW",
+            "QSnkP_kW",
+            # "TesQLoss_Tes1",
+            # "qSysOut_dpToFFieldTot"
+        ],
         # , "qSysOut_dpPipeIntTot", "qSysOut_dpSoilIntTot"],
         xlabel="",
         cmap="Paired"
     )
     plt.legend(names_legend, bbox_to_anchor=(1.05, 1), loc='upper left')
     api.export_plots_in_configured_formats(fig, sim.path, "balance-monthly", "balance")
+
+    # Monthly Solites
+    names_legend = [
+        '$Q_{Coll}$',
+        '$P_{Comp}$',
+        '$Q_{Boiler}$',
+        '$Q_{TTES,Accum}$',
+        '$Q_{BTES,Accum}$',
+        '$Q_{BTES,Losses}$',
+        '$Q_{Demand}$',
+        ]
+    fig, ax = api.energy_balance(
+        sim.monthly,
+        q_in_columns=[
+            "solites_solar",
+            "solites_comp",
+            "solites_aux",
+        ],
+        q_out_columns=[
+            "solites_ttes_accum",
+            "solites_btes_accum",
+            "solites_btes_losses",
+            "solites_demand",
+        ],
+        # , "qSysOut_dpPipeIntTot", "qSysOut_dpSoilIntTot"],
+        xlabel="",
+        cmap="Paired"
+    )
+    plt.legend(names_legend, bbox_to_anchor=(1.05, 1), loc='upper left')
+    api.export_plots_in_configured_formats(fig, sim.path, "balance-solites-monthly", "balance")
+
 
 
 def kpi(sim: api.Simulation):
@@ -397,7 +461,7 @@ def to_json(sim: api.Simulation):
 
 if __name__ == "__main__":
     path_to_sim = _pl.Path(r"C:\Daten\GIT\systems\BTES\results_more_power")
-    api.global_settings.reader.force_reread_prt = True
+    api.global_settings.reader.force_reread_prt = False
     api.global_settings.reader.read_step_files = False
 
     processing_steps = [
