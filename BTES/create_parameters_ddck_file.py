@@ -149,8 +149,8 @@ $BoHxZ = {storage.borehole_depth_m}
 BoSpacing = {storage.borehole_spacing_m}
 $BoHxNBor = INT({n_boreholes_fractional_1.name} + 0.5)
 $BoHxV = $BoHxNBor * (0.525 * BoSpacing)**2 * $PI * $BoHxZ
-$BoHxRb = {storage.heat_exchanger.fluid_to_ground_resistance_m_K_per_W}
-$BoHxRa = {-storage.heat_exchanger.pipe_to_pipe_resistance_m_K_per_W}
+$BoHxRb = {storage.heat_exchanger.fluid_to_ground_resistance_m_K_per_W / 3.6:.4f}
+$BoHxRa = {-storage.heat_exchanger.pipe_to_pipe_resistance_m_K_per_W / 3.6:.4f}
 
 {formatted_specified_and_solved_variables_block}
 
