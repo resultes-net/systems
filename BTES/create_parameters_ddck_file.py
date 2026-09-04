@@ -113,9 +113,16 @@ def test_get_solved_equations() -> None:
     data: _pyd.JsonValue = {
         "type": "btes",
         "storage": {
-            "n_boreholes": {"scaling": "relative_to_collector_area_1_per_m2", "value": 4e-3},
+            "n_boreholes": {
+                "scaling": "relative_to_collector_area_1_per_m2",
+                "value": 4e-3,
+            },
             "borehole_depth_m": 70,
             "borehole_spacing_m": 3,
+            "heat_exchanger": {
+                "fluid_to_ground_resistance_m_K_per_W": 0.1,
+                "pipe_to_pipe_resistance_m_K_per_W": 0.18,
+            },
         },
     }
 
@@ -142,6 +149,8 @@ $BoHxZ = {storage.borehole_depth_m}
 BoSpacing = {storage.borehole_spacing_m}
 $BoHxNBor = INT({n_boreholes_fractional_1.name} + 0.5)
 $BoHxV = $BoHxNBor * (0.525 * BoSpacing)**2 * $PI * $BoHxZ
+$BoHxRb = {storage.heat_exchanger.fluid_to_ground_resistance_m_K_per_W}
+$BoHxRa = {-storage.heat_exchanger.pipe_to_pipe_resistance_m_K_per_W}
 
 {formatted_specified_and_solved_variables_block}
 
