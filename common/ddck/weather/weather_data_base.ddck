@@ -26,7 +26,7 @@
 ** This variables will be used in all decks. Keep this nomenclature in Ddck
 *****************************************************************************
 
-EQUATIONS 11
+EQUATIONS #
 tAmbDry = [30,1]      !Ambient temperature °C
 vWind   = [30,3]      ! Wind velocity [m/s]
 EL = [30,5]           ! Long wave radiation [kJ/hm2]
