@@ -103,18 +103,19 @@ $AISA                   ! 12: Solar Azimuth Angle [degrees] ([0,90])
 $vWind                  ! 13: Wind Velocity [m/s] ([0.,+Inf])
 EmSky                   ! 14: Emissivity of the Sky [-] ([0.,1.])
 EmGnd                   ! 15: Emissivity of the Ground [-] ([0.,1.])
-Mode_ctrl               ! 16: Collector Outlet Temperature Control [-] ([0,4])
+0,0                     ! 16: Long-wave radiation - not used
+Mode_ctrl               ! 17: Collector Outlet Temperature Control [-] ([0,4])
                               ! 0 = run at specified inlet flow rate and calculate outlet temperature
                               ! 1 = modulate Mfr to maintain outlet temperature but turn off if the setpoint can't be maintained
                               ! 2 = modulate Mfr keep outlet as close to the setpoint as possible if the collector is gaining energy but turn off the collector if the collector is losing energy
                               ! 3 = modulate Mfr keep outlet as close to the setpoint as possible if the collector is either gaining or losing energy
                               ! 4 = modulate Mfr keep outlet as close to the setpoint as possible if the collector is gaining energy but turn off the collector if the collector is losing energy and set to the minimum flow rate if the outlet temperature is less than desired
-$TSetColl             ! 17: Outlet Temperature Setpoint [C] ([-Inf,+Inf])
-MfrMin                ! 18: Minimum Array Flow Rate [kg/hr] ([0.,+Inf])
-MfrMax                ! 19: Maximum Array Flow Rate [kg/hr] ([0.,+Inf])
+$TSetColl             ! 18: Outlet Temperature Setpoint [C] ([-Inf,+Inf])
+MfrMin                ! 19: Minimum Array Flow Rate [kg/hr] ([0.,+Inf])
+MfrMax                ! 20: Maximum Array Flow Rate [kg/hr] ([0.,+Inf])
 
 **** initial values
-20 0 10 10 0 0 0 45 45 0 45 45 0 0.9 0.9 0 100 200 6000
+20 0 10 10 0 0 0 45 45 0 45 45 0 0.9 0.9 0 0 100 200 6000
 
 EQUATIONS #
 TOut    = [17, 1] ! Outlet Temperature [C] ([-Inf,+Inf])
