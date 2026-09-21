@@ -91,7 +91,7 @@ INPUTS #
 TIn                 ! 1: Inlet Temperature [C] ([-Inf,+Inf])
 MfrIn               ! 2: Array Inlet Flowrate [kg/hr] ([0.0,+Inf])
 $Tamb                   ! 3: Ambient Temperature [C] ([-Inf,+Inf])
-$Tsky                   ! 4: Sky Temperature [C] ([-Inf,+Inf])
+0,0                     ! 4: Sky Temperature [C] ([-Inf,+Inf]) - unused
 $IB_surfUser_1          ! 5: Beam Radiation on the Tilted Surface [kJ/hr.m^2] ([0.0,+Inf])
 $ID_surfUser_1          ! 6: Sky Diffuse Radiation on Tilt [kJ/hr.m^2] ([0.0,+Inf])
 $IDG_surfUser_1         ! 7: Ground Diffuse Radiation on Tilt [kJ/hr.m^2] ([0.0,+Inf])
@@ -115,7 +115,7 @@ MfrMin                ! 19: Minimum Array Flow Rate [kg/hr] ([0.,+Inf])
 MfrMax                ! 20: Maximum Array Flow Rate [kg/hr] ([0.,+Inf])
 
 **** initial values
-20 0 10 10 0 0 0 45 45 0 45 45 0 0.9 0.9 0 0 100 200 6000
+20 0 10 0 0 0 0 45 45 0 45 45 0 0.9 0.9 0 0 100 200 6000
 
 EQUATIONS #
 TOut    = [17, 1] ! Outlet Temperature [C] ([-Inf,+Inf])
