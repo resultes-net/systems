@@ -103,7 +103,7 @@ $AISA                   ! 12: Solar Azimuth Angle [degrees] ([0,90])
 $vWind                  ! 13: Wind Velocity [m/s] ([0.,+Inf])
 EmSky                   ! 14: Emissivity of the Sky [-] ([0.,1.])
 EmGnd                   ! 15: Emissivity of the Ground [-] ([0.,1.])
-EL                      ! 16: Long-wave radiation [kJ/hr.m^2]
+$EL                     ! 16: Long-wave radiation [kJ/hr.m^2]
 Mode_ctrl               ! 17: Collector Outlet Temperature Control [-] ([0,4])
                               ! 0 = run at specified inlet flow rate and calculate outlet temperature
                               ! 1 = modulate Mfr to maintain outlet temperature but turn off if the setpoint can't be maintained
