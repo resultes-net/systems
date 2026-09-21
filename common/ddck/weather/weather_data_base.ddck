@@ -24,17 +24,12 @@
 ** outputs to other ddck
 ** DEFINITION of OVERALL VARIABLES
 ** This variables will be used in all decks. Keep this nomenclature in Ddck
-** To clean what is strictly necessary DC
-** Changes: 
-** 16.01.2023 - correct east facing facade if turned (AA_E) - SCHJ
 *****************************************************************************
 
 EQUATIONS 11
 tAmbDry = [30,1]      !Ambient temperature °C
-relHum  = [30,2]	  ! Relative humidity
 vWind   = [30,3]      ! Wind velocity [m/s]
-dirWind = [30,4]      ! Wind direction, north = 0, east = 90°, etc. [°]
-pAmb_Pa = [30,5]      ! ambient pressure [Pa]
+EL = [30,5]           ! Long wave radiation [kJ/hm2]
 AISZ = [30,10]        ! Solar zenith angle
 AISA = [30,11]        ! Solar azimuth angle
 IT_H = Max([30,12],0) ! total irradiation on the horizontal, kJ/hm2
@@ -111,15 +106,6 @@ EQUATIONS 2
 IT_H_Wm2 = IT_H_kW*100  
 IB_H_Wm2 = IB_H_KW*100  
 **IB_S_Wm2 = IB_S_kW*100     ! Direct Irradiation on south plane in kW/m3
-
-EQUATIONS 3    ! pressure conversions
-pamb_kPa = pamb_Pa/1000     ! ambient pressure [kPa]
-pamb_atm = pamb_kPa/101.325     ! Ambient pressure [atm]
-pamb_bar = pamb_kPa/100     ! Ambient pressure [bar]
-
-EQUATIONS 2     
-Tsky = [29,1]     ! effective sky temperature (°C)    
-dTsky = Tsky-Tamb     ! delta-T from sky to ambient (K)
 
 
 ***************************************
@@ -210,49 +196,10 @@ aziSurfUser_3   ! Azimuth of surface-7
 slopeSurfUser_4 ! Slope of surface-8
 aziSurfUser_4   ! Azimuth of surface-8
 
-  
-***************************************
-** PSYCHROMETRICS
-**************************************
-
-UNIT 33 TYPE 33     ! Psychrometrics
-PARAMETERS 3     
-2     ! 1 Psychrometrics mode 2: dry bulb and relative humidity known
-1     ! 2 Wet bulb mode 1: calculate wet bulb temperature; 0: do not calculate wet bulb temperature
-1     ! 3 Error mode 1: only one warning will be printed for the whole simulation; 2: all warnings will be printed
-INPUTS 3     
-tAmbDry ! Ambient dry bulb temperature [°C]
-relHum  ! Relative humidity [0..100]
-pamb_atm     ! Ambient pressure [atm]
-*** INITIAL INPUT VALUES     
-20 50 1      
-**
-
-EQUATIONS 6     
-tAmb_Met = [33,7]      
-tAmbDewPoint = [33,8]     ! dew point temp. [°C]
-RHamb_100 = [33,6]      ! Relative humidity [0..100]
-tAmb = Tamb_Met     ! Psychrometrics:Dry bulb temperature
-RHamb_1 = RHamb_100/100     
+EQUATIONS #
+tAmb = tAmbDry
 Tcw = MAX(TcwAvg,0.1)     !  Temperature shift cold water, K . We avoid below 0 °C
 
-***************************************
-** SKY TEMPERATURE
-**************************************
-
-
-UNIT 29 TYPE 69     ! Sky temp
-PARAMETERS 2     
-0     ! 1 mode for cloudiness factor
-altid     ! 2 height over sea level
-INPUTS 4     
-tamb_Met        ! Psychrometrics:Dry bulb temperature ->Ambient temperature
-tambDewPoint        ! Psychrometrics:Dew point temperature. ->Dew point temperature at ambient conditions
-IB_H       ! Weather data:beam radiation on horizontal ->Beam radiation on the horizontal
-ID_H      ! Weather data:sky diffuse radiation on horizontal ->Diffuse radiation on the horizontal
-*** INITIAL INPUT VALUES     
-0 20 0 0     
-***    
          
 ***************************************
 ** MONTHLY PRINTER
@@ -274,11 +221,11 @@ unitPrinterWeather    ! 1: Logical unit number, -
 -1     ! 4: Printing & integrating interval, h. -1 for monthly integration
 1     ! 5: Number of inputs to avoid integration, -
 1     ! 6: Output number to avoid integration
-INPUTS 40  
-Time Tamb tAmbDry relHum vWind dirWind pAmb_Pa AISZ AISA IT_H IB_H ID_H AI_H IT_N AI_N IB_N IT_S IB_S ID_S AI_S IT_E IB_E 
+INPUTS #  
+Time Tamb tAmbDry vWind AISZ AISA IT_H IB_H ID_H AI_H IT_N AI_N IB_N IT_S IB_S ID_S AI_S IT_E IB_E 
 ID_E AI_E IT_W IB_W ID_W AI_W IT_surfUser_1 IB_surfUser_1 ID_surfUser_1 IDS_surfUser_1 IDG_surfUser_1 AI_surfUser_1
 IT_surfUser_2 IB_surfUser_2 ID_surfUser_2 IDS_surfUser_2 IDG_surfUser_2 AI_surfUser_2 
-Time Tamb tAmbDry relHum vWind dirWind pAmb_Pa AISZ AISA IT_H IB_H ID_H AI_H IT_N AI_N IB_N IT_S IB_S ID_S AI_S IT_E IB_E 
+Time Tamb tAmbDry vWind AISZ AISA IT_H IB_H ID_H AI_H IT_N AI_N IB_N IT_S IB_S ID_S AI_S IT_E IB_E 
 ID_E AI_E IT_W IB_W ID_W AI_W IT_surfUser_1 IB_surfUser_1 ID_surfUser_1 IDS_surfUser_1 IDG_surfUser_1 AI_surfUser_1
 IT_surfUser_2 IB_surfUser_2 ID_surfUser_2 IDS_surfUser_2 IDG_surfUser_2 AI_surfUser_2 
 
@@ -301,13 +248,13 @@ unitPrinterWeatherHo    ! 1: Logical unit number, -
 1     ! 4: Printing & integrating interval, h. -1 for monthly integration
 1     ! 5: Number of inputs to avoid integration, -
 1     ! 6: Output number to avoid integration
-INPUTS 40
-Time Tamb tAmbDry relHum vWind dirWind pAmb_Pa AISZ AISA IT_H IB_H ID_H AI_H IT_N AI_N IB_N IT_S IB_S ID_S AI_S IT_E IB_E
+INPUTS #  
+Time Tamb tAmbDry vWind AISZ AISA IT_H IB_H ID_H AI_H IT_N AI_N IB_N IT_S IB_S ID_S AI_S IT_E IB_E 
 ID_E AI_E IT_W IB_W ID_W AI_W IT_surfUser_1 IB_surfUser_1 ID_surfUser_1 IDS_surfUser_1 IDG_surfUser_1 AI_surfUser_1
-IT_surfUser_2 IB_surfUser_2 ID_surfUser_2 IDS_surfUser_2 IDG_surfUser_2 AI_surfUser_2
-Time Tamb tAmbDry relHum vWind dirWind pAmb_Pa AISZ AISA IT_H IB_H ID_H AI_H IT_N AI_N IB_N IT_S IB_S ID_S AI_S IT_E IB_E
+IT_surfUser_2 IB_surfUser_2 ID_surfUser_2 IDS_surfUser_2 IDG_surfUser_2 AI_surfUser_2 
+Time Tamb tAmbDry vWind AISZ AISA IT_H IB_H ID_H AI_H IT_N AI_N IB_N IT_S IB_S ID_S AI_S IT_E IB_E 
 ID_E AI_E IT_W IB_W ID_W AI_W IT_surfUser_1 IB_surfUser_1 ID_surfUser_1 IDS_surfUser_1 IDG_surfUser_1 AI_surfUser_1
-IT_surfUser_2 IB_surfUser_2 ID_surfUser_2 IDS_surfUser_2 IDG_surfUser_2 AI_surfUser_2
+IT_surfUser_2 IB_surfUser_2 ID_surfUser_2 IDS_surfUser_2 IDG_surfUser_2 AI_surfUser_2 
 
    
 

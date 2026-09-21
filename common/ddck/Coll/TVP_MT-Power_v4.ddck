@@ -11,7 +11,7 @@ CONSTANTS #
 AMod          = 1.84        ! 1: Collector Module Area (aperture) [m^2] ([0.,+Inf]) (from the TVP pdf)
 NbModTot      = 2500        ! 2: Total Number of Modules [-] ([1,+Inf])
 NbModSr       = 1           ! 3: Number of Modules in Series [-] ([1,+Inf])
-LgwRadMode    = 2           ! 8: Long wave Radiation Mode [-] ([1,4])
+LgwRadMode    = 5           ! 8: Long wave Radiation Mode [-] ([1,5])
 c6            = 0           ! 15: Collector Efficiency Coefficient c6 [s/m] ([0.,+Inf])
 Kd            = 0.96        ! 16: Diffuse Radiation Coefficient (Kd) [-] ([0.,1.])
 InitArrayTemp = 20          ! 17: Initial Array Temperature [C] ([-Inf,+Inf])

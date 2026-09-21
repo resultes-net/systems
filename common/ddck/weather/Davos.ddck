@@ -1,0 +1,18 @@
+*******************************
+**BEGIN Davos.dck
+*******************************
+
+** Davos, CH
+CONSTANTS #   
+TambAvg = 10.14    ! average outdoor temperature, °C
+
+CONSTANTS #
+formatWeatherData = 1 ! 1 = user format, 2 = Standard weather file in the TMY2 format
+unitWeatherData=38
+
+ASSIGN ..\..\..\common\ddck\weather\Davos.csv unitWeatherData
+
+
+*******************************
+**END Davos.dck
+*******************************
