@@ -1,10 +1,13 @@
 import collections.abc as _cabc
 import dataclasses as _dc
+import datetime as _dt
 import json as _json
 import pathlib as _pl
+import shutil as _su
 import sys as _sys
 import typing as _tp
 
+import pandas as _pd
 import pydantic as _pyd
 import resultes_pydantic_models.simulations.parameters.common as _com
 import resultes_pydantic_models.simulations.parameters.common.collector_field as _pcoll
@@ -29,13 +32,15 @@ equations = [
     ),
 ]
 
+COMMON_DDCK_DIR_PATH = _pl.Path(__file__).parent / "ddck"
+
 PARAMETERS_DDCK_DIR_PATH = _pl.Path(__file__).parent / "ddck" / "parameters"
 
 PARAMETERS_DDCK_FILE_PATH = PARAMETERS_DDCK_DIR_PATH / "parameters.ddck"
 
-PREDEFINED_DEMAND_PROFILE_FILE_PATH = (
-    _pl.Path(__file__).parent / "ddck" / "QSnk" / "profile_norm.csv"
-)
+WEATHER_DATA_CSV_FILE_PATH = PARAMETERS_DDCK_DIR_PATH / "selected_weather_data.csv"
+
+PREDEFINED_DEMAND_PROFILE_FILE_PATH = COMMON_DDCK_DIR_PATH / "QSnk" / "profile_norm.csv"
 
 DEMAND_PROFILE_FILE_PATH = PARAMETERS_DDCK_DIR_PATH / "demand.csv"
 
@@ -122,27 +127,66 @@ def _get_collector_field_mass_flow_rate_specified_variable(
     _tp.assert_never(scaling)
 
 
-def _get_formatted_specified_variables_and_solved_equations(
-    parameters: _com.CommonParameters,
-) -> str:
-    specified_variables, solution = get_specified_variables_and_solution(parameters)
+@_dc.dataclass
+class WeatherDataStatistics:
+    """See TRNSYS Type 77: Simple Ground Temperature Model in TRNSYS' Mathematical reference."""
 
-    result = "CONSTANTS #\n"
+    yearly_average_temperature_degC: float
+    first_coldest_day_in_year: int
+    min_monthly_average_temperature_degC: float
+    max_monthly_average_temperature_degC: float
 
-    for specified_variable in specified_variables:
-        formatted_equation = (
-            f"{specified_variable.specified_variable}={specified_variable.value}\n"
-        )
-        result += formatted_equation
-
-    for variable, expression in solution.items():
-        formatted_equation = f"{variable}={expression}\n"
-        result += formatted_equation
-
-    return result
+    @property
+    def temperature_amplitude_degC(self) -> float:
+        return (
+            self.max_monthly_average_temperature_degC
+            - self.min_monthly_average_temperature_degC
+        ) / 2
 
 
-def test_get_solved_equations() -> None:
+def test_create_weather_data_statistics() -> None:
+    weather_data_statistics = _create_weather_data_statistics()
+    print(weather_data_statistics)
+
+
+def _create_weather_data_statistics() -> WeatherDataStatistics:
+    df = _pd.read_csv(
+        WEATHER_DATA_CSV_FILE_PATH,
+        sep=";",
+        skiprows=12,
+        names=["TIME", "ta", "Ghoris", "Gbn", "w10", "EL"],
+    )
+
+    index = _dt.datetime(2030, 1, 1, tzinfo=_dt.UTC) + _pd.to_timedelta(
+        df["TIME"], unit="hours"
+    )
+
+    df.index = index
+
+    yearly_average_temperature_degC = _tp.cast(float, df["ta"].mean().item())
+
+    daily_min_temperatures_degC = df["ta"].resample("D").min()
+    first_coldest_day_in_year = daily_min_temperatures_degC.argmin().item()
+
+    monthly_average_temperatures_degC = df["ta"].resample("MS").mean()
+    min_monthly_average_temperature_degC = (
+        monthly_average_temperatures_degC.min().item()
+    )
+    max_monthly_average_temperature_degC = (
+        monthly_average_temperatures_degC.max().item()
+    )
+
+    weather_data_statistics = WeatherDataStatistics(
+        yearly_average_temperature_degC=yearly_average_temperature_degC,
+        first_coldest_day_in_year=first_coldest_day_in_year,
+        min_monthly_average_temperature_degC=min_monthly_average_temperature_degC,
+        max_monthly_average_temperature_degC=max_monthly_average_temperature_degC,
+    )
+
+    return weather_data_statistics
+
+
+def test_create_parameters_ddck_contents() -> None:
     data: _pyd.JsonValue = {
         "time": {"start": 5760, "stop": 17280, "dt_sim": 0.5},
         "demand": {
@@ -188,12 +232,21 @@ def test_get_solved_equations() -> None:
 
     parameters = _com.CommonParameters(**data)
 
-    result = _create_parameters_ddck_contents(parameters)
+    weather_data_statistics = WeatherDataStatistics(
+        yearly_average_temperature_degC=10.14,
+        first_coldest_day_in_year=44,
+        min_monthly_average_temperature_degC=-2,
+        max_monthly_average_temperature_degC=18,
+    )
+
+    result = _create_parameters_ddck_contents(parameters, weather_data_statistics)
 
     print(result)
 
 
-def _create_parameters_ddck_contents(parameters: _com.CommonParameters) -> str:
+def _create_parameters_ddck_contents(
+    parameters: _com.CommonParameters, weather_data_statistics: WeatherDataStatistics
+) -> str:
     time = parameters.time
 
     demand = parameters.demand
@@ -217,6 +270,10 @@ CONSTANTS #
 $START = {time.start}
 $STOP = {time.stop}
 $dtSim = {time.dt_sim}
+
+$TambAvg = {weather_data_statistics.yearly_average_temperature_degC}
+$dTambAmpl = {weather_data_statistics.temperature_amplitude_degC}
+$ddTcwOffset = {weather_data_statistics.first_coldest_day_in_year}
 
 $QSnkScalingFactor = {demand.scaling_factor:.2}
 $QSnkQUnscaled_MWh = {unscaledYearlyHeatDemandMWh}
@@ -253,22 +310,24 @@ $TTesMax = {control.storage_temperature_maximum_degC}
     return parameters_ddck_contents
 
 
-def main(parameters_json_file_path: _pl.Path) -> None:
-    with parameters_json_file_path.open("r") as file:
-        data = _json.load(file)
+def _get_formatted_specified_variables_and_solved_equations(
+    parameters: _com.CommonParameters,
+) -> str:
+    specified_variables, solution = get_specified_variables_and_solution(parameters)
 
-    simulation = _sim.SimulationWithParams(**data)
+    result = "CONSTANTS #\n"
 
-    values = simulation.parameters.values
+    for specified_variable in specified_variables:
+        formatted_equation = (
+            f"{specified_variable.specified_variable}={specified_variable.value}\n"
+        )
+        result += formatted_equation
 
-    parameters_ddck_contents = _create_parameters_ddck_contents(values)
-    PARAMETERS_DDCK_FILE_PATH.write_text(parameters_ddck_contents)
+    for variable, expression in solution.items():
+        formatted_equation = f"{variable}={expression}\n"
+        result += formatted_equation
 
-    _write_demand_profile(values.demand.hourly_heat_demand_MW)
-
-    _write_whr_source_supply_profile(values.waste_heat_recovery_source)
-
-    _write_iam_parameters_file(values.collector_field.iam)
+    return result
 
 
 def _write_demand_profile(hourly_heat_demand_MW: _cabc.Sequence[float]) -> None:
@@ -310,6 +369,28 @@ def _write_iam_parameters_file(iam: _pcoll.IAM) -> None:
 """
 
     IAM_PARAMETERS_FILE_PATH.write_text(iam_parameters_contents)
+
+
+def main(parameters_json_file_path: _pl.Path) -> None:
+    with parameters_json_file_path.open("r") as file:
+        data = _json.load(file)
+    simulation = _sim.SimulationWithParams(**data)
+    values = simulation.parameters.values
+
+    selected_weather_data_csv_file_path = COMMON_DDCK_DIR_PATH / "weather" / "Davos.csv"
+    _su.copy(selected_weather_data_csv_file_path, WEATHER_DATA_CSV_FILE_PATH)
+    weather_data_statistics = _create_weather_data_statistics()
+
+    parameters_ddck_contents = _create_parameters_ddck_contents(
+        values, weather_data_statistics
+    )
+    PARAMETERS_DDCK_FILE_PATH.write_text(parameters_ddck_contents)
+
+    _write_demand_profile(values.demand.hourly_heat_demand_MW)
+
+    _write_whr_source_supply_profile(values.waste_heat_recovery_source)
+
+    _write_iam_parameters_file(values.collector_field.iam)
 
 
 if __name__ == "__main__":
