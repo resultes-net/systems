@@ -152,7 +152,7 @@ def test_create_weather_data_statistics() -> None:
 def _create_weather_data_statistics() -> WeatherDataStatistics:
     df = _pd.read_csv(
         WEATHER_DATA_CSV_FILE_PATH,
-        sep=";",
+        sep=r"\s+",
         skiprows=12,
         names=["TIME", "ta", "Ghoris", "Gbn", "w10", "EL"],
     )
