@@ -44,11 +44,42 @@ ROLLED_OUT_WEATHER_DATA_FILE_PATH = (
     PARAMETERS_DDCK_DIR_PATH / "selected_weather_data_rolled_out.type99"
 )
 
-ROLLED_OUT_WEATHER_DATA_FILE_HEADER = """\
+
+@_dc.dataclass
+class LocationParameters:
+    longitude: float
+    std_longitude: float
+    latitude: float
+
+    @property
+    def utc_offset(self) -> float:
+        return self.std_longitude / -15
+
+
+LOCATION_PARAMETERS: dict[_sim.Location, LocationParameters] = {
+    l: LocationParameters(*ps)
+    for l, *ps in (
+        (_sim.Location.ALPINE, -9.844, -15, 46.813),
+        (_sim.Location.COLD, 113.583, 105, 53.3),
+        (_sim.Location.DRY, -31.283, -30, 30.083),
+        (_sim.Location.HOT, -54.650, -55, 24.430),
+        (_sim.Location.MEDITERRANEAN, -12.583, -15, 41.800),
+        (_sim.Location.SUBTROPIC, -80.183, -82.5, 13.000),
+        (_sim.Location.TEMPERATE, 0.117, 0.0, 51.517),
+        (_sim.Location.TROPICAL, 90.250, 90, 29.983),
+        (_sim.Location.WET, 60.017, 60.0, -3.133),
+    )
+}
+
+
+def create_rolled_out_weather_data_file_header(location: _sim.Location) -> str:
+    p = LOCATION_PARAMETERS[location]
+
+    result = f"""\
 <userdefined>
-    <longitude> -9.84 ! East of greenwich: negative
-    <latitude> 46.81
-    <gmt> 1 !time shift from GMT, east: positive (hours)
+    <longitude> {p.longitude} ! East of greenwich: negative
+    <latitude> {p.latitude}
+    <gmt> {p.utc_offset} !time shift from GMT, east: positive (hours)
     <interval> 1 !Data file time interval between consecutive lines (hours)
     <firsttime> 1 !Time corresponding to first data line (hours)
     <var> TAMB <col> 2 <interp> 2 <add> 0 <mult> 1 <samp> 0 !...to get °C
@@ -58,6 +89,9 @@ ROLLED_OUT_WEATHER_DATA_FILE_HEADER = """\
     <var> E_L <col> 6 <interp> 1 <add> 0 <mult> 3.6 <samp> 0 !...to get long-wave radiation in kJ/hr.m^2
 <data>
 """
+
+    return result
+
 
 WEATHER_DATA_N_YEARS = 10
 
@@ -165,19 +199,25 @@ class WeatherDataStatistics:
         ) / 2
 
 
-def prepare_weather_data_and_get_statistics():
-    selected_weather_data_csv_file_path = COMMON_DDCK_DIR_PATH / "weather" / "Davos.csv"
+def prepare_weather_data_and_get_statistics(
+    location: _sim.Location,
+) -> WeatherDataStatistics:
+    selected_weather_data_csv_file_path = (
+        COMMON_DDCK_DIR_PATH / "weather" / (location.value.capitalize() + ".csv")
+    )
     _su.copy(selected_weather_data_csv_file_path, WEATHER_DATA_CSV_FILE_PATH)
 
     weather_data_statistics = _create_weather_data_statistics()
 
     contents = WEATHER_DATA_CSV_FILE_PATH.read_text()
-    contents_without_header = "\n".join(contents.splitlines()[1:]) + "\n"
-    rolled_out_contents = (
-        ROLLED_OUT_WEATHER_DATA_FILE_HEADER
-        + "\n"
-        + contents_without_header * WEATHER_DATA_N_YEARS
-    )
+    data_lines = [line for line in contents.splitlines() if not line.startswith("#")][
+        1:
+    ]
+    contents_without_header = "\n".join(data_lines) + "\n"
+
+    header = create_rolled_out_weather_data_file_header(location)
+
+    rolled_out_contents = header + "\n" + contents_without_header * WEATHER_DATA_N_YEARS
     ROLLED_OUT_WEATHER_DATA_FILE_PATH.write_text(rolled_out_contents)
 
     return weather_data_statistics
@@ -189,10 +229,7 @@ def test_create_weather_data_statistics() -> None:
 
 
 def _create_weather_data_statistics() -> WeatherDataStatistics:
-    df = _pd.read_csv(
-        WEATHER_DATA_CSV_FILE_PATH,
-        sep=r"\s+",
-    )
+    df = _pd.read_csv(WEATHER_DATA_CSV_FILE_PATH, sep=r"\s+", comment="#")
 
     index = _dt.datetime(2030, 1, 1, tzinfo=_dt.UTC) + _pd.to_timedelta(
         df["TIME"], unit="hours"
@@ -414,7 +451,9 @@ def main(parameters_json_file_path: _pl.Path) -> None:
     simulation = _sim.SimulationWithParams(**data)
     values = simulation.parameters.values
 
-    weather_data_statistics = prepare_weather_data_and_get_statistics()
+    weather_data_statistics = prepare_weather_data_and_get_statistics(
+        simulation.location
+    )
 
     parameters_ddck_contents = _create_parameters_ddck_contents(
         values, weather_data_statistics
@@ -434,5 +473,7 @@ if __name__ == "__main__":
         _sys.exit(-1)
 
     parameters_json_file_path = _pl.Path(_sys.argv[1])
+
+    main(parameters_json_file_path)
 
     main(parameters_json_file_path)
