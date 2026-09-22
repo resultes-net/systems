@@ -217,7 +217,7 @@ def prepare_weather_data_and_get_statistics(
 
     header = create_rolled_out_weather_data_file_header(location)
 
-    rolled_out_contents = header + "\n" + contents_without_header * WEATHER_DATA_N_YEARS
+    rolled_out_contents = header + contents_without_header * WEATHER_DATA_N_YEARS
     ROLLED_OUT_WEATHER_DATA_FILE_PATH.write_text(rolled_out_contents)
 
     return weather_data_statistics
