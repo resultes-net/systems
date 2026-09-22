@@ -40,6 +40,27 @@ PARAMETERS_DDCK_FILE_PATH = PARAMETERS_DDCK_DIR_PATH / "parameters.ddck"
 
 WEATHER_DATA_CSV_FILE_PATH = PARAMETERS_DDCK_DIR_PATH / "selected_weather_data.csv"
 
+ROLLED_OUT_WEATHER_DATA_FILE_PATH = (
+    PARAMETERS_DDCK_DIR_PATH / "selected_weather_data_rolled_out.type99"
+)
+
+ROLLED_OUT_WEATHER_DATA_FILE_HEADER = """\
+<userdefined>
+    <longitude> -9.84 ! East of greenwich: negative
+    <latitude> 46.81
+    <gmt> 1 !time shift from GMT, east: positive (hours)
+    <interval> 1 !Data file time interval between consecutive lines (hours)
+    <firsttime> 1 !Time corresponding to first data line (hours)
+    <var> TAMB <col> 2 <interp> 2 <add> 0 <mult> 1 <samp> 0 !...to get °C
+    <var> IGLOB_H <col> 3 <interp> 0 <add> 0 <mult> 1 <samp> 0 !...to get radiation in W/m²
+    <var> IBEAM_N <col> 4 <interp> 0 <add> 0 <mult> 1 <samp> 0 !...to get radiation in W/m²
+    <var> WSPEED <col> 5 <interp> 1 <add> 0 <mult> 1 <samp> 0 !...to get wind speed in m/s
+    <var> E_L <col> 6 <interp> 1 <add> 0 <mult> 3.6 <samp> 0 !...to get long-wave radiation in kJ/hr.m^2
+<data>
+"""
+
+WEATHER_DATA_N_YEARS = 10
+
 PREDEFINED_DEMAND_PROFILE_FILE_PATH = COMMON_DDCK_DIR_PATH / "QSnk" / "profile_norm.csv"
 
 DEMAND_PROFILE_FILE_PATH = PARAMETERS_DDCK_DIR_PATH / "demand.csv"
@@ -144,6 +165,24 @@ class WeatherDataStatistics:
         ) / 2
 
 
+def prepare_weather_data_and_get_statistics():
+    selected_weather_data_csv_file_path = COMMON_DDCK_DIR_PATH / "weather" / "Davos.csv"
+    _su.copy(selected_weather_data_csv_file_path, WEATHER_DATA_CSV_FILE_PATH)
+
+    weather_data_statistics = _create_weather_data_statistics()
+
+    contents = WEATHER_DATA_CSV_FILE_PATH.read_text()
+    contents_without_header = "\n".join(contents.splitlines()[1:]) + "\n"
+    rolled_out_contents = (
+        ROLLED_OUT_WEATHER_DATA_FILE_HEADER
+        + "\n"
+        + contents_without_header * WEATHER_DATA_N_YEARS
+    )
+    ROLLED_OUT_WEATHER_DATA_FILE_PATH.write_text(rolled_out_contents)
+
+    return weather_data_statistics
+
+
 def test_create_weather_data_statistics() -> None:
     weather_data_statistics = _create_weather_data_statistics()
     print(weather_data_statistics)
@@ -153,8 +192,6 @@ def _create_weather_data_statistics() -> WeatherDataStatistics:
     df = _pd.read_csv(
         WEATHER_DATA_CSV_FILE_PATH,
         sep=r"\s+",
-        skiprows=12,
-        names=["TIME", "ta", "Ghoris", "Gbn", "w10", "EL"],
     )
 
     index = _dt.datetime(2030, 1, 1, tzinfo=_dt.UTC) + _pd.to_timedelta(
@@ -271,8 +308,8 @@ $START = {time.start}
 $STOP = {time.stop}
 $dtSim = {time.dt_sim}
 
-$TambAvg = {weather_data_statistics.yearly_average_temperature_degC}
-$dTambAmpl = {weather_data_statistics.temperature_amplitude_degC}
+$TambAvg = {weather_data_statistics.yearly_average_temperature_degC:.1}
+$dTambAmpl = {weather_data_statistics.temperature_amplitude_degC:.1}
 $ddTcwOffset = {weather_data_statistics.first_coldest_day_in_year}
 
 $QSnkScalingFactor = {demand.scaling_factor:.2}
@@ -377,9 +414,7 @@ def main(parameters_json_file_path: _pl.Path) -> None:
     simulation = _sim.SimulationWithParams(**data)
     values = simulation.parameters.values
 
-    selected_weather_data_csv_file_path = COMMON_DDCK_DIR_PATH / "weather" / "Davos.csv"
-    _su.copy(selected_weather_data_csv_file_path, WEATHER_DATA_CSV_FILE_PATH)
-    weather_data_statistics = _create_weather_data_statistics()
+    weather_data_statistics = prepare_weather_data_and_get_statistics()
 
     parameters_ddck_contents = _create_parameters_ddck_contents(
         values, weather_data_statistics

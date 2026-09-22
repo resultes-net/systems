@@ -1,15 +1,4 @@
-<userdefined>
-    <longitude> -9.84 ! East of greenwich: negative
-    <latitude> 46.81
-    <gmt> 1 !time shift from GMT, east: positive (hours)
-    <interval> 1 !Data file time interval between consecutive lines (hours)
-    <firsttime> 1 !Time corresponding to first data line (hours)
-    <var> TAMB <col> 2 <interp> 2 <add> 0 <mult> 1 <samp> 0 !...to get °C
-    <var> IGLOB_H <col> 3 <interp> 0 <add> 0 <mult> 1 <samp> 0 !...to get radiation in W/m²
-    <var> IBEAM_N <col> 4 <interp> 0 <add> 0 <mult> 1 <samp> 0 !...to get radiation in W/m²
-    <var> WSPEED <col> 5 <interp> 1 <add> 0 <mult> 1 <samp> 0 !...to get wind speed in m/s
-    <var> E_L <col> 6 <interp> 1 <add> 0 <mult> 3.6 <samp> 0 !...to get long-wave radiation in kJ/hr.m^2
-<data>
+TIME ta Ghoris Gbn w10 EL
 1 2.21 0.00 0.00 0.91 253.68
 2 1.50 0.00 0.00 1.01 253.29
 3 0.76 0.00 0.00 1.01 252.49

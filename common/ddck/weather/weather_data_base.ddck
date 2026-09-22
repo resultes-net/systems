@@ -102,11 +102,6 @@ IB_H_kW = IB_H/3600
 IT_S_kW = IT_S/3600     ! Irradiation on south plane in kW/m2
 IB_S_kW = IB_S/3600     ! Direct Irradiation on south plane in kW/m3
 
-EQUATIONS 2
-IT_H_Wm2 = IT_H_kW*100  
-IB_H_Wm2 = IB_H_KW*100  
-**IB_S_Wm2 = IB_S_kW*100     ! Direct Irradiation on south plane in kW/m3
-
 
 ***************************************
 ** overall constants
@@ -153,13 +148,12 @@ aziSurfUser_4 = 70.    ! Azimuth of surface-8
 ** TYPE 109 TRNSYS
 **************************************
 
-UNIT 30 TYPE 109 ! Weather data for collectors     
-PARAMETERS 4
-myFormatWeatherData  ! 1 = user format, 2 = Standard weather file in the TMY2 format  FROM CITY...
-myUnitWeatherData    ! 2 Logical unit 
-4     ! 3 Sky model for diffuse radiation: 1: Isotropic sky model; 2: Hay and Davies model; 3: Reindl model; 4: Perez model
-1     ! 4 Tracking mode: 1: Fixed surface; 2: single-axis tracking,vertical axis (fixed slope); 3: single-axis tracking in the plane of the surface; 4 two axis tracking
-INPUTS 17 ! these inputs don't accept numbers but variables
+UNIT 30 TYPE 99 ! Weather data for collectors     
+PARAMETERS #
+myUnitWeatherData    ! 1 Logical unit 
+4     ! 2 Sky model for diffuse radiation: 1: Isotropic sky model; 2: Hay and Davies model; 3: Reindl model; 4: Perez model
+1     ! 3 Tracking mode: 1: Fixed surface; 2: single-axis tracking,vertical axis (fixed slope); 3: single-axis tracking in the plane of the surface; 4 two axis tracking
+INPUTS # ! these inputs don't accept numbers but variables
 0,0
 0,0
 0,0
