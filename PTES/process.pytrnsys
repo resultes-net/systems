@@ -102,6 +102,16 @@ def hx(sim: api.Simulation):
 
 
 def ptes(sim: api.Simulation):
+    #### Read solites values ####
+    df_solites = pd.read_csv('solites_temp.csv', sep=r'\s+', header=None)
+    sim.hourly["pitStore1_solites"] = df_solites.iloc[: len(sim.hourly), 0].values
+    sim.hourly["pitStore10_solites"] = df_solites.iloc[: len(sim.hourly), 1].values
+    sim.hourly["pitStore20_solites"] = df_solites.iloc[: len(sim.hourly), 2].values
+    sim.hourly["pitStore30_solites"] = df_solites.iloc[: len(sim.hourly), 3].values
+    sim.hourly["pitStore40_solites"] = df_solites.iloc[: len(sim.hourly), 4].values
+    sim.hourly["pitStore50_solites"] = df_solites.iloc[: len(sim.hourly), 5].values
+    sim.hourly["pitStoreAve_solites"] = df_solites.iloc[: len(sim.hourly), 6].values
+
 
     #### Calculations ####
     sim.scalar["pitStoreQLosses_kW_Tot"] = sim.hourly["pitStoreQLosses_kW"].sum()
@@ -122,7 +132,7 @@ def ptes(sim: api.Simulation):
         sim.scalar["pitStoreStVolume"]
         * sim.scalar["pitStoreFlDen"]
         * sim.scalar["pitStoreFlSpeHeat"]
-        * (sim.scalar["TTesMax"] - 0)
+        * (sim.scalar["SolarControlTTesMax"] - 0)
         / 3600
     )
     sim.scalar["pitStoreNCycles"] = (
@@ -146,12 +156,64 @@ def ptes(sim: api.Simulation):
     )
 
     #### Plots ####
+    # names_legend = [
+    #     '$T_{top,Resultes}$',
+    #     '$T_{medium,Resultes}$',
+    #     '$T_{bottom,Resultes}$',
+    #     '$T_{top,Solites}$',
+    #     '$T_{medium,Solites}$',
+    #     '$T_{bottom,Solites}$',
+    # ]
+
+    names_legend = [
+        '$T_{top}$',
+        '$T_{medium}$',
+        '$T_{bottom}$'
+    ]
+    # fig, ax = api.line_plot(
+    #     sim.hourly, ["pitStoreTTherStat1", "pitStoreTTherStat2", "pitStoreTTherStat3",
+    #                  "pitStore1_solites","pitStoreAve_solites","pitStore50_solites"]
+    # )
+
     fig, ax = api.line_plot(
         sim.hourly, ["pitStoreTTherStat1", "pitStoreTTherStat2", "pitStoreTTherStat3"]
     )
-    ax.set_ylabel("Temperature (°C)")
-    plt.grid()
+
+
     # plt.show()
+
+
+    # lines = ax.get_lines()
+    #
+    # if len(lines) == 6:
+    #     # Define colors for Top, Medium, Bottom
+    #     color_top = '#D32F2F'  # Red
+    #     color_medium = '#1976D2'  # Blue
+    #     color_bottom = '#388E3C'  # Green
+    #
+    #     # Set styles for the first group (Solid lines)
+    #     lines[0].set_color(color_top)
+    #     lines[0].set_linestyle('-')  # Solid line
+    #
+    #     lines[1].set_color(color_medium)
+    #     lines[1].set_linestyle('-')
+    #
+    #     lines[2].set_color(color_bottom)
+    #     lines[2].set_linestyle('-')
+    #
+    #     # Set styles for the second group (Dashed lines, matching colors)
+    #     lines[3].set_color(color_top)
+    #     lines[3].set_linestyle('--')  # Dashed line
+    #
+    #     lines[4].set_color(color_medium)
+    #     lines[4].set_linestyle('--')
+    #
+    #     lines[5].set_color(color_bottom)
+    #     lines[5].set_linestyle('--')
+
+    ax.set_ylabel("Temperature (°C)")
+    plt.legend(names_legend)
+    plt.grid()
     api.export_plots_in_configured_formats(fig, sim.path, "t-ptes-hourly", "ptes")
 
     fig, ax = api.line_plot(
@@ -365,14 +427,36 @@ def demand(sim: api.Simulation):
     # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "sink-hourly", "sink")
 
+    #### Load duration curve ####
+    sorted_demand = sim.hourly["QSnkP_kW"].sort_values(ascending=False).values
+    duration_h = np.arange(1, len(sorted_demand) + 1)
+
+    plt.figure()
+    fig = plt.plot(duration_h, sorted_demand)
+    plt.xlabel("Duration (h)")
+    plt.ylabel("Power (kW)")
+    plt.grid()
+    plt.tight_layout()
+    # plt.show()
+    api.export_plots_in_configured_formats(fig[0].figure, sim.path, "load-duration-hourly", "sink")
+
 
 
 def balance(sim: api.Simulation):
+    #### Read solites values ####
+    df_solites = pd.read_csv('solites_balance.csv', sep=r'\s+', header=None)
+    df_solites = df_solites.T
+
+    sim.monthly['solites_solar']    = df_solites[0].values
+    sim.monthly['solites_comp']   = df_solites[1].values
+    sim.monthly['solites_aux']    = df_solites[2].values
+    sim.monthly['solites_demand'] = df_solites[3].values
+    sim.monthly['solites_ptes_accum']     = df_solites[4].values
+    sim.monthly['solites_ptes_losses']      = df_solites[5].values
+
+
 
     #### Calculations ####
-
-
-
     sim.scalar["QSources"] = (
         sim.scalar["CollP_kW_calc_Tot"]
         + sim.scalar["BolrPOut_kW_Tot"]
@@ -419,38 +503,89 @@ def balance(sim: api.Simulation):
     sim.scalar["qSysOut_PipeLoss_MW"] = sim.monthly["qSysOut_PipeLoss_MW"].sum()
     sim.scalar["QDistrict_MW"] = sim.monthly["QDistrict_MW"].sum()
 
+    # Monthly resultes
+
     names_legend = [
         "$Q_{Coll}$",
         "$P_{Comp}$",
         "$Q_{Boiler}$",
-        "$Q_{Source}$",
+        # "$Q_{Source}$",
         "$Q_{Demand}$",
         "$Q_{PTES,Accum}$",
         "$Q_{PTES,Losses}$",
-        "$Q_{Pipes}$",
-        "$Q_{District}$",
+        # "$Q_{Pipes}$",
+        # "$Q_{District}$",
         "$Q_{Imb}$",
     ]
 
-    # Monthly
+    custom_colors = [
+        "#FF9F40",  # 1. Naranja (Ej. Colector solar)
+        "#4CAF50",  # 2. Verde (Para una nueva variable, ej. Bomba de calor)
+        "#FF6384",  # 3. Rojo/Rosa (Ej. Caldera)
+        "#36A2EB",  # 4. Azul (Ej. Demanda)
+        "#4BC0C0",  # 5. Turquesa (Ej. Acumulación)
+        "#9966FF",  # 6. Morado (Ej. Pérdidas)
+        "#C9CBCF",  # 7. Gris claro (Ej. Desbalance)
+
+        # "#FFC107",  # 8. Amarillo/Ambar (Para otra variable, ej. Electricidad)
+        # "#795548"  # 9. Marrón (Para otra variable extra, ej. Biomasa)
+    ]
+
+
+
     fig, ax = api.energy_balance(
         sim.monthly,
-        q_in_columns=["CollP_kW_calc_MW", "HpPelComp_MW", "BolrPOut_MW", "QSrcP_MW"],
+        q_in_columns=[
+            "CollP_kW_calc_MW",
+            "HpPelComp_MW",
+            "BolrPOut_MW",
+            # "QSrcP_MW"
+        ],
         q_out_columns=[
             "QSnkP_MW",
             "pitStoreQAccum_MW",
             "pitStoreQLosses_MW",
-            "qSysOut_PipeLoss_MW",
-            "QDistrict_MW",
+            # "qSysOut_PipeLoss_MW",
+            # "QDistrict_MW",
         ],
         xlabel="",
         cmap="Paired",
+        color=custom_colors,
     )
     ax.set_ylabel("Energy (MWh)")
     plt.legend(names_legend, bbox_to_anchor=(1.05, 1), loc="upper left")
     # plt.show()
-
     api.export_plots_in_configured_formats(fig, sim.path, "balance-monthly", "balance")
+
+    # Monthly solites
+    sim.monthly['solites_solar']    = df_solites[0].values
+    sim.monthly['solites_comp']   = df_solites[1].values
+    sim.monthly['solites_aux']    = df_solites[2].values
+    sim.monthly['solites_demand'] = df_solites[3].values
+    sim.monthly['solites_ptes_accum']     = df_solites[4].values
+    sim.monthly['solites_ptes_losses']      = df_solites[5].values
+
+
+    fig, ax = api.energy_balance(
+        sim.monthly,
+        q_in_columns=[
+            "solites_solar",
+            "solites_comp",
+            "solites_aux",
+        ],
+        q_out_columns=[
+            "solites_demand",
+            "solites_ptes_accum",
+            "solites_ptes_losses",
+        ],
+        xlabel="",
+        cmap="Paired",
+        color=custom_colors,
+    )
+    ax.set_ylabel("Energy (MWh)")
+    plt.legend(names_legend, bbox_to_anchor=(1.05, 1), loc="upper left")
+    # plt.show()
+    api.export_plots_in_configured_formats(fig, sim.path, "balance-solites-monthly", "balance")
 
     # Yearly
     fig, ax = api.energy_balance(
@@ -574,7 +709,7 @@ if __name__ == "__main__":
         sys.exit(-1)
 
     path_to_results_folder = pl.Path(sys.argv[1])
-    api.global_settings.reader.force_reread_prt = True
+    api.global_settings.reader.force_reread_prt = False
     api.global_settings.reader.read_step_files = False
 
     processing_steps = [

@@ -351,6 +351,14 @@ def balance(sim: api.Simulation):
     sim.scalar["QStore"] = sim.scalar["BoHxQAve_kW_Tot"] + sim.scalar["TesQAcum_Tes1_Tot"]
     sim.scalar["QLosses"] = sim.scalar["TesQLoss_Tes1_Tot"] + sim.scalar["qSysOut_PipeLoss_Tot"]
 
+    sim.monthly["CollP_MW_calc"] = sim.monthly["CollP_kW_calc"] / 1000
+    sim.monthly["HpPelComp_MW"] = sim.monthly["HpPelComp_kW"] / 1000
+    sim.monthly["BolrPOut_MW"] = sim.monthly["BolrPOut_kW"] / 1000
+    sim.monthly["TesQAcum_Tes1_MW"] = sim.monthly["TesQAcum_Tes1"] / 1000
+    sim.monthly["BoHxQAve_MW"] = sim.monthly["BoHxQAve_kW"] / 1000
+    sim.monthly["BoHxQLoss_MW"] = sim.monthly["BoHxQLoss_kW"] / 1000
+    sim.monthly["QSnkP_MW"] = sim.monthly["QSnkP_kW"] / 1000
+
     sim.monthly["QDistrict_MW"] = sim.monthly["QDistrict"] / 1000
     sim.scalar["QDistrict_MW"] = sim.monthly["QDistrict_MW"].sum()
 
@@ -365,42 +373,49 @@ def balance(sim: api.Simulation):
         '$Q_{BTES,Accum}$',
         '$Q_{BTES,Losses}$',
         '$Q_{Demand}$',
+        '$Q_{Imb}$'
         # '$Q_{TES,Losses}$',
         # '$Q_{District}$'
         ]
+    custom_colors = [
+        "#FF9F40",  # 1. Naranja (Ej. Colector solar)
+        "#4CAF50",  # 2. Verde (Para una nueva variable, ej. Bomba de calor)
+        "#FF6384",  # 3. Rojo/Rosa (Ej. Caldera)
+        "#FFC107",  # 4. Amarillo/Ambar (Para otra variable, ej. Electricidad)
+        "#4BC0C0",  # 5. Turquesa (Ej. Acumulación)
+        "#9966FF",  # 6. Morado (Ej. Pérdidas)
+        "#36A2EB",  # 7. Azul (Ej. Demanda)
+        "#C9CBCF",  # 8. Gris claro (Ej. Desbalance)
+
+        #
+        # "#795548"  # 9. Marrón (Para otra variable extra, ej. Biomasa)
+    ]
     fig, ax = api.energy_balance(
         sim.monthly,
         q_in_columns=[
-            "CollP_kW_calc",
-            "HpPelComp_kW",
-            "BolrPOut_kW"
+            "CollP_MW_calc",
+            "HpPelComp_MW",
+            "BolrPOut_MW"
         ],
         q_out_columns=[
-            "TesQAcum_Tes1",
-            "BoHxQAve_kW",
+            "TesQAcum_Tes1_MW",
+            "BoHxQAve_MW",
             # "BoHxQAccum_kW",
-            "BoHxQLoss_kW",
-            "QSnkP_kW",
+            "BoHxQLoss_MW",
+            "QSnkP_MW",
             # "TesQLoss_Tes1",
             # "qSysOut_dpToFFieldTot"
         ],
         # , "qSysOut_dpPipeIntTot", "qSysOut_dpSoilIntTot"],
         xlabel="",
-        cmap="Paired"
+        cmap="Paired",
+        color=custom_colors,
     )
+    ax.set_ylabel("Energy (MWh)")
     plt.legend(names_legend, bbox_to_anchor=(1.05, 1), loc='upper left')
     api.export_plots_in_configured_formats(fig, sim.path, "balance-monthly", "balance")
 
     # Monthly Solites
-    names_legend = [
-        '$Q_{Coll}$',
-        '$P_{Comp}$',
-        '$Q_{Boiler}$',
-        '$Q_{TTES,Accum}$',
-        '$Q_{BTES,Accum}$',
-        '$Q_{BTES,Losses}$',
-        '$Q_{Demand}$',
-        ]
     fig, ax = api.energy_balance(
         sim.monthly,
         q_in_columns=[
@@ -416,8 +431,10 @@ def balance(sim: api.Simulation):
         ],
         # , "qSysOut_dpPipeIntTot", "qSysOut_dpSoilIntTot"],
         xlabel="",
-        cmap="Paired"
+        cmap="Paired",
+        color=custom_colors,
     )
+    ax.set_ylabel("Energy (MWh)")
     plt.legend(names_legend, bbox_to_anchor=(1.05, 1), loc='upper left')
     api.export_plots_in_configured_formats(fig, sim.path, "balance-solites-monthly", "balance")
 

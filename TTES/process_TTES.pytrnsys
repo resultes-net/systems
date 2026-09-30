@@ -102,6 +102,14 @@ def hx(sim: api.Simulation):
 
 
 def ttes(sim: api.Simulation):
+    #### Read solites values ####
+    df_solites = pd.read_csv('solites_temp.csv', sep=r',', header=None)
+    sim.hourly["TtesTop_solites"] = df_solites.iloc[: len(sim.hourly), 1].values
+    sim.hourly["Ttes2_solites"] = df_solites.iloc[: len(sim.hourly), 2].values
+    sim.hourly["TtesMiddle_solites"] = df_solites.iloc[: len(sim.hourly), 3].values
+    sim.hourly["Ttes4_solites"] = df_solites.iloc[: len(sim.hourly), 4].values
+    sim.hourly["TtesBottom_solites"] = df_solites.iloc[: len(sim.hourly), 5].values
+
 
     #### Calculations ####
     sim.scalar["QLoss_Tes1_Tot"] = sim.hourly["QLoss_Tes1"].sum()
@@ -150,10 +158,51 @@ def ttes(sim: api.Simulation):
     )
 
     #### Plots ####
+    names_legend = [
+        '$T_{bottom,Resultes}$',
+        '$T_{medium,Resultes}$',
+        '$T_{top,Resultes}$',
+        '$T_{bottom,Solites}$',
+        '$T_{medium,Solites}$',
+        '$T_{top,Solites}$',
+    ]
     fig, ax = api.line_plot(
-        sim.hourly, ["T1_Tes1", "T2_Tes1", "T3_Tes1", "T4_Tes1", "T5_Tes1", "T6_Tes1", "T7_Tes1", "T8_Tes1", "T9_Tes1", "T10_Tes1"]
+        sim.hourly, ["T2_Tes1","T4_Tes1","T9_Tes1",
+                     # "T1_Tes1", "T2_Tes1", "T3_Tes1", "T4_Tes1", "T5_Tes1", "T6_Tes1", "T7_Tes1", "T8_Tes1", "T9_Tes1","T10_Tes1",
+                     "Ttes4_solites", "TtesMiddle_solites", "Ttes2_solites"
+    ]
     )
+
+    lines = ax.get_lines()
+
+    if len(lines) == 6:
+        # Define colors for Top, Medium, Bottom
+        color_top = '#D32F2F'  # Red
+        color_medium = '#1976D2'  # Blue
+        color_bottom = '#388E3C'  # Green
+
+        # Set styles for the first group (Solid lines)
+        lines[0].set_color(color_top)
+        lines[0].set_linestyle('-')  # Solid line
+
+        lines[1].set_color(color_medium)
+        lines[1].set_linestyle('-')
+
+        lines[2].set_color(color_bottom)
+        lines[2].set_linestyle('-')
+
+        # Set styles for the second group (Dashed lines, matching colors)
+        lines[3].set_color(color_top)
+        lines[3].set_linestyle('--')  # Dashed line
+
+        lines[4].set_color(color_medium)
+        lines[4].set_linestyle('--')
+
+        lines[5].set_color(color_bottom)
+        lines[5].set_linestyle('--')
+
     ax.set_ylabel("Temperature (°C)")
+    plt.legend(names_legend)
     plt.grid()
     # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "t-ptes-hourly", "ttes")
@@ -455,6 +504,18 @@ def balance(sim: api.Simulation):
         "$Q_{Imb}$",
     ]
 
+    custom_colors = [
+        "#FF9F40",  # 1. Naranja (Ej. Colector solar)
+        "#FF6384",  # 2. Rojo/Rosa (Ej. Caldera)
+        "#36A2EB",  # 3. Azul (Ej. Demanda)
+        "#4BC0C0",  # 4. Turquesa (Ej. Acumulación)
+        "#9966FF",  # 5. Morado (Ej. Pérdidas)
+        "#C9CBCF",  # 6. Gris claro (Ej. Desbalance)
+        "#4CAF50",  # 7. Verde (Para una nueva variable, ej. Bomba de calor)
+        "#FFC107",  # 8. Amarillo/Ambar (Para otra variable, ej. Electricidad)
+        "#795548"  # 9. Marrón (Para otra variable extra, ej. Biomasa)
+    ]
+
     # Monthly Resultes
     fig, ax = api.energy_balance(
         sim.monthly,
@@ -469,6 +530,7 @@ def balance(sim: api.Simulation):
         ],
         xlabel="",
         cmap="Paired",
+        color=custom_colors
     )
     ax.set_ylabel("Energy (MWh)")
     plt.legend(names_legend, bbox_to_anchor=(1.05, 1), loc="upper left")
@@ -488,6 +550,7 @@ def balance(sim: api.Simulation):
         ],
         xlabel="",
         cmap="Paired",
+        color=custom_colors
     )
     ax.set_ylabel("Energy (MWh)")
     plt.legend(names_legend, bbox_to_anchor=(1.05, 1), loc="upper left")
