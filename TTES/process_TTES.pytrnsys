@@ -658,6 +658,52 @@ def kpi(sim: api.Simulation):
     df.to_csv(sim.path + "\\data.csv", header=False, index=False)
 
 
+def lcoh(sim: api.Simulation):
+
+    demand = float(sim.scalar["QSnkP_kW_Tot"].iloc[0])  # kWh/a delivered heat
+    consumption = float(sim.scalar["BolrPOut_kW_Tot"].iloc[0])  # kWh/a boiler fuel (efficiency = 1 in type6)
+
+    size_solar = float(sim.scalar["CollAcollAp"].iloc[0])  # m2
+    size_tes = float(sim.scalar["Vol_Tes1"].iloc[0])  # m3
+    # size_boiler = float(sim.hourly["BolrPOut_kW"].max())  # kW, peak hourly boiler output
+
+    cost_solar = 1330.12*size_solar**(-0.0873)  # [€/m2] cost of large-scale solar collector field
+    cost_tes = 1.24*27102*size_tes**(-0.527)  # [€/m3] cost of tank TES
+    # cost_boiler = 100  # [€/kW] cost of auxiliary boiler
+
+
+
+    r = 0.03
+    T = 30
+    m = 0.01
+    fuel_price = 0.08  # [€/kWh]
+
+    b = ((1 + r) ** T - 1) / ((1 + r) ** T * r)
+    a = 1 / b
+    e_0 = consumption * fuel_price
+
+    I_solar = cost_solar * size_solar
+    I_tes = cost_tes * size_tes
+    # I_boiler = cost_boiler * size_boiler
+    I = I_solar + I_tes #+ I_boiler
+
+    pv_aux = e_0 * b
+    pv_maint = I * m * b
+    pv_sys = I + pv_aux + pv_maint
+
+    annuity = a * pv_sys
+    lcoe = annuity / demand
+
+    sim.scalar["I_solar"] = I_solar
+    sim.scalar["I_tes"] = I_tes
+    # sim.scalar["I_boiler"] = I_boiler
+    sim.scalar["I_total"] = I
+    sim.scalar["annuity"] = annuity
+    sim.scalar["LCOE"] = lcoe
+
+    print("LCOE of the system: " + str(lcoe) + " €/kWh")
+
+
 def to_json(sim: api.Simulation):
     sim.scalar.to_json(sim.path + r"\output.json", orient="records", indent=4)
 
@@ -683,6 +729,7 @@ if __name__ == "__main__":
         balance,
         q_vs_t,
         kpi,
+        lcoh,
         to_json,
     ]
 
