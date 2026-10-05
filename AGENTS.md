@@ -26,3 +26,6 @@ https://github.com/resultes-net/issues/blob/main/AGENTS.md. This file only adds 
 - `common/ddck/weather/selected_weather_data.ddck` assigns the rolled-out file (user format, `formatWeatherData = 1`);
   `weather_data_base.ddck` reads it via TRNSYS Type 99 (Type 109 is no longer used). The run configs include both via
   `COMMON$ weather\...`.
+- `common/ddck/weather/` also holds `CH-Zuerich-Kloten-66700.tm2` (TMY2, Zurich). No code reads it yet, but keep it:
+  all shared weather data (Zurich and the 9 CSVs) are kept in the repo, so that users who download a project have them
+  and could switch to other weather data. Don't write code for such switching, though.
