@@ -699,9 +699,9 @@ def lcoh(sim: api.Simulation):
     # sim.scalar["I_boiler"] = I_boiler
     sim.scalar["I_total"] = I
     sim.scalar["annuity"] = annuity
-    sim.scalar["LCOE"] = lcoe
+    sim.scalar["LCOH"] = lcoe
 
-    print("LCOE of the system: " + str(lcoe) + " €/kWh")
+    print("LCOH of the system: " + str(lcoe) + " €/kWh")
 
 
 def to_json(sim: api.Simulation):
