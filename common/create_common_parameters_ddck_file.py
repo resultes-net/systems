@@ -8,11 +8,13 @@ import sys as _sys
 import typing as _tp
 
 import pandas as _pd
+import pvlib.iotools as _pviot
 import pydantic as _pyd
 import resultes_pydantic_models.simulations.parameters.common as _com
 import resultes_pydantic_models.simulations.parameters.common.collector_field as _pcoll
 import resultes_pydantic_models.simulations.parameters.common.waste_heat_recovery_source as _pwhrs
 import resultes_pydantic_models.simulations.simulation as _sim
+import resultes_pydantic_models.weather_data as _pwd
 import sympy as _sym
 
 demand_MWh = _sym.Symbol("$QSnkQ_MWh")
@@ -38,11 +40,25 @@ PARAMETERS_DDCK_DIR_PATH = _pl.Path(__file__).parent / "ddck" / "parameters"
 
 PARAMETERS_DDCK_FILE_PATH = PARAMETERS_DDCK_DIR_PATH / "parameters.ddck"
 
-WEATHER_DATA_CSV_FILE_PATH = PARAMETERS_DDCK_DIR_PATH / "selected_weather_data.csv"
+WEATHER_DDCK_DIR_PATH = COMMON_DDCK_DIR_PATH / "weather"
+
+# The runner downloads the selected weather data into this directory (see `_pwd.DIR_NAME`).
+SELECTED_WEATHER_DIR_PATH = PARAMETERS_DDCK_DIR_PATH / _pwd.DIR_NAME
+
+ROLLED_OUT_WEATHER_DATA_FILE_NAME = "data_rolled_out.type99"
 
 ROLLED_OUT_WEATHER_DATA_FILE_PATH = (
-    PARAMETERS_DDCK_DIR_PATH / "selected_weather_data_rolled_out.type99"
+    SELECTED_WEATHER_DIR_PATH / ROLLED_OUT_WEATHER_DATA_FILE_NAME
 )
+
+WEATHER_DATA_DDCK_FILE_NAME = "weather_data.ddck"
+
+WEATHER_DATA_DDCK_FILE_PATH = PARAMETERS_DDCK_DIR_PATH / WEATHER_DATA_DDCK_FILE_NAME
+
+WEATHER_DATA_DDCK_SOURCE_FILE_NAMES: dict[_pwd.WeatherDataFormat, str] = {
+    _pwd.WeatherDataFormat.ISO: "weather_data_iso.ddck",
+    _pwd.WeatherDataFormat.TM2: "weather_data_tm2.ddck",
+}
 
 
 @_dc.dataclass
@@ -56,24 +72,31 @@ class LocationParameters:
         return self.std_longitude / -15
 
 
-LOCATION_PARAMETERS: dict[_sim.Location, LocationParameters] = {
+# Keyed by weather data ID. The IDs of the shared ISO weather data are the lower case names of the
+# ISO reference climates.
+LOCATION_PARAMETERS: dict[str, LocationParameters] = {
     l: LocationParameters(*ps)
     for l, *ps in (
-        (_sim.Location.ALPINE, -9.844, -15, 46.813),
-        (_sim.Location.COLD, 113.583, 105, 53.3),
-        (_sim.Location.DRY, -31.283, -30, 30.083),
-        (_sim.Location.HOT, -54.650, -55, 24.430),
-        (_sim.Location.MEDITERRANEAN, -12.583, -15, 41.800),
-        (_sim.Location.SUBTROPIC, -80.183, -82.5, 13.000),
-        (_sim.Location.TEMPERATE, 0.117, 0.0, 51.517),
-        (_sim.Location.TROPICAL, 90.250, 90, 29.983),
-        (_sim.Location.WET, 60.017, 60.0, -3.133),
+        ("alpine", -9.844, -15, 46.813),
+        ("cold", 113.583, 105, 53.3),
+        ("dry", -31.283, -30, 30.083),
+        ("hot", -54.650, -55, 24.430),
+        ("mediterranean", -12.583, -15, 41.800),
+        ("subtropic", -80.183, -82.5, 13.000),
+        ("temperate", 0.117, 0.0, 51.517),
+        ("tropical", 90.250, 90, 29.983),
+        ("wet", 60.017, 60.0, -3.133),
     )
 }
 
 
-def create_rolled_out_weather_data_file_header(location: _sim.Location) -> str:
-    p = LOCATION_PARAMETERS[location]
+def create_rolled_out_weather_data_file_header(weather_data_id: str) -> str:
+    try:
+        p = LOCATION_PARAMETERS[weather_data_id]
+    except KeyError:
+        raise ValueError(
+            f"No location parameters for ISO weather data {weather_data_id!r}."
+        ) from None
 
     result = f"""\
 <userdefined>
@@ -199,50 +222,110 @@ class WeatherDataStatistics:
         ) / 2
 
 
-def prepare_weather_data_and_get_statistics(
-    location: _sim.Location,
-) -> WeatherDataStatistics:
-    selected_weather_data_csv_file_path = (
-        COMMON_DDCK_DIR_PATH / "weather" / (location.value.capitalize() + ".csv")
+def get_weather_data_format(selected_weather_dir_path: _pl.Path) -> _pwd.WeatherDataFormat:
+    """Tell the format of the downloaded weather data by which data file exists."""
+    formats = [
+        f
+        for f in _pwd.WeatherDataFormat
+        if (selected_weather_dir_path / _pwd.get_data_file_name(f)).is_file()
+    ]
+
+    if len(formats) != 1:
+        raise ValueError(
+            f"Expected exactly one weather data file in {selected_weather_dir_path} "
+            f"({', '.join(_pwd.get_data_file_name(f) for f in _pwd.WeatherDataFormat)}) "
+            f"but found {len(formats)}."
+        )
+
+    return formats[0]
+
+
+def copy_weather_data_ddck(
+    weather_data_format: _pwd.WeatherDataFormat,
+    weather_ddck_dir_path: _pl.Path = WEATHER_DDCK_DIR_PATH,
+    target_file_path: _pl.Path = WEATHER_DATA_DDCK_FILE_PATH,
+) -> None:
+    source_file_path = (
+        weather_ddck_dir_path / WEATHER_DATA_DDCK_SOURCE_FILE_NAMES[weather_data_format]
     )
-    _su.copy(selected_weather_data_csv_file_path, WEATHER_DATA_CSV_FILE_PATH)
+    _su.copy(source_file_path, target_file_path)
 
-    weather_data_statistics = _create_weather_data_statistics()
 
-    contents = WEATHER_DATA_CSV_FILE_PATH.read_text()
+def prepare_weather_data_and_get_statistics(
+    weather_data_id: str,
+    selected_weather_dir_path: _pl.Path = SELECTED_WEATHER_DIR_PATH,
+    weather_ddck_dir_path: _pl.Path = WEATHER_DDCK_DIR_PATH,
+    weather_data_ddck_file_path: _pl.Path = WEATHER_DATA_DDCK_FILE_PATH,
+) -> WeatherDataStatistics:
+    weather_data_format = get_weather_data_format(selected_weather_dir_path)
+    data_file_path = selected_weather_dir_path / _pwd.get_data_file_name(
+        weather_data_format
+    )
+
+    copy_weather_data_ddck(
+        weather_data_format, weather_ddck_dir_path, weather_data_ddck_file_path
+    )
+
+    if weather_data_format == _pwd.WeatherDataFormat.TM2:
+        return _create_tm2_weather_data_statistics(data_file_path)
+
+    if weather_data_format == _pwd.WeatherDataFormat.ISO:
+        write_rolled_out_iso_weather_data(
+            weather_data_id,
+            data_file_path,
+            selected_weather_dir_path / ROLLED_OUT_WEATHER_DATA_FILE_NAME,
+        )
+        return _create_iso_weather_data_statistics(data_file_path)
+
+    _tp.assert_never(weather_data_format)
+
+
+def write_rolled_out_iso_weather_data(
+    weather_data_id: str, data_file_path: _pl.Path, target_file_path: _pl.Path
+) -> None:
+    contents = data_file_path.read_text()
     data_lines = [line for line in contents.splitlines() if not line.startswith("#")][
         1:
     ]
     contents_without_header = "\n".join(data_lines) + "\n"
 
-    header = create_rolled_out_weather_data_file_header(location)
+    header = create_rolled_out_weather_data_file_header(weather_data_id)
 
     rolled_out_contents = header + contents_without_header * WEATHER_DATA_N_YEARS
-    ROLLED_OUT_WEATHER_DATA_FILE_PATH.write_text(rolled_out_contents)
-
-    return weather_data_statistics
+    target_file_path.write_text(rolled_out_contents)
 
 
-def test_create_weather_data_statistics() -> None:
-    weather_data_statistics = _create_weather_data_statistics()
-    print(weather_data_statistics)
-
-
-def _create_weather_data_statistics() -> WeatherDataStatistics:
-    df = _pd.read_csv(WEATHER_DATA_CSV_FILE_PATH, sep=r"\s+", comment="#")
+def _create_iso_weather_data_statistics(
+    data_file_path: _pl.Path,
+) -> WeatherDataStatistics:
+    df = _pd.read_csv(data_file_path, sep=r"\s+", comment="#")
 
     index = _dt.datetime(2030, 1, 1, tzinfo=_dt.UTC) + _pd.to_timedelta(
         df["TIME"], unit="hours"
     )
 
-    df.index = index
+    return _create_weather_data_statistics(df["ta"].set_axis(index))
 
-    yearly_average_temperature_degC = _tp.cast(float, df["ta"].mean().item())
 
-    daily_min_temperatures_degC = df["ta"].resample("D").min()
+def _create_tm2_weather_data_statistics(
+    data_file_path: _pl.Path,
+) -> WeatherDataStatistics:
+    data, _ = _pviot.read_tmy2(str(data_file_path))
+
+    # `pvlib` leaves the values as in the file, i.e., the dry bulb temperature in tenths of degC.
+    return _create_weather_data_statistics(data["DryBulb"] / 10)
+
+
+def _create_weather_data_statistics(
+    temperatures_degC: _pd.Series,
+) -> WeatherDataStatistics:
+    """`temperatures_degC` must be hourly values indexed by datetime."""
+    yearly_average_temperature_degC = _tp.cast(float, temperatures_degC.mean().item())
+
+    daily_min_temperatures_degC = temperatures_degC.resample("D").min()
     first_coldest_day_in_year = daily_min_temperatures_degC.argmin().item()
 
-    monthly_average_temperatures_degC = df["ta"].resample("MS").mean()
+    monthly_average_temperatures_degC = temperatures_degC.resample("MS").mean()
     min_monthly_average_temperature_degC = (
         monthly_average_temperatures_degC.min().item()
     )
@@ -250,14 +333,12 @@ def _create_weather_data_statistics() -> WeatherDataStatistics:
         monthly_average_temperatures_degC.max().item()
     )
 
-    weather_data_statistics = WeatherDataStatistics(
+    return WeatherDataStatistics(
         yearly_average_temperature_degC=yearly_average_temperature_degC,
         first_coldest_day_in_year=first_coldest_day_in_year,
         min_monthly_average_temperature_degC=min_monthly_average_temperature_degC,
         max_monthly_average_temperature_degC=max_monthly_average_temperature_degC,
     )
-
-    return weather_data_statistics
 
 
 def test_create_parameters_ddck_contents() -> None:
@@ -452,7 +533,7 @@ def main(parameters_json_file_path: _pl.Path) -> None:
     values = simulation.parameters.values
 
     weather_data_statistics = prepare_weather_data_and_get_statistics(
-        simulation.location
+        simulation.weather_data_id
     )
 
     parameters_ddck_contents = _create_parameters_ddck_contents(

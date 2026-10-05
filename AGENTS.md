@@ -18,14 +18,24 @@ https://github.com/resultes-net/issues/blob/main/AGENTS.md. This file only adds 
 
 ## Parameters and weather data
 - `common/create_common_parameters_ddck_file.py <parameters-json>` generates the per-simulation inputs into
-  `common/ddck/parameters/`: `parameters.ddck`, `demand.csv`, the waste-heat source profile and the weather data.
-- Weather data: one CSV per ISO reference climate in `common/ddck/weather/` (`Alpine.csv`, `Cold.csv`, ...), chosen by
-  the simulation's `location`. The script copies it to `parameters/selected_weather_data.csv`, rolls it out over 10 years
-  into `selected_weather_data_rolled_out.type99`, and derives statistics (yearly average, amplitude, coldest day) that
-  go into `parameters.ddck`. Location coordinates live in `LOCATION_PARAMETERS` in the same script.
-- `common/ddck/weather/selected_weather_data.ddck` assigns the rolled-out file (user format, `formatWeatherData = 1`);
-  `weather_data_base.ddck` reads it via TRNSYS Type 99 (Type 109 is no longer used). The run configs include both via
-  `COMMON$ weather\...`.
-- `common/ddck/weather/` also holds `CH-Zuerich-Kloten-66700.tm2` (TMY2, Zurich). No code reads it yet, but keep it:
-  all shared weather data (Zurich and the 9 CSVs) are kept in the repo, so that users who download a project have them
-  and could switch to other weather data. Don't write code for such switching, though.
+  `common/ddck/parameters/`: `parameters.ddck`, `demand.csv`, the waste-heat source profile and `weather_data.ddck`.
+  Its tests are in `common/test_create_common_parameters_ddck_file.py` (they use temporary directories).
+- The simulation has a `weather_data_id` (no longer a `location`). Before the script runs, the runner downloads the
+  selected weather data into `common/ddck/parameters/selected_weather/` (`DIR_NAME` in
+  `resultes_pydantic_models.weather_data`): the data file (`get_data_file_name`: `data.csv` for ISO, `data.tm2` for
+  TM2) and a `README.md` (don't delete or overwrite it). The script tells the format by which data file exists.
+- It copies the matching ddck from `common/ddck/weather/` (`weather_data_iso.ddck` or `weather_data_tm2.ddck`) to
+  `common/ddck/parameters/weather_data.ddck`, so the run configs include `COMMON$ parameters\weather_data`.
+- ISO: the data is rolled out over 10 years into `selected_weather/data_rolled_out.type99` (read via Type 99). The
+  location (longitude, standard longitude, latitude) for its header comes from `LOCATION_PARAMETERS`, keyed by weather
+  data ID (for the shared ISO data the lower-case climate name, e.g. `alpine`).
+- TM2: no roll-out (`weather_data_tm2.ddck` reads the file itself); the statistics are computed with
+  `pvlib.iotools.read_tmy2`. `pvlib` rejects raw Meteonorm files, but the server fixes them up on upload
+  (`fix_up_and_validate_tm2_contents`), so the downloaded file is fine.
+- Statistics (yearly average, amplitude, first coldest day) go into `parameters.ddck` in both cases.
+- `common/ddck/weather/` holds the ddcks and the shared weather data: one CSV per ISO reference climate (`Alpine.csv`,
+  `Cold.csv`, ...) and `CH-Zuerich-Kloten-66700.tm2` (TMY2, Zurich). The runner doesn't read them from here anymore
+  (it downloads the selected data), but keep them: all shared weather data are kept in the repo, so that users who
+  download a project have them. Don't write code for switching to other weather data.
+- `selected_weather_data.ddck` / `weather_data_base.ddck` are the older ddcks for the ISO-only setup; the new ddcks
+  `weather_data_iso.ddck` and `weather_data_tm2.ddck` are written by hand.
