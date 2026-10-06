@@ -92,11 +92,12 @@ def test_copy_weather_data_ddck(
 
 
 def test_location_parameters_lookup_by_id() -> None:
-    p = _ccp.LOCATION_PARAMETERS["alpine"]
+    p = _ccp.LOCATION_PARAMETERS["c8a15e846e"]
+    assert p.climate == "Alpine"
     assert (p.longitude, p.std_longitude, p.latitude) == (-9.844, -15, 46.813)
     assert p.utc_offset == 1
 
-    header = _ccp.create_rolled_out_weather_data_file_header("cold")
+    header = _ccp.create_rolled_out_weather_data_file_header("7634132ef1")
     assert "<longitude> 113.583" in header
     assert "<gmt> -7.0" in header
 
@@ -105,8 +106,10 @@ def test_location_parameters_lookup_by_id() -> None:
 
 
 def test_location_parameters_cover_shared_iso_weather_data() -> None:
-    iso_ids = {p.stem.lower() for p in _ccp.WEATHER_DDCK_DIR_PATH.glob("*.csv")}
-    assert iso_ids == set(_ccp.LOCATION_PARAMETERS)
+    climates = [p.stem for p in _ccp.WEATHER_DDCK_DIR_PATH.glob("*.csv")]
+    assert sorted(climates) == sorted(
+        p.climate for p in _ccp.LOCATION_PARAMETERS.values()
+    )
 
 
 def test_prepare_iso_weather_data(
@@ -118,7 +121,7 @@ def test_prepare_iso_weather_data(
     ddck_file_path = tmp_path / "weather_data.ddck"
 
     _ccp.prepare_weather_data_and_get_statistics(
-        "alpine", selected_weather_dir_path, ddck_dir_path, ddck_file_path
+        "c8a15e846e", selected_weather_dir_path, ddck_dir_path, ddck_file_path
     )
 
     assert ddck_file_path.read_text() == "iso ddck"
@@ -126,7 +129,7 @@ def test_prepare_iso_weather_data(
     rolled_out = (selected_weather_dir_path / "data_rolled_out.type99").read_text()
     header, data = rolled_out.split("<data>\n")
     assert header + "<data>\n" == _ccp.create_rolled_out_weather_data_file_header(
-        "alpine"
+        "c8a15e846e"
     )
     assert data == "1 1.0 0 0 1 300\n2 2.0 0 0 1 300\n3 3.0 0 0 1 300\n" * 10
 
@@ -142,7 +145,7 @@ def test_iso_statistics(
     _write_iso_data(selected_weather_dir_path, temperatures)
 
     statistics = _ccp.prepare_weather_data_and_get_statistics(
-        "alpine", selected_weather_dir_path, ddck_dir_path, tmp_path / "w.ddck"
+        "c8a15e846e", selected_weather_dir_path, ddck_dir_path, tmp_path / "w.ddck"
     )
 
     assert statistics.first_coldest_day_in_year == 2
@@ -200,7 +203,7 @@ def test_tm2_first_coldest_day_in_leap_year(
     )
 
     statistics = _ccp.prepare_weather_data_and_get_statistics(
-        "zurich", selected_weather_dir_path, ddck_dir_path, tmp_path / "w.ddck"
+        "bc75a61bfd", selected_weather_dir_path, ddck_dir_path, tmp_path / "w.ddck"
     )
 
     assert statistics.first_coldest_day_in_year == 358
@@ -237,7 +240,7 @@ def test_iso_first_coldest_day_in_year(
     _write_iso_data(selected_weather_dir_path, temperatures)
 
     statistics = _ccp.prepare_weather_data_and_get_statistics(
-        "alpine", selected_weather_dir_path, ddck_dir_path, tmp_path / "w.ddck"
+        "c8a15e846e", selected_weather_dir_path, ddck_dir_path, tmp_path / "w.ddck"
     )
 
     assert statistics.first_coldest_day_in_year == expected_day

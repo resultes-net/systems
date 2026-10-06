@@ -63,6 +63,8 @@ WEATHER_DATA_DDCK_SOURCE_FILE_NAMES: dict[_pwd.WeatherDataFormat, str] = {
 
 @_dc.dataclass
 class LocationParameters:
+    # The ISO reference climate, i.e. the stem of the data file in `WEATHER_DDCK_DIR_PATH`.
+    climate: str
     longitude: float
     std_longitude: float
     latitude: float
@@ -72,20 +74,20 @@ class LocationParameters:
         return self.std_longitude / -15
 
 
-# Keyed by weather data ID. The IDs of the shared ISO weather data are the lower case names of the
-# ISO reference climates.
+# Keyed by weather data ID. The IDs of the shared weather data are hard-coded in the server's
+# migrations.
 LOCATION_PARAMETERS: dict[str, LocationParameters] = {
-    l: LocationParameters(*ps)
-    for l, *ps in (
-        ("alpine", -9.844, -15, 46.813),
-        ("cold", 113.583, 105, 53.3),
-        ("dry", -31.283, -30, 30.083),
-        ("hot", -54.650, -55, 24.430),
-        ("mediterranean", -12.583, -15, 41.800),
-        ("subtropic", -80.183, -82.5, 13.000),
-        ("temperate", 0.117, 0.0, 51.517),
-        ("tropical", 90.250, 90, 29.983),
-        ("wet", 60.017, 60.0, -3.133),
+    i: LocationParameters(*ps)
+    for i, *ps in (
+        ("c8a15e846e", "Alpine", -9.844, -15, 46.813),
+        ("7634132ef1", "Cold", 113.583, 105, 53.3),
+        ("0875a01ccb", "Dry", -31.283, -30, 30.083),
+        ("9c92f5554e", "Hot", -54.650, -55, 24.430),
+        ("48a257e131", "Mediterranean", -12.583, -15, 41.800),
+        ("6c78e63690", "Subtropic", -80.183, -82.5, 13.000),
+        ("37b95b4de7", "Temperate", 0.117, 0.0, 51.517),
+        ("4541d24b4b", "Tropical", 90.250, 90, 29.983),
+        ("d05b0a7a3a", "Wet", 60.017, 60.0, -3.133),
     )
 }
 
