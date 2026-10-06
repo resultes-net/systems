@@ -191,8 +191,32 @@ def ttes(sim: api.Simulation):
         * (sim.scalar["SolarControlTTesMax"] - 0)
         / 3600
     )
+    # Nominal capacity: from max storage temperature down to district heating return temperature
+    sim.scalar["TesTRetDH"] = sim.scalar["TSetDem"] - sim.scalar["QSnkdT"]
+    sim.scalar["TesCap_kWh"] = (
+        sim.scalar["Vol_Tes1"]
+        * sim.scalar["RhoWat_Tes1"]
+        * sim.scalar["CpWat_Tes1"]
+        * (sim.scalar["SolarControlTTesMax"] - sim.scalar["TesTRetDH"])
+        / 3600
+    )
+
+    sim.scalar["TesCap_MWh"] = sim.scalar["TesCap_kWh"]/1000
+
+    # Number of cycles (Solites criterion): discharged energy / capacity over the simulated
+    # temperature swing, i.e. max minus min of all storage node temperatures in the last year
+    tes_nodes = [f"T{i}_Tes1" for i in range(1, 11)]
+    sim.scalar["TesTMaxSim"] = sim.hourly[tes_nodes].max().max()
+    sim.scalar["TesTMinSim"] = sim.hourly[tes_nodes].min().min()
+    sim.scalar["TesCapSim_kWh"] = (
+        sim.scalar["Vol_Tes1"]
+        * sim.scalar["RhoWat_Tes1"]
+        * sim.scalar["CpWat_Tes1"]
+        * (sim.scalar["TesTMaxSim"] - sim.scalar["TesTMinSim"])
+        / 3600
+    )
     sim.scalar["TesNCycles"] = (
-        sim.scalar["TesQCharge_Tot"] / sim.scalar["TesQMax"]
+        sim.scalar["TesQDisharge_Tot"] / sim.scalar["TesCapSim_kWh"]
     )
 
     sim.scalar["TesEff"] = abs(
@@ -774,18 +798,18 @@ if __name__ == "__main__":
     processing_steps = [
         filter,
         weather,
-        # solar,
-        # # hx,
-        # ttes,
-        # # hp,
-        # boiler,
-        # source,
-        # demand,
-        # balance,
-        # q_vs_t,
-        # kpi,
-        # lcoh,
-        # to_json,
+        solar,
+        # hx,
+        ttes,
+        # hp,
+        boiler,
+        source,
+        demand,
+        balance,
+        q_vs_t,
+        kpi,
+        lcoh,
+        to_json,
     ]
 
     simulation_data = api.process_whole_result_set(

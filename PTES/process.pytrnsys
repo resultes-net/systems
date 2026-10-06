@@ -135,6 +135,22 @@ def ptes(sim: api.Simulation):
         * (sim.scalar["SolarControlTTesMax"] - 0)
         / 3600
     )
+    # Nominal capacity: from max storage temperature down to the minimum heat pump return
+    # temperature (evaporator outlet, only while the heat pump is running)
+    sim.scalar["pitStoreTRetHpMin"] = sim.hourly.loc[
+        sim.hourly["HpQEvap_kW"] > 0, "HpTEvapOut"
+    ].min()
+    sim.scalar["pitStoreCap_kWh"] = (
+        sim.scalar["pitStoreStVolume"]
+        * sim.scalar["pitStoreFlDen"]
+        * sim.scalar["pitStoreFlSpeHeat"]
+        * (sim.scalar["SolarControlTTesMax"] - sim.scalar["pitStoreTRetHpMin"])
+        / 3600
+    )
+
+    sim.scalar["pitStoreCap_MWh"] = sim.scalar["pitStoreCap_kWh"]/1000
+
+
     sim.scalar["pitStoreNCycles"] = (
         sim.scalar["pitStoreQCharge_Tot"] / sim.scalar["pitStoreQMax"]
     )

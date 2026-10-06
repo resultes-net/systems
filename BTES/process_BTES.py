@@ -147,6 +147,19 @@ def btes(sim: api.Simulation):
             * (sim.scalar["SolarControlTTesMax"] - 0)
             / 3600
     )
+    # Nominal capacity: from max ground inlet temperature (set by the borehole mixing valve,
+    # TSetBor) down to the minimum heat pump return temperature (evaporator outlet, only while
+    # the heat pump is running), since the boreholes are discharged through the heat pump
+    sim.scalar["BoHxTRetHpMin"] = sim.hourly.loc[
+        sim.hourly["HpQEvap_kW"] > 0, "HpTEvapOut"
+    ].min()
+    sim.scalar["BoHxCap_kWh"] = (
+            sim.scalar["BoHxV"]
+            * sim.scalar["BoHxCpLayer"]
+            * (sim.scalar["TSetBor"] - sim.scalar["BoHxTRetHpMin"])
+            / 3600
+    )
+    sim.scalar["BoHxCap_MWh"] = sim.scalar["BoHxCap_kWh"] / 1000
     sim.scalar["BoHxNCycles"] = (
             sim.scalar["BoHxQChar_kW_Tot"] / sim.scalar["BoHxQMax"]
     )
