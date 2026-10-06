@@ -31,14 +31,17 @@ https://github.com/resultes-net/issues/blob/main/AGENTS.md. This file only adds 
   `common/ddck/parameters/weather_data.ddck`, so the run configs include `COMMON$ parameters\weather_data`.
 - ISO: the data is rolled out over 10 years into `selected_weather/data_rolled_out.type99` (read via Type 99). The
   location (longitude, standard longitude, latitude) for its header comes from `LOCATION_PARAMETERS`, keyed by weather
-  data ID (for the shared ISO data the lower-case climate name, e.g. `alpine`).
-- TM2: no roll-out (`weather_data_tm2.ddck` reads the file itself); the statistics are computed with
-  `pvlib.iotools.read_tmy2`. `pvlib` rejects raw Meteonorm files, but the server fixes them up on upload
-  (`fix_up_and_validate_tm2_contents`), so the downloaded file is fine.
+  data ID (the shared ISO data's IDs, hard-coded in the server's migrations).
+- TM2: no roll-out (`weather_data_tm2.ddck` reads the file itself, via Type 109); the statistics and the site
+  elevation (`$altid`, for Type 69's sky temperature) are read with `pvlib.iotools.read_tmy2`. `pvlib` rejects raw
+  Meteonorm files, but the server fixes them up on upload (`fix_up_and_validate_tm2_contents`), so the downloaded file
+  is fine.
 - Statistics (yearly average, amplitude, first coldest day) go into `parameters.ddck` in both cases.
+- Long-wave radiation: the collector (Type 1357, modified by us) gets `$LgwRadMode` from `parameters.ddck`: 5 for ISO
+  (takes `EL` from the data; undocumented, our addition), 2 for TM2 (computes it from `Tsky`, `EmSky` and `EmGnd`). Both
+  weather ddcks define all four variables; the ones the mode doesn't use are explicit placeholders.
 - `common/ddck/weather/` holds the ddcks and the shared weather data: one CSV per ISO reference climate (`Alpine.csv`,
   `Cold.csv`, ...) and `CH-Zuerich-Kloten-66700.tm2` (TMY2, Zurich). The runner doesn't read them from here anymore
   (it downloads the selected data), but keep them: all shared weather data are kept in the repo, so that users who
   download a project have them. Don't write code for switching to other weather data.
-- `selected_weather_data.ddck` / `weather_data_base.ddck` are the older ddcks for the ISO-only setup; the new ddcks
-  `weather_data_iso.ddck` and `weather_data_tm2.ddck` are written by hand.
+- `weather_data_iso.ddck` and `weather_data_tm2.ddck` are maintained by hand.

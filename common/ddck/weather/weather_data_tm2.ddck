@@ -1,5 +1,5 @@
 *******************************
-**BEGIN WeatherData.dck
+**BEGIN weather_data_tm2.ddck
 *******************************
     
 *****************************************
@@ -10,7 +10,14 @@
 ****************************************************
 ** Description: 
 ** Weather data and calculation on inclined surfaces
+** TMY2 weather data, read by Type 109
 ****************************************************
+
+CONSTANTS #
+formatWeatherData = 2 ! 1 = user format, 2 = Standard weather file in the TMY2 format
+unitWeatherData=38
+
+ASSIGN ..\..\..\common\ddck\parameters\selected_weather\data.tm2 unitWeatherData
 
 ***********************************
 ** inputs from hydraulic solver
@@ -107,11 +114,6 @@ IB_H_kW = IB_H/3600
 IT_S_kW = IT_S/3600     ! Irradiation on south plane in kW/m2
 IB_S_kW = IB_S/3600     ! Direct Irradiation on south plane in kW/m3
 
-EQUATIONS 2
-IT_H_Wm2 = IT_H_kW*100  
-IB_H_Wm2 = IB_H_KW*100  
-**IB_S_Wm2 = IB_S_kW*100     ! Direct Irradiation on south plane in kW/m3
-
 EQUATIONS 3    ! pressure conversions
 pamb_kPa = pamb_Pa/1000     ! ambient pressure [kPa]
 pamb_atm = pamb_kPa/101.325     ! Ambient pressure [atm]
@@ -120,6 +122,13 @@ pamb_bar = pamb_kPa/100     ! Ambient pressure [bar]
 EQUATIONS 2     
 Tsky = [29,1]     ! effective sky temperature (°C)    
 dTsky = Tsky-Tamb     ! delta-T from sky to ambient (K)
+
+** Long-wave radiation for the collector (Type 1357): with the TMY2 data, it computes it from the sky
+** temperature and the emissivities (LgwRadMode = 2, see parameters.ddck), so EL is a placeholder.
+EQUATIONS 3
+EmSky = 0.736 + 0.00577 * tAmbDewPoint
+EmGnd = 0.95
+EL    = 0 ! Not used
 
 
 ***************************************
@@ -312,5 +321,5 @@ IT_surfUser_2 IB_surfUser_2 ID_surfUser_2 IDS_surfUser_2 IDG_surfUser_2 AI_surfU
    
 
 *******************************
-**END WeatherData.ddck
+**END weather_data_tm2.ddck
 *******************************

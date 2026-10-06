@@ -1,5 +1,5 @@
 *******************************
-**BEGIN WeatherData.dck
+**BEGIN weather_data_iso.ddck
 *******************************
     
 *****************************************
@@ -10,7 +10,14 @@
 ****************************************************
 ** Description: 
 ** Weather data and calculation on inclined surfaces
+** ISO weather data, rolled out over 10 years by create_common_parameters_ddck_file.py, read by Type 99
 ****************************************************
+
+CONSTANTS #
+formatWeatherData = 1 ! 1 = user format, 2 = Standard weather file in the TMY2 format
+unitWeatherData=38
+
+ASSIGN ..\..\..\common\ddck\parameters\selected_weather\data_rolled_out.type99 unitWeatherData
 
 ***********************************
 ** inputs from hydraulic solver
@@ -101,6 +108,13 @@ IT_H_kW = IT_H/3600
 IB_H_kW = IB_H/3600  
 IT_S_kW = IT_S/3600     ! Irradiation on south plane in kW/m2
 IB_S_kW = IB_S/3600     ! Direct Irradiation on south plane in kW/m3
+
+** Long-wave radiation for the collector (Type 1357): with the ISO data, it takes EL as input
+** (LgwRadMode = 5, see parameters.ddck), so the sky temperature and the emissivities are placeholders.
+CONSTANTS 3
+Tsky  = 0 ! Not used
+EmSky = 0 ! Not used
+EmGnd = 0 ! Not used
 
 
 ***************************************
@@ -253,5 +267,5 @@ IT_surfUser_2 IB_surfUser_2 ID_surfUser_2 IDS_surfUser_2 IDG_surfUser_2 AI_surfU
    
 
 *******************************
-**END WeatherData.ddck
+**END weather_data_iso.ddck
 *******************************

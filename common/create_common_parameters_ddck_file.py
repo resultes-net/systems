@@ -60,6 +60,14 @@ WEATHER_DATA_DDCK_SOURCE_FILE_NAMES: dict[_pwd.WeatherDataFormat, str] = {
     _pwd.WeatherDataFormat.TM2: "weather_data_tm2.ddck",
 }
 
+# Type 1357's long-wave radiation mode (`$LgwRadMode`). Mode 5 isn't in TRNSYS' documentation: our
+# modified Type 1357 takes the long-wave radiation as input (`$EL`), which the ISO data contain.
+# Mode 2 computes it from the sky temperature and the emissivities (`$Tsky`, `$EmSky`, `$EmGnd`).
+LONG_WAVE_RADIATION_MODES: dict[_pwd.WeatherDataFormat, int] = {
+    _pwd.WeatherDataFormat.ISO: 5,
+    _pwd.WeatherDataFormat.TM2: 2,
+}
+
 
 @_dc.dataclass
 class LocationParameters:
@@ -227,6 +235,14 @@ class WeatherDataStatistics:
         ) / 2
 
 
+@_dc.dataclass
+class WeatherDataParameters:
+    statistics: WeatherDataStatistics
+    long_wave_radiation_mode: int
+    # Only for TM2: Type 69 (sky temperature) needs it.
+    site_elevation_m: float | None
+
+
 def get_weather_data_format(
     selected_weather_dir_path: _pl.Path,
 ) -> _pwd.WeatherDataFormat:
@@ -258,12 +274,12 @@ def copy_weather_data_ddck(
     _su.copy(source_file_path, target_file_path)
 
 
-def prepare_weather_data_and_get_statistics(
+def prepare_weather_data_and_get_parameters(
     weather_data_id: str,
     selected_weather_dir_path: _pl.Path = SELECTED_WEATHER_DIR_PATH,
     weather_ddck_dir_path: _pl.Path = WEATHER_DDCK_DIR_PATH,
     weather_data_ddck_file_path: _pl.Path = WEATHER_DATA_DDCK_FILE_PATH,
-) -> WeatherDataStatistics:
+) -> WeatherDataParameters:
     weather_data_format = get_weather_data_format(selected_weather_dir_path)
     data_file_path = selected_weather_dir_path / _pwd.get_data_file_name(
         weather_data_format
@@ -273,8 +289,15 @@ def prepare_weather_data_and_get_statistics(
         weather_data_format, weather_ddck_dir_path, weather_data_ddck_file_path
     )
 
+    long_wave_radiation_mode = LONG_WAVE_RADIATION_MODES[weather_data_format]
+
     if weather_data_format == _pwd.WeatherDataFormat.TM2:
-        return _create_tm2_weather_data_statistics(data_file_path)
+        data, metadata = _pviot.read_tmy2(str(data_file_path))
+        return WeatherDataParameters(
+            statistics=_create_tm2_weather_data_statistics(data),
+            long_wave_radiation_mode=long_wave_radiation_mode,
+            site_elevation_m=metadata["altitude"],
+        )
 
     if weather_data_format == _pwd.WeatherDataFormat.ISO:
         write_rolled_out_iso_weather_data(
@@ -282,7 +305,11 @@ def prepare_weather_data_and_get_statistics(
             data_file_path,
             selected_weather_dir_path / ROLLED_OUT_WEATHER_DATA_FILE_NAME,
         )
-        return _create_iso_weather_data_statistics(data_file_path)
+        return WeatherDataParameters(
+            statistics=_create_iso_weather_data_statistics(data_file_path),
+            long_wave_radiation_mode=long_wave_radiation_mode,
+            site_elevation_m=None,
+        )
 
     _tp.assert_never(weather_data_format)
 
@@ -310,11 +337,7 @@ def _create_iso_weather_data_statistics(
     return _create_weather_data_statistics(df["ta"])
 
 
-def _create_tm2_weather_data_statistics(
-    data_file_path: _pl.Path,
-) -> WeatherDataStatistics:
-    data, _ = _pviot.read_tmy2(str(data_file_path))
-
+def _create_tm2_weather_data_statistics(data: _pd.DataFrame) -> WeatherDataStatistics:
     # `pvlib` leaves the values as in the file, i.e., the dry bulb temperature in tenths of degC.
     return _create_weather_data_statistics(data["DryBulb"] / 10)
 
@@ -400,20 +423,32 @@ def test_create_parameters_ddck_contents() -> None:
 
     parameters = _com.CommonParameters(**data)
 
-    weather_data_statistics = WeatherDataStatistics(
-        yearly_average_temperature_degC=10.14,
-        first_coldest_day_in_year=44,
-        min_monthly_average_temperature_degC=-2,
-        max_monthly_average_temperature_degC=18,
+    weather_data_parameters = WeatherDataParameters(
+        statistics=WeatherDataStatistics(
+            yearly_average_temperature_degC=10.14,
+            first_coldest_day_in_year=44,
+            min_monthly_average_temperature_degC=-2,
+            max_monthly_average_temperature_degC=18,
+        ),
+        long_wave_radiation_mode=2,
+        site_elevation_m=436.0,
     )
 
-    result = _create_parameters_ddck_contents(parameters, weather_data_statistics)
+    result = _create_parameters_ddck_contents(parameters, weather_data_parameters)
 
     print(result)
 
+    assert "\n$altid = 436.0\n" in result
+    assert "\n$LgwRadMode = 2\n" in result
+
+    weather_data_parameters.site_elevation_m = None
+    result = _create_parameters_ddck_contents(parameters, weather_data_parameters)
+
+    assert "$altid" not in result
+
 
 def _create_parameters_ddck_contents(
-    parameters: _com.CommonParameters, weather_data_statistics: WeatherDataStatistics
+    parameters: _com.CommonParameters, weather_data_parameters: WeatherDataParameters
 ) -> str:
     time = parameters.time
 
@@ -425,6 +460,14 @@ def _create_parameters_ddck_contents(
     collector_field = parameters.collector_field
 
     control = parameters.control
+
+    weather_data_statistics = weather_data_parameters.statistics
+
+    formatted_site_elevation_line = (
+        f"$altid = {weather_data_parameters.site_elevation_m}\n"
+        if weather_data_parameters.site_elevation_m is not None
+        else ""
+    )
 
     formatted_specified_and_solved_variables_block = (
         _get_formatted_specified_variables_and_solved_equations(parameters)
@@ -442,6 +485,7 @@ $dtSim = {time.dt_sim}
 $TambAvg = {weather_data_statistics.yearly_average_temperature_degC:.1f}
 $dTambAmpl = {weather_data_statistics.temperature_amplitude_degC:.1f}
 $ddTcwOffset = {weather_data_statistics.first_coldest_day_in_year}
+{formatted_site_elevation_line}
 
 $QSnkScalingFactor = {demand.scaling_factor:.2f}
 $QSnkQUnscaled_MWh = {unscaledYearlyHeatDemandMWh}
@@ -449,6 +493,8 @@ $QSnkQ_MWh = $QSnkScalingFactor*$QSnkQUnscaled_MWh
 $QSnkHourlyMax_kW = {maxHourlyHeatDemand_kW}
 
 $HPQLoadMax_kW = $QSnkQ_MWh/10
+
+$LgwRadMode = {weather_data_parameters.long_wave_radiation_mode}
 
 $slopeSurfUser_1 = {collector_field.inclination_deg}
 $aziSurfUser_1 = {collector_field.orientation_east_west_deg}
@@ -545,12 +591,12 @@ def main(parameters_json_file_path: _pl.Path) -> None:
     simulation = _sim.SimulationWithParams(**data)
     values = simulation.parameters.values
 
-    weather_data_statistics = prepare_weather_data_and_get_statistics(
+    weather_data_parameters = prepare_weather_data_and_get_parameters(
         simulation.weather_data_id
     )
 
     parameters_ddck_contents = _create_parameters_ddck_contents(
-        values, weather_data_statistics
+        values, weather_data_parameters
     )
     PARAMETERS_DDCK_FILE_PATH.write_text(parameters_ddck_contents)
 

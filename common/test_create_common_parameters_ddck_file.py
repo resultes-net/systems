@@ -120,11 +120,13 @@ def test_prepare_iso_weather_data(
     _write_iso_data(selected_weather_dir_path, [1.0, 2.0, 3.0])
     ddck_file_path = tmp_path / "weather_data.ddck"
 
-    _ccp.prepare_weather_data_and_get_statistics(
+    parameters = _ccp.prepare_weather_data_and_get_parameters(
         "c8a15e846e", selected_weather_dir_path, ddck_dir_path, ddck_file_path
     )
 
     assert ddck_file_path.read_text() == "iso ddck"
+    assert parameters.long_wave_radiation_mode == 5
+    assert parameters.site_elevation_m is None
 
     rolled_out = (selected_weather_dir_path / "data_rolled_out.type99").read_text()
     header, data = rolled_out.split("<data>\n")
@@ -144,9 +146,9 @@ def test_iso_statistics(
     temperatures[2 * 24 + 5] = -10.0
     _write_iso_data(selected_weather_dir_path, temperatures)
 
-    statistics = _ccp.prepare_weather_data_and_get_statistics(
+    statistics = _ccp.prepare_weather_data_and_get_parameters(
         "c8a15e846e", selected_weather_dir_path, ddck_dir_path, tmp_path / "w.ddck"
-    )
+    ).statistics
 
     assert statistics.first_coldest_day_in_year == 2
     assert statistics.yearly_average_temperature_degC == _pt.approx(
@@ -164,13 +166,19 @@ def test_prepare_tm2_weather_data(
     _write_tm2_data(selected_weather_dir_path)
     ddck_file_path = tmp_path / "weather_data.ddck"
 
-    statistics = _ccp.prepare_weather_data_and_get_statistics(
+    parameters = _ccp.prepare_weather_data_and_get_parameters(
         "5e0a17c3d2", selected_weather_dir_path, ddck_dir_path, ddck_file_path
     )
 
     assert ddck_file_path.read_text() == "tm2 ddck"
     # No roll-out (and no location parameters needed) for TM2.
     assert not (selected_weather_dir_path / "data_rolled_out.type99").exists()
+
+    assert parameters.long_wave_radiation_mode == 2
+    # From the file's header.
+    assert parameters.site_elevation_m == 436
+
+    statistics = parameters.statistics
 
     # Zurich-Kloten: roughly 9 degC yearly average, coldest in winter, warmest in summer.
     assert 7 < statistics.yearly_average_temperature_degC < 11
@@ -202,9 +210,9 @@ def test_tm2_first_coldest_day_in_leap_year(
         header_line + "".join(fix_up(l) for l in data_lines), newline=""
     )
 
-    statistics = _ccp.prepare_weather_data_and_get_statistics(
+    statistics = _ccp.prepare_weather_data_and_get_parameters(
         "bc75a61bfd", selected_weather_dir_path, ddck_dir_path, tmp_path / "w.ddck"
-    )
+    ).statistics
 
     assert statistics.first_coldest_day_in_year == 358
 
@@ -239,8 +247,8 @@ def test_iso_first_coldest_day_in_year(
     temperatures[coldest_time_h - 1] = -10.0
     _write_iso_data(selected_weather_dir_path, temperatures)
 
-    statistics = _ccp.prepare_weather_data_and_get_statistics(
+    statistics = _ccp.prepare_weather_data_and_get_parameters(
         "c8a15e846e", selected_weather_dir_path, ddck_dir_path, tmp_path / "w.ddck"
-    )
+    ).statistics
 
     assert statistics.first_coldest_day_in_year == expected_day

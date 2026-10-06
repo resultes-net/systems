@@ -52,8 +52,6 @@ IT_kW     = IT_kWm2 * ACollAp
 
 CONSTANTS #
 !Inputs
-EmSky      = 0 ! Not used
-EmGnd      = 0 ! Not used
 Mode_ctrl  = 4
 MfrMin     = 0.2 * MfrNom
 MfrMax     = 10  * MfrNom
@@ -74,7 +72,7 @@ Cp            ! 4: Fluid Specific Heat [kJ/kg.K] ([0.0,+Inf])
 unitReadIAM   ! 5: Logical Unit for IAM Data [-] ([10,+Inf])
 NbTrsvAng     ! 6: Number of Transverse Angles [-] ([1,100])
 NbLgtdAng     ! 7: Number of Longitudinal Angles [-] ([1,100])
-LgwRadMode    ! 8: Long wave Radiation Mode [-] ([1,4])
+$LgwRadMode   ! 8: Long wave Radiation Mode [-] ([1,5]); 5: EL as input (our addition), see parameters.ddck
 c0            ! 9:  Collector Efficiency Coefficient c0 [-] ([0.,1.])
 c1            ! 10: Collector Efficiency Coefficient c1 [kJ/hr.m^2.K] ([0.,+Inf])
 c2            ! 11: Collector Efficiency Coefficient c2 [kJ/hr.m^2.K^2] ([0.,+Inf])
@@ -91,7 +89,7 @@ INPUTS #
 TIn                 ! 1: Inlet Temperature [C] ([-Inf,+Inf])
 MfrIn               ! 2: Array Inlet Flowrate [kg/hr] ([0.0,+Inf])
 $Tamb                   ! 3: Ambient Temperature [C] ([-Inf,+Inf])
-0,0                     ! 4: Sky Temperature [C] ([-Inf,+Inf]) - unused
+$Tsky                   ! 4: Sky Temperature [C] ([-Inf,+Inf])
 $IB_surfUser_1          ! 5: Beam Radiation on the Tilted Surface [kJ/hr.m^2] ([0.0,+Inf])
 $ID_surfUser_1          ! 6: Sky Diffuse Radiation on Tilt [kJ/hr.m^2] ([0.0,+Inf])
 $IDG_surfUser_1         ! 7: Ground Diffuse Radiation on Tilt [kJ/hr.m^2] ([0.0,+Inf])
@@ -101,8 +99,8 @@ $aziSurfUser_1                   ! 10: Collector Azimuth Angle [degrees] ([-360,
 $AISZ                   ! 11: Solar Zenith Angle [degrees] ([0,90])
 $AISA                   ! 12: Solar Azimuth Angle [degrees] ([0,90])
 $vWind                  ! 13: Wind Velocity [m/s] ([0.,+Inf])
-EmSky                   ! 14: Emissivity of the Sky [-] ([0.,1.])
-EmGnd                   ! 15: Emissivity of the Ground [-] ([0.,1.])
+$EmSky                  ! 14: Emissivity of the Sky [-] ([0.,1.])
+$EmGnd                  ! 15: Emissivity of the Ground [-] ([0.,1.])
 $EL                     ! 16: Long-wave radiation [kJ/hr.m^2]
 Mode_ctrl               ! 17: Collector Outlet Temperature Control [-] ([0,4])
                               ! 0 = run at specified inlet flow rate and calculate outlet temperature
@@ -115,7 +113,7 @@ MfrMin                ! 19: Minimum Array Flow Rate [kg/hr] ([0.,+Inf])
 MfrMax                ! 20: Maximum Array Flow Rate [kg/hr] ([0.,+Inf])
 
 **** initial values
-20 0 10 0 0 0 0 45 45 0 45 45 0 0.9 0.9 0 0 100 200 6000
+20 0 10 10 0 0 0 45 45 0 45 45 0 0.9 0.9 0 0 100 200 6000
 
 EQUATIONS #
 TOut    = [17, 1] ! Outlet Temperature [C] ([-Inf,+Inf])
