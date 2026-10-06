@@ -11,10 +11,13 @@ https://github.com/resultes-net/issues/blob/main/AGENTS.md. This file only adds 
 
 ## Environment and tests
 - There's no venv checked out in the repo by default. `requirements.txt` pins `pytrnsys_process` etc.;
-  `ci/requirements.txt` only holds the CI tooling (OpenStack client, `uv`, ...). `common/create_common_parameters_ddck_file.py`
-  additionally needs `resultes_pydantic_models`, `pydantic`, `sympy` and `pandas`, which aren't pinned here.
+  `ci/requirements.txt` only holds the CI tooling (OpenStack client, `uv`, ...). The `common/` scripts run in the runner's Python
+  environment, so their dependencies are pinned there: https://github.com/resultes-net/runner/tree/main/requirements-3.13
+  (`run-3rd-party.txt`, plus `resultes-pydantic-models` from the runner's `pydantic-models` submodule).
 - `pytest.ini` sets `python_files = *.py`, so pytest imports *every* Python file, including run and processing scripts.
   Collection fails with `ModuleNotFoundError` unless the dependencies above are installed.
+- To run only the parameters script's tests: `pytest common/test_create_common_parameters_ddck_file.py
+  common/create_common_parameters_ddck_file.py`.
 
 ## Parameters and weather data
 - `common/create_common_parameters_ddck_file.py <parameters-json>` generates the per-simulation inputs into
