@@ -1,4 +1,5 @@
 import pathlib as _pl
+import shutil as _su
 
 import create_common_parameters_ddck_file as _ccp
 import pandas as _pd
@@ -8,40 +9,9 @@ import resultes_pydantic_models.weather_data as _pwd
 _ISO_FORMAT = _pwd.WeatherDataFormat.ISO
 _TM2_FORMAT = _pwd.WeatherDataFormat.TM2
 
+# Fixed up like uploads (the server's `fix_up_and_validate_tm2_contents`): `pvlib` can't read the
+# raw Meteonorm file.
 _TM2_FILE_PATH = _ccp.WEATHER_DDCK_DIR_PATH / "CH-Zuerich-Kloten-66700.tm2"
-
-
-def _fix_up_tm2_header_line(header_line: str) -> str:
-    # Same fix-ups as `fix_up_and_validate_tm2_contents` in the server's `external/weather_data.py`,
-    # which are applied on upload. `pvlib` rejects the unfixed Meteonorm file.
-    station_number = header_line[:7]
-    if station_number[0] == " " and station_number[-1] != " ":
-        station_number = station_number[1:] + " "
-
-    city = header_line[7:30]
-    city = (city.rstrip().replace(" ", "_") or "XX").ljust(len(city))
-
-    state = header_line[30:32]
-    if state == "  ":
-        state = "XX"
-
-    return station_number + city + state + header_line[32:]
-
-
-def _fix_up_tm2_data_line(data_line: str) -> str:
-    if data_line[113:123] == "99999999?0":
-        return data_line[:113] + ("9" * 10) + data_line[123:]
-
-    return data_line
-
-
-def _fix_up_tm2_contents(contents: str) -> str:
-    lines = contents.splitlines()
-    fixed_up_lines = [
-        _fix_up_tm2_header_line(lines[0]),
-        *(_fix_up_tm2_data_line(l) for l in lines[1:]),
-    ]
-    return "\r\n".join(fixed_up_lines) + "\r\n"
 
 
 def _write_iso_data(dir_path: _pl.Path, temperatures_degC: list[float]) -> _pl.Path:
@@ -54,9 +24,7 @@ def _write_iso_data(dir_path: _pl.Path, temperatures_degC: list[float]) -> _pl.P
 
 def _write_tm2_data(dir_path: _pl.Path) -> _pl.Path:
     file_path = dir_path / _pwd.get_data_file_name(_TM2_FORMAT)
-    with _TM2_FILE_PATH.open(newline="") as file:
-        contents = file.read()
-    file_path.write_text(_fix_up_tm2_contents(contents), newline="")
+    _su.copy(_TM2_FILE_PATH, file_path)
     return file_path
 
 
@@ -273,11 +241,3 @@ def test_iso_first_coldest_day_in_year(
     )
 
     assert statistics.first_coldest_day_in_year == expected_day
-
-
-def test_checked_in_tm2_is_unchanged_by_fix_ups_in_tests(
-    selected_weather_dir_path: _pl.Path,
-) -> None:
-    before = _TM2_FILE_PATH.read_bytes()
-    _write_tm2_data(selected_weather_dir_path)
-    assert _TM2_FILE_PATH.read_bytes() == before
