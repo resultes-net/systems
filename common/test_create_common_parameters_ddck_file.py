@@ -1,9 +1,9 @@
 import pathlib as _pl
 
+import create_common_parameters_ddck_file as _ccp
+import pandas as _pd
 import pytest as _pt
 import resultes_pydantic_models.weather_data as _pwd
-
-import create_common_parameters_ddck_file as _ccp
 
 _ISO_FORMAT = _pwd.WeatherDataFormat.ISO
 _TM2_FORMAT = _pwd.WeatherDataFormat.TM2
@@ -169,8 +169,6 @@ def test_iso_statistics(
     ddck_dir_path: _pl.Path,
 ) -> None:
     # January: 0 degC, except for one hour at -10 on day 3 (index 2); February: 10 degC.
-    # TIME starts at 1, so the first hour of the data is 01:00 on Jan 1st and the last one of
-    # January (TIME 744) falls into February.
     temperatures = [0.0] * 31 * 24 + [10.0] * 28 * 24
     temperatures[2 * 24 + 5] = -10.0
     _write_iso_data(selected_weather_dir_path, temperatures)
@@ -183,7 +181,7 @@ def test_iso_statistics(
     assert statistics.yearly_average_temperature_degC == _pt.approx(
         sum(temperatures) / len(temperatures)
     )
-    assert statistics.min_monthly_average_temperature_degC == _pt.approx(-10 / 743)
+    assert statistics.min_monthly_average_temperature_degC == _pt.approx(-10 / 744)
     assert statistics.max_monthly_average_temperature_degC == _pt.approx(10)
 
 
@@ -205,13 +203,76 @@ def test_prepare_tm2_weather_data(
 
     # Zurich-Kloten: roughly 9 degC yearly average, coldest in winter, warmest in summer.
     assert 7 < statistics.yearly_average_temperature_degC < 11
-    assert (
-        statistics.first_coldest_day_in_year < 60
-        or statistics.first_coldest_day_in_year > 300
-    )
+    # January 12th, the day with the lowest hourly temperature (-11.7 degC).
+    assert statistics.first_coldest_day_in_year == 11
     assert statistics.min_monthly_average_temperature_degC < 3
     assert statistics.max_monthly_average_temperature_degC > 16
     assert 6 < statistics.temperature_amplitude_degC < 12
+
+
+def test_tm2_first_coldest_day_in_leap_year(
+    tmp_path: _pl.Path,
+    selected_weather_dir_path: _pl.Path,
+    ddck_dir_path: _pl.Path,
+) -> None:
+    # `pvlib` dates all values with the year of the first data line, so a typical year whose
+    # January is from a leap year would have no February 29th.
+    data_file_path = _write_tm2_data(selected_weather_dir_path)
+    with data_file_path.open(newline="") as file:
+        header_line, *data_lines = file.read().splitlines(keepends=True)
+
+    def fix_up(data_line: str) -> str:
+        data_line = data_line[:1] + "96" + data_line[3:]
+        if data_line[3:9] == "122501":  # December 25th, first hour.
+            data_line = data_line[:67] + "-500" + data_line[71:]  # Dry bulb: -50 degC.
+        return data_line
+
+    data_file_path.write_text(
+        header_line + "".join(fix_up(l) for l in data_lines), newline=""
+    )
+
+    statistics = _ccp.prepare_weather_data_and_get_statistics(
+        "zurich", selected_weather_dir_path, ddck_dir_path, tmp_path / "w.ddck"
+    )
+
+    assert statistics.first_coldest_day_in_year == 358
+
+
+@_pt.mark.parametrize(
+    ("coldest_hour_index", "expected_day"),
+    [(0, 0), (23, 0), (24, 1), (8759, 364)],
+)
+def test_first_coldest_day_in_year(coldest_hour_index: int, expected_day: int) -> None:
+    # Type 77's time shift: 0 for January 1st, 364 for December 31st.
+    temperatures = [0.0] * 8760
+    temperatures[coldest_hour_index] = -10.0
+
+    statistics = _ccp._create_weather_data_statistics(_pd.Series(temperatures))
+
+    assert statistics.first_coldest_day_in_year == expected_day
+
+
+@_pt.mark.parametrize(
+    ("coldest_time_h", "expected_day"),
+    [(1, 0), (24, 0), (25, 1), (8760, 364)],
+)
+def test_iso_first_coldest_day_in_year(
+    tmp_path: _pl.Path,
+    selected_weather_dir_path: _pl.Path,
+    ddck_dir_path: _pl.Path,
+    coldest_time_h: int,
+    expected_day: int,
+) -> None:
+    # `TIME` is the end of the hour: `TIME` 24 is the last hour of January 1st.
+    temperatures = [0.0] * 8760
+    temperatures[coldest_time_h - 1] = -10.0
+    _write_iso_data(selected_weather_dir_path, temperatures)
+
+    statistics = _ccp.prepare_weather_data_and_get_statistics(
+        "alpine", selected_weather_dir_path, ddck_dir_path, tmp_path / "w.ddck"
+    )
+
+    assert statistics.first_coldest_day_in_year == expected_day
 
 
 def test_checked_in_tm2_is_unchanged_by_fix_ups_in_tests(

@@ -207,7 +207,10 @@ def _get_collector_field_mass_flow_rate_specified_variable(
 
 @_dc.dataclass
 class WeatherDataStatistics:
-    """See TRNSYS Type 77: Simple Ground Temperature Model in TRNSYS' Mathematical reference."""
+    """See TRNSYS Type 77: Simple Ground Temperature Model in TRNSYS' Mathematical reference.
+
+    `first_coldest_day_in_year` is Type 77's time shift, i.e., 0 for January 1st.
+    """
 
     yearly_average_temperature_degC: float
     first_coldest_day_in_year: int
@@ -222,7 +225,9 @@ class WeatherDataStatistics:
         ) / 2
 
 
-def get_weather_data_format(selected_weather_dir_path: _pl.Path) -> _pwd.WeatherDataFormat:
+def get_weather_data_format(
+    selected_weather_dir_path: _pl.Path,
+) -> _pwd.WeatherDataFormat:
     """Tell the format of the downloaded weather data by which data file exists."""
     formats = [
         f
@@ -300,11 +305,7 @@ def _create_iso_weather_data_statistics(
 ) -> WeatherDataStatistics:
     df = _pd.read_csv(data_file_path, sep=r"\s+", comment="#")
 
-    index = _dt.datetime(2030, 1, 1, tzinfo=_dt.UTC) + _pd.to_timedelta(
-        df["TIME"], unit="hours"
-    )
-
-    return _create_weather_data_statistics(df["ta"].set_axis(index))
+    return _create_weather_data_statistics(df["ta"])
 
 
 def _create_tm2_weather_data_statistics(
@@ -319,7 +320,17 @@ def _create_tm2_weather_data_statistics(
 def _create_weather_data_statistics(
     temperatures_degC: _pd.Series,
 ) -> WeatherDataStatistics:
-    """`temperatures_degC` must be hourly values indexed by datetime."""
+    """`temperatures_degC` must be hourly values in order, starting with the year's first hour."""
+    # Re-index by position, labelling each value by the start of its hour. The data's own
+    # timestamps can't be used: ISO's `TIME` labels the end of the hour, and `pvlib` dates TMY2
+    # data with the year of the first line, which may be a leap year.
+    index = _pd.date_range(
+        _dt.datetime(2030, 1, 1, tzinfo=_dt.UTC),
+        periods=len(temperatures_degC),
+        freq="h",
+    )
+    temperatures_degC = temperatures_degC.set_axis(index)
+
     yearly_average_temperature_degC = _tp.cast(float, temperatures_degC.mean().item())
 
     daily_min_temperatures_degC = temperatures_degC.resample("D").min()
@@ -426,11 +437,11 @@ $START = {time.start}
 $STOP = {time.stop}
 $dtSim = {time.dt_sim}
 
-$TambAvg = {weather_data_statistics.yearly_average_temperature_degC:.1}
-$dTambAmpl = {weather_data_statistics.temperature_amplitude_degC:.1}
+$TambAvg = {weather_data_statistics.yearly_average_temperature_degC:.1f}
+$dTambAmpl = {weather_data_statistics.temperature_amplitude_degC:.1f}
 $ddTcwOffset = {weather_data_statistics.first_coldest_day_in_year}
 
-$QSnkScalingFactor = {demand.scaling_factor:.2}
+$QSnkScalingFactor = {demand.scaling_factor:.2f}
 $QSnkQUnscaled_MWh = {unscaledYearlyHeatDemandMWh}
 $QSnkQ_MWh = $QSnkScalingFactor*$QSnkQUnscaled_MWh
 $QSnkHourlyMax_kW = {maxHourlyHeatDemand_kW}
@@ -554,7 +565,5 @@ if __name__ == "__main__":
         _sys.exit(-1)
 
     parameters_json_file_path = _pl.Path(_sys.argv[1])
-
-    main(parameters_json_file_path)
 
     main(parameters_json_file_path)
