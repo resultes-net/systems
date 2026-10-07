@@ -19,6 +19,16 @@ https://github.com/resultes-net/issues/blob/main/AGENTS.md. This file only adds 
 - To run only the parameters script's tests: `pytest common/test_create_common_parameters_ddck_file.py
   common/create_common_parameters_ddck_file.py`.
 
+## Post-processing
+- The runner runs `[T|P|B]TES/process.pytrnsys results` with the system's directory as working directory, so `common/` isn't
+  on the module search path: shared code is imported via a `sys.path` insert (see `TTES/process.pytrnsys`).
+- All deck variables, including the constants from `parameters.ddck`, are in `sim.scalar`, without the `$` (e.g.
+  `CollAcollAp`, `Vol_Tes1`).
+- `to_json` writes `sim.scalar` to `output.json`, which the client reads for the KPIs. Scalars for the client must be set in
+  a processing step before `to_json`.
+- The three scripts contain a lot of duplicated code. Put new shared logic into `common/process/` (as `lcoh.py`) instead of
+  copying it, as a step towards removing the duplication.
+
 ## Parameters and weather data
 - `common/create_common_parameters_ddck_file.py <parameters-json>` generates the per-simulation inputs into
   `common/ddck/parameters/`: `parameters.ddck`, `demand.csv`, the waste-heat source profile and `weather_data.ddck`.
