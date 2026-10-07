@@ -419,6 +419,19 @@ def test_create_parameters_ddck_contents() -> None:
             "demand_delta_T_degC": 30.0,
             "storage_temperature_maximum_degC": 85.0,
         },
+        "financial": {
+            "cost_region": "ch",
+            "real_discount_rate_1": 0.03,
+            "fuel_price_per_kWh": 0.075,
+            "electricity_price_per_kWh": 0.19,
+            "lifetime_a": 30,
+            "maintenance_rate_1": 0.01,
+            "boiler_efficiency_1": 0.9,
+            "storage_cost": {"a": 27102 * 1.24, "b": -0.527},
+            "collector_field_cost": {"a": 1330.12, "b": -0.0873},
+            "heat_pump_cost_per_kW": 954.1 * 1.24,
+            "boiler_cost_per_kW": 250 * 1.24,
+        },
     }
 
     parameters = _com.CommonParameters(**data)
@@ -440,6 +453,10 @@ def test_create_parameters_ddck_contents() -> None:
 
     assert "\n$altid = 436.0\n" in result
     assert "\n$LgwRadMode = 2\n" in result
+    assert "\n$FinRealDiscountRate = 0.03\n" in result
+    assert "\n$FinLifetime_a = 30\n" in result
+    assert "\n$FinCostTesB = -0.527\n" in result
+    assert "\n$FinCostCollA = 1330.12\n" in result
 
     weather_data_parameters.site_elevation_m = None
     result = _create_parameters_ddck_contents(parameters, weather_data_parameters)
@@ -460,6 +477,8 @@ def _create_parameters_ddck_contents(
     collector_field = parameters.collector_field
 
     control = parameters.control
+
+    financial = parameters.financial
 
     weather_data_statistics = weather_data_parameters.statistics
 
@@ -512,6 +531,19 @@ $CollNbTrsvAng = {len(collector_field.iam.transversal_angles_degC)}
 $TSetDem = {control.demand_temperature_setpoint_degC}
 $QSnkdT = {control.demand_delta_T_degC}
 $TTesMax = {control.storage_temperature_maximum_degC}
+
+$FinRealDiscountRate = {financial.real_discount_rate_1}
+$FinFuelPrice_per_kWh = {financial.fuel_price_per_kWh}
+$FinElecPrice_per_kWh = {financial.electricity_price_per_kWh}
+$FinLifetime_a = {financial.lifetime_a}
+$FinMaintRate = {financial.maintenance_rate_1}
+$FinBoilerEff = {financial.boiler_efficiency_1}
+$FinCostTesA = {financial.storage_cost.a}
+$FinCostTesB = {financial.storage_cost.b}
+$FinCostCollA = {financial.collector_field_cost.a}
+$FinCostCollB = {financial.collector_field_cost.b}
+$FinCostHp_per_kW = {financial.heat_pump_cost_per_kW}
+$FinCostBoiler_per_kW = {financial.boiler_cost_per_kW}
 
 {formatted_specified_and_solved_variables_block}
 

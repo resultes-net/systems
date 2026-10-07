@@ -26447,6 +26447,25 @@
                 "demand_temperature_setpoint_degC": 80.0,
                 "demand_delta_T_degC": 30.0,
                 "storage_temperature_maximum_degC": 85.0
+            },
+            "financial": {
+                "cost_region": "eu",
+                "real_discount_rate_1": 0.03,
+                "fuel_price_per_kWh": 0.08,
+                "electricity_price_per_kWh": 0.2,
+                "lifetime_a": 30,
+                "maintenance_rate_1": 0.01,
+                "boiler_efficiency_1": 0.9,
+                "storage_cost": {
+                    "a": 19142,
+                    "b": -0.539
+                },
+                "collector_field_cost": {
+                    "a": 1072.6774193548385,
+                    "b": -0.0873
+                },
+                "heat_pump_cost_per_kW": 954.1,
+                "boiler_cost_per_kW": 250
             }
         }
     }
