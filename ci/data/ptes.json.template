@@ -1,6 +1,6 @@
 {
     "name": "<PROJECT_NAME>",
-    "location": "alpine",
+    "weather_data_id": "bc75a61bfd",
     "type": "ptes",
     "parameters": {
         "values": {
