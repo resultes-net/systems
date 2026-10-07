@@ -6,6 +6,12 @@ import numpy as np
 import pandas as pd
 from pytrnsys_process import api
 
+# The runner runs this script with the system's directory as working directory, so `common`
+# isn't on the module search path.
+sys.path.insert(0, str(pl.Path(__file__).resolve().parents[1] / "common"))
+
+import process.lcoh as common_lcoh  # noqa: E402
+
 
 def filter(sim: api.Simulation):
     sim.monthly.index = pd.to_datetime(sim.monthly.index)
@@ -382,6 +388,18 @@ def kpi(sim: api.Simulation):
     df.to_csv(sim.path + "\\data.csv", header=False, index=False)
 
 
+def lcoh(sim: api.Simulation):
+    # The storage cost curve is per m³ water equivalent, not per m³ ground.
+    storage_volume_water_equivalent_m3 = common_lcoh.get_water_equivalent_volume_m3(
+        float(sim.scalar["BoHxV"].iloc[0]), float(sim.scalar["BoHxCpLayer"].iloc[0])
+    )
+    common_lcoh.add_lcoh(
+        sim,
+        storage_volume_water_equivalent_m3=storage_volume_water_equivalent_m3,
+        has_heat_pump=True,
+    )
+
+
 def to_json(sim: api.Simulation):
     sim.scalar.to_json(sim.path + "\\output.json", orient="records", indent=4)
 
@@ -407,6 +425,7 @@ if __name__ == "__main__":
         control,
         balance,
         kpi,
+        lcoh,
         to_json,
     ]
 
