@@ -115,7 +115,7 @@ def ptes(sim: api.Simulation):
         sim.scalar["pitStoreStVolume"]
         * sim.scalar["pitStoreFlDen"]
         * sim.scalar["pitStoreFlSpeHeat"]
-        * (sim.scalar["SolarControlTTesMax"] - 0)
+        * (sim.scalar["TTesMax"] - 0)
         / 3600
     )
     # Nominal capacity: from max storage temperature down to the minimum heat pump return
@@ -127,7 +127,7 @@ def ptes(sim: api.Simulation):
         sim.scalar["pitStoreStVolume"]
         * sim.scalar["pitStoreFlDen"]
         * sim.scalar["pitStoreFlSpeHeat"]
-        * (sim.scalar["SolarControlTTesMax"] - sim.scalar["pitStoreTRetHpMin"])
+        * (sim.scalar["TTesMax"] - sim.scalar["pitStoreTRetHpMin"])
         / 3600
     )
 

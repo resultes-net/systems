@@ -162,7 +162,7 @@ def ttes(sim: api.Simulation):
         sim.scalar["Vol_Tes1"]
         * sim.scalar["RhoWat_Tes1"]
         * sim.scalar["CpWat_Tes1"]
-        * (sim.scalar["SolarControlTTesMax"] - sim.scalar["TesTRetDH"])
+        * (sim.scalar["TTesMax"] - sim.scalar["TesTRetDH"])
         / 3600
     )
 
