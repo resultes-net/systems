@@ -389,9 +389,12 @@ def balance(sim: api.Simulation):
     names_legend = [
         "$Q_{Coll}$",
         "$Q_{Boiler}$",
+        "$Q_{Source}$",
         "$Q_{Demand}$",
         "$Q_{TTES,Accum}$",
         "$Q_{TTES,Losses}$",
+        "$Q_{Pipes}$",
+        "$Q_{District}$",
         "$Q_{Imb}$",
     ]
 
@@ -403,6 +406,8 @@ def balance(sim: api.Simulation):
             "QSnkP_MW",
             "QAcum_Tes1_MW",
             "QLoss_Tes1_MW",
+            "qSysOut_PipeLoss_MW",
+            "QDistrict_MW",
         ],
         xlabel="",
         cmap="Paired",

@@ -435,23 +435,24 @@ def balance(sim: api.Simulation):
         "$Q_{Coll}$",
         "$P_{Comp}$",
         "$Q_{Boiler}$",
+        "$Q_{Source}$",
         "$Q_{Demand}$",
         "$Q_{PTES,Accum}$",
         "$Q_{PTES,Losses}$",
+        "$Q_{Pipes}$",
+        "$Q_{District}$",
         "$Q_{Imb}$",
     ]
 
     fig, ax = api.energy_balance(
         sim.monthly / 1e3,
-        q_in_columns=[
-            "CollP_kW_calc_MW",
-            "HpPelComp_MW",
-            "BolrPOut_MW",
-        ],
+        q_in_columns=["CollP_kW_calc_MW", "HpPelComp_MW", "BolrPOut_MW", "QSrcP_MW"],
         q_out_columns=[
             "QSnkP_MW",
             "pitStoreQAccum_MW",
             "pitStoreQLosses_MW",
+            "qSysOut_PipeLoss_MW",
+            "QDistrict_MW",
         ],
         xlabel="",
         cmap="Paired",
