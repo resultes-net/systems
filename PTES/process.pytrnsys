@@ -20,7 +20,6 @@ def filter(sim: api.Simulation):
 
 
 def solar(sim: api.Simulation):
-
     #### Calculations ####
     sim.monthly["CollP_MW"] = sim.monthly["CollP_kW"] / 1000
 
@@ -46,19 +45,16 @@ def solar(sim: api.Simulation):
     fig, ax = api.bar_chart(sim.monthly / 1e6, ["CollP_kW"], use_legend=False)
     ax.set_ylabel("Energy [GWh]")
     ax.legend()
-    # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "solar-monthly", "solar")
 
     fig, ax = api.line_plot(sim.hourly, ["CollTIn", "CollTOut"])
     ax.set_ylabel("Temperature [°C]")
     plt.grid()
-    # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "temp-hourly", "solar")
 
     fig, ax = api.line_plot(sim.hourly, ["SolarControlStag"])
     ax.set_ylabel("Stagnation ON [-]")
     plt.grid()
-    # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "stagnation-hourly", "solar")
 
     df = pd.DataFrame(
@@ -69,14 +65,11 @@ def solar(sim: api.Simulation):
     df["Q_cum"] = np.cumsum(df["Q"])
 
     plt.figure()
-    fig = plt.plot(
-        df["T"], df["Q_cum"]
-    )  # , linestyle='-', color='blue', label='Q_cum')
+    fig = plt.plot(df["T"], df["Q_cum"])
     plt.xlabel("$T_{coll,out}$ [°C]")
     plt.ylabel("$Q_{coll,cum}$ [GWh]")
     plt.tight_layout()
     plt.grid()
-    # plt.show()
     api.export_plots_in_configured_formats(fig[0].figure, sim.path, "q_t", "solar")
 
 
@@ -88,13 +81,11 @@ def hx(sim: api.Simulation):
     fig, ax = api.line_plot(sim.hourly, ["HxCollEff", "HxEff", "HxQSrcEff"])
     ax.set_ylabel("Effectiveness [-]")
     plt.grid()
-    # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "effectiveness-hourly", "hx")
 
     fig, ax = api.line_plot(sim.hourly, ["HxCollLMTD", "HxLMTD", "HxQSrcLMTD"])
     ax.set_ylabel("LMTD [K]")
     plt.grid()
-    # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "LMTD-hourly", "hx")
 
 
@@ -134,8 +125,7 @@ def ptes(sim: api.Simulation):
         / 3600
     )
 
-    sim.scalar["pitStoreCap_MWh"] = sim.scalar["pitStoreCap_kWh"]/1000
-
+    sim.scalar["pitStoreCap_MWh"] = sim.scalar["pitStoreCap_kWh"] / 1000
 
     sim.scalar["pitStoreNCycles"] = (
         sim.scalar["pitStoreQCharge_Tot"] / sim.scalar["pitStoreQMax"]
@@ -157,25 +147,7 @@ def ptes(sim: api.Simulation):
         / 3600
     )
 
-    #### Plots ####
-    # names_legend = [
-    #     '$T_{top,Resultes}$',
-    #     '$T_{medium,Resultes}$',
-    #     '$T_{bottom,Resultes}$',
-    #     '$T_{top,Solites}$',
-    #     '$T_{medium,Solites}$',
-    #     '$T_{bottom,Solites}$',
-    # ]
-
-    names_legend = [
-        '$T_{top}$',
-        '$T_{medium}$',
-        '$T_{bottom}$'
-    ]
-    # fig, ax = api.line_plot(
-    #     sim.hourly, ["pitStoreTTherStat1", "pitStoreTTherStat2", "pitStoreTTherStat3",
-    #                  "pitStore1_solites","pitStoreAve_solites","pitStore50_solites"]
-    # )
+    names_legend = ["$T_{top}$", "$T_{medium}$", "$T_{bottom}$"]
 
     fig, ax = api.line_plot(
         sim.hourly, ["pitStoreTTherStat1", "pitStoreTTherStat2", "pitStoreTTherStat3"]
@@ -200,7 +172,6 @@ def ptes(sim: api.Simulation):
 
     ax.set_ylabel("Temperature [°C]")
     plt.grid()
-    # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "t-nodes-ptes-hourly", "ptes")
 
     fig, ax = api.line_plot(sim.hourly, ["pitStoreSoc"], use_legend=False)
@@ -253,8 +224,6 @@ def ptes(sim: api.Simulation):
         ["pitStoreQ31_kW", "pitStoreTTherStat3"],
     ]
 
-    dataframes = pd.DataFrame()  # []
-
     plt.figure()
 
     for q, t in plot_variables:
@@ -264,12 +233,8 @@ def ptes(sim: api.Simulation):
 
         df = df.sort_values(by=t)
         df[q] = np.cumsum(df[q])
-        # dataframes = dataframes + a + b
-        # dataframes.append(df)
 
-        fig = plt.plot(
-            df[t], df[q], label=q + "____" + t
-        )  # , linestyle='-', color='blue', label='Q_cum')
+        fig = plt.plot(df[t], df[q], label=q + "____" + t)
 
     plt.xlabel("Temperature [°C]")
     plt.ylabel("Cumulative energy [kWh]")
@@ -347,7 +312,6 @@ def hp(sim: api.Simulation):
 
 
 def boiler(sim: api.Simulation):
-
     #### Calculations ####
     sim.scalar["BolrPOut_kW_Tot"] = sim.hourly["BolrPOut_kW"].sum()
 
@@ -355,12 +319,10 @@ def boiler(sim: api.Simulation):
     fig, ax = api.line_plot(sim.hourly / 1e3, ["BolrPOut_kW"], use_legend=False)
     ax.set_ylabel("Power [MW]")
     plt.grid()
-    # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "boiler-hourly", "boiler")
 
 
 def source(sim: api.Simulation):
-
     #### Calculations ####
     sim.scalar["QSrcP_kW_Tot"] = sim.hourly["QSrcP_kW"].sum()
 
@@ -368,12 +330,10 @@ def source(sim: api.Simulation):
     fig, ax = api.line_plot(sim.hourly / 1e3, ["QSrcP_kW"], use_legend=False)
     ax.set_ylabel("Power [MW]")
     plt.grid()
-    # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "source-hourly", "source")
 
 
 def demand(sim: api.Simulation):
-
     #### Calculations ####
     sim.scalar["QSnkP_kW_Tot"] = sim.hourly["QSnkP_kW"].sum()
     sim.scalar["QSnkTIn_Avg"] = sim.hourly["QSnkTIn"].mean()
@@ -398,7 +358,6 @@ def demand(sim: api.Simulation):
     fig, ax = api.line_plot(sim.hourly / 1e3, ["QSnkP_kW"], use_legend=False)
     ax.set_ylabel("Power [MW]")
     plt.grid()
-    # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "sink-hourly", "sink")
 
     #### Load duration curve ####
@@ -407,26 +366,16 @@ def demand(sim: api.Simulation):
 
     plt.figure()
     fig = plt.plot(duration_h, sorted_demand)
-    plt.xlabel("Duration (h)")
-    plt.ylabel("Power (kW)")
+    plt.xlabel("Duration [h]")
+    plt.ylabel("Power [kW]")
     plt.grid()
     plt.tight_layout()
-    # plt.show()
-    api.export_plots_in_configured_formats(fig[0].figure, sim.path, "load-duration-hourly", "sink")
-
+    api.export_plots_in_configured_formats(
+        fig[0].figure, sim.path, "load-duration-hourly", "sink"
+    )
 
 
 def balance(sim: api.Simulation):
-    #### Read solites values ####
-    df_solites = pd.read_csv('solites_balance.csv', sep=r'\s+', header=None)
-    df_solites = df_solites.T
-
-    sim.monthly['solites_solar']    = df_solites[0].values
-    sim.monthly['solites_comp']   = df_solites[1].values
-    sim.monthly['solites_aux']    = df_solites[2].values
-    sim.monthly['solites_demand'] = df_solites[3].values
-    sim.monthly['solites_ptes_accum']     = df_solites[4].values
-    sim.monthly['solites_ptes_losses']      = df_solites[5].values
     #### Calculations ####
     sim.scalar["QSources"] = (
         sim.scalar["CollP_kW_calc_Tot"]
@@ -480,29 +429,11 @@ def balance(sim: api.Simulation):
         "$Q_{Coll}$",
         "$P_{Comp}$",
         "$Q_{Boiler}$",
-        # "$Q_{Source}$",
         "$Q_{Demand}$",
         "$Q_{PTES,Accum}$",
         "$Q_{PTES,Losses}$",
-        # "$Q_{Pipes}$",
-        # "$Q_{District}$",
         "$Q_{Imb}$",
     ]
-
-    custom_colors = [
-        "#FF9F40",  # 1. Naranja (Ej. Colector solar)
-        "#4CAF50",  # 2. Verde (Para una nueva variable, ej. Bomba de calor)
-        "#FF6384",  # 3. Rojo/Rosa (Ej. Caldera)
-        "#36A2EB",  # 4. Azul (Ej. Demanda)
-        "#4BC0C0",  # 5. Turquesa (Ej. Acumulación)
-        "#9966FF",  # 6. Morado (Ej. Pérdidas)
-        "#C9CBCF",  # 7. Gris claro (Ej. Desbalance)
-
-        # "#FFC107",  # 8. Amarillo/Ambar (Para otra variable, ej. Electricidad)
-        # "#795548"  # 9. Marrón (Para otra variable extra, ej. Biomasa)
-    ]
-
-
 
     fig, ax = api.energy_balance(
         sim.monthly / 1e3,
@@ -510,53 +441,18 @@ def balance(sim: api.Simulation):
             "CollP_kW_calc_MW",
             "HpPelComp_MW",
             "BolrPOut_MW",
-            # "QSrcP_MW"
         ],
         q_out_columns=[
             "QSnkP_MW",
             "pitStoreQAccum_MW",
             "pitStoreQLosses_MW",
-            # "qSysOut_PipeLoss_MW",
-            # "QDistrict_MW",
         ],
         xlabel="",
         cmap="Paired",
-        color=custom_colors,
     )
     ax.set_ylabel("Energy [GWh]")
     plt.legend(names_legend, bbox_to_anchor=(1.05, 1), loc="upper left")
-    # plt.show()
     api.export_plots_in_configured_formats(fig, sim.path, "balance-monthly", "balance")
-
-    # Monthly solites
-    sim.monthly['solites_solar']    = df_solites[0].values
-    sim.monthly['solites_comp']   = df_solites[1].values
-    sim.monthly['solites_aux']    = df_solites[2].values
-    sim.monthly['solites_demand'] = df_solites[3].values
-    sim.monthly['solites_ptes_accum']     = df_solites[4].values
-    sim.monthly['solites_ptes_losses']      = df_solites[5].values
-
-
-    fig, ax = api.energy_balance(
-        sim.monthly,
-        q_in_columns=[
-            "solites_solar",
-            "solites_comp",
-            "solites_aux",
-        ],
-        q_out_columns=[
-            "solites_demand",
-            "solites_ptes_accum",
-            "solites_ptes_losses",
-        ],
-        xlabel="",
-        cmap="Paired",
-        color=custom_colors,
-    )
-    ax.set_ylabel("Energy (MWh)")
-    plt.legend(names_legend, bbox_to_anchor=(1.05, 1), loc="upper left")
-    # plt.show()
-    api.export_plots_in_configured_formats(fig, sim.path, "balance-solites-monthly", "balance")
 
     # Yearly
     fig, ax = api.energy_balance(
@@ -574,7 +470,6 @@ def balance(sim: api.Simulation):
     )
     ax.set_ylabel("Energy [GWh]")
     plt.legend(names_legend, bbox_to_anchor=(1.05, 1), loc="upper left")
-    # plt.show()
 
     api.export_plots_in_configured_formats(fig, sim.path, "balance-yearly", "balance")
 
@@ -602,8 +497,6 @@ def q_vs_t(sim: api.Simulation):
         ["QSnkP_kW", "QSnkTOut"],
     ]
 
-    dataframes = pd.DataFrame()  # []
-
     plt.figure()
 
     for q, t in plot_variables:
@@ -613,12 +506,8 @@ def q_vs_t(sim: api.Simulation):
 
         df = df.sort_values(by=t)
         df[q] = np.cumsum(df[q])
-        # dataframes = dataframes + a + b
-        # dataframes.append(df)
 
-        fig = plt.plot(
-            df[t], df[q], label=q + "____" + t
-        )  # , linestyle='-', color='blue', label='Q_cum')
+        fig = plt.plot(df[t], df[q], label=q + "____" + t)
 
     plt.xlabel("Temperature [°C]")
     plt.ylabel("Cumulative energy [kWh]")
@@ -628,42 +517,35 @@ def q_vs_t(sim: api.Simulation):
 
 
 def kpi(sim: api.Simulation):
-
     ### Calculations ###
     sim.scalar["FactorRenewable"] = (
         sim.scalar["QSnkP_kW_Tot"] - sim.scalar["BolrPOut_kW_Tot"]
     ) / sim.scalar["QSnkP_kW_Tot"]
 
-    ### Create dataframe with Solites KPIs ###
-    sim.scalar["zero"] = 0
     data = [
-        sim.scalar["IT_kW_m2"],  # 14
-        sim.scalar["CollP_kW_calc_Tot"] / 1000,  # 15
-        sim.scalar["Q_kW_m2"],  # 16
-        sim.scalar["zero"] / 1000,  # 17
-        sim.scalar["pitStoreQCharge_Tot"] / 1000,  # 18
-        sim.scalar["pitStoreQDisharge_Tot"] / 1000,  # 19
-        sim.scalar["pitStoreQLosses_kW_Tot"] / 1000,  # 20
-        sim.scalar["pitStoreQLossesTo_kW_Tot"] / 1000,  # 21
-        sim.scalar["pitStoreQLossesEd_kW_Tot"] / 1000,  # 22
-        sim.scalar["pitStoreQLossesBo_kW_Tot"] / 1000,  # 23
-        sim.scalar["QDistrict_MW"],  # 24
-        sim.scalar["pitStoreQAccum_kW_Tot"] / 1000,  # 25
-        sim.scalar["zero"],  # 26
-        sim.scalar["zero"],  # 27
-        sim.scalar["HxQ_kW_Tot"] / 1000,  # 28
-        sim.scalar["HpQEvap_kW_Tot"] / 1000,  # 29
-        sim.scalar["HpQCond_kW_Tot"] / 1000,  # 30
-        sim.scalar["HpPelComp_kW_Tot"] / 1000,  # 31
-        sim.scalar["BolrPOut_kW_Tot"] / 1000,  # 32
-        sim.scalar["QDemand_kW_Tot"] / 1000,  # 33
-        sim.scalar["zero"],  # 34
-        sim.scalar["SolarControlStagDays"],  # 35
-        sim.scalar["HpCOP"],  # 36
-        sim.scalar["pitStoreEff"],  # 37
-        sim.scalar["pitStoreNCycles"],  # 38
-        sim.scalar["QSnkTIn_Avg"],  # 39
-        sim.scalar["QSnkTOut_Avg"],  # 40
+        sim.scalar["IT_kW_m2"],
+        sim.scalar["CollP_kW_calc_Tot"] / 1000,
+        sim.scalar["Q_kW_m2"],
+        sim.scalar["pitStoreQCharge_Tot"] / 1000,
+        sim.scalar["pitStoreQDisharge_Tot"] / 1000,
+        sim.scalar["pitStoreQLosses_kW_Tot"] / 1000,
+        sim.scalar["pitStoreQLossesTo_kW_Tot"] / 1000,
+        sim.scalar["pitStoreQLossesEd_kW_Tot"] / 1000,
+        sim.scalar["pitStoreQLossesBo_kW_Tot"] / 1000,
+        sim.scalar["QDistrict_MW"],
+        sim.scalar["pitStoreQAccum_kW_Tot"] / 1000,
+        sim.scalar["HxQ_kW_Tot"] / 1000,
+        sim.scalar["HpQEvap_kW_Tot"] / 1000,
+        sim.scalar["HpQCond_kW_Tot"] / 1000,
+        sim.scalar["HpPelComp_kW_Tot"] / 1000,
+        sim.scalar["BolrPOut_kW_Tot"] / 1000,
+        sim.scalar["QDemand_kW_Tot"] / 1000,
+        sim.scalar["SolarControlStagDays"],
+        sim.scalar["HpCOP"],
+        sim.scalar["pitStoreEff"],
+        sim.scalar["pitStoreNCycles"],
+        sim.scalar["QSnkTIn_Avg"],
+        sim.scalar["QSnkTOut_Avg"],
     ]
     df = pd.DataFrame(data)
 
@@ -698,7 +580,7 @@ if __name__ == "__main__":
         to_json,
     ]
 
-    simulation_data = api.process_whole_result_set(
+    api.process_whole_result_set(
         path_to_results_folder,
         processing_steps,
     )
