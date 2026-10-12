@@ -195,10 +195,10 @@ def _create_simulation(has_heat_pump: bool) -> _Simulation:
 
 
 @_pt.mark.parametrize("has_heat_pump", [True, False])
-def test_add_lcoh(has_heat_pump: bool) -> None:
+def test_add_financial_outputs(has_heat_pump: bool) -> None:
     sim = _create_simulation(has_heat_pump)
 
-    _lcoh.add_lcoh(
+    _lcoh.add_financial_outputs(
         sim, storage_volume_water_equivalent_m3=20000, has_heat_pump=has_heat_pump
     )
 

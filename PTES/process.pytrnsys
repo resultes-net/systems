@@ -559,8 +559,8 @@ def kpi(sim: api.Simulation):
     df.to_csv(sim.path + "\\data.csv", header=False, index=False)
 
 
-def lcoh(sim: api.Simulation):
-    common_lcoh.add_lcoh(
+def financial_outputs(sim: api.Simulation):
+    common_lcoh.add_financial_outputs(
         sim,
         storage_volume_water_equivalent_m3=float(
             sim.scalar["pitStoreStVolume"].iloc[0]
@@ -594,7 +594,7 @@ if __name__ == "__main__":
         balance,
         q_vs_t,
         kpi,
-        lcoh,
+        financial_outputs,
         to_json,
     ]
 

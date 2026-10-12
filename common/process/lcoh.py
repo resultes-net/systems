@@ -163,7 +163,7 @@ class Simulation(_tp.Protocol):
     hourly: "_pd.DataFrame"
 
 
-def add_lcoh(
+def add_financial_outputs(
     sim: Simulation, storage_volume_water_equivalent_m3: float, has_heat_pump: bool
 ) -> None:
     """Calculates the LCOH from the simulation's results and writes it, together with the
