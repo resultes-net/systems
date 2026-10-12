@@ -209,5 +209,10 @@ def test_add_lcoh(has_heat_pump: bool) -> None:
     for name in ["LCOH", "I_solar", "I_tes", "I_boiler", "I_hp", "I_total", "annuity"]:
         assert sim.scalar[name].iloc[0] == getattr(expected, name)
 
+    assert sim.scalar["BolrCap_kW"].iloc[0] == 3000
+    assert sim.scalar["HpCap_kW"].iloc[0] == (800 if has_heat_pump else 0)
+    assert sim.scalar["TesVolWaterEq_m3"].iloc[0] == 20000
+
     records = _pd.read_json(sim.scalar.to_json(orient="records"), orient="records")
     assert records["LCOH"].iloc[0] == _pt.approx(expected.LCOH)
+    assert records["HpCap_kW"].iloc[0] == (800 if has_heat_pump else 0)

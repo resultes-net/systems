@@ -167,7 +167,9 @@ def add_lcoh(
     sim: Simulation, storage_volume_water_equivalent_m3: float, has_heat_pump: bool
 ) -> Lcoh:
     """Calculates the LCOH from the simulation's results and writes it, together with the
-    investment costs, into `sim.scalar` (see `Lcoh` for the names).
+    investment costs (see `Lcoh` for the names) and the quantities they're based on, into
+    `sim.scalar`: `BolrCap_kW`, `HpCap_kW` (0 without a heat pump, like `I_hp`) and
+    `TesVolWaterEq_m3`. The collector aperture area is already there (`CollAcollAp`).
 
     Expects the boiler's and the demand's yearly totals (`BolrPOut_kW_Tot`, `QSnkP_kW_Tot`) and,
     with a heat pump, the compressor's (`HpPelComp_kW_Tot`) in `sim.scalar`. The capacities
@@ -204,6 +206,10 @@ def add_lcoh(
 
     for name, value in _dc.asdict(lcoh).items():
         sim.scalar[name] = value
+
+    sim.scalar["BolrCap_kW"] = system.boiler_capacity_kW
+    sim.scalar["HpCap_kW"] = heat_pump.capacity_kW if heat_pump else 0.0
+    sim.scalar["TesVolWaterEq_m3"] = system.storage_volume_water_equivalent_m3
 
     print(f"LCOH of the system: {lcoh.LCOH} per kWh (in the cost region's currency)")
 
