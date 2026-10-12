@@ -26,6 +26,9 @@ https://github.com/resultes-net/issues/blob/main/AGENTS.md. This file only adds 
   `CollAcollAp`, `Vol_Tes1`).
 - `to_json` writes `sim.scalar` to `output.json`, which the client reads for the KPIs. Scalars for the client must be set in
   a processing step before `to_json`.
+- Write the scalars for the client with their names spelled out (`sim.scalar["I_total"] = ...`), not in a loop over a
+  dataclass's fields: the names are the interface to the client (`create[T|P|B]tesKpis.ts`), so they must be greppable
+  in both repos.
 - The three scripts contain a lot of duplicated code. Put new shared logic into `common/process/` (as `lcoh.py`) instead of
   copying it, as a step towards removing the duplication.
 
