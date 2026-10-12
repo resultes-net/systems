@@ -62,16 +62,16 @@ def test_lcoh_with_heat_pump() -> None:
     b = 19.600441
     annuity = (I * (1 + 0.01 * b) + E_0 * b) / b
 
-    assert result.I_solar == _pt.approx(I_solar)
-    assert result.I_tes == _pt.approx(I_tes)
-    assert result.I_boiler == _pt.approx(I_boiler)
-    assert result.I_hp == _pt.approx(I_hp)
-    assert result.I_total == _pt.approx(I)
-    assert result.annuity == _pt.approx(annuity)
-    assert result.LCOH == _pt.approx(annuity / 10e6)
+    assert result.collector_field_investment == _pt.approx(I_solar)
+    assert result.storage_investment == _pt.approx(I_tes)
+    assert result.boiler_investment == _pt.approx(I_boiler)
+    assert result.heat_pump_investment == _pt.approx(I_hp)
+    assert result.total_investment == _pt.approx(I)
+    assert result.annuity_per_a == _pt.approx(annuity)
+    assert result.lcoh_per_kWh == _pt.approx(annuity / 10e6)
 
     # The annuity is the yearly capital cost, maintenance and energy cost.
-    assert result.annuity == _pt.approx(I / b + 0.01 * I + E_0)
+    assert result.annuity_per_a == _pt.approx(I / b + 0.01 * I + E_0)
 
 
 def test_lcoh_without_heat_pump_ignores_electricity() -> None:
@@ -83,11 +83,13 @@ def test_lcoh_without_heat_pump_ignores_electricity() -> None:
     result = _lcoh.calculate_lcoh(system, parameters)
     with_heat_pump = _lcoh.calculate_lcoh(_SYSTEM, _PARAMETERS)
 
-    assert result.I_hp == 0
-    assert result.I_total == _pt.approx(with_heat_pump.I_total - with_heat_pump.I_hp)
-    assert result.annuity == _pt.approx(
-        with_heat_pump.annuity
-        - with_heat_pump.I_hp * (1 / 19.600441 + 0.01)
+    assert result.heat_pump_investment == 0
+    assert result.total_investment == _pt.approx(
+        with_heat_pump.total_investment - with_heat_pump.heat_pump_investment
+    )
+    assert result.annuity_per_a == _pt.approx(
+        with_heat_pump.annuity_per_a
+        - with_heat_pump.heat_pump_investment * (1 / 19.600441 + 0.01)
         - 1e6 * 0.2
     )
 
@@ -128,7 +130,9 @@ def test_lcoh_matches_prototype() -> None:
         heat_pump=None,
     )
 
-    assert _lcoh.calculate_lcoh(system, parameters).LCOH == _pt.approx(expected_lcoh)
+    assert _lcoh.calculate_lcoh(system, parameters).lcoh_per_kWh == _pt.approx(
+        expected_lcoh
+    )
 
 
 def test_boiler_efficiency_increases_fuel_cost() -> None:
@@ -139,7 +143,7 @@ def test_boiler_efficiency_increases_fuel_cost() -> None:
         _SYSTEM, _dc.replace(_PARAMETERS, boiler_efficiency_1=0.8)
     )
 
-    assert inefficient.annuity - efficient.annuity == _pt.approx(
+    assert inefficient.annuity_per_a - efficient.annuity_per_a == _pt.approx(
         4e6 * 0.08 * (1 / 0.8 - 1)
     )
 
@@ -205,18 +209,18 @@ def test_add_financial_outputs(has_heat_pump: bool) -> None:
     system = _SYSTEM if has_heat_pump else _dc.replace(_SYSTEM, heat_pump=None)
     expected = _lcoh.calculate_lcoh(system, _PARAMETERS)
 
-    assert sim.scalar["LCOH"].iloc[0] == expected.LCOH
-    assert sim.scalar["annuity"].iloc[0] == expected.annuity
-    assert sim.scalar["I_solar"].iloc[0] == expected.I_solar
-    assert sim.scalar["I_tes"].iloc[0] == expected.I_tes
-    assert sim.scalar["I_boiler"].iloc[0] == expected.I_boiler
-    assert sim.scalar["I_hp"].iloc[0] == expected.I_hp
-    assert sim.scalar["I_total"].iloc[0] == expected.I_total
+    assert sim.scalar["LCOH"].iloc[0] == expected.lcoh_per_kWh
+    assert sim.scalar["annuity"].iloc[0] == expected.annuity_per_a
+    assert sim.scalar["I_solar"].iloc[0] == expected.collector_field_investment
+    assert sim.scalar["I_tes"].iloc[0] == expected.storage_investment
+    assert sim.scalar["I_boiler"].iloc[0] == expected.boiler_investment
+    assert sim.scalar["I_hp"].iloc[0] == expected.heat_pump_investment
+    assert sim.scalar["I_total"].iloc[0] == expected.total_investment
 
     assert sim.scalar["BolrCap_kW"].iloc[0] == 3000
     assert sim.scalar["HpCap_kW"].iloc[0] == (800 if has_heat_pump else 0)
     assert sim.scalar["TesVolWaterEq_m3"].iloc[0] == 20000
 
     records = _pd.read_json(sim.scalar.to_json(orient="records"), orient="records")
-    assert records["LCOH"].iloc[0] == _pt.approx(expected.LCOH)
+    assert records["LCOH"].iloc[0] == _pt.approx(expected.lcoh_per_kWh)
     assert records["HpCap_kW"].iloc[0] == (800 if has_heat_pump else 0)

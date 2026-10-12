@@ -86,17 +86,15 @@ class System:
 
 @_dc.dataclass(frozen=True)
 class Lcoh:
-    """Costs in the cost region's currency."""
+    """In the cost region's currency."""
 
-    I_solar: float
-    I_tes: float
-    I_boiler: float
-    I_hp: float
-    I_total: float
-    # Per year.
-    annuity: float
-    # Per kWh.
-    LCOH: float
+    collector_field_investment: float
+    storage_investment: float
+    boiler_investment: float
+    heat_pump_investment: float
+    total_investment: float
+    annuity_per_a: float
+    lcoh_per_kWh: float
 
 
 def get_water_equivalent_volume_m3(
@@ -146,13 +144,13 @@ def calculate_lcoh(system: System, parameters: FinancialParameters) -> Lcoh:
     lcoh = annuity / system.yearly_demand_kWh
 
     return Lcoh(
-        I_solar=I_solar,
-        I_tes=I_tes,
-        I_boiler=I_boiler,
-        I_hp=I_hp,
-        I_total=I,
-        annuity=annuity,
-        LCOH=lcoh,
+        collector_field_investment=I_solar,
+        storage_investment=I_tes,
+        boiler_investment=I_boiler,
+        heat_pump_investment=I_hp,
+        total_investment=I,
+        annuity_per_a=annuity,
+        lcoh_per_kWh=lcoh,
     )
 
 
@@ -203,13 +201,13 @@ def add_financial_outputs(
 
     lcoh = calculate_lcoh(system, parameters)
 
-    sim.scalar["LCOH"] = lcoh.LCOH
-    sim.scalar["annuity"] = lcoh.annuity
-    sim.scalar["I_solar"] = lcoh.I_solar
-    sim.scalar["I_tes"] = lcoh.I_tes
-    sim.scalar["I_boiler"] = lcoh.I_boiler
-    sim.scalar["I_hp"] = lcoh.I_hp
-    sim.scalar["I_total"] = lcoh.I_total
+    sim.scalar["LCOH"] = lcoh.lcoh_per_kWh
+    sim.scalar["annuity"] = lcoh.annuity_per_a
+    sim.scalar["I_solar"] = lcoh.collector_field_investment
+    sim.scalar["I_tes"] = lcoh.storage_investment
+    sim.scalar["I_boiler"] = lcoh.boiler_investment
+    sim.scalar["I_hp"] = lcoh.heat_pump_investment
+    sim.scalar["I_total"] = lcoh.total_investment
 
     sim.scalar["BolrCap_kW"] = system.boiler_capacity_kW
     # 0 without a heat pump, like `I_hp`.
