@@ -10,7 +10,7 @@ from pytrnsys_process import api
 # isn't on the module search path.
 sys.path.insert(0, str(pl.Path(__file__).resolve().parents[1] / "common"))
 
-import process.lcoh as common_lcoh  # noqa: E402
+import process.financial as common_financial  # noqa: E402
 
 
 def filter(sim: api.Simulation):
@@ -390,10 +390,12 @@ def kpi(sim: api.Simulation):
 
 def financial_outputs(sim: api.Simulation):
     # The storage cost curve is per m³ water equivalent, not per m³ ground.
-    storage_volume_water_equivalent_m3 = common_lcoh.get_water_equivalent_volume_m3(
-        float(sim.scalar["BoHxV"].iloc[0]), float(sim.scalar["BoHxCpLayer"].iloc[0])
+    storage_volume_water_equivalent_m3 = (
+        common_financial.get_water_equivalent_volume_m3(
+            float(sim.scalar["BoHxV"].iloc[0]), float(sim.scalar["BoHxCpLayer"].iloc[0])
+        )
     )
-    common_lcoh.add_financial_outputs(
+    common_financial.add_financial_outputs(
         sim,
         storage_volume_water_equivalent_m3=storage_volume_water_equivalent_m3,
         has_heat_pump=True,

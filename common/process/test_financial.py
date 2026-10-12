@@ -3,24 +3,24 @@ import dataclasses as _dc
 import pandas as _pd
 import pytest as _pt
 
-from . import lcoh as _lcoh
+from . import financial as _financial
 
-_PARAMETERS = _lcoh.FinancialParameters(
+_PARAMETERS = _financial.FinancialParameters(
     real_discount_rate_1=0.03,
     lifetime_a=30,
     maintenance_rate_1=0.01,
     fuel_price_per_kWh=0.08,
     electricity_price_per_kWh=0.2,
     boiler_efficiency_1=0.9,
-    storage_cost=_lcoh.PowerLawCost(19142, -0.539),
-    collector_field_cost=_lcoh.PowerLawCost(1330.12 / 1.24, -0.0873),
+    storage_cost=_financial.PowerLawCost(19142, -0.539),
+    collector_field_cost=_financial.PowerLawCost(1330.12 / 1.24, -0.0873),
     heat_pump_cost_per_kW=954.1,
     boiler_cost_per_kW=250,
 )
 
-_HEAT_PUMP = _lcoh.HeatPump(capacity_kW=800, yearly_compressor_electricity_kWh=1e6)
+_HEAT_PUMP = _financial.HeatPump(capacity_kW=800, yearly_compressor_electricity_kWh=1e6)
 
-_SYSTEM = _lcoh.System(
+_SYSTEM = _financial.System(
     yearly_demand_kWh=10e6,
     collector_area_m2=5000,
     storage_volume_water_equivalent_m3=20000,
@@ -32,26 +32,26 @@ _SYSTEM = _lcoh.System(
 
 def test_present_value_factor() -> None:
     # b = ((1 + r)^T − 1) / ((1 + r)^T · r)
-    assert _lcoh.get_present_value_factor(0.03, 30) == _pt.approx(19.600441)
-    assert _lcoh.get_present_value_factor(0.05, 1) == _pt.approx(1 / 1.05)
-    assert _lcoh.get_present_value_factor(0, 30) == 30
-    assert _lcoh.get_present_value_factor(1e-9, 30) == _pt.approx(30)
+    assert _financial.get_present_value_factor(0.03, 30) == _pt.approx(19.600441)
+    assert _financial.get_present_value_factor(0.05, 1) == _pt.approx(1 / 1.05)
+    assert _financial.get_present_value_factor(0, 30) == 30
+    assert _financial.get_present_value_factor(1e-9, 30) == _pt.approx(30)
 
 
 def test_power_law_cost() -> None:
-    cost = _lcoh.PowerLawCost(27102, -0.527)
+    cost = _financial.PowerLawCost(27102, -0.527)
 
     assert cost.get_specific_cost(1000) == _pt.approx(27102 * 1000**-0.527)
     assert cost.get_cost(1000) == _pt.approx(27102 * 1000**-0.527 * 1000)
 
 
 def test_water_equivalent_volume() -> None:
-    assert _lcoh.get_water_equivalent_volume_m3(1000, 2016) == _pt.approx(481.1456)
-    assert _lcoh.get_water_equivalent_volume_m3(1000, 4190) == _pt.approx(1000)
+    assert _financial.get_water_equivalent_volume_m3(1000, 2016) == _pt.approx(481.1456)
+    assert _financial.get_water_equivalent_volume_m3(1000, 4190) == _pt.approx(1000)
 
 
 def test_lcoh_with_heat_pump() -> None:
-    result = _lcoh.calculate_lcoh(_SYSTEM, _PARAMETERS)
+    result = _financial.calculate_financial_results(_SYSTEM, _PARAMETERS)
 
     I_solar = 1330.12 / 1.24 * 5000**-0.0873 * 5000
     I_tes = 19142 * 20000**-0.539 * 20000
@@ -80,8 +80,8 @@ def test_lcoh_without_heat_pump_ignores_electricity() -> None:
         _PARAMETERS, electricity_price_per_kWh=1000, heat_pump_cost_per_kW=1e6
     )
 
-    result = _lcoh.calculate_lcoh(system, parameters)
-    with_heat_pump = _lcoh.calculate_lcoh(_SYSTEM, _PARAMETERS)
+    result = _financial.calculate_financial_results(system, parameters)
+    with_heat_pump = _financial.calculate_financial_results(_SYSTEM, _PARAMETERS)
 
     assert result.heat_pump_investment == 0
     assert result.total_investment == _pt.approx(
@@ -109,19 +109,19 @@ def test_lcoh_matches_prototype() -> None:
     I = cost_solar * size_solar + cost_tes * size_tes
     expected_lcoh = (1 / b) * (I + consumption * fuel_price * b + I * m * b) / demand
 
-    parameters = _lcoh.FinancialParameters(
+    parameters = _financial.FinancialParameters(
         real_discount_rate_1=r,
         lifetime_a=T,
         maintenance_rate_1=m,
         fuel_price_per_kWh=fuel_price,
         electricity_price_per_kWh=0.2,
         boiler_efficiency_1=1,
-        storage_cost=_lcoh.PowerLawCost(1.24 * 27102, -0.527),
-        collector_field_cost=_lcoh.PowerLawCost(1330.12, -0.0873),
+        storage_cost=_financial.PowerLawCost(1.24 * 27102, -0.527),
+        collector_field_cost=_financial.PowerLawCost(1330.12, -0.0873),
         heat_pump_cost_per_kW=954.1,
         boiler_cost_per_kW=0,
     )
-    system = _lcoh.System(
+    system = _financial.System(
         yearly_demand_kWh=demand,
         collector_area_m2=size_solar,
         storage_volume_water_equivalent_m3=size_tes,
@@ -130,16 +130,16 @@ def test_lcoh_matches_prototype() -> None:
         heat_pump=None,
     )
 
-    assert _lcoh.calculate_lcoh(system, parameters).lcoh_per_kWh == _pt.approx(
-        expected_lcoh
-    )
+    assert _financial.calculate_financial_results(
+        system, parameters
+    ).lcoh_per_kWh == _pt.approx(expected_lcoh)
 
 
 def test_boiler_efficiency_increases_fuel_cost() -> None:
-    efficient = _lcoh.calculate_lcoh(
+    efficient = _financial.calculate_financial_results(
         _SYSTEM, _dc.replace(_PARAMETERS, boiler_efficiency_1=1)
     )
-    inefficient = _lcoh.calculate_lcoh(
+    inefficient = _financial.calculate_financial_results(
         _SYSTEM, _dc.replace(_PARAMETERS, boiler_efficiency_1=0.8)
     )
 
@@ -165,7 +165,7 @@ _DECK_VARIABLES = {
 
 
 def test_financial_parameters_from_deck_variables() -> None:
-    parameters = _lcoh.FinancialParameters.from_deck_variables(
+    parameters = _financial.FinancialParameters.from_deck_variables(
         _DECK_VARIABLES.__getitem__
     )
 
@@ -202,12 +202,12 @@ def _create_simulation(has_heat_pump: bool) -> _Simulation:
 def test_add_financial_outputs(has_heat_pump: bool) -> None:
     sim = _create_simulation(has_heat_pump)
 
-    _lcoh.add_financial_outputs(
+    _financial.add_financial_outputs(
         sim, storage_volume_water_equivalent_m3=20000, has_heat_pump=has_heat_pump
     )
 
     system = _SYSTEM if has_heat_pump else _dc.replace(_SYSTEM, heat_pump=None)
-    expected = _lcoh.calculate_lcoh(system, _PARAMETERS)
+    expected = _financial.calculate_financial_results(system, _PARAMETERS)
 
     assert sim.scalar["LCOH"].iloc[0] == expected.lcoh_per_kWh
     assert sim.scalar["annuity"].iloc[0] == expected.annuity_per_a

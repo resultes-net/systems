@@ -11,7 +11,7 @@ from pytrnsys_process import api
 # isn't on the module search path.
 sys.path.insert(0, str(pl.Path(__file__).resolve().parents[1] / "common"))
 
-import process.lcoh as common_lcoh  # noqa: E402
+import process.financial as common_financial  # noqa: E402
 
 
 def filter(sim: api.Simulation):
@@ -500,7 +500,7 @@ def kpi(sim: api.Simulation):
 
 
 def financial_outputs(sim: api.Simulation):
-    common_lcoh.add_financial_outputs(
+    common_financial.add_financial_outputs(
         sim,
         storage_volume_water_equivalent_m3=float(sim.scalar["Vol_Tes1"].iloc[0]),
         has_heat_pump=False,

@@ -1,4 +1,5 @@
-"""The levelized cost of heat (LCOH), with the annuity method of the final report (section 5.3).
+"""The financial results: the levelized cost of heat (LCOH) and the investment costs, with the
+annuity method of the final report (section 5.3).
 
 Shared by the systems' post-processing scripts (`[T|P|B]TES/process.pytrnsys`). The financial
 parameters are read from the deck (they're written into `parameters.ddck` by
@@ -85,7 +86,7 @@ class System:
 
 
 @_dc.dataclass(frozen=True)
-class Lcoh:
+class FinancialResults:
     """In the cost region's currency."""
 
     collector_field_investment: float
@@ -114,7 +115,9 @@ def get_present_value_factor(real_discount_rate_1: float, lifetime_a: float) -> 
     return ((1 + r) ** T - 1) / ((1 + r) ** T * r)
 
 
-def calculate_lcoh(system: System, parameters: FinancialParameters) -> Lcoh:
+def calculate_financial_results(
+    system: System, parameters: FinancialParameters
+) -> FinancialResults:
     """`LCOH = a · (I · (1 + m · b) + E₀ · b) / Q_demand`, with `b` the present value factor
     and `a = 1 / b` the annuity factor."""
     I_solar = parameters.collector_field_cost.get_cost(system.collector_area_m2)
@@ -143,7 +146,7 @@ def calculate_lcoh(system: System, parameters: FinancialParameters) -> Lcoh:
     annuity = a * (I * (1 + m * b) + E_0 * b)
     lcoh = annuity / system.yearly_demand_kWh
 
-    return Lcoh(
+    return FinancialResults(
         collector_field_investment=I_solar,
         storage_investment=I_tes,
         boiler_investment=I_boiler,
@@ -199,15 +202,15 @@ def add_financial_outputs(
 
     parameters = FinancialParameters.from_deck_variables(get_scalar)
 
-    lcoh = calculate_lcoh(system, parameters)
+    results = calculate_financial_results(system, parameters)
 
-    sim.scalar["LCOH"] = lcoh.lcoh_per_kWh
-    sim.scalar["annuity"] = lcoh.annuity_per_a
-    sim.scalar["I_solar"] = lcoh.collector_field_investment
-    sim.scalar["I_tes"] = lcoh.storage_investment
-    sim.scalar["I_boiler"] = lcoh.boiler_investment
-    sim.scalar["I_hp"] = lcoh.heat_pump_investment
-    sim.scalar["I_total"] = lcoh.total_investment
+    sim.scalar["LCOH"] = results.lcoh_per_kWh
+    sim.scalar["annuity"] = results.annuity_per_a
+    sim.scalar["I_solar"] = results.collector_field_investment
+    sim.scalar["I_tes"] = results.storage_investment
+    sim.scalar["I_boiler"] = results.boiler_investment
+    sim.scalar["I_hp"] = results.heat_pump_investment
+    sim.scalar["I_total"] = results.total_investment
 
     sim.scalar["BolrCap_kW"] = system.boiler_capacity_kW
     # 0 without a heat pump, like `I_hp`.
