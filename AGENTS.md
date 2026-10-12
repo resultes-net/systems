@@ -12,8 +12,12 @@ https://github.com/resultes-net/issues/blob/main/AGENTS.md. This file only adds 
 ## Environment and tests
 - There's no venv checked out in the repo by default. `requirements.txt` pins `pytrnsys_process` etc.;
   `ci/requirements.txt` only holds the CI tooling (OpenStack client, `uv`, ...). The `common/` scripts run in the runner's Python
-  environment, so their dependencies are pinned there: https://github.com/resultes-net/runner/tree/main/requirements-3.13
-  (`run-3rd-party.txt`, plus `resultes-pydantic-models` from the runner's `pydantic-models` submodule).
+  environment, so their dependencies are pinned there: https://github.com/resultes-net/runner/tree/main/requirements-3.13.
+  `run.txt` is what runs in production and staging (`run-3rd-party.txt` plus the runner's own packages, e.g.
+  `resultes-pydantic-models` from its `pydantic-models` submodule). For dev work, use `dev.txt`: the same plus Black,
+  pytest, ...
+- The Python code, including the `.pytrnsys` scripts, is Black-formatted (default settings). Use the Black from the
+  runner's `dev.txt`, and format only the files you change.
 - `pytest.ini` sets `python_files = *.py`, so pytest imports *every* Python file, including run and processing scripts.
   Collection fails with `ModuleNotFoundError` unless the dependencies above are installed.
 - To run only the parameters script's tests: `pytest common/test_create_common_parameters_ddck_file.py
