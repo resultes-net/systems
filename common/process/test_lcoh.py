@@ -198,16 +198,20 @@ def _create_simulation(has_heat_pump: bool) -> _Simulation:
 def test_add_lcoh(has_heat_pump: bool) -> None:
     sim = _create_simulation(has_heat_pump)
 
-    result = _lcoh.add_lcoh(
+    _lcoh.add_lcoh(
         sim, storage_volume_water_equivalent_m3=20000, has_heat_pump=has_heat_pump
     )
 
     system = _SYSTEM if has_heat_pump else _dc.replace(_SYSTEM, heat_pump=None)
     expected = _lcoh.calculate_lcoh(system, _PARAMETERS)
-    assert result == expected
 
-    for name in ["LCOH", "I_solar", "I_tes", "I_boiler", "I_hp", "I_total", "annuity"]:
-        assert sim.scalar[name].iloc[0] == getattr(expected, name)
+    assert sim.scalar["LCOH"].iloc[0] == expected.LCOH
+    assert sim.scalar["annuity"].iloc[0] == expected.annuity
+    assert sim.scalar["I_solar"].iloc[0] == expected.I_solar
+    assert sim.scalar["I_tes"].iloc[0] == expected.I_tes
+    assert sim.scalar["I_boiler"].iloc[0] == expected.I_boiler
+    assert sim.scalar["I_hp"].iloc[0] == expected.I_hp
+    assert sim.scalar["I_total"].iloc[0] == expected.I_total
 
     assert sim.scalar["BolrCap_kW"].iloc[0] == 3000
     assert sim.scalar["HpCap_kW"].iloc[0] == (800 if has_heat_pump else 0)
