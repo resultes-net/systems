@@ -69,6 +69,8 @@ def test_lcoh_with_heat_pump() -> None:
     assert result.total_investment == _pt.approx(I)
     assert result.annuity_per_a == _pt.approx(annuity)
     assert result.lcoh_per_kWh == _pt.approx(annuity / 10e6)
+    assert result.yearly_fuel_kWh == _pt.approx(4e6 / 0.9)
+    assert result.yearly_fuel_cost_per_a == _pt.approx(4e6 / 0.9 * 0.08)
 
     # The annuity is the yearly capital cost, maintenance and energy cost.
     assert result.annuity_per_a == _pt.approx(I / b + 0.01 * I + E_0)
@@ -216,6 +218,8 @@ def test_add_financial_outputs(has_heat_pump: bool) -> None:
     assert sim.scalar["I_boiler"].iloc[0] == expected.boiler_investment
     assert sim.scalar["I_hp"].iloc[0] == expected.heat_pump_investment
     assert sim.scalar["I_total"].iloc[0] == expected.total_investment
+    assert sim.scalar["FuelCost_per_a"].iloc[0] == expected.yearly_fuel_cost_per_a
+    assert sim.scalar["FuelConsumption_kWh"].iloc[0] == expected.yearly_fuel_kWh
 
     assert sim.scalar["BolrCap_kW"].iloc[0] == 3000
     assert sim.scalar["HpCap_kW"].iloc[0] == (800 if has_heat_pump else 0)

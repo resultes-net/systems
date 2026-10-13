@@ -87,7 +87,7 @@ class System:
 
 @_dc.dataclass(frozen=True)
 class FinancialResults:
-    """In the cost region's currency."""
+    """The costs are in the cost region's currency."""
 
     collector_field_investment: float
     storage_investment: float
@@ -96,6 +96,8 @@ class FinancialResults:
     total_investment: float
     annuity_per_a: float
     lcoh_per_kWh: float
+    yearly_fuel_kWh: float
+    yearly_fuel_cost_per_a: float
 
 
 def get_water_equivalent_volume_m3(
@@ -136,9 +138,9 @@ def calculate_financial_results(
     yearly_electricity_kWh = (
         system.heat_pump.yearly_compressor_electricity_kWh if system.heat_pump else 0.0
     )
+    yearly_fuel_cost = yearly_fuel_kWh * parameters.fuel_price_per_kWh
     E_0 = (
-        yearly_fuel_kWh * parameters.fuel_price_per_kWh
-        + yearly_electricity_kWh * parameters.electricity_price_per_kWh
+        yearly_fuel_cost + yearly_electricity_kWh * parameters.electricity_price_per_kWh
     )
 
     m = parameters.maintenance_rate_1
@@ -158,6 +160,8 @@ def calculate_financial_results(
         total_investment=I,
         annuity_per_a=annuity,
         lcoh_per_kWh=lcoh,
+        yearly_fuel_kWh=yearly_fuel_kWh,
+        yearly_fuel_cost_per_a=yearly_fuel_cost,
     )
 
 
@@ -172,8 +176,9 @@ def add_financial_outputs(
     sim: Simulation, storage_volume_water_equivalent_m3: float, has_heat_pump: bool
 ) -> None:
     """Calculates the LCOH from the simulation's results and writes it, together with the
-    investment costs and the quantities they're based on, into `sim.scalar`. The collector
-    aperture area is already there (`CollAcollAp`).
+    investment costs and the quantities they're based on, and the yearly fuel cost and
+    consumption (the boiler's input), into `sim.scalar`. The collector aperture area is
+    already there (`CollAcollAp`).
 
     Expects the boiler's and the demand's yearly totals (`BolrPOut_kW_Tot`, `QSnkP_kW_Tot`) and,
     with a heat pump, the compressor's (`HpPelComp_kW_Tot`) in `sim.scalar`. The capacities
@@ -215,6 +220,8 @@ def add_financial_outputs(
     sim.scalar["I_boiler"] = results.boiler_investment
     sim.scalar["I_hp"] = results.heat_pump_investment
     sim.scalar["I_total"] = results.total_investment
+    sim.scalar["FuelCost_per_a"] = results.yearly_fuel_cost_per_a
+    sim.scalar["FuelConsumption_kWh"] = results.yearly_fuel_kWh
 
     sim.scalar["BolrCap_kW"] = system.boiler_capacity_kW
     # 0 without a heat pump, like `I_hp`.
