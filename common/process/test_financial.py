@@ -7,7 +7,7 @@ from . import financial as _financial
 
 _PARAMETERS = _financial.FinancialParameters(
     real_discount_rate_1=0.03,
-    lifetime_a=30,
+    calculation_period_a=30,
     maintenance_rate_1=0.01,
     fuel_price_per_kWh=0.08,
     electricity_price_per_kWh=0.2,
@@ -111,7 +111,7 @@ def test_lcoh_matches_prototype() -> None:
 
     parameters = _financial.FinancialParameters(
         real_discount_rate_1=r,
-        lifetime_a=T,
+        calculation_period_a=T,
         maintenance_rate_1=m,
         fuel_price_per_kWh=fuel_price,
         electricity_price_per_kWh=0.2,
@@ -150,7 +150,7 @@ def test_boiler_efficiency_increases_fuel_cost() -> None:
 
 _DECK_VARIABLES = {
     "FinRealDiscountRate": 0.03,
-    "FinLifetime_a": 30,
+    "FinCalculationPeriod_a": 30,
     "FinMaintRate": 0.01,
     "FinFuelPrice_per_kWh": 0.08,
     "FinElecPrice_per_kWh": 0.2,

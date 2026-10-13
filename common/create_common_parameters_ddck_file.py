@@ -424,7 +424,7 @@ def test_create_parameters_ddck_contents() -> None:
             "real_discount_rate_1": 0.03,
             "fuel_price_per_kWh": 0.075,
             "electricity_price_per_kWh": 0.19,
-            "lifetime_a": 30,
+            "calculation_period_a": 30,
             "maintenance_rate_1": 0.01,
             "boiler_efficiency_1": 0.9,
             "storage_cost": {"a": 27102 * 1.24, "b": -0.527},
@@ -454,7 +454,7 @@ def test_create_parameters_ddck_contents() -> None:
     assert "\n$altid = 436.0\n" in result
     assert "\n$LgwRadMode = 2\n" in result
     assert "\n$FinRealDiscountRate = 0.03\n" in result
-    assert "\n$FinLifetime_a = 30\n" in result
+    assert "\n$FinCalculationPeriod_a = 30\n" in result
     assert "\n$FinCostTesB = -0.527\n" in result
     assert "\n$FinCostCollA = 1330.12\n" in result
 
@@ -535,7 +535,7 @@ $TTesMax = {control.storage_temperature_maximum_degC}
 $FinRealDiscountRate = {financial.real_discount_rate_1}
 $FinFuelPrice_per_kWh = {financial.fuel_price_per_kWh}
 $FinElecPrice_per_kWh = {financial.electricity_price_per_kWh}
-$FinLifetime_a = {financial.lifetime_a}
+$FinCalculationPeriod_a = {financial.calculation_period_a}
 $FinMaintRate = {financial.maintenance_rate_1}
 $FinBoilerEff = {financial.boiler_efficiency_1}
 $FinCostTesA = {financial.storage_cost.a}

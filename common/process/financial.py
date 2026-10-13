@@ -34,7 +34,7 @@ class PowerLawCost:
 @_dc.dataclass(frozen=True)
 class FinancialParameters:
     real_discount_rate_1: float
-    lifetime_a: float
+    calculation_period_a: float
     maintenance_rate_1: float
     fuel_price_per_kWh: float
     electricity_price_per_kWh: float
@@ -53,7 +53,7 @@ class FinancialParameters:
     ) -> "FinancialParameters":
         return FinancialParameters(
             real_discount_rate_1=get_value("FinRealDiscountRate"),
-            lifetime_a=get_value("FinLifetime_a"),
+            calculation_period_a=get_value("FinCalculationPeriod_a"),
             maintenance_rate_1=get_value("FinMaintRate"),
             fuel_price_per_kWh=get_value("FinFuelPrice_per_kWh"),
             electricity_price_per_kWh=get_value("FinElecPrice_per_kWh"),
@@ -104,9 +104,11 @@ def get_water_equivalent_volume_m3(
     return volume_m3 * volumetric_heat_capacity_kJ_per_m3_K / RHO_C_WATER_KJ_PER_M3_K
 
 
-def get_present_value_factor(real_discount_rate_1: float, lifetime_a: float) -> float:
+def get_present_value_factor(
+    real_discount_rate_1: float, calculation_period_a: float
+) -> float:
     r = real_discount_rate_1
-    T = lifetime_a
+    T = calculation_period_a
 
     if r == 0:
         # The limit for r -> 0.
@@ -140,7 +142,9 @@ def calculate_financial_results(
     )
 
     m = parameters.maintenance_rate_1
-    b = get_present_value_factor(parameters.real_discount_rate_1, parameters.lifetime_a)
+    b = get_present_value_factor(
+        parameters.real_discount_rate_1, parameters.calculation_period_a
+    )
     a = 1 / b
 
     annuity = a * (I * (1 + m * b) + E_0 * b)
