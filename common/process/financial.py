@@ -90,14 +90,24 @@ class FinancialResults:
     """The costs are in the cost region's currency."""
 
     collector_field_investment: float
+    # Per m² aperture area.
+    specific_collector_field_investment_per_m2: float
     storage_investment: float
     boiler_investment: float
     heat_pump_investment: float
     total_investment: float
+    # The sum of the yearly capital, maintenance, fuel and electricity costs.
     annuity_per_a: float
     lcoh_per_kWh: float
+    yearly_capital_cost_per_a: float
+    yearly_maintenance_cost_per_a: float
     yearly_fuel_kWh: float
     yearly_fuel_cost_per_a: float
+    # The heat pump's compressor's, the only electricity accounted for.
+    yearly_electricity_kWh: float
+    yearly_electricity_cost_per_a: float
+    # If the boiler, with the same efficiency, covered the whole demand.
+    yearly_boiler_only_fuel_cost_per_a: float
 
 
 def get_water_equivalent_volume_m3(
@@ -125,6 +135,9 @@ def calculate_financial_results(
     """`LCOH = a · (I · (1 + m · b) + E₀ · b) / Q_demand`, with `b` the present value factor
     and `a = 1 / b` the annuity factor."""
     I_solar = parameters.collector_field_cost.get_cost(system.collector_area_m2)
+    I_solar_per_m2 = parameters.collector_field_cost.get_specific_cost(
+        system.collector_area_m2
+    )
     I_tes = parameters.storage_cost.get_cost(system.storage_volume_water_equivalent_m3)
     I_boiler = parameters.boiler_cost_per_kW * system.boiler_capacity_kW
     I_hp = (
@@ -139,8 +152,8 @@ def calculate_financial_results(
         system.heat_pump.yearly_compressor_electricity_kWh if system.heat_pump else 0.0
     )
     yearly_fuel_cost = yearly_fuel_kWh * parameters.fuel_price_per_kWh
-    E_0 = (
-        yearly_fuel_cost + yearly_electricity_kWh * parameters.electricity_price_per_kWh
+    yearly_electricity_cost = (
+        yearly_electricity_kWh * parameters.electricity_price_per_kWh
     )
 
     m = parameters.maintenance_rate_1
@@ -149,19 +162,39 @@ def calculate_financial_results(
     )
     a = 1 / b
 
-    annuity = a * (I * (1 + m * b) + E_0 * b)
+    # `a · (I · (1 + m · b) + E₀ · b)`, split into its parts.
+    yearly_capital_cost = a * I
+    yearly_maintenance_cost = m * I
+    annuity = (
+        yearly_capital_cost
+        + yearly_maintenance_cost
+        + yearly_fuel_cost
+        + yearly_electricity_cost
+    )
     lcoh = annuity / system.yearly_demand_kWh
+
+    yearly_boiler_only_fuel_cost = (
+        system.yearly_demand_kWh
+        / parameters.boiler_efficiency_1
+        * parameters.fuel_price_per_kWh
+    )
 
     return FinancialResults(
         collector_field_investment=I_solar,
+        specific_collector_field_investment_per_m2=I_solar_per_m2,
         storage_investment=I_tes,
         boiler_investment=I_boiler,
         heat_pump_investment=I_hp,
         total_investment=I,
         annuity_per_a=annuity,
         lcoh_per_kWh=lcoh,
+        yearly_capital_cost_per_a=yearly_capital_cost,
+        yearly_maintenance_cost_per_a=yearly_maintenance_cost,
         yearly_fuel_kWh=yearly_fuel_kWh,
         yearly_fuel_cost_per_a=yearly_fuel_cost,
+        yearly_electricity_kWh=yearly_electricity_kWh,
+        yearly_electricity_cost_per_a=yearly_electricity_cost,
+        yearly_boiler_only_fuel_cost_per_a=yearly_boiler_only_fuel_cost,
     )
 
 
@@ -176,9 +209,10 @@ def add_financial_outputs(
     sim: Simulation, storage_volume_water_equivalent_m3: float, has_heat_pump: bool
 ) -> None:
     """Calculates the LCOH from the simulation's results and writes it, together with the
-    investment costs and the quantities they're based on, and the yearly fuel cost and
-    consumption (the boiler's input), into `sim.scalar`. The collector aperture area is
-    already there (`CollAcollAp`).
+    investment costs and the quantities they're based on, and the yearly costs (the
+    annuity's parts, with the fuel and electricity consumption, and the fuel cost of a
+    boiler-only system), into `sim.scalar`. The collector aperture area is already there
+    (`CollAcollAp`).
 
     Expects the boiler's and the demand's yearly totals (`BolrPOut_kW_Tot`, `QSnkP_kW_Tot`) and,
     with a heat pump, the compressor's (`HpPelComp_kW_Tot`) in `sim.scalar`. The capacities
@@ -220,8 +254,15 @@ def add_financial_outputs(
     sim.scalar["I_boiler"] = results.boiler_investment
     sim.scalar["I_hp"] = results.heat_pump_investment
     sim.scalar["I_total"] = results.total_investment
+    sim.scalar["I_solar_per_m2"] = results.specific_collector_field_investment_per_m2
+    sim.scalar["CapitalCost_per_a"] = results.yearly_capital_cost_per_a
+    sim.scalar["MaintCost_per_a"] = results.yearly_maintenance_cost_per_a
     sim.scalar["FuelCost_per_a"] = results.yearly_fuel_cost_per_a
     sim.scalar["FuelConsumption_kWh"] = results.yearly_fuel_kWh
+    # 0 without a heat pump.
+    sim.scalar["ElecCost_per_a"] = results.yearly_electricity_cost_per_a
+    sim.scalar["ElecConsumption_kWh"] = results.yearly_electricity_kWh
+    sim.scalar["BoilerOnlyFuelCost_per_a"] = results.yearly_boiler_only_fuel_cost_per_a
 
     sim.scalar["BolrCap_kW"] = system.boiler_capacity_kW
     # 0 without a heat pump, like `I_hp`.
