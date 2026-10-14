@@ -28,8 +28,12 @@ https://github.com/resultes-net/issues/blob/main/AGENTS.md. This file only adds 
   on the module search path: shared code is imported via a `sys.path` insert (see `TTES/process.pytrnsys`).
 - All deck variables, including the constants from `parameters.ddck`, are in `sim.scalar`, without the `$` (e.g.
   `CollAcollAp`, `Vol_Tes1`).
-- `to_json` writes `sim.scalar` to `output.json`, which the client reads for the KPIs. Scalars for the client must be set in
-  a processing step before `to_json`.
+- `to_json` writes `sim.scalar` to `output.json` (`common/process/outputs.py`), which the client reads for the KPIs.
+  Scalars for the client must be set in a processing step before `to_json`.
+- `output.json` has a version, `OutputsVersion` (`OUTPUTS_VERSION` in `common/process/outputs.py`; missing means 0), one for
+  all three systems, so that the client can tell old results from new ones. If you add, rename or remove outputs the client
+  reads, or change their meaning, bump it. The client (`create[T|P|B]tesKpis.ts`) may need changes: if you don't make
+  them yourself, tell whoever works on the client, e.g. with an issue in https://github.com/resultes-net/issues.
 - Write the scalars for the client with their names spelled out (`sim.scalar["I_total"] = ...`), not in a loop over a
   dataclass's fields: the names are the interface to the client (`create[T|P|B]tesKpis.ts`), so they must be greppable
   in both repos.
