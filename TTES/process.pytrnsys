@@ -348,6 +348,9 @@ def balance(sim: api.Simulation):
         + sim.scalar["BolrPOut_kW_Tot"]
         + sim.scalar["QSrcP_kW_Tot"]
     )
+    sim.scalar["SolarFraction"] = (
+        sim.scalar["CollP_kW_calc_Tot"] / sim.scalar["QSources"]
+    )
     sim.scalar["QSinks"] = sim.scalar["QSnkP_kW_Tot"]
     sim.scalar["QStore"] = sim.scalar["QAcum_Tes1_Tot"]
     sim.scalar["QLosses"] = (
