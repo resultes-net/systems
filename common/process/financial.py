@@ -93,6 +93,8 @@ class FinancialResults:
     # Per m² aperture area.
     specific_collector_field_investment_per_m2: float
     storage_investment: float
+    # Per m³ water equivalent.
+    specific_storage_investment_per_m3: float
     boiler_investment: float
     heat_pump_investment: float
     total_investment: float
@@ -139,6 +141,9 @@ def calculate_financial_results(
         system.collector_area_m2
     )
     I_tes = parameters.storage_cost.get_cost(system.storage_volume_water_equivalent_m3)
+    I_tes_per_m3 = parameters.storage_cost.get_specific_cost(
+        system.storage_volume_water_equivalent_m3
+    )
     I_boiler = parameters.boiler_cost_per_kW * system.boiler_capacity_kW
     I_hp = (
         parameters.heat_pump_cost_per_kW * system.heat_pump.capacity_kW
@@ -183,6 +188,7 @@ def calculate_financial_results(
         collector_field_investment=I_solar,
         specific_collector_field_investment_per_m2=I_solar_per_m2,
         storage_investment=I_tes,
+        specific_storage_investment_per_m3=I_tes_per_m3,
         boiler_investment=I_boiler,
         heat_pump_investment=I_hp,
         total_investment=I,
@@ -255,6 +261,7 @@ def add_financial_outputs(
     sim.scalar["I_hp"] = results.heat_pump_investment
     sim.scalar["I_total"] = results.total_investment
     sim.scalar["I_solar_per_m2"] = results.specific_collector_field_investment_per_m2
+    sim.scalar["I_tes_per_m3"] = results.specific_storage_investment_per_m3
     sim.scalar["CapitalCost_per_a"] = results.yearly_capital_cost_per_a
     sim.scalar["MaintCost_per_a"] = results.yearly_maintenance_cost_per_a
     sim.scalar["FuelCost_per_a"] = results.yearly_fuel_cost_per_a

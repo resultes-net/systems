@@ -72,6 +72,7 @@ def test_lcoh_with_heat_pump() -> None:
     assert result.specific_collector_field_investment_per_m2 == _pt.approx(
         I_solar / 5000
     )
+    assert result.specific_storage_investment_per_m3 == _pt.approx(I_tes / 20000)
     assert result.yearly_capital_cost_per_a == _pt.approx(I / b)
     assert result.yearly_maintenance_cost_per_a == _pt.approx(0.01 * I)
     assert result.yearly_fuel_kWh == _pt.approx(4e6 / 0.9)
@@ -231,6 +232,10 @@ def test_add_financial_outputs(has_heat_pump: bool) -> None:
     assert (
         sim.scalar["I_solar_per_m2"].iloc[0]
         == expected.specific_collector_field_investment_per_m2
+    )
+    assert (
+        sim.scalar["I_tes_per_m3"].iloc[0]
+        == expected.specific_storage_investment_per_m3
     )
     assert sim.scalar["CapitalCost_per_a"].iloc[0] == expected.yearly_capital_cost_per_a
     assert (
