@@ -253,6 +253,8 @@ def add_financial_outputs(
 
     results = calculate_financial_results(system, parameters)
 
+    # The scalars for the client. If you add, rename or remove any, or change their meaning,
+    # bump `OUTPUTS_VERSION` (see `outputs.py`).
     sim.scalar["LCOH"] = results.lcoh_per_kWh
     sim.scalar["annuity"] = results.annuity_per_a
     sim.scalar["I_solar"] = results.collector_field_investment

@@ -12,6 +12,7 @@ from pytrnsys_process import api
 sys.path.insert(0, str(pl.Path(__file__).resolve().parents[1] / "common"))
 
 import process.financial as common_financial  # noqa: E402
+import process.outputs as common_outputs  # noqa: E402
 
 
 def filter(sim: api.Simulation):
@@ -511,7 +512,9 @@ def financial_outputs(sim: api.Simulation):
 
 
 def to_json(sim: api.Simulation):
-    sim.scalar.to_json(sim.path + r"\output.json", orient="records", indent=4)
+    # If you add, rename or remove outputs the client reads, or change their meaning, bump
+    # `OUTPUTS_VERSION` (see `common/process/outputs.py`).
+    common_outputs.write_output_json(sim)
 
 
 if __name__ == "__main__":
