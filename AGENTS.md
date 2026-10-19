@@ -16,6 +16,12 @@ https://github.com/resultes-net/issues/blob/main/AGENTS.md. This file only adds 
   `run.txt` is what runs in production and staging (`run-3rd-party.txt` plus the runner's own packages, e.g.
   `resultes-pydantic-models` from its `pydantic-models` submodule). For dev work, use `dev.txt`: the same plus Black,
   pytest, ...
+- The runner's requirements are pinned for Windows, so that environment, and with it pytest and Black for `systems`, only
+  exists as a Windows venv in a runner checkout. From WSL, run it as `<runner checkout>/venv/Scripts/python.exe -m pytest
+  ...` from the `systems` checkout. A Linux checkout of the runner can't have it.
+- That venv imports `resultes_pydantic_models` from its runner checkout's `pydantic-models` submodule. To test against
+  another (e.g. unpushed) `pydantic-models`, set `PYTHONPATH` to that checkout's `pydantic-models/src`. From WSL, also
+  pass it on to the Windows process with `WSLENV=PYTHONPATH`.
 - The Python code, including the `.pytrnsys` scripts, is Black-formatted (default settings). Use the Black from the
   runner's `dev.txt`, and format only the files you change.
 - `pytest.ini` sets `python_files = *.py`, so pytest imports *every* Python file, including run and processing scripts.
