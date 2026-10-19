@@ -36,15 +36,6 @@ https://github.com/resultes-net/issues/blob/main/AGENTS.md. This file only adds 
    `CollAcollAp`, `Vol_Tes1`).
 1. `to_json` writes `sim.scalar` to `output.json` (`common/process/outputs.py`), which the client reads for the KPIs.
    Scalars for the client must be set in a processing step before `to_json`.
-1. The "solar" plots show `CollP_kW`, Type 1357's own gain. The heat that actually flows into the system is
-   `CollP_kW_calc` (mass flow × cp × ΔT through the field), which the KPIs use. The two can differ completely, e.g. when
-   there's no flow through the field.
-1. The generated `.dck` in the variation's results zip (see the org-wide guide) is the source of truth for the values that
-   ran: `deck <variable> <value>` lines in `run_*.config` override ddck variables (e.g. `loop2Len`), and
-   `executeTrnsys.py` marks such changes with "value changed from original".
-1. Simulations cover several years (`time.stop`: so far 5 for TTES and BTES, 3 for PTES), but the processing (`last_year`
-   in `process.pytrnsys`) cuts the hourly and monthly data to the last one, so the KPIs and plots only cover that year.
-   For the first years, use the `.prt` files in the results zip.
 1. `output.json` has a version, `OutputsVersion` (`OUTPUTS_VERSION` in `common/process/outputs.py`; missing means 0), one for
    all three systems, so that the client can tell old results from new ones. If you add, rename or remove outputs the client
    reads, or change their meaning, bump it. The client (`create[T|P|B]tesKpis.ts`) may need changes: if you don't make
@@ -54,6 +45,17 @@ https://github.com/resultes-net/issues/blob/main/AGENTS.md. This file only adds 
    in both repos.
 1. The three scripts contain a lot of duplicated code. Put new shared logic into `common/process/` (as `financial.py`) instead of
    copying it, as a step towards removing the duplication.
+
+## Inspecting results
+1. The generated `.dck` in the variation's results zip (see the org-wide guide) is the source of truth for the values that
+   ran: `deck <variable> <value>` lines in `run_*.config` override ddck variables (e.g. `loop2Len`), and
+   `executeTrnsys.py` marks such changes with "value changed from original".
+1. Simulations cover several years (`time.stop`: so far 5 for TTES and BTES, 3 for PTES), but the processing (`last_year`
+   in `process.pytrnsys`) cuts the hourly and monthly data to the last one, so the KPIs and plots only cover that year.
+   For the first years, use the `.prt` files in the results zip.
+1. The "solar" plots show `CollP_kW`, Type 1357's own gain. The heat that actually flows into the system is
+   `CollP_kW_calc` (mass flow × cp × ΔT through the field), which the KPIs use. The two can differ completely, e.g. when
+   there's no flow through the field.
 
 ## Parameters and weather data
 1. `common/create_common_parameters_ddck_file.py <parameters-json>` generates the per-simulation inputs into
