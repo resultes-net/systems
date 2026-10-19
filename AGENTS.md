@@ -29,6 +29,20 @@ https://github.com/resultes-net/issues/blob/main/AGENTS.md. This file only adds 
 1. To run only the parameters script's tests: `pytest common/test_create_common_parameters_ddck_file.py
    common/create_common_parameters_ddck_file.py`.
 
+## Simulation model
+1. Each system's deck is assembled from ddcks (`[T|P|B]TES/ddck/`, `common/ddck/`) by its `run_*.config`.
+   `deck <variable> <value>` lines there override ddck variables (e.g. `loop2Len`), so a ddck's value isn't necessarily
+   the one that ran. The generated `.dck` is the source of truth: `executeTrnsys.py` marks overridden values with "value
+   changed from original".
+1. Solar loop: a primary pump (collector field) and a secondary pump (heat exchanger to storage), switched in
+   `common/ddck/SolarControl/SolarActivation.ddck`. The primary pump runs above `GhiMin`, unless the over-temperature
+   cut-off on `CollTOut` has stopped it: it stops above `TCollMax` (150 °C) and restarts only below `TCollMin` (130 °C).
+   The secondary pump additionally needs a temperature difference and no stagnation (`Stagnation.ddck`: the storage top
+   above `TTesMax`). Stagnation stops only the secondary pump.
+1. Temperatures without flow aren't physical: Type 2221 (pumps and connections between components) picks the upstream
+   temperature by flow direction, and without flow it holds its last value, possibly for years, while pipes (Type 931)
+   cool down. Don't base control or analysis on them (see https://github.com/resultes-net/issues/issues/57).
+
 ## Post-processing
 1. The runner runs `[T|P|B]TES/process.pytrnsys results` with the system's directory as working directory, so `common/` isn't
    on the module search path: shared code is imported via a `sys.path` insert (see `TTES/process.pytrnsys`).
@@ -47,12 +61,12 @@ https://github.com/resultes-net/issues/blob/main/AGENTS.md. This file only adds 
    copying it, as a step towards removing the duplication.
 
 ## Inspecting results
-1. The generated `.dck` in the variation's results zip (see the org-wide guide) is the source of truth for the values that
-   ran: `deck <variable> <value>` lines in `run_*.config` override ddck variables (e.g. `loop2Len`), and
-   `executeTrnsys.py` marks such changes with "value changed from original".
+1. The variation's results zip in Swift (see the org-wide guide) holds the whole working directory, e.g.
+   `TTES/results/complete-0/`: the generated `.dck`, the per-time-step printer files (`*_Mfr.prt`, `*_T.prt`), hourly
+   printers in `temp/` (e.g. `STAGNATION_HR.Prt`) and `processing.log`.
 1. Simulations cover several years (`time.stop`: so far 5 for TTES and BTES, 3 for PTES), but the processing (`last_year`
-   in `process.pytrnsys`) cuts the hourly and monthly data to the last one, so the KPIs and plots only cover that year.
-   For the first years, use the `.prt` files in the results zip.
+   in `process.pytrnsys`) cuts the hourly and monthly data to the last one: the KPIs, `output.json`, `hourly.csv` (TTES
+   only) and the plots only cover that year. For the first years, use the `.prt` files.
 1. The "solar" plots show `CollP_kW`, Type 1357's own gain. The heat that actually flows into the system is
    `CollP_kW_calc` (mass flow × cp × ΔT through the field), which the KPIs use. The two can differ completely, e.g. when
    there's no flow through the field.
