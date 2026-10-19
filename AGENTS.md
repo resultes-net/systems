@@ -4,80 +4,80 @@ For the overall ResulTES architecture, read the org-wide guide first:
 https://github.com/resultes-net/issues/blob/main/AGENTS.md. This file only adds what's specific to this repo.
 
 ## Layout
-- `TTES/`, `PTES/`, `BTES/`: the three (py)TRNSYS system simulations. `common/`: shared ddck components and
-  `create_common_parameters_ddck_file.py` (see below).
-- `ci/`: requirements, scripts and data for CI. *Every* push to `main` uploads `systems-main.zip` to Swift for the runners
-  and then starts a PTES simulation on `dev.resultes.net` from `ci/data/ptes.json.template`.
+1. `TTES/`, `PTES/`, `BTES/`: the three (py)TRNSYS system simulations. `common/`: shared ddck components and
+   `create_common_parameters_ddck_file.py` (see below).
+1. `ci/`: requirements, scripts and data for CI. *Every* push to `main` uploads `systems-main.zip` to Swift for the runners
+   and then starts a PTES simulation on `dev.resultes.net` from `ci/data/ptes.json.template`.
 
 ## Environment and tests
-- There's no venv checked out in the repo by default. `requirements.txt` pins `pytrnsys_process` etc.;
-  `ci/requirements.txt` only holds the CI tooling (OpenStack client, `uv`, ...). The `common/` scripts run in the runner's Python
-  environment, so their dependencies are pinned there: https://github.com/resultes-net/runner/tree/main/requirements-3.13.
-  `run.txt` is what runs in production and staging (`run-3rd-party.txt` plus the runner's own packages, e.g.
-  `resultes-pydantic-models` from its `pydantic-models` submodule). For dev work, use `dev.txt`: the same plus Black,
-  pytest, ...
-- The runner's requirements are pinned for Windows, so that environment, and with it pytest and Black for `systems`, only
-  exists as a Windows venv in a runner checkout. From WSL, run it as `<runner checkout>/venv/Scripts/python.exe -m pytest
-  ...` from the `systems` checkout. A Linux checkout of the runner can't have it.
-- That venv imports `resultes_pydantic_models` from its runner checkout's `pydantic-models` submodule. To test against
-  another (e.g. unpushed) `pydantic-models`, set `PYTHONPATH` to that checkout's `pydantic-models/src`. From WSL, also
-  pass it on to the Windows process with `WSLENV=PYTHONPATH`.
-- The Python code, including the `.pytrnsys` scripts, is Black-formatted (default settings). Use the Black from the
-  runner's `dev.txt`, and format only the files you change.
-- `pytest.ini` sets `python_files = *.py`, so pytest imports *every* Python file, including run and processing scripts.
-  Collection fails with `ModuleNotFoundError` unless the dependencies above are installed.
-- To run only the parameters script's tests: `pytest common/test_create_common_parameters_ddck_file.py
-  common/create_common_parameters_ddck_file.py`.
+1. There's no venv checked out in the repo by default. `requirements.txt` pins `pytrnsys_process` etc.;
+   `ci/requirements.txt` only holds the CI tooling (OpenStack client, `uv`, ...). The `common/` scripts run in the runner's Python
+   environment, so their dependencies are pinned there: https://github.com/resultes-net/runner/tree/main/requirements-3.13.
+   `run.txt` is what runs in production and staging (`run-3rd-party.txt` plus the runner's own packages, e.g.
+   `resultes-pydantic-models` from its `pydantic-models` submodule). For dev work, use `dev.txt`: the same plus Black,
+   pytest, ...
+1. The runner's requirements are pinned for Windows, so that environment, and with it pytest and Black for `systems`, only
+   exists as a Windows venv in a runner checkout. From WSL, run it as `<runner checkout>/venv/Scripts/python.exe -m pytest
+   ...` from the `systems` checkout. A Linux checkout of the runner can't have it.
+1. That venv imports `resultes_pydantic_models` from its runner checkout's `pydantic-models` submodule. To test against
+   another (e.g. unpushed) `pydantic-models`, set `PYTHONPATH` to that checkout's `pydantic-models/src`. From WSL, also
+   pass it on to the Windows process with `WSLENV=PYTHONPATH`.
+1. The Python code, including the `.pytrnsys` scripts, is Black-formatted (default settings). Use the Black from the
+   runner's `dev.txt`, and format only the files you change.
+1. `pytest.ini` sets `python_files = *.py`, so pytest imports *every* Python file, including run and processing scripts.
+   Collection fails with `ModuleNotFoundError` unless the dependencies above are installed.
+1. To run only the parameters script's tests: `pytest common/test_create_common_parameters_ddck_file.py
+   common/create_common_parameters_ddck_file.py`.
 
 ## Post-processing
-- The runner runs `[T|P|B]TES/process.pytrnsys results` with the system's directory as working directory, so `common/` isn't
-  on the module search path: shared code is imported via a `sys.path` insert (see `TTES/process.pytrnsys`).
-- All deck variables, including the constants from `parameters.ddck`, are in `sim.scalar`, without the `$` (e.g.
-  `CollAcollAp`, `Vol_Tes1`).
-- `to_json` writes `sim.scalar` to `output.json` (`common/process/outputs.py`), which the client reads for the KPIs.
-  Scalars for the client must be set in a processing step before `to_json`.
-- The "solar" plots show `CollP_kW`, Type 1357's own gain. The heat that actually flows into the system is
-  `CollP_kW_calc` (mass flow × cp × ΔT through the field), which the KPIs use. The two can differ completely, e.g. when
-  there's no flow through the field.
-- The generated `.dck` in the variation's results zip (see the org-wide guide) is the source of truth for the values that
-  ran: `deck <variable> <value>` lines in `run_*.config` override ddck variables (e.g. `loop2Len`), and
-  `executeTrnsys.py` marks such changes with "value changed from original".
-- Simulations cover several years (`time.stop`: so far 5 for TTES and BTES, 3 for PTES), but the processing (`last_year`
-  in `process.pytrnsys`) cuts the hourly and monthly data to the last one, so the KPIs and plots only cover that year.
-  For the first years, use the `.prt` files in the results zip.
-- `output.json` has a version, `OutputsVersion` (`OUTPUTS_VERSION` in `common/process/outputs.py`; missing means 0), one for
-  all three systems, so that the client can tell old results from new ones. If you add, rename or remove outputs the client
-  reads, or change their meaning, bump it. The client (`create[T|P|B]tesKpis.ts`) may need changes: if you don't make
-  them yourself, tell whoever works on the client, e.g. with an issue in https://github.com/resultes-net/issues.
-- Write the scalars for the client with their names spelled out (`sim.scalar["I_total"] = ...`), not in a loop over a
-  dataclass's fields: the names are the interface to the client (`create[T|P|B]tesKpis.ts`), so they must be greppable
-  in both repos.
-- The three scripts contain a lot of duplicated code. Put new shared logic into `common/process/` (as `financial.py`) instead of
-  copying it, as a step towards removing the duplication.
+1. The runner runs `[T|P|B]TES/process.pytrnsys results` with the system's directory as working directory, so `common/` isn't
+   on the module search path: shared code is imported via a `sys.path` insert (see `TTES/process.pytrnsys`).
+1. All deck variables, including the constants from `parameters.ddck`, are in `sim.scalar`, without the `$` (e.g.
+   `CollAcollAp`, `Vol_Tes1`).
+1. `to_json` writes `sim.scalar` to `output.json` (`common/process/outputs.py`), which the client reads for the KPIs.
+   Scalars for the client must be set in a processing step before `to_json`.
+1. The "solar" plots show `CollP_kW`, Type 1357's own gain. The heat that actually flows into the system is
+   `CollP_kW_calc` (mass flow × cp × ΔT through the field), which the KPIs use. The two can differ completely, e.g. when
+   there's no flow through the field.
+1. The generated `.dck` in the variation's results zip (see the org-wide guide) is the source of truth for the values that
+   ran: `deck <variable> <value>` lines in `run_*.config` override ddck variables (e.g. `loop2Len`), and
+   `executeTrnsys.py` marks such changes with "value changed from original".
+1. Simulations cover several years (`time.stop`: so far 5 for TTES and BTES, 3 for PTES), but the processing (`last_year`
+   in `process.pytrnsys`) cuts the hourly and monthly data to the last one, so the KPIs and plots only cover that year.
+   For the first years, use the `.prt` files in the results zip.
+1. `output.json` has a version, `OutputsVersion` (`OUTPUTS_VERSION` in `common/process/outputs.py`; missing means 0), one for
+   all three systems, so that the client can tell old results from new ones. If you add, rename or remove outputs the client
+   reads, or change their meaning, bump it. The client (`create[T|P|B]tesKpis.ts`) may need changes: if you don't make
+   them yourself, tell whoever works on the client, e.g. with an issue in https://github.com/resultes-net/issues.
+1. Write the scalars for the client with their names spelled out (`sim.scalar["I_total"] = ...`), not in a loop over a
+   dataclass's fields: the names are the interface to the client (`create[T|P|B]tesKpis.ts`), so they must be greppable
+   in both repos.
+1. The three scripts contain a lot of duplicated code. Put new shared logic into `common/process/` (as `financial.py`) instead of
+   copying it, as a step towards removing the duplication.
 
 ## Parameters and weather data
-- `common/create_common_parameters_ddck_file.py <parameters-json>` generates the per-simulation inputs into
-  `common/ddck/parameters/`: `parameters.ddck`, `demand.csv`, the waste-heat source profile and `weather_data.ddck`.
-  Its tests are in `common/test_create_common_parameters_ddck_file.py` (they use temporary directories).
-- The simulation has a `weather_data_id` (no longer a `location`). Before the script runs, the runner downloads the
-  selected weather data into `common/ddck/parameters/selected_weather/` (`DIR_NAME` in
-  `resultes_pydantic_models.weather_data`): the data file (`get_data_file_name`: `data.csv` for ISO, `data.tm2` for
-  TM2) and a `README.md` (don't delete or overwrite it). The script tells the format by which data file exists.
-- It copies the matching ddck from `common/ddck/weather/` (`weather_data_iso.ddck` or `weather_data_tm2.ddck`) to
-  `common/ddck/parameters/weather_data.ddck`, so the run configs include `COMMON$ parameters\weather_data`.
-- ISO: the data is rolled out over 10 years into `selected_weather/data_rolled_out.type99` (read via Type 99). The
-  location (longitude, standard longitude, latitude) for its header comes from `LOCATION_PARAMETERS`, keyed by weather
-  data ID (the shared ISO data's IDs, hard-coded in the server's migrations).
-- TM2: no roll-out (`weather_data_tm2.ddck` reads the file itself, via Type 109); the statistics and the site
-  elevation (`$altid`, for Type 69's sky temperature) are read with `pvlib.iotools.read_tmy2`. `pvlib` rejects raw
-  Meteonorm files, but the server fixes them up on upload (`fix_up_and_validate_tm2_contents`), so the downloaded file
-  is fine.
-- Statistics (yearly average, amplitude, first coldest day) go into `parameters.ddck` in both cases.
-- Long-wave radiation: the collector (Type 1357, modified by us) gets `$LgwRadMode` from `parameters.ddck`: 5 for ISO
-  (takes `EL` from the data; undocumented, our addition), 2 for TM2 (computes it from `Tsky`, `EmSky` and `EmGnd`). Both
-  weather ddcks define all four variables; the ones the mode doesn't use are explicit placeholders.
-- `common/ddck/weather/` holds the ddcks and the shared weather data: one CSV per ISO reference climate (`Alpine.csv`,
-  `Cold.csv`, ...) and `CH-Zuerich-Kloten-66700.tm2` (TMY2, Zurich). The runner doesn't read them from here anymore
-  (it downloads the selected data), but keep them: all shared weather data are kept in the repo, so that users who
-  download a project have them. Don't write code for switching to other weather data.
-- `weather_data_iso.ddck` and `weather_data_tm2.ddck` are maintained by hand.
+1. `common/create_common_parameters_ddck_file.py <parameters-json>` generates the per-simulation inputs into
+   `common/ddck/parameters/`: `parameters.ddck`, `demand.csv`, the waste-heat source profile and `weather_data.ddck`.
+   Its tests are in `common/test_create_common_parameters_ddck_file.py` (they use temporary directories).
+1. The simulation has a `weather_data_id` (no longer a `location`). Before the script runs, the runner downloads the
+   selected weather data into `common/ddck/parameters/selected_weather/` (`DIR_NAME` in
+   `resultes_pydantic_models.weather_data`): the data file (`get_data_file_name`: `data.csv` for ISO, `data.tm2` for
+   TM2) and a `README.md` (don't delete or overwrite it). The script tells the format by which data file exists.
+1. It copies the matching ddck from `common/ddck/weather/` (`weather_data_iso.ddck` or `weather_data_tm2.ddck`) to
+   `common/ddck/parameters/weather_data.ddck`, so the run configs include `COMMON$ parameters\weather_data`.
+1. ISO: the data is rolled out over 10 years into `selected_weather/data_rolled_out.type99` (read via Type 99). The
+   location (longitude, standard longitude, latitude) for its header comes from `LOCATION_PARAMETERS`, keyed by weather
+   data ID (the shared ISO data's IDs, hard-coded in the server's migrations).
+1. TM2: no roll-out (`weather_data_tm2.ddck` reads the file itself, via Type 109); the statistics and the site
+   elevation (`$altid`, for Type 69's sky temperature) are read with `pvlib.iotools.read_tmy2`. `pvlib` rejects raw
+   Meteonorm files, but the server fixes them up on upload (`fix_up_and_validate_tm2_contents`), so the downloaded file
+   is fine.
+1. Statistics (yearly average, amplitude, first coldest day) go into `parameters.ddck` in both cases.
+1. Long-wave radiation: the collector (Type 1357, modified by us) gets `$LgwRadMode` from `parameters.ddck`: 5 for ISO
+   (takes `EL` from the data; undocumented, our addition), 2 for TM2 (computes it from `Tsky`, `EmSky` and `EmGnd`). Both
+   weather ddcks define all four variables; the ones the mode doesn't use are explicit placeholders.
+1. `common/ddck/weather/` holds the ddcks and the shared weather data: one CSV per ISO reference climate (`Alpine.csv`,
+   `Cold.csv`, ...) and `CH-Zuerich-Kloten-66700.tm2` (TMY2, Zurich). The runner doesn't read them from here anymore
+   (it downloads the selected data), but keep them: all shared weather data are kept in the repo, so that users who
+   download a project have them. Don't write code for switching to other weather data.
+1. `weather_data_iso.ddck` and `weather_data_tm2.ddck` are maintained by hand.
