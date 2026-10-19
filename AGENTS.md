@@ -36,6 +36,9 @@ https://github.com/resultes-net/issues/blob/main/AGENTS.md. This file only adds 
   `CollAcollAp`, `Vol_Tes1`).
 - `to_json` writes `sim.scalar` to `output.json` (`common/process/outputs.py`), which the client reads for the KPIs.
   Scalars for the client must be set in a processing step before `to_json`.
+- The "solar" plots show `CollP_kW`, Type 1357's own gain. The heat that actually flows into the system is
+  `CollP_kW_calc` (mass flow × cp × ΔT through the field), which the KPIs use. The two can differ completely, e.g. when
+  there's no flow through the field.
 - `output.json` has a version, `OutputsVersion` (`OUTPUTS_VERSION` in `common/process/outputs.py`; missing means 0), one for
   all three systems, so that the client can tell old results from new ones. If you add, rename or remove outputs the client
   reads, or change their meaning, bump it. The client (`create[T|P|B]tesKpis.ts`) may need changes: if you don't make
