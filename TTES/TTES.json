@@ -690,14 +690,18 @@
             ".__ConnectionDict__": true,
             "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
             "connectionId": 306,
-            "diameterInCm": 30.0,
+            "diameterInCm": {
+                "name": "loop4Dia"
+            },
             "fromPortId": 14,
             "id": 462,
             "labelPos": [
                 -1683.0,
                 17.0
             ],
-            "lengthInM": 2000.0,
+            "lengthInM": {
+                "name": "loop4Len"
+            },
             "massFlowLabelPos": [
                 -1692.0,
                 -17.0
@@ -716,20 +720,26 @@
             "shallBeSimulated": true,
             "toPortId": 110,
             "trnsysId": 373,
-            "uValueInWPerM2K": 0.8
+            "uValueInWPerM2K": {
+                "name": "loop4UVal"
+            }
         },
         "Connection-27": {
             ".__ConnectionDict__": true,
             "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
             "connectionId": 307,
-            "diameterInCm": 30.0,
+            "diameterInCm": {
+                "name": "loop4Dia"
+            },
             "fromPortId": 112,
             "id": 463,
             "labelPos": [
                 -1563.0,
                 97.0
             ],
-            "lengthInM": 1000.0,
+            "lengthInM": {
+                "name": "loop4Len"
+            },
             "massFlowLabelPos": [
                 -2081.354166666667,
                 110.65972222222221
@@ -745,23 +755,29 @@
                     100.0
                 ]
             ],
-            "shallBeSimulated": false,
+            "shallBeSimulated": true,
             "toPortId": 199,
             "trnsysId": 374,
-            "uValueInWPerM2K": 0.8
+            "uValueInWPerM2K": {
+                "name": "loop4UVal"
+            }
         },
         "Connection-28": {
             ".__ConnectionDict__": true,
             "__version__": "74032e79-2abc-4fcf-9328-5d697ef31023",
             "connectionId": 357,
-            "diameterInCm": 30.0,
+            "diameterInCm": {
+                "name": "loop4Dia"
+            },
             "fromPortId": 200,
             "id": 521,
             "labelPos": [
                 -1637.0,
                 97.0
             ],
-            "lengthInM": 33.333333333333336,
+            "lengthInM": {
+                "name": "loop4Len"
+            },
             "massFlowLabelPos": [
                 -1693.4236111111113,
                 116.96527777777777
@@ -785,10 +801,12 @@
                     100.0
                 ]
             ],
-            "shallBeSimulated": false,
+            "shallBeSimulated": true,
             "toPortId": 13,
             "trnsysId": 427,
-            "uValueInWPerM2K": 0.8
+            "uValueInWPerM2K": {
+                "name": "loop4UVal"
+            }
         },
         "Connection-29": {
             ".__ConnectionDict__": true,
@@ -1676,7 +1694,7 @@
         },
         {
             "__version__": "1e16cd15-83b9-46fa-ac63-11b2b2209af1",
-            "connectionsDefinitionMode": "individual",
+            "connectionsDefinitionMode": "loop-wide-defaults",
             "connectionsTrnsysId": [
                 373,
                 374,

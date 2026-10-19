@@ -40,8 +40,14 @@ https://github.com/resultes-net/issues/blob/main/AGENTS.md. This file only adds 
    The secondary pump additionally needs a temperature difference and no stagnation (`Stagnation.ddck`: the storage top
    above `TTesMax`). Stagnation stops only the secondary pump.
 1. Temperatures without flow aren't physical: Type 2221 (pumps and connections between components) picks the upstream
-   temperature by flow direction, and without flow it holds its last value, possibly for years, while pipes (Type 931)
-   cool down. Don't base control or analysis on them (see https://github.com/resultes-net/issues/issues/57).
+   temperature by flow direction, and without flow it outputs its own last value (confirmed in its source), possibly
+   for years, while pipes (Type 931) cool down. Don't base control or analysis on them.
+1. The pytrnsys GUI exports every connection that isn't simulated (`shallBeSimulated: false` in `[T|P|B]TES/*.json`, or
+   a loop with `dummy-pipes`) as Type 2221. So a temperature that a controller monitors must come from a pipe or a
+   component with capacity: in TTES, the collector inlet came from a Type 2221, and the over-temperature cut-off never
+   released (https://github.com/resultes-net/issues/issues/57).
+1. Loops with loop-wide defaults (the collector loops) are exported with the GUI's fixed defaults (`loopNLen`,
+   `loopNDia`, `loopNUVal`). Their actual values are `deck` overrides in the run configs.
 
 ## Post-processing
 1. The runner runs `[T|P|B]TES/process.pytrnsys results` with the system's directory as working directory, so `common/` isn't
