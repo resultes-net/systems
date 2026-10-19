@@ -77,6 +77,28 @@ https://github.com/resultes-net/issues/blob/main/AGENTS.md. This file only adds 
    flows into the system. Type 1357's own gain, `CollP_kW`, can differ completely from it, e.g. when there's no flow
    through the field.
 
+## Running a simulation locally
+To reproduce a simulation or test a change without pushing (every push to `main` deploys, see "Layout"), run the
+runner's commands by hand:
+1. Inputs: the create-variations job's working directory, `results/<simulation ID>.zip` in Swift's `resultes-results`
+   (see the org-wide guide). Take `parameters.json` and `common/ddck/parameters/selected_weather/` from it (without
+   `data_rolled_out.type99`, which is generated), and everything else from the `systems` checkout to test. Parameters
+   can be changed in `parameters.json`, e.g. `parameters.values.collector_field.area`.
+1. Python: the runner's Windows venv (see "Environment and tests"). Its `pydantic-models` must match the parameters'
+   format, otherwise the scripts fail, e.g. with `'TtesParameters' object has no attribute 'financial'`: set
+   `PYTHONPATH` to an up-to-date checkout, as described there.
+1. TRNSYS: the runners' one. Unpack `create-disk-image/contents/TRNSYS18_resultes.zip` from the `runner` repo and run
+   its `Exe\TrnEXE.exe`. A standard TRNSYS installation lacks our modified Types, e.g. Type 1357, and the decks fail at
+   time 0 ("19 INPUTS are required and 20 INPUTS were specified").
+1. The commands, as the scheduler sends them to the runner (`scheduler/src/scheduler/runner/client.py`):
+   1. In the working directory: `python common/create_common_parameters_ddck_file.py parameters.json`, then
+      `python <SYSTEM>/create_parameters_ddck_file.py parameters.json`.
+   1. In `<SYSTEM>/`: `python run.pytrnsys`, which generates `results/complete-0/complete-0.dck`.
+   1. In `<SYSTEM>/results/complete-0/`: `TrnEXE.exe complete-0.dck /N`.
+   1. In `<SYSTEM>/`: `python process.pytrnsys results`.
+1. A 5-year run takes tens of minutes: run it in the background. Several runs can run in parallel, each in its own
+   working directory.
+
 ## Parameters and weather data
 1. `common/create_common_parameters_ddck_file.py <parameters-json>` generates the per-simulation inputs into
    `common/ddck/parameters/`: `parameters.ddck`, `demand.csv`, the waste-heat source profile and `weather_data.ddck`.
