@@ -73,9 +73,9 @@ https://github.com/resultes-net/issues/blob/main/AGENTS.md. This file only adds 
 1. Simulations cover several years (`time.stop`: so far 5 for TTES and BTES, 3 for PTES), but the processing (`last_year`
    in `process.pytrnsys`) cuts the hourly and monthly data to the last one: the KPIs, `output.json`, `hourly.csv` (TTES
    only) and the plots only cover that year. For the first years, use the `.prt` files.
-1. The "solar" plots show `CollP_kW`, Type 1357's own gain. The heat that actually flows into the system is
-   `CollP_kW_calc` (mass flow × cp × ΔT through the field), which the KPIs use. The two can differ completely, e.g. when
-   there's no flow through the field.
+1. The "solar" plots and the KPIs show `CollP_kW_calc` (mass flow × cp × ΔT through the field), the heat that actually
+   flows into the system. Type 1357's own gain, `CollP_kW`, can differ completely from it, e.g. when there's no flow
+   through the field.
 
 ## Parameters and weather data
 1. `common/create_common_parameters_ddck_file.py <parameters-json>` generates the per-simulation inputs into
