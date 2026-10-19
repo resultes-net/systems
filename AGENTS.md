@@ -6,8 +6,8 @@ https://github.com/resultes-net/issues/blob/main/AGENTS.md. This file only adds 
 ## Layout
 - `TTES/`, `PTES/`, `BTES/`: the three (py)TRNSYS system simulations. `common/`: shared ddck components and
   `create_common_parameters_ddck_file.py` (see below).
-- `ci/`: requirements, scripts and data for CI. Pushes to `main` upload `systems-main.zip` to Swift for the runners and
-  then start a PTES simulation on `dev.resultes.net` from `ci/data/ptes.json.template`.
+- `ci/`: requirements, scripts and data for CI. *Every* push to `main` uploads `systems-main.zip` to Swift for the runners
+  and then starts a PTES simulation on `dev.resultes.net` from `ci/data/ptes.json.template`.
 
 ## Environment and tests
 - There's no venv checked out in the repo by default. `requirements.txt` pins `pytrnsys_process` etc.;
