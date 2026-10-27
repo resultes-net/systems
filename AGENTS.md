@@ -48,6 +48,16 @@ https://github.com/resultes-net/issues/blob/main/AGENTS.md. This file only adds 
    released (https://github.com/resultes-net/issues/issues/57).
 1. Loops with loop-wide defaults (the collector loops) are exported with the GUI's fixed defaults (`loopNLen`,
    `loopNDia`, `loopNUVal`). Their actual values are `deck` overrides in the run configs.
+1. BTES's borehole field is TRNSYS Type 548 (TESS, a duct storage model; `BTES/ddck/BoHx/type548/`). Of its heat
+   outputs, only these are energy flows:
+   1. `BoHxQAve_kW`: the heat from the fluid into the field, per time step. It matches `BoHxQCalc_kW`, computed from
+      mass flow and temperatures.
+   1. `BoHxQLoss_kW`: the losses through the top, side and bottom. They're computed once per "global" time step (16–17 h
+      in the variations checked so far) and reported in a single time step, zero in between.
+
+   `BoHxQAccum_kW` is only an estimate: the change in the mean storage temperature times an approximate heat capacity.
+   It matches `BoHxQAve_kW − BoHxQLoss_kW` only over the year, and is off by up to about 290 MWh in a single month. Use
+   `BoHxQAve_kW − BoHxQLoss_kW` for the accumulation, as the system balance does.
 
 ## Post-processing
 1. The runner runs `[T|P|B]TES/process.pytrnsys results` with the system's directory as working directory, so `common/` isn't
@@ -63,6 +73,9 @@ https://github.com/resultes-net/issues/blob/main/AGENTS.md. This file only adds 
 1. Write the scalars for the client with their names spelled out (`sim.scalar["I_total"] = ...`), not in a loop over a
    dataclass's fields: the names are the interface to the client (`create[T|P|B]tesKpis.ts`), so they must be greppable
    in both repos.
+1. The system energy balance plots (`balance/`) are drawn by `common/process/balance.py`, which fixes each quantity's
+   color and label for all three systems (readable with red-green color blindness). A script only maps its
+   columns to the quantities: add a new quantity there, rather than passing colors or legend labels in a script.
 1. The three scripts contain a lot of duplicated code. Put new shared logic into `common/process/` (as `financial.py`) instead of
    copying it, as a step towards removing the duplication.
 

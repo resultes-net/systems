@@ -10,6 +10,7 @@ from pytrnsys_process import api
 # isn't on the module search path.
 sys.path.insert(0, str(pl.Path(__file__).resolve().parents[1] / "common"))
 
+import process.balance as common_balance  # noqa: E402
 import process.financial as common_financial  # noqa: E402
 import process.outputs as common_outputs  # noqa: E402
 
@@ -279,6 +280,8 @@ def demand(sim: api.Simulation):
         + sim.monthly["qSysOut_dpPipeIntTot"]
         + sim.monthly["qSysOut_dpSoilIntTot"]
     )
+    # In MWh. The client reads it.
+    sim.scalar["QDistrict_MW"] = sim.monthly["QDistrict"].sum() / 1000
 
     sim.monthly["QDemand_kW"] = sim.monthly["QSnkP_kW"] + sim.monthly["QDistrict"]
     sim.scalar["QDemand_kW_Tot"] = sim.monthly["QDemand_kW"].sum()
@@ -316,9 +319,6 @@ def balance(sim: api.Simulation):
         sim.scalar["TesQLoss_Tes1_Tot"] + sim.scalar["qSysOut_PipeLoss_Tot"]
     )
 
-    sim.monthly["QDistrict_MW"] = sim.monthly["QDistrict"] / 1000
-    sim.scalar["QDistrict_MW"] = sim.monthly["QDistrict_MW"].sum()
-
     sim.scalar["QImb"] = (
         sim.scalar["QSources"]
         - sim.scalar["QStore"]
@@ -327,34 +327,28 @@ def balance(sim: api.Simulation):
     )
 
     #### Plots ####
-    names_legend = [
-        "$Q_{Coll}$",
-        "$P_{Comp}$",
-        "$Q_{Boiler}$",
-        "$Q_{BTES,Accum}$",
-        "$Q_{Demand}$",
-        "$Q_{TES,Accum}$",
-        "$Q_{TES,Losses}$",
-        "$Q_{District}$",
-        "$Q_{Imbalance}$",
-    ]
-
-    fig, _ = api.energy_balance(
-        sim.monthly / 1e6,
-        q_in_columns=["CollP_kW_calc", "HpPelComp_kW", "BolrPOut_kW"],
-        q_out_columns=[
-            "BoHxQAve_kW",
-            "QSnkP_kW",
-            "TesQAcum_Tes1",
-            "TesQLoss_Tes1",
-            "qSysOut_dpToFFieldTot",
-        ],
-        xlabel="",
-        ylabel="Energy [GWh]",
-        cmap="Paired",
+    # Type 548's own accumulation (`BoHxQAccum_kW`) is only an estimate from the mean storage
+    # temperature: it adds up with the losses to the heat into the field over the year, but not
+    # month by month (see AGENTS.md, "Simulation model").
+    sim.monthly["BoHxQAccumFromBalance_kW"] = (
+        sim.monthly["BoHxQAve_kW"] - sim.monthly["BoHxQLoss_kW"]
     )
-    plt.legend(names_legend, bbox_to_anchor=(1.05, 1), loc="upper left")
-    api.export_plots_in_configured_formats(fig, sim.path, "balance-monthly", "balance")
+
+    common_balance.plot_system_balance(
+        sim,
+        {
+            common_balance.SOLAR: "CollP_kW_calc",
+            common_balance.COMPRESSOR: "HpPelComp_kW",
+            common_balance.BOILER: "BolrPOut_kW",
+            common_balance.DEMAND: "QSnkP_kW",
+            common_balance.STORAGE_ACCUMULATION: "BoHxQAccumFromBalance_kW",
+            common_balance.STORAGE_LOSSES: "BoHxQLoss_kW",
+            common_balance.BUFFER_TANK_ACCUMULATION: "TesQAcum_Tes1",
+            common_balance.BUFFER_TANK_LOSSES: "TesQLoss_Tes1",
+            common_balance.SOLAR_LOOP_PIPE_LOSSES: "qSysOut_PipeLoss",
+            common_balance.DISTRICT_HEATING_LOSSES: "QDistrict",
+        },
+    )
 
 
 def kpi(sim: api.Simulation):
