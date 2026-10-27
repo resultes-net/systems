@@ -120,6 +120,11 @@ def test_get_solved_equations() -> None:
                 "bottom": 0.05,
             },
         },
+        "waste_heat_recovery_source": {
+            "name": "constant.csv",
+            "mass_flow_rates_kg_per_h": [500 for _ in range(365 * 24)],
+            "temperatures_deg_C": [35 for _ in range(365 * 24)],
+        },
     }
 
     parameters = _pptes.PtesSpecificParameters(**data)

@@ -13,6 +13,8 @@ import pydantic as _pyd
 import resultes_pydantic_models.simulations.parameters.common as _com
 import resultes_pydantic_models.simulations.parameters.common.collector_field as _pcoll
 import resultes_pydantic_models.simulations.parameters.common.waste_heat_recovery_source as _pwhrs
+import resultes_pydantic_models.simulations.parameters.ptes as _pptes
+import resultes_pydantic_models.simulations.parameters.ttes as _pttes
 import resultes_pydantic_models.simulations.simulation as _sim
 import resultes_pydantic_models.weather_data as _pwd
 import sympy as _sym
@@ -409,11 +411,6 @@ def test_create_parameters_ddck_contents() -> None:
                 "value": 20.0,
             },
         },
-        "waste_heat_recovery_source": {
-            "name": "constant.csv",
-            "mass_flow_rates_kg_per_h": [500 for _ in range(365 * 24)],
-            "temperatures_deg_C": [35 for _ in range(365 * 24)],
-        },
         "control": {
             "demand_temperature_setpoint_degC": 80.0,
             "demand_delta_T_degC": 30.0,
@@ -634,7 +631,11 @@ def main(parameters_json_file_path: _pl.Path) -> None:
 
     _write_demand_profile(values.demand.hourly_heat_demand_MW)
 
-    _write_whr_source_supply_profile(values.waste_heat_recovery_source)
+    does_system_have_waste_heat_recovery_source = isinstance(
+        values, (_pttes.TtesParameters, _pptes.PtesParameters)
+    )
+    if does_system_have_waste_heat_recovery_source:
+        _write_whr_source_supply_profile(values.waste_heat_recovery_source)
 
     _write_iam_parameters_file(values.collector_field.iam)
 
