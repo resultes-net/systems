@@ -79,8 +79,9 @@ dpSoilThickness = 0.5  ! Thickness of soil around the gravel considered in the m
 dpRadNdDist = dpSoilThickness/dpNrSlRad ! Radial distance of any node in m
 dpNrSlCirc = 4  ! Number of circumferential soil nodes
 
-UNIT 450 TYPE 9352
-PARAMETERS 224
+UNIT 450 TYPE 4750
+PARAMETERS 225
+165  ! number of outputs (Type 4750): 3 per component
 mfrSolverAbsTol
 mfrSolverRelTol
 mfrTolSwitchThreshold
@@ -154,6 +155,8 @@ INPUTS 55! for Type 9351
 0 0 0 0 0 0 0 0 0 0 
 0 0 0 0 0 0 0 0 0 0 
 0 0 0 0 0 
+LABELS 1
+MassFlowSolver\MassFlowSolver.jl
 
 EQUATIONS 116	! Output up to three (A,B,C) mass flow rates of each component, positive = input/inlet, negative = output/outlet 
 MSCnrCold_A=[450,1]
