@@ -81,7 +81,7 @@ https://github.com/resultes-net/issues/blob/main/AGENTS.md. This file only adds 
 
 ## Inspecting results
 1. The variation's results zip in Swift (see the org-wide guide) holds the whole working directory, e.g.
-   `TTES/results/complete-0/`: the generated `.dck`, the per-time-step printer files (`*_Mfr.prt`, `*_T.prt`), hourly
+   `TTES/results/complete-0/` (`PTES/results/PTES/`, `BTES/results/BTES/`): the generated `.dck`, the per-time-step printer files (`*_Mfr.prt`, `*_T.prt`), hourly
    printers in `temp/` (e.g. `STAGNATION_HR.Prt`) and `processing.log`.
 1. Simulations cover several years (`time.stop`: so far 5 for TTES and BTES, 3 for PTES), but the processing (`last_year`
    in `process.pytrnsys`) cuts the hourly and monthly data to the last one: the KPIs, `output.json`, `hourly.csv` (TTES
@@ -106,8 +106,9 @@ runner's commands by hand:
 1. The commands, as the scheduler sends them to the runner (`scheduler/src/scheduler/runner/client.py`):
    1. In the working directory: `python common/create_common_parameters_ddck_file.py parameters.json`, then
       `python <SYSTEM>/create_parameters_ddck_file.py parameters.json`.
-   1. In `<SYSTEM>/`: `python run.pytrnsys`, which generates `results/complete-0/complete-0.dck`.
-   1. In `<SYSTEM>/results/complete-0/`: `TrnEXE.exe complete-0.dck /N`.
+   1. In `<SYSTEM>/`: `python run.pytrnsys`, which generates `results/<variation>/<variation>.dck`: `complete-0` for
+      TTES, the system's name for PTES and BTES (e.g. `results/BTES/BTES.dck`).
+   1. In `<SYSTEM>/results/<variation>/`: `TrnEXE.exe <variation>.dck /N`.
    1. In `<SYSTEM>/`: `python process.pytrnsys results`.
 1. A 5-year run takes tens of minutes: run it in the background. Several runs can run in parallel, each in its own
    working directory.
